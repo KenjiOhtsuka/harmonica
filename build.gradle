@@ -16,14 +16,14 @@ apply plugin: 'kotlin'
 apply plugin: 'java-gradle-plugin'
 //apply plugin: 'harmonica'
 
-gradlePlugin {
-    plugins {
-        harmonica {
-            id = 'harmonica'
-            implementationClass = 'com.improve_future.harmonica.plugin'
-        }
-    }
-}
+//gradlePlugin {
+//    plugins {
+//        harmonica {
+//            id = 'harmonica'
+//            implementationClass = 'com.improve_future.harmonica.plugin.HarmonicaPlugin'
+//        }
+//    }
+//}
 
 repositories {
     mavenCentral()

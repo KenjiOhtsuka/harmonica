@@ -1,4 +1,4 @@
-package com.imp
+package com.improve_future.harmonica.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

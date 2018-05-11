@@ -2,7 +2,11 @@ package com.improve_future.harmonica.core
 
 import java.sql.DriverManager
 
-class Connection(private val javaConnection: java.sql.Connection) {
+open class Connection(private val javaConnection: java.sql.Connection) {
+    init {
+        javaConnection.autoCommit = false
+    }
+
     companion object {
         fun create(block: DbConfig.() -> Unit): Connection {
             return create(DbConfig.create(block))
@@ -28,6 +32,16 @@ class Connection(private val javaConnection: java.sql.Connection) {
                         ""
                 }
             }
+        }
+    }
+
+    open fun transaction(block: Connection.() -> Unit) {
+        try {
+            block()
+            javaConnection.commit()
+        } catch(e: Exception) {
+            javaConnection.rollback()
+            throw e
         }
     }
 

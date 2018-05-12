@@ -1,13 +1,10 @@
 package com.improve_future.harmonica.plugin
 
-import com.improve_future.harmonica.core.AbstractMigration
-import com.improve_future.harmonica.core.Connection
-import com.improve_future.harmonica.core.DbConfig
-import com.improve_future.harmonica.core.Dbms
+import com.improve_future.harmonica.core.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
-import java.sql.Statement
+import java.sql.ResultSet
 import javax.script.ScriptEngineManager
 
 abstract class AbstractMigrationTask: AbstractTask() {
@@ -38,12 +35,21 @@ abstract class AbstractMigrationTask: AbstractTask() {
     }
 
     protected fun doesVersionMigrated(connection: Connection, version: String): Boolean {
-        createStatement(connection).use {
-            it.executeQuery(
-                    "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version").use {
-                return it.getLong(0) == 1L
-            }
+        val statement = createStatement(connection)
+        val result: Boolean
+        val resultSet: ResultSet
+        try {
+            resultSet = statement.executeQuery(
+                    "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version")
+            resultSet.next()
+            result = resultSet.getLong(0) != 1L
+        } catch (e: Exception) {
+            println(e.message)
+            statement.close()
+            throw e
         }
+        statement.close()
+        return result
     }
 
     protected fun saveVersion(connection: Connection, version: String) {

@@ -1,6 +1,6 @@
 package com.improve_future.harmonica.plugin
 
-import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
@@ -10,11 +10,20 @@ open class MigrationCreate: AbstractTask() {
     private val dateFormat: SimpleDateFormat =
             SimpleDateFormat("yyyyMMddHHmmssSSS")
 
+    private fun composeName(): String {
+        property("name")?.let {
+            it as String
+            if (it.isNotBlank()) return it
+        }
+        return "Migration"
+    }
+
     @TaskAction
     fun createMigration() {
         val version = dateFormat.format(Date())
         val migrationFile = Paths.get(
-                findMigrationDir().absolutePath, "${version}_XXXXXXXX.kts").toFile()
+                findMigrationDir().absolutePath,
+                "${version}_" + composeName() + ".kts").toFile()
         migrationFile.parentFile.mkdirs()
         migrationFile.createNewFile()
         migrationFile.writeText("""import com.improve_future.harmonica.core.AbstractMigration

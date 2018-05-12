@@ -9,16 +9,21 @@ import java.nio.file.Paths
 import javax.script.ScriptEngineManager
 
 abstract class AbstractTask: DefaultTask() {
+    @Input
+    open var directoryPath: String = "src/main/kotlin/db"
+    @Input
+    var env: String = "default"
+
+    init {
+        if (property("env") != null && (property("env") as String).isNotBlank())
+            env = property("env") as String
+    }
+
     companion object {
         val engine: KotlinJsr223JvmLocalScriptEngine =
                 ScriptEngineManager().getEngineByName("kotlin")
                         as KotlinJsr223JvmLocalScriptEngine
     }
-
-    @Input
-    var directoryPath: String = "src/main/kotlin/db"
-    @Input
-    var env: String = "default"
 
     private fun findConfigFile(): File {
         return Paths.get(directoryPath, "config", "$env.kts").toFile()

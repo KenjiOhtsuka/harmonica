@@ -11,7 +11,7 @@ open class MigrationDownTask: AbstractMigrationTask() {
             createConnection().use { connection ->
                 val migrationVersion = findCurrentMigrationVersion(connection)
                 val fileCandidateArray: Array<out File> = findMigrationDir().
-                        listFiles { dir, name -> name.startsWith(migrationVersion) }
+                        listFiles { _, name -> name.startsWith(migrationVersion) }
                 if (fileCandidateArray.isEmpty() || 1 < fileCandidateArray.size)
                     throw Error("More then one files exist for migration $migrationVersion")
                 val file = fileCandidateArray.first()
@@ -39,6 +39,5 @@ open class MigrationDownTask: AbstractMigrationTask() {
             }
             throw e
         }
-
     }
 }

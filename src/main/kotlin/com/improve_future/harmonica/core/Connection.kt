@@ -1,6 +1,5 @@
 package com.improve_future.harmonica.core
 
-import org.jetbrains.kotlin.psi.psiUtil.checkReservedYieldBeforeLambda
 import java.io.Closeable
 import java.sql.*
 
@@ -52,9 +51,8 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
     }
 
     fun executeSelect(sql: String) {
-        val statement = javaConnection.createStatement().use {
-            val rs = it.executeQuery(sql)
-            // ToDo: Retrieve all data, like DataTable in .Net
+        createStatement().use { statement ->
+            val rs = statement.executeQuery(sql)
             while (rs.next()) {
                 for (i in 0 until rs.metaData.columnCount - 1) {
                     when (rs.metaData.getColumnType(i)) {
@@ -65,23 +63,24 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
                     }
                 }
             }
+            rs.close()
         }
     }
 
     fun execute(sql: String): Boolean {
-        javaConnection.createStatement().use {
-            return it.execute(sql)
+        createStatement().use { statement ->
+            return statement.execute(sql)
         }
     }
 
     fun doesTableExist(tableName: String): Boolean {
-        javaConnection.metaData.getTables(null, null, tableName, null).use {
-            if (it.next()) return true
-        }
-        return false
+        val resultSet = javaConnection.metaData.getTables(null, null, tableName, null)
+        val result = resultSet.next()
+        resultSet.close()
+        return result
     }
 
     fun createStatement(): Statement {
-        return javaConnection.createStatement()
+        return Statement(javaConnection.createStatement())
     }
 }

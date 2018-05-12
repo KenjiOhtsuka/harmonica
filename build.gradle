@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         //classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
     }
 }
@@ -30,7 +31,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: kotlin_version
 
-
     testCompile "mysql:mysql-connector-java:5.1.44"
     //testCompile "mysql:mysql-connector-mxj:5.0.12"
     testCompile 'org.postgresql:postgresql:9.4.1212.jre6'
@@ -46,10 +46,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
 
-
     testCompile "org.jetbrains.kotlin:kotlin-test"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit"
-
 
     compile localGroovy()  // Groovy SDK
     compileOnly gradleApi()

@@ -1,8 +1,14 @@
 package com.improve_future.harmonica.core
 
-import java.sql.DriverManager
+import org.jetbrains.kotlin.psi.psiUtil.checkReservedYieldBeforeLambda
+import java.io.Closeable
+import java.sql.*
 
-open class Connection(private val javaConnection: java.sql.Connection) {
+open class Connection(private val javaConnection: java.sql.Connection): Closeable {
+    override fun close() {
+        if (!javaConnection.isClosed) javaConnection.close()
+    }
+
     init {
         javaConnection.autoCommit = false
     }
@@ -12,7 +18,7 @@ open class Connection(private val javaConnection: java.sql.Connection) {
             return create(DbConfig.create(block))
         }
 
-        private fun create(dbConfig: DbConfig): Connection {
+        fun create(dbConfig: DbConfig): Connection {
             return Connection(
                     DriverManager.getConnection(
                             buildConnectionUriFromDbConfig(dbConfig),
@@ -49,7 +55,16 @@ open class Connection(private val javaConnection: java.sql.Connection) {
         val statement = javaConnection.createStatement().use {
             val rs = it.executeQuery(sql)
             // ToDo: Retrieve all data, like DataTable in .Net
-            while (rs.next()) { }
+            while (rs.next()) {
+                for (i in 0 until rs.metaData.columnCount - 1) {
+                    when (rs.metaData.getColumnType(i)) {
+                        Types.DATE -> {}
+                        Types.BIGINT -> {}
+                        Types.BINARY -> {}
+                        Types.BIT -> {}
+                    }
+                }
+            }
         }
     }
 
@@ -57,5 +72,16 @@ open class Connection(private val javaConnection: java.sql.Connection) {
         javaConnection.createStatement().use {
             return it.execute(sql)
         }
+    }
+
+    fun doesTableExist(tableName: String): Boolean {
+        javaConnection.metaData.getTables(null, null, tableName, null).use {
+            if (it.next()) return true
+        }
+        return false
+    }
+
+    fun createStatement(): Statement {
+        return javaConnection.createStatement()
     }
 }

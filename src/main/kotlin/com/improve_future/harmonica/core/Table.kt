@@ -52,17 +52,3 @@ class TableBuilder {
                 ");"
     }
 }
-
-class Column(val name: String, val type: Type) {
-    val sqlType: String
-    get() {
-        return when (type) {
-            Types.VARCHAR -> "VARCHAR"
-            Types.INTEGER -> "INTEGER"
-            Types.BOOLEAN -> "BOOL"
-            Types.BLOB -> "BLOB"
-            Types.DATE -> "DATE"
-            else -> throw Exception()
-        }
-    }
-}

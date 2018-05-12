@@ -5,6 +5,7 @@ abstract class AbstractMigration {
 
     fun createTable(name: String, block: TableBuilder.() -> Unit): Table {
         val tb = TableBuilder()
+        tb.name = name
         tb.block()
         connection.execute(tb.buildMigrationSql())
         return tb.create()
@@ -12,6 +13,10 @@ abstract class AbstractMigration {
 
     fun dropTable(name: String) {
         connection.execute("DROP TABLE $name")
+    }
+
+    fun executeSql(sql: String) {
+        connection.execute(sql)
     }
 
     open fun up() {

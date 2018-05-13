@@ -35,7 +35,7 @@ buildscript {
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: '1.2.41'
         classpath 'org.postgresql:postgresql:9.4.1212.jre6'
-        classpath 'com.github.KenjiOhtsuka:harmonica:0.0.1'
+        classpath 'com.github.KenjiOhtsuka:harmonica:0.0.2'
     }
 }
 ```
@@ -52,11 +52,12 @@ Current version harmonica needs the following file structure
 
 ```
 `- src
-  `- kotlin
-    `- db
-      |- config
-      | `- default.kts <- configuration file
-      `- migration
+  `- main
+    `- kotlin
+      `- db
+        |- config
+        | `- default.kts <- configuration file
+        `- migration
 ```
 
 ##### default.kts

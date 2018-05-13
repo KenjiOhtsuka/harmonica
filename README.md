@@ -35,7 +35,7 @@ buildscript {
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: '1.2.41'
         classpath 'org.postgresql:postgresql:9.4.1212.jre6'
-        classpath 'com.github.KenjiOhtsuka:harmonica:0.0.3'
+        classpath 'com.github.KenjiOhtsuka:harmonica:0.0.4'
     }
 }
 ```
@@ -56,7 +56,8 @@ Current version harmonica needs the following file structure
     `- kotlin
       `- db
         |- config
-        | `- default.kts <- configuration file
+        | |- default.kts <- default configuration file
+        | `- develop.kts <- you can create own configuration file
         `- migration
 ```
 
@@ -77,6 +78,8 @@ DbConfig.create {
 }
 ```
 
+If you create another database configuration file, you can use multi databases.
+
 #### Create Migration file
 
 Execute `harmonicaCreate` task.
@@ -92,7 +95,11 @@ After editin the migration file, you can migrate with command `./gradlew harmoni
 ## Command
 
 * `harmonicaUp`: migrate
+    * `./gradlew harmonicaUp`: migrate
+    * `./gradlew harmonicaUp -Penv=develop`: migrate using the configuration file, `develop.kts` instead of `default.kts`
 * `harmonicaDown`: migrate down
+    * `./gradlew harmonicaDown`: migrate down
+    * `./gradlew harmonicaDown -Penv=develop`: migrate down using the configuration file, `develop.kts` instead of `default.kts`
 * `harmonicaCreate`: create migration file
     * `./gradlew harmonicaCreate`: create migration file `XXXXXXXXXX_Migration`
     * `./gradlew harmonicaCreate -PmigrationName=Abcdefg`: create migration file `XXXXXXXXX_Abcdefg`

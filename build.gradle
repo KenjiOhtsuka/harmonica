@@ -16,7 +16,7 @@ buildscript {
 }
 
 group 'com.improve_future'
-version '0.0.3'
+version '0.0.4'
 
 
 apply plugin: "com.gradle.plugin-publish"

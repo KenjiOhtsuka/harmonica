@@ -1,5 +1,8 @@
 # Kotlin Database Migration Tool
 
+[![](https://jitpack.io/v/KenjiOhtsuka/harmonica.svg)](https://jitpack.io/#KenjiOhtsuka/harmonica) [![Twitter Follow](https://img.shields.io/twitter/follow/escamilloIII.svg?style=social)](https://twitter.com/escamilloIII)
+
+
 Gradle Plugin Page: https://plugins.gradle.org/plugin/com.improve_future.harmonica
 
 This is Database Migration Tool, gradle plugin, made with Kotlin.

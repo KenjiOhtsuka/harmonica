@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.core.AbstractMigration
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 open class MigrationUpTask: AbstractMigrationTask() {
@@ -26,16 +27,6 @@ open class MigrationUpTask: AbstractMigrationTask() {
                 }
             }
         } catch (e: Exception) {
-            println(e.message)
-            e.stackTrace.forEach {
-                println(
-                        "         " +
-                                it.fileName + " : " +
-                                it.lineNumber + " : " +
-                                it.methodName
-
-                )
-            }
             throw e
         }
     }

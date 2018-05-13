@@ -51,26 +51,30 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
     }
 
     fun executeSelect(sql: String) {
-        createStatement().use { statement ->
-            val rs = statement.executeQuery(sql)
-            while (rs.next()) {
-                for (i in 0 until rs.metaData.columnCount - 1) {
-                    when (rs.metaData.getColumnType(i)) {
-                        Types.DATE -> {}
-                        Types.BIGINT -> {}
-                        Types.BINARY -> {}
-                        Types.BIT -> {}
-                    }
+        val statement = createStatement()
+        val rs = statement.executeQuery(sql)
+        while (rs.next()) {
+            for (i in 0 until rs.metaData.columnCount - 1) {
+                when (rs.metaData.getColumnType(i)) {
+                    Types.DATE -> {}
+                    Types.BIGINT -> {}
+                    Types.BINARY -> {}
+                    Types.BIT -> {}
                 }
             }
-            rs.close()
         }
+        rs.close()
     }
 
+    /**
+     * Execute SQL
+     */
     fun execute(sql: String): Boolean {
-        createStatement().use { statement ->
-            return statement.execute(sql)
-        }
+        val statement = createStatement()
+        val result: Boolean
+        result = statement.execute(sql)
+        statement.close()
+        return result
     }
 
     fun doesTableExist(tableName: String): Boolean {
@@ -81,6 +85,6 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
     }
 
     fun createStatement(): Statement {
-        return Statement(javaConnection.createStatement())
+        return javaConnection.createStatement()
     }
 }

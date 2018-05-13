@@ -7,14 +7,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 open class MigrationCreate: AbstractTask() {
+    @Input
+    val migrationName: String = ""
+
     private val dateFormat: SimpleDateFormat =
             SimpleDateFormat("yyyyMMddHHmmssSSS")
 
     private fun composeName(): String {
-        property("name")?.let {
-            it as String
-            if (it.isNotBlank()) return it
-        }
+        if (migrationName.isNotBlank())
+            return migrationName
+
         return "Migration"
     }
 
@@ -30,7 +32,7 @@ open class MigrationCreate: AbstractTask() {
 
 object : AbstractMigration() {
     override fun up() {
-        createTable("table_name') {
+        createTable("table_name") {
             integer("column_1")
             varchar("column_2")
         }

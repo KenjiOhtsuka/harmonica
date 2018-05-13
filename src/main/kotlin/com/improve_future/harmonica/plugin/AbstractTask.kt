@@ -14,11 +14,6 @@ abstract class AbstractTask: DefaultTask() {
     @Input
     var env: String = "default"
 
-    init {
-        if (property("env") != null && (property("env") as String).isNotBlank())
-            env = property("env") as String
-    }
-
     companion object {
         val engine: KotlinJsr223JvmLocalScriptEngine =
                 ScriptEngineManager().getEngineByName("kotlin")

@@ -46,9 +46,7 @@ class TableBuilder {
 
     fun buildMigrationSql(): String {
         return "CREATE TABLE $name (" +
-                columnList.
-                        map{ "${it.type} ${it.name}" } .
-                        joinToString(", ") +
+                columnList.joinToString(", ") { "${it.name} ${it.sqlType}" } +
                 ");"
     }
 }

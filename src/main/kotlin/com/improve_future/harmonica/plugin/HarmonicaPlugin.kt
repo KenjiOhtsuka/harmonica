@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
 open class HarmonicaPlugin: Plugin<Project> {
     override fun apply(project: Project) {
         project.tasks.run {
-            create("harmonica", MigrationUpTask::class.java) {
+            create("harmonicaUp", MigrationUpTask::class.java) {
 
             }
 

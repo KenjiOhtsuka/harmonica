@@ -5,6 +5,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
 import java.sql.ResultSet
+import java.sql.Statement
 import javax.script.ScriptEngineManager
 
 abstract class AbstractMigrationTask: AbstractTask() {
@@ -40,9 +41,9 @@ abstract class AbstractMigrationTask: AbstractTask() {
         val resultSet: ResultSet
         try {
             resultSet = statement.executeQuery(
-                    "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version")
+                    "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version';")
             resultSet.next()
-            result = resultSet.getLong(0) != 1L
+            result = resultSet.getLong(1) > 0
         } catch (e: Exception) {
             println(e.message)
             statement.close()

@@ -27,16 +27,6 @@ open class MigrationDownTask: AbstractMigrationTask() {
                 println("== [End] Migrate down $migrationVersion ==")
             }
         } catch (e: Exception) {
-            println(e.message)
-            e.stackTrace.forEach {
-                println(
-                        "         " +
-                                it.fileName + " : " +
-                                it.lineNumber + " : " +
-                                it.methodName
-
-                )
-            }
             throw e
         }
     }

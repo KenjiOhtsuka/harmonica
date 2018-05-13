@@ -4,6 +4,7 @@ abstract class AbstractMigration {
     lateinit var connection: Connection
 
     fun createTable(name: String, block: TableBuilder.() -> Unit): Table {
+        println("Create Table: $name")
         val tb = TableBuilder()
         tb.name = name
         tb.block()
@@ -12,10 +13,12 @@ abstract class AbstractMigration {
     }
 
     fun dropTable(name: String) {
+        println("Drop Table: $name")
         connection.execute("DROP TABLE $name")
     }
 
     fun executeSql(sql: String) {
+        println("Execute SQL")
         connection.execute(sql)
     }
 

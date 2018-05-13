@@ -26,6 +26,9 @@ open class MigrationCreate: AbstractTask() {
         migrationFile.createNewFile()
         migrationFile.writeText("""import com.improve_future.harmonica.core.AbstractMigration
 
+/**
+ * ${composeName()}
+ */
 object : AbstractMigration() {
     override fun up() {
         createTable("table_name") {

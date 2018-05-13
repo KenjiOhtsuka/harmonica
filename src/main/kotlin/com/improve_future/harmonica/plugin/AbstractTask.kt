@@ -11,8 +11,14 @@ import javax.script.ScriptEngineManager
 abstract class AbstractTask: DefaultTask() {
     @Input
     open var directoryPath: String = "src/main/kotlin/db"
-    @Input
-    var env: String = "default"
+
+    val env: String
+    get() {
+        if (project.hasProperty("env"))
+            return project.properties["env"] as String
+        return "default"
+    }
+
 
     companion object {
         val engine: KotlinJsr223JvmLocalScriptEngine =

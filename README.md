@@ -1,5 +1,7 @@
 # Kotlin Database Migration Tool
 
+Gradle Plugin Page: https://plugins.gradle.org/plugin/com.improve_future.harmonica
+
 This is Database Migration Tool, gradle plugin, made with Kotlin.
 It is made similar to Phinx, Rails.
 

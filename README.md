@@ -94,4 +94,6 @@ After editin the migration file, you can migrate with command `./gradlew harmoni
 * `harmonicaUp`: migrate
 * `harmonicaDown`: migrate down
 * `harmonicaCreate`: create migration file
+    * `./gradlew harmonicaCreate`: create migration file `XXXXXXXXXX_Migration`
+    * `./gradlew harmonicaCreate -PmigrationName=Abcdefg`: create migration file `XXXXXXXXX_Abcdefg`
 

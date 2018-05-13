@@ -35,7 +35,7 @@ buildscript {
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: '1.2.41'
         classpath 'org.postgresql:postgresql:9.4.1212.jre6'
-        classpath files('/lib/harmonica-1.0-SNAPSHOT.jar')
+        classpath 'com.github.KenjiOhtsuka:harmonica:0.0.1'
     }
 }
 ```

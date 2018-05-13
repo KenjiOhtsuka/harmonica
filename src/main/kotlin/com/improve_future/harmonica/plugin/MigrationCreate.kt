@@ -7,16 +7,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 open class MigrationCreate: AbstractTask() {
-    @Input
-    val migrationName: String = ""
-
     private val dateFormat: SimpleDateFormat =
             SimpleDateFormat("yyyyMMddHHmmssSSS")
 
     private fun composeName(): String {
-        if (migrationName.isNotBlank())
-            return migrationName
-
+        if (project.hasProperty("migrationName"))
+            return project.properties["migrationName"] as String
         return "Migration"
     }
 

@@ -53,7 +53,7 @@ apply plugin: 'harmonica'
 
 #### Create Config File
 
-Current version harmonica needs the following file structure
+Harmonica needs the following file structure
 
 ```
 `- src
@@ -65,6 +65,17 @@ Current version harmonica needs the following file structure
         | `- develop.kts <- you can create own configuration file
         `- migration
 ```
+
+As default, `db` directory must be in `src/main/kotlin` directory,
+but you can change it in `build.gradle` as follows.
+
+```
+extensions.extraProperties["directoryPath"] =
+        "src/main/kotlin/com/improve_future/test/db"
+```
+
+In this case, config files must be in `src/main/kotlin/com/improve_future/test/db/config`,
+and migration files must be in `src/main/kotlin/com/improve_future/test/db/migration`.
 
 ##### default.kts
 

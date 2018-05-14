@@ -5,8 +5,11 @@ import java.sql.*
 
 open class Connection(private val javaConnection: java.sql.Connection): Closeable {
     override fun close() {
-        if (!javaConnection.isClosed) javaConnection.close()
+        if (!isClosed) javaConnection.close()
     }
+
+    val isClosed: Boolean
+    get() { return javaConnection.isClosed }
 
     init {
         javaConnection.autoCommit = false
@@ -48,6 +51,11 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
             javaConnection.rollback()
             throw e
         }
+    }
+
+    fun execAndClose(block: (Connection) -> Unit) {
+        block(this)
+        this.close()
     }
 
     fun executeSelect(sql: String) {

@@ -3,6 +3,8 @@ package com.improve_future.harmonica.core
 import java.sql.Types
 
 class Column(val name: String, val type: Type) {
+    val indexList: MutableList<Index> = mutableListOf()
+
     val sqlType: String
         get() {
             return when (type) {
@@ -35,4 +37,8 @@ class Column(val name: String, val type: Type) {
                 else -> throw Exception()
             }
         }
+
+    fun index() {
+        indexList.add(Index())
+    }
 }

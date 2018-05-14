@@ -7,27 +7,28 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 open class MigrationCreate: AbstractTask() {
-    private val dateFormat: SimpleDateFormat =
-            SimpleDateFormat("yyyyMMddHHmmssSSS")
-
-    private fun composeName(): String {
+    private val migrationName: String
+    get() {
         if (project.hasProperty("migrationName"))
             return project.properties["migrationName"] as String
         return "Migration"
     }
+
+    private val dateFormat: SimpleDateFormat =
+            SimpleDateFormat("yyyyMMddHHmmssSSS")
 
     @TaskAction
     fun createMigration() {
         val version = dateFormat.format(Date())
         val migrationFile = Paths.get(
                 findMigrationDir().absolutePath,
-                "${version}_" + composeName() + ".kts").toFile()
+                "${version}_$migrationName.kts").toFile()
         migrationFile.parentFile.mkdirs()
         migrationFile.createNewFile()
         migrationFile.writeText("""import com.improve_future.harmonica.core.AbstractMigration
 
 /**
- * ${composeName()}
+ * $migrationName
  */
 object : AbstractMigration() {
     override fun up() {

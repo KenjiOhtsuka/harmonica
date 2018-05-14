@@ -29,15 +29,19 @@ class TableBuilder {
     }
 
     fun integer(columnName: String) {
-        column(columnName, java.sql.Types.INTEGER)
+        column(columnName, Types.INTEGER)
     }
 
     fun varchar(columnName: String) {
-        column(columnName, java.sql.Types.VARCHAR)
+        column(columnName, Types.VARCHAR)
     }
 
     fun bool(columnName: String) {
-        column(columnName, java.sql.Types.BOOLEAN)
+        column(columnName, Types.BOOLEAN)
+    }
+
+    fun date(columnName: String) {
+        column(columnName, Types.DATE)
     }
 
     fun create(): Table {

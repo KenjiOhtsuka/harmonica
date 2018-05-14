@@ -60,21 +60,29 @@ abstract class AbstractMigrationTask: AbstractTask() {
 
     protected fun removeVersion(connection: Connection, version: String) {
         connection.execute(
-                "DELETE FROM $migrationTableName WHERE version = $version")
+                "DELETE FROM $migrationTableName WHERE version = '$version'")
     }
 
     protected fun findCurrentMigrationVersion(connection: Connection): String {
+        var result: String = ""
         if (!connection.doesTableExist(migrationTableName))
-            return ""
-        connection.createStatement().use {
-            it.executeQuery("""
+            return result
+
+        val statement = connection.createStatement()
+        try {
+            val resultSet = statement.executeQuery("""
                 SELECT version
                   FROM $migrationTableName
                  ORDER BY version DESC
-                 LIMIT 1""".trimMargin()).use {
-                if (it.next()) return it.getString(0)
-            }
+                 LIMIT 1""".trimMargin())
+            if (resultSet.next()) result = resultSet.getString(1)
+            resultSet.close()
+            statement.close()
+        } catch (e: Exception) {
+            statement.close()
+            throw e
         }
-        return ""
+        statement.close()
+        return result
     }
 }

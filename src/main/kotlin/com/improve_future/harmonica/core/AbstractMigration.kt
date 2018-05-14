@@ -14,7 +14,7 @@ abstract class AbstractMigration {
 
     fun dropTable(name: String) {
         println("Drop Table: $name")
-        connection.execute("DROP TABLE $name")
+        connection.execute("DROP TABLE $name;")
     }
 
     fun executeSql(sql: String) {

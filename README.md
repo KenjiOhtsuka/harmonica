@@ -104,9 +104,29 @@ Execute `harmonicaCreate` task.
 ./gradlew harmonicaCreate
 ```
 
+##### Sample Migration
+
+```
+import com.improve_future.harmonica.core.AbstractMigration
+
+object : AbstractMigration() {
+    override fun up() {
+        createTable("sample_table") {
+            integer("column_1")
+            varchar("column_2")
+            bool("column_3")
+        }
+    }
+
+    override fun down() {
+        dropTable("sample_table")
+    }
+}
+```
+
 Then, migration file will be created
 
-After editin the migration file, you can migrate with command `./gradlew harmonicaUp`.
+After editing the migration file, you can migrate with command `./gradlew harmonicaUp`.
 
 ## Command
 

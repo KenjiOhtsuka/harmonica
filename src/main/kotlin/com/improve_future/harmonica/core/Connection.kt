@@ -1,9 +1,12 @@
 package com.improve_future.harmonica.core
 
+import org.jetbrains.exposed.sql.Database
 import java.io.Closeable
 import java.sql.*
 
 open class Connection(private val javaConnection: java.sql.Connection): Closeable {
+    private val database: Database
+
     override fun close() {
         if (!isClosed) javaConnection.close()
     }
@@ -13,6 +16,7 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
 
     init {
         javaConnection.autoCommit = false
+        database = Database.connect({ javaConnection })
     }
 
     companion object {
@@ -21,12 +25,16 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
         }
 
         fun create(dbConfig: DbConfig): Connection {
-            return Connection(
-                    DriverManager.getConnection(
-                            buildConnectionUriFromDbConfig(dbConfig),
-                            dbConfig.user,
-                            dbConfig.password
-                    ))
+            val j = object : java.sql.Connection by DriverManager.getConnection(
+                    buildConnectionUriFromDbConfig(dbConfig),
+                    dbConfig.user,
+                    dbConfig.password
+            ) {
+                override fun setTransactionIsolation(level: Int) {
+
+                }
+            }
+            return Connection(j)
         }
 
         private fun buildConnectionUriFromDbConfig(dbConfig: DbConfig): String {
@@ -44,12 +52,14 @@ open class Connection(private val javaConnection: java.sql.Connection): Closeabl
     }
 
     open fun transaction(block: Connection.() -> Unit) {
-        try {
-            block()
-            javaConnection.commit()
-        } catch(e: Exception) {
-            javaConnection.rollback()
-            throw e
+        org.jetbrains.exposed.sql.transactions.transaction {
+            try {
+                block()
+                javaConnection.commit()
+            } catch (e: Exception) {
+                javaConnection.rollback()
+                throw e
+            }
         }
     }
 

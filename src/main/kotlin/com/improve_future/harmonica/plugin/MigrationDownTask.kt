@@ -1,7 +1,8 @@
 package com.improve_future.harmonica.plugin
 
-import com.improve_future.harmonica.core.AbstractMigration
+import com.improve_future.harmonica.core.Migration
 import org.gradle.api.tasks.TaskAction
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 
 open class MigrationDownTask: AbstractMigrationTask() {
@@ -17,12 +18,11 @@ open class MigrationDownTask: AbstractMigrationTask() {
             val file = fileCandidateArray.first()
 
             println("== [Start] Migrate down $migrationVersion ==")
-            connection.transaction {
-                val migration: AbstractMigration =
-                        execKotlin(file.readText())
-                migration.connection = connection
-                migration.down()
-                removeVersion(this, migrationVersion)
+            transaction {
+                val migration: Migration =
+                        readMigration(file.readText())
+                migration.downFun()
+                removeVersion(connection, migrationVersion)
             }
             connection.close()
                 println("== [End] Migrate down $migrationVersion ==")

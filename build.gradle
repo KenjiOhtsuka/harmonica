@@ -27,9 +27,13 @@ apply plugin: 'java-gradle-plugin'
 
 repositories {
     mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/kotlin/exposed"
+    }
 }
 
 dependencies {
+    compile 'org.jetbrains.exposed:exposed:0.10.2'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: kotlin_version

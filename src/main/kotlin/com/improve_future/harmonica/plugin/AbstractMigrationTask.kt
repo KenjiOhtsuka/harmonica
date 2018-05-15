@@ -3,9 +3,11 @@ package com.improve_future.harmonica.plugin
 import com.improve_future.harmonica.core.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
 import java.sql.ResultSet
 import java.sql.Statement
+import javax.naming.InitialContext
 import javax.script.ScriptEngineManager
 
 abstract class AbstractMigrationTask: AbstractTask() {
@@ -14,8 +16,8 @@ abstract class AbstractMigrationTask: AbstractTask() {
     @Input
     var dbms: Dbms = Dbms.PostgreSQL
 
-    protected fun execKotlin(script: String): AbstractMigration {
-        return engine.eval(script) as AbstractMigration
+    protected fun readMigration(script: String): Migration {
+        return engine.eval(script) as Migration
     }
 
     protected fun createConnection(): Connection {

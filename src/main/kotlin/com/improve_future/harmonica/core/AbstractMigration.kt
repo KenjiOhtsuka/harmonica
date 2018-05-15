@@ -1,5 +1,8 @@
 package com.improve_future.harmonica.core
 
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+
 abstract class AbstractMigration {
     lateinit var connection: Connection
 
@@ -22,11 +25,15 @@ abstract class AbstractMigration {
         connection.execute(sql)
     }
 
-    open fun up() {
-
+    open fun up(block: Transaction.() -> Unit) {
+        block(TransactionManager.current())
     }
 
-    open fun down() {
+    var up: Transaction.() -> Unit = {}
 
+    open fun down(block: Transaction.() -> Unit) {
+        block(TransactionManager.current())
     }
+
+    protected var down: Transaction.() -> Unit = {}
 }

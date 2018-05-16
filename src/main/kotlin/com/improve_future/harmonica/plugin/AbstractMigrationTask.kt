@@ -1,23 +1,31 @@
 package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.core.*
-import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
 import java.sql.ResultSet
 import java.sql.Statement
-import javax.naming.InitialContext
-import javax.script.ScriptEngineManager
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 abstract class AbstractMigrationTask: AbstractTask() {
     private val migrationTableName: String = "harmonica_migration"
 
+    protected fun transaction(block: () -> Unit) {
+        TransactionManager.currentOrNew(DEFAULT_BUFFER_SIZE).run {
+            try {
+                block()
+                commit()
+            } catch (e: Exception) {
+                rollback()
+                throw e
+            }
+        }
+    }
+
     @Input
     var dbms: Dbms = Dbms.PostgreSQL
 
-    protected fun readMigration(script: String): Migration {
-        return engine.eval(script) as Migration
+    protected fun readMigration(script: String): AbstractMigration {
+        return engine.eval(script) as AbstractMigration
     }
 
     protected fun createConnection(): Connection {

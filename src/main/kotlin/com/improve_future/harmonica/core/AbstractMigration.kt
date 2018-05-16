@@ -25,15 +25,11 @@ abstract class AbstractMigration {
         connection.execute(sql)
     }
 
-    open fun up(block: Transaction.() -> Unit) {
-        block(TransactionManager.current())
+    open fun up() {
+
     }
 
-    var up: Transaction.() -> Unit = {}
+    open fun down() {
 
-    open fun down(block: Transaction.() -> Unit) {
-        block(TransactionManager.current())
     }
-
-    protected var down: Transaction.() -> Unit = {}
 }

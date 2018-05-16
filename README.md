@@ -20,14 +20,7 @@ You have to add the following jar to buildscript classpath
 * jdbc
 * harmonica
 
-This tool ca be retrieved from jitpack.io, so please add the dependency.
-
-```
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-```
-
+This tool can be retrieved from jitpack.io, so please add the repository, and dependency and apply plugin..
 
 Example, using PostgreSQL
 
@@ -40,15 +33,20 @@ buildscript {
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: '1.2.41'
         classpath 'org.postgresql:postgresql:9.4.1212.jre6'
-        classpath 'com.github.KenjiOhtsuka:harmonica:0.0.4'
+        classpath 'com.github.KenjiOhtsuka:harmonica:0.1.0'
     }
 }
-```
 
-add plugin
-
-```
 apply plugin: 'harmonica'
+
+repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    classpath 'org.postgresql:postgresql:9.4.1212.jre6'
+    classpath 'com.github.KenjiOhtsuka:harmonica:0.1.0'
+}
 ```
 
 #### Create Config File
@@ -104,6 +102,8 @@ Execute `harmonicaCreate` task.
 ./gradlew harmonicaCreate
 ```
 
+Then, migration file will be created
+
 ##### Sample Migration
 
 ```
@@ -124,9 +124,30 @@ object : AbstractMigration() {
 }
 ```
 
-Then, migration file will be created
-
 After editing the migration file, you can migrate with command `./gradlew harmonicaUp`.
+
+[Exposed](https://github.com/JetBrains/Exposed) can be used, too.
+
+```
+import org.jetbrains.exposed.sql.SchemaUtils.drop
+import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.Table
+
+object Cities : Table() {
+    val id = integer("id").autoIncrement().primaryKey() // Column<Int>
+}
+
+object : AbstractMigration() {
+    override fun up() {
+        create(Cities)
+    }
+
+    override fun down() {
+        drop(Cities)
+    }
+}
+
+```
 
 ## Command
 

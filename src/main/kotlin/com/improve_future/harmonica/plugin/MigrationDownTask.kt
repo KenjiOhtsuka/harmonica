@@ -20,13 +20,14 @@ open class MigrationDownTask: AbstractMigrationTask() {
             transaction {
                 val migration: AbstractMigration =
                         readMigration(file.readText())
+                migration.connection = connection
                 migration.down()
                 removeVersion(connection, migrationVersion)
             }
-            connection.close()
-                println("== [End] Migrate down $migrationVersion ==")
+            //connection.close()
+            println("== [End] Migrate down $migrationVersion ==")
         } catch (e: Exception) {
-            connection.close()
+            //connection.close()
             throw e
         }
     }

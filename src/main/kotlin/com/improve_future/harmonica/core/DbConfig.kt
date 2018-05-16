@@ -1,5 +1,7 @@
 package com.improve_future.harmonica.core
 
+import com.sun.org.apache.xpath.internal.operations.Bool
+
 class DbConfig {
     lateinit var dbms: Dbms
     lateinit var host: String
@@ -7,6 +9,7 @@ class DbConfig {
     lateinit var dbName: String
     lateinit var user: String
     lateinit var password: String
+    var sslmode: Boolean = false
 
     companion object {
         fun create(block: DbConfig.() -> Unit): DbConfig {
@@ -18,6 +21,7 @@ class DbConfig {
                         Dbms.PostgreSQL -> 5432
                         Dbms.MySQL -> 3396
                         Dbms.SQLite -> 0
+                        Dbms.Oracle -> 0
                     }
                 }
             }
@@ -31,6 +35,8 @@ class DbConfig {
             Dbms.MySQL ->
                     "jdbc:mysql://$host:$port/$dbName"
             Dbms.SQLite ->
+                    ""
+            Dbms.Oracle ->
                     ""
         }
     }

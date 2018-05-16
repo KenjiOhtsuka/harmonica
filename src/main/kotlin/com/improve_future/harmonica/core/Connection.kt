@@ -3,49 +3,63 @@ package com.improve_future.harmonica.core
 import org.jetbrains.exposed.sql.Database
 import java.io.Closeable
 import java.sql.*
+import javax.sql.ConnectionPoolDataSource
+import javax.sql.PooledConnection
 
-open class Connection(private val javaConnection: java.sql.Connection): Closeable {
-    private val database: Database
+open class Connection(
+        private val config: DbConfig
+): Closeable {
+    val javaConnection: java.sql.Connection
+    val database: Database
 
     override fun close() {
         if (!isClosed) javaConnection.close()
+//        DriverManager.deregisterDriver(DriverManager.getDriver(
+//                buildConnectionUriFromDbConfig(config)))
     }
 
     val isClosed: Boolean
     get() { return javaConnection.isClosed }
 
     init {
+//        DriverManager.registerDriver(
+//                DriverManager.getDriver(buildConnectionUriFromDbConfig(config)))
+        javaConnection = object : java.sql.Connection by DriverManager.getConnection(
+                buildConnectionUriFromDbConfig(config),
+                config.user,
+                config.password
+        ) {
+            override fun setTransactionIsolation(level: Int) {
+
+            }
+        }
+
+        //javaConnection.ve
+
+        if (config.dbms == Dbms.Oracle)
+            execute("SELECT 1 FROM DUAL;")
+        else
+            execute("SELECT 1;")
         javaConnection.autoCommit = false
         database = Database.connect({ javaConnection })
     }
 
     companion object {
         fun create(block: DbConfig.() -> Unit): Connection {
-            return create(DbConfig.create(block))
-        }
-
-        fun create(dbConfig: DbConfig): Connection {
-            val j = object : java.sql.Connection by DriverManager.getConnection(
-                    buildConnectionUriFromDbConfig(dbConfig),
-                    dbConfig.user,
-                    dbConfig.password
-            ) {
-                override fun setTransactionIsolation(level: Int) {
-
-                }
-            }
-            return Connection(j)
+            return Connection(DbConfig.create(block))
         }
 
         private fun buildConnectionUriFromDbConfig(dbConfig: DbConfig): String {
             return dbConfig.run {
                 when (dbms) {
                     Dbms.PostgreSQL ->
-                        "jdbc:postgresql://$host:$port/$dbName"
+                        "jdbc:postgresql://$host:$port/$dbName?autoReconnect=true"
                     Dbms.MySQL ->
-                        "jdbc:mysql://$host:$port/$dbName"
+                        "jdbc:mysql://$host:$port/$dbName?autoReconnect=true"
                     Dbms.SQLite ->
                         ""
+                    Dbms.Oracle ->
+                            ""
                 }
             }
         }

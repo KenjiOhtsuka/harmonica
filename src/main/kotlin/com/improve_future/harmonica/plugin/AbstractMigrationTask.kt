@@ -2,6 +2,8 @@ package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.core.*
 import org.gradle.api.tasks.Input
+import org.gradle.workers.IsolationMode
+import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
 import java.sql.ResultSet
 import java.sql.Statement
 import org.jetbrains.exposed.sql.transactions.TransactionManager
@@ -10,12 +12,14 @@ abstract class AbstractMigrationTask: AbstractTask() {
     private val migrationTableName: String = "harmonica_migration"
 
     protected fun transaction(block: () -> Unit) {
-        TransactionManager.currentOrNew(DEFAULT_BUFFER_SIZE).run {
+        TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).run {
             try {
                 block()
                 commit()
+                //close()
             } catch (e: Exception) {
                 rollback()
+                //close()
                 throw e
             }
         }
@@ -29,7 +33,7 @@ abstract class AbstractMigrationTask: AbstractTask() {
     }
 
     protected fun createConnection(): Connection {
-        return Connection.create(loadConfigFile())
+        return Connection(loadConfigFile())
     }
 
     protected fun createStatement(connection: Connection): Statement {

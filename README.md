@@ -32,7 +32,7 @@ buildscript {
     }
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: '1.2.41'
-        classpath 'org.postgresql:postgresql:9.4.1212.jre6'
+        classpath files('/lib/postgresql-42.2.2.jar')
         classpath 'com.github.KenjiOhtsuka:harmonica:0.1.0'
     }
 }
@@ -44,8 +44,9 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    classpath 'org.postgresql:postgresql:9.4.1212.jre6'
-    classpath 'com.github.KenjiOhtsuka:harmonica:0.1.0'
+    // this section is for IDE helping, such as Intellij IDEA
+    compile files('/lib/postgresql-42.2.2.jar')
+    compile 'com.github.KenjiOhtsuka:harmonica:0.1.0'
 }
 ```
 

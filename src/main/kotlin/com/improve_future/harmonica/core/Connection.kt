@@ -24,18 +24,18 @@ open class Connection(
     init {
         val ds = InitialContext().lookup(
                 config.toConnectionUrlString()) as DataSource
-        javaConnection = object : java.sql.Connection by ds.connection {
-            override fun setTransactionIsolation(level: Int) {}
-        }
-//        DriverManager.registerDriver(
-//                DriverManager.getDriver(buildConnectionUriFromDbConfig(config)))
-//        javaConnection = object : java.sql.Connection by DriverManager.getConnection(
-//                buildConnectionUriFromDbConfig(config),
-//                config.user,
-//                config.password
-//        ) {
+//        javaConnection = object : java.sql.Connection by ds.connection {
 //            override fun setTransactionIsolation(level: Int) {}
 //        }
+//        DriverManager.registerDriver(
+//                DriverManager.getDriver(buildConnectionUriFromDbConfig(config)))
+        javaConnection = object : java.sql.Connection by DriverManager.getConnection(
+                buildConnectionUriFromDbConfig(config),
+                config.user,
+                config.password
+        ) {
+            override fun setTransactionIsolation(level: Int) {}
+        }
 
         if (config.dbms == Dbms.Oracle)
             execute("SELECT 1 FROM DUAL;")

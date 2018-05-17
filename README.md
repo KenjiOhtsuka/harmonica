@@ -33,7 +33,7 @@ buildscript {
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: '1.2.41'
         classpath files('/lib/postgresql-42.2.2.jar')
-        classpath 'com.github.KenjiOhtsuka:harmonica:0.1.0'
+        classpath 'com.github.KenjiOhtsuka:harmonica:0.1.1'
     }
 }
 
@@ -46,7 +46,7 @@ repositories {
 dependencies {
     // this section is for IDE helping, such as Intellij IDEA
     compile files('/lib/postgresql-42.2.2.jar')
-    compile 'com.github.KenjiOhtsuka:harmonica:0.1.0'
+    compile 'com.github.KenjiOhtsuka:harmonica:0.1.1'
 }
 ```
 

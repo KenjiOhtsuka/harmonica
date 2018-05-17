@@ -162,3 +162,7 @@ object : AbstractMigration() {
     * `./gradlew harmonicaCreate`: create migration file `XXXXXXXXXX_Migration`
     * `./gradlew harmonicaCreate -PmigrationName=Abcdefg`: create migration file `XXXXXXXXX_Abcdefg`
 
+## Caution
+
+Sometimes, it says "The connection has already been closed" and the migrations fail.
+Then, execute `gradlew --stop` to clear dead connections.

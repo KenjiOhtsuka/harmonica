@@ -1,7 +1,6 @@
 package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.core.AbstractMigration
-import com.improve_future.harmonica.core.Migration
 import org.gradle.api.tasks.TaskAction
 import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
 import java.sql.DriverManager
@@ -22,15 +21,14 @@ open class MigrationUpTask: AbstractMigrationTask() {
                 transaction {
                     val migration: AbstractMigration =
                             readMigration(file.readText())
-                    migration.connection = connection
                     migration.up()
                     saveVersion(connection, migrationVersion)
                 }
                 println("== [End] Migrate up $migrationVersion ==")
             }
-            //connection.close()
+            connection.close()
         } catch (e: Exception) {
-            //connection.close()
+            connection.close()
             throw e
         }
     }

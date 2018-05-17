@@ -16,10 +16,10 @@ abstract class AbstractMigrationTask: AbstractTask() {
             try {
                 block()
                 commit()
-                //close()
+                close()
             } catch (e: Exception) {
                 rollback()
-                //close()
+                close()
                 throw e
             }
         }

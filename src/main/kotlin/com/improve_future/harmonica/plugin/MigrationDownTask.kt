@@ -24,10 +24,10 @@ open class MigrationDownTask: AbstractMigrationTask() {
                 migration.down()
                 removeVersion(connection, migrationVersion)
             }
-            //connection.close()
+            connection.close()
             println("== [End] Migrate down $migrationVersion ==")
         } catch (e: Exception) {
-            //connection.close()
+            connection.close()
             throw e
         }
     }

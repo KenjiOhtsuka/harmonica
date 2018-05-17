@@ -3,8 +3,8 @@ package com.improve_future.harmonica.core
 import org.jetbrains.exposed.sql.Database
 import java.io.Closeable
 import java.sql.*
-import javax.sql.ConnectionPoolDataSource
-import javax.sql.PooledConnection
+import javax.naming.InitialContext
+import javax.sql.DataSource
 
 open class Connection(
         private val config: DbConfig
@@ -22,19 +22,20 @@ open class Connection(
     get() { return javaConnection.isClosed }
 
     init {
+        val ds = InitialContext().lookup(
+                config.toConnectionUrlString()) as DataSource
+        javaConnection = object : java.sql.Connection by ds.connection {
+            override fun setTransactionIsolation(level: Int) {}
+        }
 //        DriverManager.registerDriver(
 //                DriverManager.getDriver(buildConnectionUriFromDbConfig(config)))
-        javaConnection = object : java.sql.Connection by DriverManager.getConnection(
-                buildConnectionUriFromDbConfig(config),
-                config.user,
-                config.password
-        ) {
-            override fun setTransactionIsolation(level: Int) {
-
-            }
-        }
-
-        //javaConnection.ve
+//        javaConnection = object : java.sql.Connection by DriverManager.getConnection(
+//                buildConnectionUriFromDbConfig(config),
+//                config.user,
+//                config.password
+//        ) {
+//            override fun setTransactionIsolation(level: Int) {}
+//        }
 
         if (config.dbms == Dbms.Oracle)
             execute("SELECT 1 FROM DUAL;")
@@ -110,7 +111,8 @@ open class Connection(
     }
 
     fun doesTableExist(tableName: String): Boolean {
-        val resultSet = javaConnection.metaData.getTables(null, null, tableName, null)
+        val resultSet = javaConnection.metaData.getTables(
+                null, null, tableName, null)
         val result = resultSet.next()
         resultSet.close()
         return result

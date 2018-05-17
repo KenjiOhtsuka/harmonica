@@ -22,8 +22,8 @@ open class Connection(
     get() { return javaConnection.isClosed }
 
     init {
-        val ds = InitialContext().lookup(
-                config.toConnectionUrlString()) as DataSource
+//        val ds = InitialContext().lookup(
+//                config.toConnectionUrlString()) as DataSource
 //        javaConnection = object : java.sql.Connection by ds.connection {
 //            override fun setTransactionIsolation(level: Int) {}
 //        }

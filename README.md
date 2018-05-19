@@ -19,6 +19,8 @@ You have to add the following jar to buildscript classpath
 * kotlin-script-util
 * jdbc
 * harmonica
+* Exposed
+* reflection
 
 This tool can be retrieved from jitpack.io, so please add the repository, and dependency and apply plugin..
 

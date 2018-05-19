@@ -12,14 +12,14 @@ abstract class AbstractMigrationTask: AbstractTask() {
     private val migrationTableName: String = "harmonica_migration"
 
     protected fun transaction(block: () -> Unit) {
-        TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).run {
+        TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).let {
             try {
                 block()
-                commit()
-                close()
+                it.commit()
+                it.close()
             } catch (e: Exception) {
-                rollback()
-                close()
+                it.rollback()
+                it.close()
                 throw e
             }
         }

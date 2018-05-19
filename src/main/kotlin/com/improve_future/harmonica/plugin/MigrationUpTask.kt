@@ -21,6 +21,7 @@ open class MigrationUpTask: AbstractMigrationTask() {
                 transaction {
                     val migration: AbstractMigration =
                             readMigration(file.readText())
+                    migration.connection = connection
                     migration.up()
                     saveVersion(connection, migrationVersion)
                 }

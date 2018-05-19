@@ -61,7 +61,7 @@ dependencies {
     compile localGroovy()  // Groovy SDK
     compileOnly gradleApi()
 }
-sourceSets {}
+
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }

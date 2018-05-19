@@ -166,3 +166,7 @@ object : AbstractMigration() {
 
 Sometimes, it says "The connection has already been closed" and the migrations fail.
 Then, execute `gradlew --stop` to clear dead connections.
+
+## Contribute
+
+Pull requests are welcomed!! Please feel free to use it, and to contribute.

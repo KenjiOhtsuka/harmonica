@@ -2,7 +2,7 @@ package com.improve_future.harmonica.core
 
 import com.sun.org.apache.xpath.internal.operations.Bool
 
-class DbConfig {
+open class DbConfig() {
     lateinit var dbms: Dbms
     lateinit var host: String
     var port: Int = -1
@@ -11,20 +11,22 @@ class DbConfig {
     lateinit var password: String
     var sslmode: Boolean = false
 
+    constructor(block: DbConfig.() -> Unit): this() {
+        this.block()
+
+        if (port == -1) {
+            port = when (dbms) {
+                Dbms.PostgreSQL -> 5432
+                Dbms.MySQL -> 3396
+                Dbms.SQLite -> 0
+                Dbms.Oracle -> 0
+            }
+        }
+    }
+
     companion object {
         fun create(block: DbConfig.() -> Unit): DbConfig {
-            return DbConfig().apply {
-                this.block()
-
-                if (port == -1) {
-                    port = when (dbms) {
-                        Dbms.PostgreSQL -> 5432
-                        Dbms.MySQL -> 3396
-                        Dbms.SQLite -> 0
-                        Dbms.Oracle -> 0
-                    }
-                }
-            }
+            return DbConfig(block)
         }
     }
 

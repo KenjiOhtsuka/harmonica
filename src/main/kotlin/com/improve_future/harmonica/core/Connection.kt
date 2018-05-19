@@ -1,6 +1,8 @@
 package com.improve_future.harmonica.core
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.io.Closeable
 import java.sql.*
 import javax.naming.InitialContext
@@ -14,6 +16,9 @@ open class Connection(
 
     override fun close() {
         if (!isClosed) javaConnection.close()
+//        DriverManager.getDrivers().iterator().forEach {
+//            it.takeUnless {  }
+//        }
 //        DriverManager.deregisterDriver(DriverManager.getDriver(
 //                buildConnectionUriFromDbConfig(config)))
     }
@@ -36,13 +41,14 @@ open class Connection(
         ) {
             override fun setTransactionIsolation(level: Int) {}
         }
-
-        if (config.dbms == Dbms.Oracle)
-            execute("SELECT 1 FROM DUAL;")
-        else
-            execute("SELECT 1;")
         javaConnection.autoCommit = false
         database = Database.connect({ javaConnection })
+        when (config.dbms) {
+            Dbms.Oracle ->
+                execute("SELECT 1 FROM DUAL;")
+            else ->
+                execute("SELECT 1;")
+        }
     }
 
     companion object {
@@ -67,20 +73,17 @@ open class Connection(
     }
 
     open fun transaction(block: Connection.() -> Unit) {
-        org.jetbrains.exposed.sql.transactions.transaction {
-            try {
-                block()
-                javaConnection.commit()
-            } catch (e: Exception) {
-                javaConnection.rollback()
-                throw e
-            }
+        javaConnection.autoCommit = false
+        val t = TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL)
+        try {
+            block()
+            t.commit()
+            t.close()
+        } catch (e: Exception) {
+            t.rollback()
+            t.close()
+            throw e
         }
-    }
-
-    fun execAndClose(block: (Connection) -> Unit) {
-        block(this)
-        this.close()
     }
 
     fun executeSelect(sql: String) {

@@ -53,13 +53,15 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
 
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+
     testCompile "org.jetbrains.kotlin:kotlin-test"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit"
 
     compile localGroovy()  // Groovy SDK
     compileOnly gradleApi()
 }
-
+sourceSets {}
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
@@ -72,6 +74,10 @@ gradlePlugin {
         harmonica {
             id = 'harmonica'
             implementationClass = 'com.improve_future.harmonica.plugin.HarmonicaPlugin'
+        }
+        jarmonica {
+            id = 'jarmonica'
+            implementationClass = 'com.improve_future.harmonica.plugin.JarmonicaPlugin'
         }
     }
 }

@@ -66,8 +66,6 @@ class JarmonicaPluginAction : Action<Project> {
                     }
             )
             conventionMapping("main", { "com.improve_future.harmonica.Main" })
-            //conventionMapping("main",
-            //        MainClassConvention(project, ???({ run.getClasspath() })))
         }
     }
 }

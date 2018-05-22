@@ -32,59 +32,36 @@ class JarmonicaPluginAction : Action<Project> {
     override fun execute(project: Project) {
         val javaConvention = project.convention
                 .getPlugin(JavaPluginConvention::class.java)
-        val task1: JarmonicaUpTask = project.tasks.create("jarmonicaUp", JarmonicaUpTask::class.java)
-        task1.run {
+        fun <T:JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
+            return project.tasks.create(name, task).apply {
+                // ToDo: change to Harmonica
+                group = ApplicationPlugin.APPLICATION_GROUP
+                classpath(javaConvention.sourceSets
+                        .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
+                conventionMapping.map(
+                        "jvmArgs",
+                        groovyClosure {
+                            if (project.hasProperty("applicationDefaultJvmArgs"))
+                                project.property("applicationDefaultJvmArgs")
+                            else java.util.Collections.emptyList<Any>()
+                        }
+                )
+            }
+        }
+        createTaskBase("jarmoncaUp", JarmonicaUpTask::class.java).run {
             description = "Compile and migrate up."
-            group = ApplicationPlugin.APPLICATION_GROUP
-            classpath(javaConvention.sourceSets
-                    .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
-            conventionMapping.map(
-                    "jvmArgs",
-                    groovyClosure {
-                        if (project.hasProperty("applicationDefaultJvmArgs"))
-                            project.property("applicationDefaultJvmArgs")
-                        else java.util.Collections.emptyList<Any>()
-                    }
-            )
             conventionMapping("main", { "com.improve_future.harmonica.Main" })
+        }
+        createTaskBase("jarmonicaDown", JarmonicaDownTask::class.java).run {
+            description = "Compile and migrate down."
+            conventionMapping("main", { "com.improve_future.harmonica.Main" })
+        }
+        createTaskBase("jarmonicaCreate", JarmonicaCreateTask::class.java).run {
+            description = "Create migrate file."
+            conventionMapping("main", { "com.improve_future.harmonica.Main" })
+        }
             //conventionMapping("main",
             //        MainClassConvention(project, ???({ run.getClasspath() })))
-        }
-        val task2: JarmonicaDownTask = project.tasks.create("jarmonicaDown", JarmonicaDownTask::class.java)
-        task2.run {
-            description = "Compile and migrate down."
-            // ToDo: change to Harmonica
-            group = ApplicationPlugin.APPLICATION_GROUP
-            classpath(javaConvention.sourceSets
-                    .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
-            conventionMapping.map(
-                    "jvmArgs",
-                    groovyClosure {
-                        if (project.hasProperty("applicationDefaultJvmArgs"))
-                            project.property("applicationDefaultJvmArgs")
-                        else java.util.Collections.emptyList<Any>()
-                    }
-            )
-            conventionMapping("main", { "com.improve_future.harmonica.Main" })
-        }
-        val task3: JarmonicaCreateTask = project.tasks.create("jarmonicaCreate", JarmonicaCreateTask::class.java)
-        task3.run {
-            description = "Create migrate file."
-            // ToDo: change to Harmonica
-            group = ApplicationPlugin.APPLICATION_GROUP
-            classpath(javaConvention.sourceSets
-                    .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
-            conventionMapping.map(
-                    "jvmArgs",
-                    groovyClosure {
-                        if (project.hasProperty("applicationDefaultJvmArgs"))
-                            project.property("applicationDefaultJvmArgs")
-                        else java.util.Collections.emptyList<Any>()
-                    }
-            )
-            conventionMapping("main", { "com.improve_future.harmonica.Main" })
-        }
-
     }
 }
 

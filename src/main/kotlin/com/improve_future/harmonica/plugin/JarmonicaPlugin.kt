@@ -67,6 +67,24 @@ class JarmonicaPluginAction : Action<Project> {
             )
             conventionMapping("main", { "com.improve_future.harmonica.Main" })
         }
+        val task3: JarmonicaCreateTask = project.tasks.create("jarmonicaCreate", JarmonicaCreateTask::class.java)
+        task3.run {
+            description = "Create migrate file."
+            // ToDo: change to Harmonica
+            group = ApplicationPlugin.APPLICATION_GROUP
+            classpath(javaConvention.sourceSets
+                    .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
+            conventionMapping.map(
+                    "jvmArgs",
+                    groovyClosure {
+                        if (project.hasProperty("applicationDefaultJvmArgs"))
+                            project.property("applicationDefaultJvmArgs")
+                        else java.util.Collections.emptyList<Any>()
+                    }
+            )
+            conventionMapping("main", { "com.improve_future.harmonica.Main" })
+        }
+
     }
 }
 

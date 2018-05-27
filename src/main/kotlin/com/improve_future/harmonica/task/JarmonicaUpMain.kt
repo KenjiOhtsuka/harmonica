@@ -1,11 +1,5 @@
 package com.improve_future.harmonica.task
 
-import com.improve_future.harmonica.core.AbstractMigration
-import com.improve_future.harmonica.core.Connection
-import com.improve_future.harmonica.core.DbConfig
-import com.improve_future.harmonica.service.VersionService
-import org.reflections.Reflections
-
 object JarmonicaUpMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {

@@ -17,19 +17,8 @@ fun <T> T.groovyClosure(function: () -> Unit) = object : Closure<Unit>(this) {
 }
 
 class JarmonicaPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
+    override fun apply(project: Project) {
         // register plugin action
-        registerPluginAction(target)
-    }
-
-    private fun registerPluginAction(target: Project) {
-        val actionList = listOf(JarmonicaPluginAction())
-        actionList.forEach { it.execute(target) }
-    }
-}
-
-class JarmonicaPluginAction : Action<Project> {
-    override fun execute(project: Project) {
         val javaConvention = project.convention
                 .getPlugin(JavaPluginConvention::class.java)
         fun <T:JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
@@ -50,18 +39,18 @@ class JarmonicaPluginAction : Action<Project> {
         }
         createTaskBase("jarmonicaUp", JarmonicaUpTask::class.java).run {
             description = "Compile and migrate up."
-            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaDownMain" })
+            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaUpMain" })
         }
         createTaskBase("jarmonicaDown", JarmonicaDownTask::class.java).run {
             description = "Compile and migrate down."
-            conventionMapping("main", { "com.improve_future.harmonica.task.Main" })
+            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaDownMain" })
         }
         createTaskBase("jarmonicaCreate", JarmonicaCreateTask::class.java).run {
             description = "Create migrate file."
-            conventionMapping("main", { "com.improve_future.harmonica.task.Main" })
+            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaCreateMain" })
         }
-            //conventionMapping("main",
-            //        MainClassConvention(project, ???({ run.getClasspath() })))
+        //conventionMapping("main",
+        //        MainClassConvention(project, ???({ run.getClasspath() })))
     }
 }
 
@@ -103,7 +92,7 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
 //    }
 
     override fun exec() {
-        jvmArgs = listOf<String>()//migrationPackage)
+        jvmArgs = listOf<String>()
         args = listOf(migrationPackage, JarmonicaTaskType.Up.toString())
         super.exec()
     }
@@ -111,7 +100,7 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
 
 open class JarmonicaDownTask : JarmonicaMigrationTask() {
     override fun exec() {
-        jvmArgs = listOf<String>()//migrationPackage)
+        jvmArgs = listOf<String>()
         args = listOf(migrationPackage, JarmonicaTaskType.Down.toString())
         super.exec()
     }
@@ -119,7 +108,7 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
 
 open class JarmonicaCreateTask : JarmonicaMigrationTask() {
     override fun exec() {
-        jvmArgs = listOf<String>()//migrationPackage)
+        jvmArgs = listOf<String>()
         args = listOf(migrationPackage, JarmonicaTaskType.Create.toString())
         super.exec()
     }

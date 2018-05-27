@@ -4,7 +4,7 @@ import com.improve_future.harmonica.core.*
 import com.improve_future.harmonica.service.VersionService
 import org.gradle.api.tasks.Input
 
-abstract class AbstractMigrationTask: AbstractTask() {
+abstract class AbstractMigrationTask: AbstractHarmonicaTask() {
     private val migrationTableName: String = "harmonica_migration"
     protected val versionService: VersionService
 

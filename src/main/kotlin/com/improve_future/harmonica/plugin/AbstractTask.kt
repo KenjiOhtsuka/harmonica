@@ -8,14 +8,14 @@ import java.nio.file.Paths
 import javax.script.ScriptEngineManager
 
 abstract class AbstractTask: DefaultTask() {
-    private val directoryPath: String
+    protected val directoryPath: String
     get() {
         if (project.extensions.extraProperties.has("directoryPath"))
             return project.extensions.extraProperties["directoryPath"] as String
         return "src/main/kotlin/db"
     }
 
-    private val env: String
+    protected val env: String
     get() {
         if (project.extensions.extraProperties.has("env"))
             return project.extensions.extraProperties["env"] as String
@@ -24,21 +24,4 @@ abstract class AbstractTask: DefaultTask() {
         return "default"
     }
 
-    companion object {
-        val engine: KotlinJsr223JvmLocalScriptEngine =
-                ScriptEngineManager().getEngineByName("kotlin")
-                        as KotlinJsr223JvmLocalScriptEngine
-    }
-
-    private fun findConfigFile(): File {
-        return Paths.get(directoryPath, "config", "$env.kts").toFile()
-    }
-
-    fun loadConfigFile(): DbConfig {
-        return engine.eval(findConfigFile().readText()) as DbConfig
-    }
-
-    fun findMigrationDir(): File {
-        return Paths.get(directoryPath, "migration").toFile()
-    }
 }

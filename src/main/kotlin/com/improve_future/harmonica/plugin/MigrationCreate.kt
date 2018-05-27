@@ -6,7 +6,7 @@ import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class MigrationCreate: AbstractTask() {
+open class MigrationCreate: AbstractHarmonicaTask() {
     private val migrationName: String
     get() {
         if (project.hasProperty("migrationName"))

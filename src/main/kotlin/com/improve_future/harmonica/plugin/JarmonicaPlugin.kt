@@ -48,17 +48,17 @@ class JarmonicaPluginAction : Action<Project> {
                 )
             }
         }
-        createTaskBase("jarmoncaUp", JarmonicaUpTask::class.java).run {
+        createTaskBase("jarmonicaUp", JarmonicaUpTask::class.java).run {
             description = "Compile and migrate up."
-            conventionMapping("main", { "com.improve_future.harmonica.Main" })
+            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaDownMain" })
         }
         createTaskBase("jarmonicaDown", JarmonicaDownTask::class.java).run {
             description = "Compile and migrate down."
-            conventionMapping("main", { "com.improve_future.harmonica.Main" })
+            conventionMapping("main", { "com.improve_future.harmonica.task.Main" })
         }
         createTaskBase("jarmonicaCreate", JarmonicaCreateTask::class.java).run {
             description = "Create migrate file."
-            conventionMapping("main", { "com.improve_future.harmonica.Main" })
+            conventionMapping("main", { "com.improve_future.harmonica.task.Main" })
         }
             //conventionMapping("main",
             //        MainClassConvention(project, ???({ run.getClasspath() })))
@@ -105,7 +105,6 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
     override fun exec() {
         jvmArgs = listOf<String>()//migrationPackage)
         args = listOf(migrationPackage, JarmonicaTaskType.Up.toString())
-        println(main)
         super.exec()
     }
 }
@@ -114,7 +113,6 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
     override fun exec() {
         jvmArgs = listOf<String>()//migrationPackage)
         args = listOf(migrationPackage, JarmonicaTaskType.Down.toString())
-        println(main)
         super.exec()
     }
 }
@@ -123,16 +121,18 @@ open class JarmonicaCreateTask : JarmonicaMigrationTask() {
     override fun exec() {
         jvmArgs = listOf<String>()//migrationPackage)
         args = listOf(migrationPackage, JarmonicaTaskType.Create.toString())
-        println(main)
         super.exec()
     }
 }
 
 class JarmonicaArgument() {
     lateinit var migrationPackage: String
+    lateinit var taskType: JarmonicaTaskType
 
-    fun toArray() {
-        arrayOf(migrationPackage)
+    fun toArray(): Array<String> {
+        return arrayOf(
+                migrationPackage,
+                taskType.name)
     }
 }
 

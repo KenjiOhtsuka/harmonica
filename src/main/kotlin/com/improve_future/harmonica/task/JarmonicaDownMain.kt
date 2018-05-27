@@ -1,24 +1,26 @@
-package com.improve_future.harmonica.plugin
+package com.improve_future.harmonica.task
 
-import com.improve_future.harmonica.core.AbstractMigration
-import org.gradle.api.tasks.TaskAction
+object JarmonicaDownMain : JarmonicaTaskMain() {
+    @JvmStatic
+    fun main(vararg args: String) {
+        val migrationPackage = args[0]
+        println("main copy")
+//        (classLoader as URLClassLoader).urLs.forEach {
+//            println(it)
+//        }
 
-open class MigrationUpTask: AbstractMigrationTask() {
-    @TaskAction
-    fun migrateUp() {
-        val connection = createConnection()
+        val connection = createConnection(migrationPackage)
         try {
             connection.transaction {
                 versionService.setupHarmonicaMigrationTable(connection)
             }
-            for (file in findMigrationDir().listFiles().sortedBy { it.name }) {
-                val migrationVersion: String = file.name.split('_')[0]
+            for (clazz in findMigrationClassList(migrationPackage)) {
+                val migrationVersion: String = clazz.name.substring(clazz.name.lastIndexOf('_') + 1)
                 if (versionService.doesVersionMigrated(connection, migrationVersion)) continue
 
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {
-                    val migration: AbstractMigration =
-                            readMigration(file.readText())
+                    val migration = clazz.newInstance()
                     migration.connection = connection
                     migration.up()
                     versionService.saveVersion(connection, migrationVersion)

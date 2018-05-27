@@ -9,7 +9,7 @@ open class MigrationDownTask: AbstractMigrationTask() {
     fun migrateDown() {
         val connection = createConnection()
         try {
-            val migrationVersion = findCurrentMigrationVersion(connection)
+            val migrationVersion = versionService.findCurrentMigrationVersion(connection)
             val fileCandidateArray: Array<out File> = findMigrationDir().
                     listFiles { _, name -> name.startsWith(migrationVersion) }
             if (fileCandidateArray.isEmpty())
@@ -19,12 +19,12 @@ open class MigrationDownTask: AbstractMigrationTask() {
             val file = fileCandidateArray.first()
 
             println("== [Start] Migrate down $migrationVersion ==")
-            transaction {
+            connection.transaction {
                 val migration: AbstractMigration =
                         readMigration(file.readText())
                 migration.connection = connection
                 migration.down()
-                removeVersion(connection, migrationVersion)
+                versionService.removeVersion(connection, migrationVersion)
             }
             connection.close()
             println("== [End] Migrate down $migrationVersion ==")

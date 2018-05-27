@@ -23,8 +23,7 @@ class JarmonicaPlugin : Plugin<Project> {
                 .getPlugin(JavaPluginConvention::class.java)
         fun <T:JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
             return project.tasks.create(name, task).apply {
-                // ToDo: change to Harmonica
-                group = ApplicationPlugin.APPLICATION_GROUP
+                group = "harmonica"
                 classpath(javaConvention.sourceSets
                         .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
                 conventionMapping.map(
@@ -59,8 +58,38 @@ abstract class JarmonicaMigrationTask : JavaExec() {
         get() {
             if (project.extensions.extraProperties.has("migrationPackage"))
                 return project.extensions.extraProperties["migrationPackage"] as String
+            if (project.extensions.extraProperties.has("directoryPath"))
+                return directoryPath.removePrefix("src/main/kotlin/").
+                        replace("/", ".")
             return "db"
         }
+
+    protected val directoryPath: String
+        get() {
+            if (project.extensions.extraProperties.has("directoryPath"))
+                return project.extensions.extraProperties["directoryPath"] as String
+            if (project.extensions.extraProperties.has("migrationPackage"))
+                "src/main/kotlin/" + migrationPackage.replace(".", "/")
+            return "src/main/kotlin/db"
+        }
+
+    protected val env: String
+        get() {
+            if (project.extensions.extraProperties.has("env"))
+                return project.extensions.extraProperties["env"] as String
+            if (project.hasProperty("env"))
+                return project.properties["env"] as String
+            return "default"
+        }
+
+    protected fun buildJarmonicaArgument(taskType: JarmonicaTaskType): JarmonicaArgument {
+        return JarmonicaArgument().also {
+            it.migrationDirectory = directoryPath
+            it.migrationPackage = migrationPackage
+            it.env = env
+            it.taskType = taskType
+        }
+    }
 }
 
 open class JarmonicaUpTask : JarmonicaMigrationTask() {
@@ -93,7 +122,7 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
 
     override fun exec() {
         jvmArgs = listOf<String>()
-        args = listOf(migrationPackage, JarmonicaTaskType.Up.toString())
+        args = buildJarmonicaArgument(JarmonicaTaskType.Up).toList()
         super.exec()
     }
 }
@@ -101,7 +130,7 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
 open class JarmonicaDownTask : JarmonicaMigrationTask() {
     override fun exec() {
         jvmArgs = listOf<String>()
-        args = listOf(migrationPackage, JarmonicaTaskType.Down.toString())
+        args = buildJarmonicaArgument(JarmonicaTaskType.Down).toList()
         super.exec()
     }
 }
@@ -109,7 +138,7 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
 open class JarmonicaCreateTask : JarmonicaMigrationTask() {
     override fun exec() {
         jvmArgs = listOf<String>()
-        args = listOf(migrationPackage, JarmonicaTaskType.Create.toString())
+        args = buildJarmonicaArgument(JarmonicaTaskType.Create).toList()
         super.exec()
     }
 }
@@ -117,11 +146,23 @@ open class JarmonicaCreateTask : JarmonicaMigrationTask() {
 class JarmonicaArgument() {
     lateinit var migrationPackage: String
     lateinit var taskType: JarmonicaTaskType
+    lateinit var env: String
+    lateinit var migrationDirectory: String
 
     fun toArray(): Array<String> {
         return arrayOf(
                 migrationPackage,
-                taskType.name)
+                taskType.name,
+                migrationDirectory,
+                env)
+    }
+
+    fun toList(): List<String> {
+        return listOf(
+                migrationPackage,
+                taskType.name,
+                migrationDirectory,
+                env)
     }
 }
 

@@ -3,7 +3,6 @@ package com.improve_future.harmonica.task
 object JarmonicaUpMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
-        println("start main method")
         val migrationPackage = args[0]
 
 //        (classLoader as URLClassLoader).urLs.forEach {

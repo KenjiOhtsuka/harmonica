@@ -4,7 +4,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
         val migrationPackage = args[0]
-        println("main copy")
+
 //        (classLoader as URLClassLoader).urLs.forEach {
 //            println(it)
 //        }

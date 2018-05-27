@@ -8,9 +8,11 @@ import java.sql.DriverManager
 open class MigrationUpTask: AbstractMigrationTask() {
     @TaskAction
     fun migrateUp() {
+        com.improve_future.harmonica.Main
+        println("jarmonica up")
         val connection = createConnection()
         try {
-            transaction {
+            connection.transaction {
                 setupHarmonicaMigrationTable(connection)
             }
             for (file in findMigrationDir().listFiles().sortedBy { it.name }) {
@@ -18,7 +20,7 @@ open class MigrationUpTask: AbstractMigrationTask() {
                 if (doesVersionMigrated(connection, migrationVersion)) continue
 
                 println("== [Start] Migrate up $migrationVersion ==")
-                transaction {
+                connection.transaction {
                     val migration: AbstractMigration =
                             readMigration(file.readText())
                     migration.connection = connection

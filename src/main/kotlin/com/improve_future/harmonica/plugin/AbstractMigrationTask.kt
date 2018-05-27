@@ -2,28 +2,11 @@ package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.core.*
 import org.gradle.api.tasks.Input
-import org.gradle.workers.IsolationMode
-import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
 import java.sql.ResultSet
 import java.sql.Statement
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 abstract class AbstractMigrationTask: AbstractTask() {
     private val migrationTableName: String = "harmonica_migration"
-
-    protected fun transaction(block: () -> Unit) {
-        TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).let {
-            try {
-                block()
-                it.commit()
-                it.close()
-            } catch (e: Exception) {
-                it.rollback()
-                it.close()
-                throw e
-            }
-        }
-    }
 
     @Input
     var dbms: Dbms = Dbms.PostgreSQL

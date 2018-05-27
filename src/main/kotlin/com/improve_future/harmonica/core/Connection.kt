@@ -74,15 +74,16 @@ open class Connection(
 
     open fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
-        val t = TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL)
-        try {
-            block()
-            t.commit()
-            t.close()
-        } catch (e: Exception) {
-            t.rollback()
-            t.close()
-            throw e
+        TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).let {
+            try {
+                block()
+                it.commit()
+                it.close()
+            } catch (e: Exception) {
+                it.rollback()
+                it.close()
+                throw e
+            }
         }
     }
 

@@ -10,7 +10,7 @@ It is made similar to Phinx, Rails.
 
 ## Usage, Command
 
-Look at [Wiki](https://github.com/KenjiOhtsuka/harmonica/wiki).
+Please look at [Wiki](https://github.com/KenjiOhtsuka/harmonica/wiki).
 
 ## Caution
 

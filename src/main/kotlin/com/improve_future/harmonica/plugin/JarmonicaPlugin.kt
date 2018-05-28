@@ -1,11 +1,9 @@
 package com.improve_future.harmonica.plugin
 
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import groovy.lang.Closure
 import org.gradle.api.tasks.SourceSet
-import org.gradle.api.plugins.ApplicationPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.JavaExec
 

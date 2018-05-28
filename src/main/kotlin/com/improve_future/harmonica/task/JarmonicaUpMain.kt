@@ -16,7 +16,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
             }
             for (clazz in findMigrationClassList(migrationPackage)) {
                 val migrationVersion: String = clazz.name.substring(clazz.name.lastIndexOf('_') + 1)
-                if (versionService.doesVersionMigrated(connection, migrationVersion)) continue
+                if (versionService.isVersionMigrated(connection, migrationVersion)) continue
 
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {

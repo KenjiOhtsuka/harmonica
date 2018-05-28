@@ -13,7 +13,7 @@ open class MigrationUpTask: AbstractMigrationTask() {
             }
             for (file in findMigrationDir().listFiles().sortedBy { it.name }) {
                 val migrationVersion: String = file.name.split('_')[0]
-                if (versionService.doesVersionMigrated(connection, migrationVersion)) continue
+                if (versionService.isVersionMigrated(connection, migrationVersion)) continue
 
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {

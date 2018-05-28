@@ -18,7 +18,7 @@ class VersionService(val migrationTableName: String) {
         return connection.createStatement()
     }
 
-    fun doesVersionMigrated(connection: Connection, version: String): Boolean {
+    fun isVersionMigrated(connection: Connection, version: String): Boolean {
         val statement = createStatement(connection)
         val result: Boolean
         val resultSet: ResultSet

@@ -4,13 +4,13 @@ import com.improve_future.harmonica.core.Connection
 import java.sql.ResultSet
 import java.sql.Statement
 
-class VersionService(val migrationTableName: String) {
+class VersionService(private val migrationTableName: String) {
     fun setupHarmonicaMigrationTable(connection: Connection) {
         if (!connection.doesTableExist(migrationTableName)) {
             connection.execute("""
                 CREATE TABLE harmonica_migration (
                     version VARCHAR
-                )""".trimMargin())
+                )""".trimIndent())
         }
     }
 
@@ -57,7 +57,7 @@ class VersionService(val migrationTableName: String) {
                 SELECT version
                   FROM $migrationTableName
                  ORDER BY version DESC
-                 LIMIT 1""".trimMargin())
+                 LIMIT 1""".trimIndent())
             if (resultSet.next()) result = resultSet.getString(1)
             resultSet.close()
             statement.close()
@@ -68,4 +68,23 @@ class VersionService(val migrationTableName: String) {
         statement.close()
         return result
     }
+
+    /**
+     * Pick up version string from class name
+     *
+     * class name is like `M20180101001010101010_Migration`.
+     */
+    fun pickUpVersionFromClassName(clazz: Class<out Any>): String {
+        return pickUpVersionFromClassName(clazz.name)
+    }
+
+    /**
+     * Pick up version string from class name
+     *
+     * class name is like `M20180101001010101010_Migration`.
+     */
+    fun pickUpVersionFromClassName(name: String): String {
+        return name.substring(1, name.indexOf('_'))
+    }
+
 }

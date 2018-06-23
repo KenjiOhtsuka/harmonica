@@ -7,8 +7,8 @@ class VersionServiceTest {
     @Test
     fun pickUpVersionFromClassTest() {
         val versionService = VersionService("test")
-        val version =
-                versionService.pickUpVersionFromClassName("M12345_Migration")
+        val version = versionService.pickUpVersionFromClassName(
+                "com.improve_future.harmonica.test.AA\$M12345_Migration")
         assertEquals("12345", version)
     }
 }

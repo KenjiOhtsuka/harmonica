@@ -15,7 +15,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
                 versionService.setupHarmonicaMigrationTable(connection)
             }
             for (clazz in findMigrationClassList(migrationPackage)) {
-                val migrationVersion: String = clazz.name.substring(clazz.name.lastIndexOf('_') + 1)
+                val migrationVersion = versionService.pickUpVersionFromClassName(clazz.name)
                 if (versionService.isVersionMigrated(connection, migrationVersion)) continue
 
                 println("== [Start] Migrate up $migrationVersion ==")

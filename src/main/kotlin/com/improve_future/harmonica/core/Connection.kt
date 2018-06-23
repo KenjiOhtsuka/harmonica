@@ -11,8 +11,35 @@ import javax.sql.DataSource
 open class Connection(
         private val config: DbConfig
 ): Closeable {
+    private lateinit var coreConnection: java.sql.Connection
+
+    private fun connect(config: DbConfig) {
+        coreConnection = object : java.sql.Connection by DriverManager.getConnection(
+                buildConnectionUriFromDbConfig(config),
+                config.user,
+                config.password
+        ) {
+            override fun setTransactionIsolation(level: Int) {}
+        }
+        database =
+                if (PluginStatus.hasExposed())
+                    Database.connect({ coreConnection })
+                else null
+        coreConnection.autoCommit = false
+    }
+
     val javaConnection: java.sql.Connection
-    val database: Database
+    get () {
+        if (isClosed) connect(config)
+
+        return if (PluginStatus.hasExposed())
+            coreConnection
+//            TransactionManager.current().connection
+        else
+            coreConnection
+    }
+
+    private var database: Database? = null
 
     override fun close() {
         if (!isClosed) javaConnection.close()
@@ -24,7 +51,7 @@ open class Connection(
     }
 
     val isClosed: Boolean
-    get() { return javaConnection.isClosed }
+    get() { return coreConnection.isClosed }
 
     init {
 //        val ds = InitialContext().lookup(
@@ -34,15 +61,8 @@ open class Connection(
 //        }
 //        DriverManager.registerDriver(
 //                DriverManager.getDriver(buildConnectionUriFromDbConfig(config)))
-        javaConnection = object : java.sql.Connection by DriverManager.getConnection(
-                buildConnectionUriFromDbConfig(config),
-                config.user,
-                config.password
-        ) {
-            override fun setTransactionIsolation(level: Int) {}
-        }
-        javaConnection.autoCommit = false
-        database = Database.connect({ javaConnection })
+        //coreConnection =
+        connect(config)
         when (config.dbms) {
             Dbms.Oracle ->
                 execute("SELECT 1 FROM DUAL;")
@@ -87,31 +107,44 @@ open class Connection(
         }
     }
 
-    fun executeSelect(sql: String) {
-        val statement = createStatement()
-        val rs = statement.executeQuery(sql)
-        while (rs.next()) {
-            for (i in 0 until rs.metaData.columnCount - 1) {
-                when (rs.metaData.getColumnType(i)) {
-                    Types.DATE -> {}
-                    Types.BIGINT -> {}
-                    Types.BINARY -> {}
-                    Types.BIT -> {}
-                }
-            }
-        }
-        rs.close()
-    }
+//    fun executeSelect(sql: String) {
+//        val statement = createStatement()
+//        val rs = statement.executeQuery(sql)
+//        while (rs.next()) {
+//            for (i in 0 until rs.metaData.columnCount - 1) {
+//                when (rs.metaData.getColumnType(i)) {
+//                    Types.DATE -> {}
+//                    Types.BIGINT -> {}
+//                    Types.BINARY -> {}
+//                    Types.BIT -> {}
+//                }
+//            }
+//        }
+//        rs.close()
+//    }
 
     /**
      * Execute SQL
      */
     fun execute(sql: String): Boolean {
-        val statement = createStatement()
-        val result: Boolean
-        result = statement.execute(sql)
-        statement.close()
-        return result
+        return if (PluginStatus.hasExposed()) {
+            val tr = TransactionManager.currentOrNull()
+            if (tr == null) {
+                val newTr = TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL)
+                newTr.exec(sql)
+                newTr.close()
+            } else {
+                tr.exec(sql)
+            }
+            // ToDo: return correct status
+            true
+        } else {
+            val statement = createStatement()
+            val result: Boolean
+            result = statement.execute(sql)
+            statement.close()
+            result
+        }
     }
 
     fun doesTableExist(tableName: String): Boolean {

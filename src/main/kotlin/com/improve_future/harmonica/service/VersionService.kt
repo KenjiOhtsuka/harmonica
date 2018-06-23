@@ -1,8 +1,11 @@
 package com.improve_future.harmonica.service
 
 import com.improve_future.harmonica.core.Connection
+import java.nio.file.Paths
 import java.sql.ResultSet
 import java.sql.Statement
+import java.text.SimpleDateFormat
+import java.util.*
 
 class VersionService(private val migrationTableName: String) {
     fun setupHarmonicaMigrationTable(connection: Connection) {
@@ -85,8 +88,30 @@ class VersionService(private val migrationTableName: String) {
      */
     fun pickUpVersionFromClassName(name: String): String {
         val endIndex = name.lastIndexOf('_')
-        val startIndex = name.substring(0, endIndex).lastIndexOf("M")
-        return name.substring(startIndex + 1, endIndex)
+        val startIndex = name.substring(0, endIndex).lastIndexOf(migrationHeadString)
+        return name.substring(startIndex + migrationHeadString.length, endIndex)
     }
 
+    /**
+     * Date format to use for Version Number
+     */
+    private val dateFormat: SimpleDateFormat =
+            SimpleDateFormat("yyyyMMddHHmmssSSS")
+
+    /**
+     * Create new version number
+     */
+    fun createNewVersionNumber(): String {
+        return dateFormat.format(Date())
+    }
+
+    private val migrationHeadString = "M"
+
+    /**
+     * Create new migration file/class name
+     */
+    fun composeNewMigrationName(migrationName: String): String {
+        val version = createNewVersionNumber()
+        return "$migrationHeadString${version}_$migrationName"
+    }
 }

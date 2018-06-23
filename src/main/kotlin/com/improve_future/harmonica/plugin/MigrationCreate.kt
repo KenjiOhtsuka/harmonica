@@ -1,12 +1,13 @@
 package com.improve_future.harmonica.plugin
 
+import com.improve_future.harmonica.service.VersionService
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class MigrationCreate: AbstractHarmonicaTask() {
+open class MigrationCreate : AbstractTask() {
     private val migrationName: String
     get() {
         if (project.hasProperty("migrationName"))
@@ -14,15 +15,14 @@ open class MigrationCreate: AbstractHarmonicaTask() {
         return "Migration"
     }
 
-    private val dateFormat: SimpleDateFormat =
-            SimpleDateFormat("yyyyMMddHHmmssSSS")
+    private val versionService = VersionService("")
 
     @TaskAction
     fun createMigration() {
-        val version = dateFormat.format(Date())
         val migrationFile = Paths.get(
                 findMigrationDir().absolutePath,
-                "${version}_$migrationName.kts").toFile()
+                versionService.composeNewMigrationName(migrationName) + ".kts"
+        ).toFile()
         migrationFile.parentFile.mkdirs()
         migrationFile.createNewFile()
         migrationFile.writeText("""import com.improve_future.harmonica.core.AbstractMigration

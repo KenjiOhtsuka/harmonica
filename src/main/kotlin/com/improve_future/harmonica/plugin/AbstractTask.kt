@@ -24,4 +24,8 @@ abstract class AbstractTask: DefaultTask() {
         return "default"
     }
 
+    fun findMigrationDir(): File {
+        return Paths.get(directoryPath, "migration").toFile()
+    }
+
 }

@@ -52,6 +52,8 @@ class JarmonicaPlugin : Plugin<Project> {
 }
 
 abstract class JarmonicaMigrationTask : JavaExec() {
+    abstract val taskType: JarmonicaTaskType
+
     protected val migrationPackage: String
         get() {
             if (project.extensions.extraProperties.has("migrationPackage"))
@@ -80,17 +82,20 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             return "default"
         }
 
-    protected fun buildJarmonicaArgument(taskType: JarmonicaTaskType): JarmonicaArgument {
+    protected fun buildJarmonicaArgument(
+            vararg args: String): JarmonicaArgument {
         return JarmonicaArgument().also {
             it.migrationDirectory = directoryPath
             it.migrationPackage = migrationPackage
             it.env = env
             it.taskType = taskType
+            args.forEach { arg -> it.add(arg) }
         }
     }
 }
 
 open class JarmonicaUpTask : JarmonicaMigrationTask() {
+    override val taskType = JarmonicaTaskType.Up
 //    private val env: String
 //        get() {
 //            if (project.extensions.extraProperties.has("env"))
@@ -120,23 +125,32 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
 
     override fun exec() {
         jvmArgs = listOf<String>()
-        args = buildJarmonicaArgument(JarmonicaTaskType.Up).toList()
+        args = buildJarmonicaArgument().toList()
         super.exec()
     }
 }
 
 open class JarmonicaDownTask : JarmonicaMigrationTask() {
+    override val taskType: JarmonicaTaskType = JarmonicaTaskType.Down
+
     override fun exec() {
         jvmArgs = listOf<String>()
-        args = buildJarmonicaArgument(JarmonicaTaskType.Down).toList()
+        args = buildJarmonicaArgument().toList()
         super.exec()
     }
 }
 
 open class JarmonicaCreateTask : JarmonicaMigrationTask() {
+    override val taskType = JarmonicaTaskType.Create
+
     override fun exec() {
+        val migrationName =
+                if (project.hasProperty("migrationName"))
+                    project.properties["migrationName"] as String
+                else "Migration"
+
         jvmArgs = listOf<String>()
-        args = buildJarmonicaArgument(JarmonicaTaskType.Create).toList()
+        args = buildJarmonicaArgument(migrationName).toList()
         super.exec()
     }
 }
@@ -146,13 +160,14 @@ class JarmonicaArgument() {
     lateinit var taskType: JarmonicaTaskType
     lateinit var env: String
     lateinit var migrationDirectory: String
+    private val additionalArgList = mutableListOf<String>()
 
     fun toArray(): Array<String> {
         return arrayOf(
                 migrationPackage,
                 taskType.name,
                 migrationDirectory,
-                env)
+                env) + additionalArgList.toTypedArray()
     }
 
     fun toList(): List<String> {
@@ -160,7 +175,12 @@ class JarmonicaArgument() {
                 migrationPackage,
                 taskType.name,
                 migrationDirectory,
-                env)
+                env) + additionalArgList
+    }
+
+    fun add(arg: String): JarmonicaArgument {
+        additionalArgList.add(arg)
+        return this
     }
 }
 

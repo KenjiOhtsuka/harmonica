@@ -20,8 +20,4 @@ abstract class AbstractHarmonicaTask : AbstractTask() {
     fun loadConfigFile(): DbConfig {
         return engine.eval(findConfigFile().readText()) as DbConfig
     }
-
-    fun findMigrationDir(): File {
-        return Paths.get(directoryPath, "migration").toFile()
-    }
 }

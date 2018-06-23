@@ -6,10 +6,10 @@ import com.improve_future.harmonica.core.DbConfig
 import com.improve_future.harmonica.service.VersionService
 import org.reflections.Reflections
 
-open class JarmonicaTaskMain {
-    protected val migrationTableName: String = "harmonica_migration"
+abstract class JarmonicaTaskMain {
+    private val migrationTableName: String = "harmonica_migration"
     protected val versionService: VersionService
-    protected var classLoader: ClassLoader
+    private var classLoader: ClassLoader
 
     init {
         versionService = VersionService(migrationTableName)

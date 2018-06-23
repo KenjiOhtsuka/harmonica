@@ -21,7 +21,7 @@ class JarmonicaPlugin : Plugin<Project> {
                 .getPlugin(JavaPluginConvention::class.java)
         fun <T:JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
             return project.tasks.create(name, task).apply {
-                group = "harmonica"
+                group = "migration"
                 classpath(javaConvention.sourceSets
                         .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
                 conventionMapping.map(

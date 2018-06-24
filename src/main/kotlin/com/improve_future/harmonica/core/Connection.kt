@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.core
 
+import com.improve_future.harmonica.config.PluginConfig
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
 import org.jetbrains.exposed.sql.transactions.TransactionManager
@@ -94,14 +95,25 @@ open class Connection(
 
     open fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
-        TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).let {
+        if (PluginConfig.hasExposed()) {
+            TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).let {
+                try {
+                    block()
+                    it.commit()
+                    it.close()
+                } catch (e: Exception) {
+                    it.rollback()
+                    it.close()
+                    throw e
+                }
+            }
+        } else {
             try {
                 block()
-                it.commit()
-                it.close()
+                javaConnection.commit()
             } catch (e: Exception) {
-                it.rollback()
-                it.close()
+                javaConnection.rollback()
+                javaConnection.close()
                 throw e
             }
         }

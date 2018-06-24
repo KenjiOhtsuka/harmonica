@@ -13,7 +13,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
             if (migrationVersion.isNotEmpty()) {
                 val classCandidateList =
                         versionService.filterClassCandidateWithVersion(
-                                classList, migrationVersion!!)
+                                classList, migrationVersion)
                 if (classCandidateList.isEmpty())
                     throw Error("No migration class is found for the version $migrationVersion.")
                 if (1 < classCandidateList.size)

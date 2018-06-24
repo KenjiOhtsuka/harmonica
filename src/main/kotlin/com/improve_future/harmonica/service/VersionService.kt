@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.service
 
+import com.improve_future.harmonica.core.AbstractMigration
 import com.improve_future.harmonica.core.Connection
 import java.nio.file.Paths
 import java.sql.ResultSet
@@ -113,5 +114,13 @@ class VersionService(private val migrationTableName: String) {
     fun composeNewMigrationName(migrationName: String): String {
         val version = createNewVersionNumber()
         return "$migrationHeadString${version}_$migrationName"
+    }
+
+    fun filterClassCandidateWithVersion(
+            classList: List<Class<AbstractMigration>>, version: String
+    ): List<Class<out AbstractMigration>> {
+        return classList.filter {
+            pickUpVersionFromClassName(it.simpleName) == version
+        }
     }
 }

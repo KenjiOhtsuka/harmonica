@@ -30,7 +30,7 @@ class VersionService(private val migrationTableName: String) {
             resultSet = statement.executeQuery(
                     "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version';")
             resultSet.next()
-            result = resultSet.getLong(1) > 0
+            result = (resultSet.getLong(1) > 0)
         } catch (e: Exception) {
             println(e.message)
             statement.close()
@@ -117,7 +117,7 @@ class VersionService(private val migrationTableName: String) {
     }
 
     fun filterClassCandidateWithVersion(
-            classList: List<Class<AbstractMigration>>, version: String
+            classList: List<Class<out AbstractMigration>>, version: String
     ): List<Class<out AbstractMigration>> {
         return classList.filter {
             pickUpVersionFromClassName(it.simpleName) == version

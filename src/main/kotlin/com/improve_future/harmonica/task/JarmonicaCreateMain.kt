@@ -22,7 +22,7 @@ object JarmonicaCreateMain : JarmonicaTaskMain() {
 /**
  * $migrationName
  */
-object $migrationClassName : AbstractMigration() {
+class $migrationClassName : AbstractMigration() {
     override fun up() {
         createTable("table_name") {
             integer("column_1")

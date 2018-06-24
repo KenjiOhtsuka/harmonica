@@ -14,13 +14,14 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
             connection.transaction {
                 versionService.setupHarmonicaMigrationTable(connection)
             }
-            for (clazz in findMigrationClassList(migrationPackage)) {
-                val migrationVersion = versionService.pickUpVersionFromClassName(clazz.name)
+            for (migrationClass in findMigrationClassList(migrationPackage)) {
+                val migrationVersion =
+                        versionService.pickUpVersionFromClassName(migrationClass.name)
                 if (versionService.isVersionMigrated(connection, migrationVersion)) continue
 
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {
-                    val migration = clazz.newInstance()
+                    val migration = migrationClass.newInstance()
                     migration.connection = connection
                     migration.up()
                     versionService.saveVersion(connection, migrationVersion)

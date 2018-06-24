@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.plugin
 
+import com.improve_future.harmonica.config.PluginConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import groovy.lang.Closure
@@ -21,7 +22,7 @@ class JarmonicaPlugin : Plugin<Project> {
                 .getPlugin(JavaPluginConvention::class.java)
         fun <T:JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
             return project.tasks.create(name, task).apply {
-                group = "migration"
+                group = PluginConfig.groupName
                 classpath(javaConvention.sourceSets
                         .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
                 conventionMapping.map(

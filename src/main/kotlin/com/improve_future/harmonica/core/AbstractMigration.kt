@@ -1,8 +1,5 @@
 package com.improve_future.harmonica.core
 
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.transactions.TransactionManager
-
 abstract class AbstractMigration {
     lateinit var connection: Connection
 

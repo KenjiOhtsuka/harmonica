@@ -4,10 +4,11 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
         val migrationPackage = args[0]
+        val env = args[3]
 
         val classList = findMigrationClassList(migrationPackage)
 
-        val connection = createConnection(migrationPackage)
+        val connection = createConnection(migrationPackage, args[3])
         try {
             val migrationVersion = versionService.findCurrentMigrationVersion(connection)
             if (migrationVersion.isNotEmpty()) {

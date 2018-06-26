@@ -8,8 +8,9 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
 //        (classLoader as URLClassLoader).urLs.forEach {
 //            println(it)
 //        }
+        val env = args[3]
 
-        val connection = createConnection(migrationPackage)
+        val connection = createConnection(migrationPackage, args[3])
         try {
             connection.transaction {
                 versionService.setupHarmonicaMigrationTable(connection)

@@ -17,7 +17,7 @@ open class DbConfig() {
         if (port == -1) {
             port = when (dbms) {
                 Dbms.PostgreSQL -> 5432
-                Dbms.MySQL -> 3396
+                Dbms.MySQL -> 3306
                 Dbms.SQLite -> 0
                 Dbms.Oracle -> 0
             }

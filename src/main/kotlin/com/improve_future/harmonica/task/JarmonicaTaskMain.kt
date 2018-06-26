@@ -16,8 +16,8 @@ abstract class JarmonicaTaskMain {
         classLoader = ClassLoader.getSystemClassLoader()
     }
 
-    protected fun createConnection(packageName: String): Connection {
-        return Connection(loadDbConfig(packageName))
+    protected fun createConnection(packageName: String, env: String): Connection {
+        return Connection(loadDbConfig(packageName, env))
     }
 
     protected fun findMigrationClassList(packageName: String): List<Class<out AbstractMigration>> {

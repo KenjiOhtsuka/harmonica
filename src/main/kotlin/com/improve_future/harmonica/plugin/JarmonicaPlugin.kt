@@ -80,7 +80,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
                 return project.extensions.extraProperties["env"] as String
             if (project.hasProperty("env"))
                 return project.properties["env"] as String
-            return "default"
+            return "Default"
         }
 
     protected fun buildJarmonicaArgument(

@@ -8,7 +8,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
 
         val classList = findMigrationClassList(migrationPackage)
 
-        val connection = createConnection(migrationPackage, args[3])
+        val connection = createConnection(migrationPackage, env)
         try {
             val migrationVersion = versionService.findCurrentMigrationVersion(connection)
             if (migrationVersion.isNotEmpty()) {

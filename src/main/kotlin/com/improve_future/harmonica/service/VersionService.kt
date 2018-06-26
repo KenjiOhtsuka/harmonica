@@ -13,7 +13,7 @@ class VersionService(private val migrationTableName: String) {
         if (!connection.doesTableExist(migrationTableName)) {
             connection.execute("""
                 CREATE TABLE harmonica_migration (
-                    version VARCHAR
+                    version VARCHAR(255)
                 )""".trimIndent())
         }
     }

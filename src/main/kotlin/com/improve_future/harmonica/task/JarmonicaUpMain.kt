@@ -10,7 +10,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
 //        }
         val env = args[3]
 
-        val connection = createConnection(migrationPackage, args[3])
+        val connection = createConnection(migrationPackage, env)
         try {
             connection.transaction {
                 versionService.setupHarmonicaMigrationTable(connection)

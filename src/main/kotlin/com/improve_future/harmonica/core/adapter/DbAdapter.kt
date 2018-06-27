@@ -5,15 +5,12 @@ import com.improve_future.harmonica.core.TableBuilder
 
 abstract class DbAdapter(val connection: Connection) {
     fun createTable(tableName: String, block: TableBuilder.() -> TableBuilder) {
-        println("Create Table: $tableName")
-        createTableCore(tableName, TableBuilder().block())
+        createTable(tableName, TableBuilder().block())
     }
 
-    protected abstract fun createTableCore(
-            tableName: String, tableBuilder: TableBuilder)
+    abstract fun createTable(tableName: String, tableBuilder: TableBuilder)
 
     fun dropTable(tableName: String) {
-        println("Drop Table: $tableName")
         dropTableCore(tableName)
     }
 

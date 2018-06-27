@@ -2,9 +2,6 @@ package com.improve_future.harmonica.core
 
 import java.sql.Types
 
-class Table(name: String) {
-}
-
 typealias Type = Int
 
 class TableBuilder {
@@ -29,15 +26,5 @@ class TableBuilder {
 
     fun date(columnName: String) {
         column(columnName, Types.DATE)
-    }
-
-    fun create(): Table {
-        return Table(name)
-    }
-
-    fun buildMigrationSql(): String {
-        return "CREATE TABLE $name (" +
-                columnList.joinToString(", ") { "${it.name} ${it.sqlType}" } +
-                ");"
     }
 }

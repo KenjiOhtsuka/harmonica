@@ -1,7 +1,11 @@
 package com.improve_future.harmonica.core
 
+import com.improve_future.harmonica.core.adapter.DbAdapter
+
 abstract class AbstractMigration {
     lateinit var connection: Connection
+    lateinit var adapter: DbAdapter
+
 
     fun createTable(name: String, block: TableBuilder.() -> Unit): Table {
         println("Create Table: $name")

@@ -8,9 +8,10 @@ import javax.script.ScriptEngineManager
 
 abstract class AbstractHarmonicaTask : AbstractTask() {
     companion object {
-        val engine: KotlinJsr223JvmLocalScriptEngine =
-                ScriptEngineManager().getEngineByName("kotlin")
-                        as KotlinJsr223JvmLocalScriptEngine
+        val engine: KotlinJsr223JvmLocalScriptEngine by lazy {
+            ScriptEngineManager().getEngineByName("kotlin")
+                    as KotlinJsr223JvmLocalScriptEngine
+        }
     }
 
     private fun findConfigFile(): File {

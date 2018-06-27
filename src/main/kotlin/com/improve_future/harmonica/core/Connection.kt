@@ -8,7 +8,7 @@ import java.io.Closeable
 import java.sql.*
 
 open class Connection(
-        private val config: DbConfig
+        val config: DbConfig
 ): Closeable {
     private lateinit var coreConnection: java.sql.Connection
 

@@ -6,8 +6,6 @@ import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.io.Closeable
 import java.sql.*
-import javax.naming.InitialContext
-import javax.sql.DataSource
 
 open class Connection(
         private val config: DbConfig
@@ -23,7 +21,7 @@ open class Connection(
             override fun setTransactionIsolation(level: Int) {}
         }
         database =
-                if (PluginStatus.hasExposed())
+                if (PluginConfig.hasExposed())
                     Database.connect({ coreConnection })
                 else null
         coreConnection.autoCommit = false
@@ -33,7 +31,7 @@ open class Connection(
     get () {
         if (isClosed) connect(config)
 
-        return if (PluginStatus.hasExposed())
+        return if (PluginConfig.hasExposed())
             coreConnection
 //            TransactionManager.current().connection
         else
@@ -139,7 +137,7 @@ open class Connection(
      * Execute SQL
      */
     fun execute(sql: String): Boolean {
-        return if (PluginStatus.hasExposed()) {
+        return if (PluginConfig.hasExposed()) {
             val tr = TransactionManager.currentOrNull()
             if (tr == null) {
                 val newTr = TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL)

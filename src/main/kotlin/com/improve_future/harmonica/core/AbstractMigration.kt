@@ -14,7 +14,7 @@ abstract class AbstractMigration {
         }
     }
 
-    fun createTable(name: String, block: TableBuilder.() -> TableBuilder) {
+    fun createTable(name: String, block: TableBuilder.() -> Unit) {
         adapter.createTable(name, block)
     }
 

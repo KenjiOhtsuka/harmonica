@@ -22,6 +22,10 @@ class TableBuilder {
         return column(columnName, Types.VARCHAR)
     }
 
+    fun string(columnName: String): Column {
+        return varchar(columnName)
+    }
+
     fun bool(columnName: String): Column {
         return column(columnName, Types.BOOLEAN)
     }

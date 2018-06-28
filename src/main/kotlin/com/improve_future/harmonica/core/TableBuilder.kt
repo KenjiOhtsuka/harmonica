@@ -22,7 +22,10 @@ class TableBuilder {
         return column(columnName, Types.INTEGER)
     }
 
-    fun varchar(columnName: String): Column {
+    /**
+     * variable with limit
+     */
+    fun varchar(columnName: String, size: Int? = null): Column {
         return column(columnName, Types.VARCHAR)
     }
 
@@ -39,5 +42,12 @@ class TableBuilder {
 
     fun date(columnName: String): Column {
         return column(columnName, Types.DATE)
+    }
+
+    /**
+     * unlimited length
+     */
+    fun text(columnName: String): Column {
+        return column(columnName, Types.LONGNVARCHAR)
     }
 }

@@ -14,6 +14,10 @@ class TableBuilder {
         return column
     }
 
+    fun decimal(columnName: String): Column {
+        return column(columnName, Types.DECIMAL)
+    }
+
     fun integer(columnName: String): Column {
         return column(columnName, Types.INTEGER)
     }
@@ -22,6 +26,9 @@ class TableBuilder {
         return column(columnName, Types.VARCHAR)
     }
 
+    /**
+     * Alias for varchar
+     */
     fun string(columnName: String): Column {
         return varchar(columnName)
     }

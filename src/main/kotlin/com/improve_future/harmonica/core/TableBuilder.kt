@@ -14,7 +14,7 @@ class TableBuilder {
         return column
     }
 
-    fun decimal(columnName: String): Column {
+    fun decimal(columnName: String, precision: Int? = null, scale: Int? = null): Column {
         return column(columnName, Types.DECIMAL)
     }
 
@@ -25,18 +25,18 @@ class TableBuilder {
     /**
      * variable with limit
      */
-    fun varchar(columnName: String, size: Int? = null): Column {
+    fun varchar(columnName: String, size: Int? = null, notNull: Boolean = false): Column {
         return column(columnName, Types.VARCHAR)
     }
 
     /**
      * Alias for varchar
      */
-    fun string(columnName: String): Column {
-        return varchar(columnName)
+    fun string(columnName: String, size: Int? = null, notNull: Boolean = false): Column {
+        return varchar(columnName, size, notNull)
     }
 
-    fun bool(columnName: String): Column {
+    fun bool(columnName: String, notNull: Boolean = false): Column {
         return column(columnName, Types.BOOLEAN)
     }
 

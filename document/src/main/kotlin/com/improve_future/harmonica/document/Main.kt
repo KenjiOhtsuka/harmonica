@@ -10,7 +10,7 @@ import java.nio.file.Paths
 import kotlin.io.use
 
 object Main {
-    private val sitePath = Paths.get("..", "doc", "site").toRealPath()!!
+    private val sitePath = Paths.get("..", "docs", "site").toRealPath()!!
 
     @JvmStatic
     fun main(vararg args: String) {

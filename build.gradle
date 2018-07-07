@@ -102,5 +102,5 @@ pluginBundle {
 
 dokka {
     outputFormat = 'html'
-    outputDirectory = Paths.get("doc", "api").toString()
+    outputDirectory = Paths.get("docs", "api").toString()
 }

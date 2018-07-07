@@ -43,4 +43,6 @@ abstract class AbstractColumn(val name: String, val type: Type) {
     fun index() {
         indexList.add(Index())
     }
+
+    var nullable = true
 }

@@ -1,8 +1,10 @@
-package com.improve_future.harmonica.core
+package com.improve_future.harmonica.core.table.column
 
+import com.improve_future.harmonica.core.Index
+import com.improve_future.harmonica.core.table.Type
 import java.sql.Types
 
-class Column(val name: String, val type: Type) {
+abstract class AbstractColumn(val name: String, val type: Type) {
     val indexList: MutableList<Index> = mutableListOf()
 
     val sqlType: String

@@ -3,6 +3,7 @@ package com.improve_future.harmonica.core
 import com.improve_future.harmonica.core.adapter.DbAdapter
 import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
+import com.improve_future.harmonica.core.table.TableBuilder
 
 abstract class AbstractMigration {
     lateinit var connection: Connection

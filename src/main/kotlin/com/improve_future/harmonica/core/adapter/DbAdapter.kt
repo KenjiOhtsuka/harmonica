@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.Connection
-import com.improve_future.harmonica.core.TableBuilder
+import com.improve_future.harmonica.core.table.TableBuilder
 
 abstract class DbAdapter(val connection: Connection) {
     fun createTable(tableName: String, block: TableBuilder.() -> Any) {

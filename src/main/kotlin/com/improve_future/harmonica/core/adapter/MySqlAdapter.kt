@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.Connection
-import com.improve_future.harmonica.core.TableBuilder
+import com.improve_future.harmonica.core.table.TableBuilder
 
 class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {

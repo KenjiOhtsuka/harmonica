@@ -1,7 +1,5 @@
 package com.improve_future.harmonica.core
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-
 open class DbConfig() {
     lateinit var dbms: Dbms
     lateinit var host: String

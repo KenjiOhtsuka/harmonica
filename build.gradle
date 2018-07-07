@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 buildscript {
     ext.kotlin_version = '1.2.50'
 
@@ -23,7 +25,6 @@ version '1.0.3'
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'kotlin'
 apply plugin: 'java-gradle-plugin'
-//apply plugin: 'harmonica'
 apply plugin: 'org.jetbrains.dokka'
 
 
@@ -101,5 +102,5 @@ pluginBundle {
 
 dokka {
     outputFormat = 'html'
-    outputDirectory = "${buildDir.absolutePath}/kdoc"
+    outputDirectory = Paths.get("doc", "api").toString()
 }

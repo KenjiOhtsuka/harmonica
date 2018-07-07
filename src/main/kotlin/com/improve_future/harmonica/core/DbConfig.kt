@@ -2,7 +2,10 @@ package com.improve_future.harmonica.core
 
 open class DbConfig() {
     lateinit var dbms: Dbms
-    lateinit var host: String
+    /**
+     * The default value is 127.0.0.1
+     */
+    var host: String = "127.0.0.1"
     var port: Int = -1
     lateinit var dbName: String
     lateinit var user: String

@@ -8,7 +8,7 @@ import com.improve_future.harmonica.core.table.TableBuilder
 abstract class AbstractMigration {
     lateinit var connection: Connection
 
-    val adapter: DbAdapter by lazy {
+    private val adapter: DbAdapter by lazy {
         when (connection.config.dbms) {
             Dbms.MySQL -> MySqlAdapter(connection)
             else -> PostgreSqlAdapter(connection)

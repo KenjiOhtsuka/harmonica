@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>TableBuilder - harmonica</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">harmonica</a>&nbsp;/&nbsp;<a href="../index.html">com.improve_future.harmonica.core.table</a>&nbsp;/&nbsp;<a href="./index.html">TableBuilder</a><br/>
+<br/>
+<h1>TableBuilder</h1>
+<code><span class="keyword">class </span><span class="identifier">TableBuilder</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">TableBuilder</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="column-list.html">columnList</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">columnList</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="id.html">id</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">id</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="name.html">name</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">name</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="add-column.html">addColumn</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addColumn</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$addColumn(com.improve_future.harmonica.core.table.column.AbstractColumn)/column">column</span><span class="symbol">:</span>&nbsp;<a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="boolean.html">boolean</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">boolean</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$boolean(kotlin.String, kotlin.Boolean)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$boolean(kotlin.String, kotlin.Boolean)/notNull">notNull</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="date.html">date</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">date</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$date(kotlin.String)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="decimal.html">decimal</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">decimal</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$decimal(kotlin.String, kotlin.Int, kotlin.Int)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$decimal(kotlin.String, kotlin.Int, kotlin.Int)/precision">precision</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$decimal(kotlin.String, kotlin.Int, kotlin.Int)/scale">scale</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="integer.html">integer</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">integer</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$integer(kotlin.String)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="string.html">string</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">string</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$string(kotlin.String, kotlin.Int, kotlin.Boolean)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$string(kotlin.String, kotlin.Int, kotlin.Boolean)/size">size</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$string(kotlin.String, kotlin.Int, kotlin.Boolean)/notNull">notNull</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code>
+<p>Alias for varchar</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="text.html">text</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">text</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$text(kotlin.String)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code>
+<p>unlimited length</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="varchar.html">varchar</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">varchar</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$varchar(kotlin.String, kotlin.Int, kotlin.Boolean)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$varchar(kotlin.String, kotlin.Int, kotlin.Boolean)/size">size</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.table.TableBuilder$varchar(kotlin.String, kotlin.Int, kotlin.Boolean)/notNull">notNull</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core.table.column/-abstract-column/index.html"><span class="identifier">AbstractColumn</span></a></code>
+<p>variable with limit</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

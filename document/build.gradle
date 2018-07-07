@@ -1,0 +1,34 @@
+import java.nio.file.Paths
+
+plugins {
+    id 'groovy'
+    id 'org.jetbrains.kotlin.jvm' //version '1.2.50'
+    id 'application'
+}
+
+group 'com.improve_future.harmonica'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    //Fill this in with the version of kotlinx in use in your project
+    def kotlinx_html_version = "0.6.11"
+    // include for server side
+    compile "org.jetbrains.kotlinx:kotlinx-html-jvm:${kotlinx_html_version}"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+mainClassName = "com.improve_future.harmonica.document.Main"

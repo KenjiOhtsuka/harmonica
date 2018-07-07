@@ -51,6 +51,7 @@ class TableBuilder {
      *
      * variable with limit
      *
+     * @param size For MySQL, `null` means 255.
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun varchar(
@@ -59,7 +60,10 @@ class TableBuilder {
             nullable: Boolean = true,
             default: String? = null): AbstractColumn {
         val varcharColumn = VarcharColumn(columnName)
-        varcharColumn.nullable = nullable
+        varcharColumn.also {
+            it.nullable = nullable
+            it.size = size
+        }
         return addColumn(varcharColumn)
     }
 

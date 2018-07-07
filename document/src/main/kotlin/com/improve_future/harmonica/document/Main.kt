@@ -1,5 +1,7 @@
 package com.improve_future.harmonica.document
 
+import com.improve_future.harmonica.document.view.TopView
+import com.improve_future.harmonica.document.view.ViewInterface
 import java.io.*
 import java.nio.file.Path
 import java.nio.file.Paths

@@ -5,7 +5,7 @@ import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 
 object Template {
-    fun default(title: String = "Harmonica", block: BODY.() -> Unit): String {
+    fun default(title: String = "Harmonica", block: DIV.() -> Unit): String {
         return buildString {
             appendln("<!DOCTYPE html>")
             appendHTML().html {
@@ -28,7 +28,21 @@ object Template {
                     }
                     div("container") {
                         row {
-                            div("col-xl-1 col-lg-2 col-md-2 col-sm-3")
+                            // side bar
+                            div("col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down") {
+                                section {
+                                    ul {
+                                        li {}
+                                        li {}
+                                        li {}
+                                        li {}
+                                    }
+                                }
+                            }
+                            // main content
+                            div("col-xl-11 col-lg-10 col-md-10 col-sm-9 col-xs-12") {
+                                block()
+                            }
                         }
                     }
                     footer {

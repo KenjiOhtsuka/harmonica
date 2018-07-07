@@ -23,7 +23,6 @@ version '1.0.3'
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'kotlin'
 apply plugin: 'java-gradle-plugin'
-//apply plugin: 'harmonica'
 apply plugin: 'org.jetbrains.dokka'
 
 
@@ -101,5 +100,5 @@ pluginBundle {
 
 dokka {
     outputFormat = 'html'
-    outputDirectory = "${buildDir.absolutePath}/kdoc"
+    outputDirectory = "${buildDir.absolutePath}/doc/api"
 }

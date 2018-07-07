@@ -1,6 +1,9 @@
+import java.nio.file.Paths
+
 plugins {
     id 'groovy'
-    id 'org.jetbrains.kotlin.jvm' version '1.2.50'
+    id 'org.jetbrains.kotlin.jvm' //version '1.2.50'
+    id 'application'
 }
 
 group 'com.improve_future.harmonica'
@@ -27,3 +30,5 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+mainClassName = "com.improve_future.harmonica.document.Main"

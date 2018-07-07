@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.document.view
 
+import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 
@@ -16,12 +17,20 @@ object Template {
                         attributes["crossorigin"] = "anonymous"
                         attributes["integrity"] = "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
                     }
+//                    link(
+//                            "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css",
+//                            rel = "stylesheet"
+//                    )
+//                    script(src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js") {}
                 }
                 body {
                     header {
-
                     }
-                    block()
+                    div("container") {
+                        row {
+                            div("col-xl-1 col-lg-2 col-md-2 col-sm-3")
+                        }
+                    }
                     footer {
 
                     }

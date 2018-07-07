@@ -16,7 +16,7 @@ This is used for PostgreSQL, not fully adapted to MySQL.
 
 With this library, you can write database migration like as follows.
 
-```
+```kotlin
 package your.package.migration
 
 import com.improve_future.harmonica.core.AbstractMigration

@@ -44,7 +44,8 @@ Please look at [Wiki](https://github.com/KenjiOhtsuka/harmonica/wiki).
 
 ## Caution
 
-Sometimes, it says "The connection has already been closed" and the migrations fail.
+When you use harmonica, not jarmonica,
+sometimes it says "The connection has already been closed" and the migrations fail.
 Then, execute `gradlew --stop` to clear dead connections.
 
 ## Contribute

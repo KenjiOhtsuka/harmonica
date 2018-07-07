@@ -20,7 +20,7 @@ buildscript {
 }
 
 group 'com.improve_future'
-version '1.0.3'
+version '1.0.4'
 
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'kotlin'

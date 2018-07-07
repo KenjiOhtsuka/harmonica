@@ -27,7 +27,7 @@ import com.improve_future.harmonica.core.AbstractMigration
 class M20180624011127699_HolloWorld : AbstractMigration() {
     override fun up() {
         createTable("table_name") {
-            integer("column_1")
+            integer("column_1", nullable = false)
             varchar("column_2")
         }
     }

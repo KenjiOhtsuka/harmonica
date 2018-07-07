@@ -1,4 +1,8 @@
 package com.improve_future.harmonica.document
 
-class Main {
+object Main {
+    @JvmStatic
+    fun main(vararg args: String) {
+
+    }
 }

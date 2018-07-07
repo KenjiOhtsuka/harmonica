@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 buildscript {
     ext.kotlin_version = '1.2.50'
 
@@ -100,5 +102,5 @@ pluginBundle {
 
 dokka {
     outputFormat = 'html'
-    outputDirectory = "${buildDir.absolutePath}/doc/api"
+    outputDirectory = Paths.get("doc", "api").toString()
 }

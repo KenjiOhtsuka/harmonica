@@ -7,6 +7,7 @@ typealias Type = Int
 class TableBuilder {
     lateinit var name: String
     val columnList = mutableListOf<AbstractColumn>()
+    var id = true
 
     protected fun addColumn(column: AbstractColumn): AbstractColumn {
         columnList.add(column)

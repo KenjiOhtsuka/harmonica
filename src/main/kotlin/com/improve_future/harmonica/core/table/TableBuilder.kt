@@ -14,6 +14,13 @@ class TableBuilder {
         return column
     }
 
+    /**
+     * Add decimal column
+     *
+     * @param precision The number of digits in the number.
+     * @param scale The number of digits to the right of the decimal point in the number.
+     * @param nullable null constraint. `false` means `NOT NULL` constraint.
+     */
     fun decimal(
             columnName: String,
             precision: Int? = null,
@@ -25,6 +32,11 @@ class TableBuilder {
         return addColumn(decimalColumn)
     }
 
+    /**
+     * Add integer column.
+     *
+     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     */
     fun integer(
             columnName: String,
             nullable: Boolean = true,
@@ -35,7 +47,11 @@ class TableBuilder {
     }
 
     /**
+     * add varchar column
+     *
      * variable with limit
+     *
+     * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun varchar(
             columnName: String,
@@ -48,7 +64,11 @@ class TableBuilder {
     }
 
     /**
-     * Alias for varchar
+     * add varchar column
+     *
+     * Alias for varchar.
+     *
+     * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun string(
             columnName: String,
@@ -58,6 +78,11 @@ class TableBuilder {
         return varchar(columnName, size, nullable)
     }
 
+    /**
+     * add boolean column
+     *
+     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     */
     fun boolean(
             columnName: String,
             nullable: Boolean = false,
@@ -67,9 +92,14 @@ class TableBuilder {
         return addColumn(booleanColumn)
     }
 
+    /**
+     * add date column
+     *
+     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     */
     fun date(
             columnName: String,
-            nullable: Boolean = false): AbstractColumn {
+            nullable: Boolean = true): AbstractColumn {
         val dateColumn = DateColumn(columnName)
         dateColumn.nullable = nullable
         return addColumn(dateColumn)

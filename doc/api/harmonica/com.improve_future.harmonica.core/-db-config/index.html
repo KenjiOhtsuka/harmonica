@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DbConfig - harmonica</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">harmonica</a>&nbsp;/&nbsp;<a href="../index.html">com.improve_future.harmonica.core</a>&nbsp;/&nbsp;<a href="./index.html">DbConfig</a><br/>
+<br/>
+<h1>DbConfig</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">DbConfig</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">DbConfig</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.DbConfig$<init>(kotlin.Function1((com.improve_future.harmonica.core.DbConfig, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">DbConfig</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span></code><br/>
+<code><span class="identifier">DbConfig</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="db-name.html">dbName</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">dbName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="dbms.html">dbms</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">dbms</span><span class="symbol">: </span><a href="../-dbms/index.html"><span class="identifier">Dbms</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="host.html">host</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">host</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>The default value is 127.0.0.1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="password.html">password</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">password</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="port.html">port</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">port</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="sslmode.html">sslmode</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">sslmode</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="user.html">user</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">user</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="to-connection-url-string.html">toConnectionUrlString</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">toConnectionUrlString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="create.html">create</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">create</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.DbConfig.Companion$create(kotlin.Function1((com.improve_future.harmonica.core.DbConfig, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">DbConfig</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">DbConfig</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../invoke.html">invoke</a></p>
+</td>
+<td>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><a href="./index.html"><span class="identifier">DbConfig</span></a><span class="symbol">.</span><span class="identifier">invoke</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core$invoke(com.improve_future.harmonica.core.DbConfig, kotlin.Function1((com.improve_future.harmonica.core.DbConfig, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">DbConfig</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">DbConfig</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

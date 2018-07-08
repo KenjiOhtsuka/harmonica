@@ -32,7 +32,11 @@ abstract class AbstractMigration {
         // ToDo
     }
 
-    fun addIndex(tableName: String) {
+    fun addIndex(tableName: String, columnName: String) {
+        // ToDo
+    }
+
+    fun addIndex(tableName: String, columnNameArray: Array<String>) {
         // ToDo
     }
 

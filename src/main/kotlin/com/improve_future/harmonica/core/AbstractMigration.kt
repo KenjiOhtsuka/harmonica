@@ -24,6 +24,22 @@ abstract class AbstractMigration {
         adapter.dropTable(name)
     }
 
+    fun removeColumn(tableName: String) {
+        // ToDo
+    }
+
+    fun addColumn(tableName: String) {
+        // ToDo
+    }
+
+    fun addIndex(tableName: String) {
+        // ToDo
+    }
+
+    fun removeIndex(tableName: String) {
+        // ToDo
+    }
+
     fun executeSql(sql: String) {
         println("Execute SQL")
         connection.execute(sql)

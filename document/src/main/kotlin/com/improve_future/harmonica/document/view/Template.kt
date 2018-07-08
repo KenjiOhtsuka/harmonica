@@ -32,10 +32,26 @@ object Template {
                             div("col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down") {
                                 section {
                                     ul {
-                                        li {}
-                                        li {}
-                                        li {}
-                                        li {}
+                                        li {
+                                            a() {
+                                                +"Top"
+                                            }
+                                        }
+                                        li {
+                                            a() {
+                                                +"Jarmonica"
+                                            }
+
+                                        }
+                                        li {
+                                            a() {
+                                                +"Harmonica"
+                                            }
+
+                                        }
+                                        li {
+                                            
+                                        }
                                     }
                                 }
                             }

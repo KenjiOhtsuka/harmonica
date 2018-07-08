@@ -10,7 +10,7 @@ Gradle Plugin Page: https://plugins.gradle.org/plugin/com.improve_future.harmoni
 This is Database Migration Tool, gradle plugin, made with Kotlin.
 It is made similar to Phinx, Rails.
 
-This is used for PostgreSQL, not fully adapted to MySQL.
+Now, this tool is for PostgreSQL and MySQL.
 
 ## Overview
 
@@ -51,3 +51,7 @@ Then, execute `gradlew --stop` to clear dead connections.
 ## Contribute
 
 Pull requests are welcomed!! Please feel free to use it, and to contribute.
+
+## Links
+
+* [API Document](https://kenjiohtsuka.github.io/harmonica/api/harmonica/index.html)

@@ -49,10 +49,6 @@ abstract class AbstractMigration {
         println("Drop Index: $tableName $indexName")
     }
 
-    fun removeIndex(tableName: String) {
-        // ToDo
-    }
-
     fun executeSql(sql: String) {
         println("Execute SQL")
         connection.execute(sql)

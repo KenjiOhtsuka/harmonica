@@ -4,9 +4,7 @@ import com.improve_future.harmonica.core.adapter.DbAdapter
 import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
 import com.improve_future.harmonica.core.table.TableBuilder
-import com.improve_future.harmonica.core.table.column.AbstractColumn
-import com.improve_future.harmonica.core.table.column.AddingColumnOption
-import com.improve_future.harmonica.core.table.column.IntegerColumn
+import com.improve_future.harmonica.core.table.column.*
 
 abstract class AbstractMigration {
     lateinit var connection: Connection
@@ -33,7 +31,9 @@ abstract class AbstractMigration {
         adapter.removeColumn(tableName, columnName)
     }
 
-    private fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
+    private fun addColumn(
+            tableName: String, column: AbstractColumn,
+            first: Boolean = false, justBeforeColumnName: String? = null) {
         // ToDo
     }
 
@@ -55,28 +55,43 @@ abstract class AbstractMigration {
             it.nullable = nullable
             it.default = default
         }
-        val option = AddingColumnOption().also {
-            it.first = first
-            it.justBeforeColumn = justBeforeColumnName
-        }
-        addColumn(tableName, integerColumn, option)
+        addColumn(tableName, integerColumn, first, justBeforeColumnName)
     }
 
     fun addVarcharColumn(
             tableName: String, columnName: String,
-            nullable: Boolean = true, default: String? = null) {
+            nullable: Boolean = true, default: String? = null,
+            first: Boolean = false, justBeforeColumnName: String? = null) {
+        val varcharColumn = VarcharColumn(columnName)
+        varcharColumn.also {
+            it.nullable = nullable
+            it.default = default
+        }
+        addColumn(tableName, varcharColumn, first, justBeforeColumnName)
     }
 
     fun addBooleanColumn(
             tableName: String, columnName: String,
-            nullable: Boolean = true, default: Boolean? = null) {
-
+            nullable: Boolean = true, default: Boolean? = null,
+            first: Boolean = false, justBeforeColumnName: String? = null) {
+        val booleanColumn = BooleanColumn(columnName)
+        booleanColumn.also {
+            it.nullable = nullable
+            it.default = default
+        }
+        addColumn(tableName, booleanColumn, first, justBeforeColumnName)
     }
 
     fun addTextColumn(
             tableName: String, columnName: String,
-            nullable: Boolean = true, default: String? = null) {
-
+            nullable: Boolean = true, default: String? = null,
+            first: Boolean = false, justBeforeColumnName: String? = null) {
+        val textColumn = TextColumn(columnName)
+        textColumn.also {
+            it.nullable = nullable
+            it.default = default
+        }
+        addColumn(tableName, textColumn, first, justBeforeColumnName)
     }
 
     fun createIndex(tableName: String, columnName: String) {

@@ -42,6 +42,11 @@ abstract class AbstractMigration {
         // println("Add Index:")
     }
 
+    fun dropIndex(tableName: String, indexName: String) {
+        adapter.dropIndex(tableName, indexName)
+        println("Drop Index: $tableName $indexName")
+    }
+
     fun removeIndex(tableName: String) {
         // ToDo
     }

@@ -12,11 +12,15 @@ abstract class DbAdapter(val connection: Connection) {
 
     abstract fun createIndex(tableName: String, columnName: String, unique: Boolean = false)
 
+    fun dropIndex(tableName: String, indexName: String) {
+        connection.execute("DROP INDEX $indexName ON $tableName;")
+    }
+
     fun dropTable(tableName: String) {
         dropTableCore(tableName)
     }
 
     open fun dropTableCore(tableName: String) {
-        connection.execute("DROP TABLE $tableName")
+        connection.execute("DROP TABLE $tableName;")
     }
 }

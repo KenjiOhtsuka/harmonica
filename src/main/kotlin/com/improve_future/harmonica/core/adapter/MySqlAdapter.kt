@@ -39,8 +39,11 @@ class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
         }
     }
 
-    override fun createIndex(tableName: String, columnName: String) {
-
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
+        var sql = "CREATE"
+        if (unique) sql += " UNIQUE"
+        //sql += " INDEX ${tableName}_$columnName ON $tableName($columnName);"
+        sql += " INDEX ON $tableName($columnName);"
+        connection.execute(sql)
     }
 }

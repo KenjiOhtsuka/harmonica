@@ -31,19 +31,30 @@ abstract class AbstractMigration {
         adapter.removeColumn(tableName, columnName)
     }
 
+    /**
+     * Add new column to existing table
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL.
+     */
     private fun addColumn(
             tableName: String, column: AbstractColumn,
             first: Boolean = false, justBeforeColumnName: String? = null) {
-        // ToDo
+        val option = AddingColumnOption().also {
+            it.first = first
+            it.justBeforeColumn = justBeforeColumnName
+        }
+        println("Add column: $tableName ${column.name}")
+        adapter.addColumn(tableName, column, option)
     }
 
     /**
-     * Add new integer column to existing table
+     * Add new integer column to existing table.
      *
-     * @param first You add column at first of the columns
-     * valid only for MySQL
+     * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
-     * valid only for MySQL
+     * (valid only for MySQL)
      */
     fun addIntegerColumn(
             tableName: String, columnName: String,
@@ -58,6 +69,13 @@ abstract class AbstractMigration {
         addColumn(tableName, integerColumn, first, justBeforeColumnName)
     }
 
+    /**
+     * Add new varchar column to existing table.
+     *
+     * @param first You add column at first of the columns (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be add just after
+     * (valid only for MySQL)
+     */
     fun addVarcharColumn(
             tableName: String, columnName: String,
             nullable: Boolean = true, default: String? = null,
@@ -70,6 +88,13 @@ abstract class AbstractMigration {
         addColumn(tableName, varcharColumn, first, justBeforeColumnName)
     }
 
+    /**
+     * Add new boolean column to existing table.
+     *
+     * @param first You add column at first of the columns (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
     fun addBooleanColumn(
             tableName: String, columnName: String,
             nullable: Boolean = true, default: Boolean? = null,
@@ -82,6 +107,13 @@ abstract class AbstractMigration {
         addColumn(tableName, booleanColumn, first, justBeforeColumnName)
     }
 
+    /**
+     * Add new text column to existing table.
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
     fun addTextColumn(
             tableName: String, columnName: String,
             nullable: Boolean = true, default: String? = null,

@@ -10,6 +10,8 @@ abstract class DbAdapter(val connection: Connection) {
 
     abstract fun createTable(tableName: String, tableBuilder: TableBuilder)
 
+    abstract fun createIndex(tableName: String, columnName: String)
+
     fun dropTable(tableName: String) {
         dropTableCore(tableName)
     }

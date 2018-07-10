@@ -38,4 +38,9 @@ class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
             return sql
         }
     }
+
+    override fun createIndex(tableName: String, columnName: String) {
+
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

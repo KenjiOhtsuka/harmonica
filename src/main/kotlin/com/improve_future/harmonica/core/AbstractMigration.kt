@@ -30,8 +30,24 @@ abstract class AbstractMigration {
         adapter.removeColumn(tableName, columnName)
     }
 
-    fun addColumn(tableName: String) {
+    private fun addColumn(tableName: String) {
         // ToDo
+    }
+
+    fun addIntegerColumn() {
+
+    }
+
+    fun addVarcharColumn() {
+
+    }
+
+    fun addBooleanColumn() {
+
+    }
+
+    fun addTextColumn() {
+
     }
 
     fun createIndex(tableName: String, columnName: String) {

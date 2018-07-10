@@ -39,10 +39,10 @@ abstract class AbstractMigration {
         adapter.createIndex(tableName, columnName)
     }
 
-    fun createIndex(tableName: String, columnNameArray: Array<String>) {
-        // ToDo
-        // println("Add Index:")
-    }
+//    fun createIndex(tableName: String, columnNameArray: Array<String>) {
+//        // ToDo
+//        // println("Add Index:")
+//    }
 
     fun dropIndex(tableName: String, indexName: String) {
         adapter.dropIndex(tableName, indexName)

@@ -17,10 +17,10 @@ abstract class DbAdapter(val connection: Connection) {
     }
 
     fun dropTable(tableName: String) {
-        dropTableCore(tableName)
+        connection.execute("DROP TABLE $tableName;")
     }
 
-    open fun dropTableCore(tableName: String) {
-        connection.execute("DROP TABLE $tableName;")
+    fun removeColumn(tableName: String, columnName: String) {
+        connection.execute("ALTER TABLE $tableName DROP COLUMN $columnName;")
     }
 }

@@ -16,6 +16,7 @@ abstract class AbstractMigration {
     }
 
     fun createTable(name: String, block: TableBuilder.() -> Unit) {
+        println("Create Table: $name")
         adapter.createTable(name, block)
     }
 
@@ -24,8 +25,9 @@ abstract class AbstractMigration {
         adapter.dropTable(name)
     }
 
-    fun removeColumn(tableName: String) {
-        // ToDo
+    fun removeColumn(tableName: String, columnName: String) {
+        println("Remove Column: $tableName $columnName")
+        adapter.removeColumn(tableName, columnName)
     }
 
     fun addColumn(tableName: String) {
@@ -33,8 +35,8 @@ abstract class AbstractMigration {
     }
 
     fun createIndex(tableName: String, columnName: String) {
-        adapter.createIndex(tableName, columnName)
         println("Add Index: $tableName $columnName")
+        adapter.createIndex(tableName, columnName)
     }
 
     fun createIndex(tableName: String, columnNameArray: Array<String>) {

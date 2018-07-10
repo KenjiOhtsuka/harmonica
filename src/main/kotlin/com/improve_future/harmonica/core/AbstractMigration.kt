@@ -34,19 +34,26 @@ abstract class AbstractMigration {
         // ToDo
     }
 
-    fun addIntegerColumn() {
+    fun addIntegerColumn(
+            tableName: String, columnName: String,
+            nullable: Boolean = true, default: Long? = null) {
 
     }
 
-    fun addVarcharColumn() {
+    fun addVarcharColumn(
+            tableName: String, columnName: String,
+            nullable: Boolean = true, default: String? = null) {
+    }
+
+    fun addBooleanColumn(
+            tableName: String, columnName: String,
+            nullable: Boolean = true, default: Boolean? = null) {
 
     }
 
-    fun addBooleanColumn() {
-
-    }
-
-    fun addTextColumn() {
+    fun addTextColumn(
+            tableName: String, columnName: String,
+            nullable: Boolean = true, default: String? = null) {
 
     }
 

@@ -5,7 +5,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
     fun main(vararg args: String) {
         val migrationPackage = args[0]
         val env = args[3]
-        val maxStep = if (args[5] == "") null else args[5].toLong()
+        val maxStep = if (args[4] == "") null else args[4].toLong()
         var stepCounter = 1
 
         val classList = findMigrationClassList(migrationPackage)

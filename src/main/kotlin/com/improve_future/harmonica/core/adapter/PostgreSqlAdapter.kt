@@ -3,6 +3,7 @@ package com.improve_future.harmonica.core.adapter
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.AbstractColumn
+import com.improve_future.harmonica.core.table.column.AddingColumnOption
 import com.improve_future.harmonica.core.table.column.IntegerColumn
 
 class PostgreSqlAdapter(connection: Connection) : DbAdapter(connection) {
@@ -39,6 +40,16 @@ class PostgreSqlAdapter(connection: Connection) : DbAdapter(connection) {
         if (unique) sql += " UNIQUE"
         //sql += " INDEX ${tableName}_$columnName ON $tableName($columnName);"
         sql += " INDEX ON $tableName($columnName);"
+        connection.execute(sql)
+    }
+
+    override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
+        var sql = "ALTER TABLE $tableName"
+        sql += " ADD COLUMN ${column.name}"
+        when (column) {
+            is IntegerColumn -> {}
+        }
+        if (!column.nullable) sql += " NOT NULL"
         connection.execute(sql)
     }
 }

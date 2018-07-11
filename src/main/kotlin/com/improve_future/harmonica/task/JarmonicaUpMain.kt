@@ -4,11 +4,12 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
         val migrationPackage = args[0]
-
 //        (classLoader as URLClassLoader).urLs.forEach {
 //            println(it)
 //        }
         val env = args[3]
+        val maxStep = if (args[5] == "") null else args[5].toLong()
+        var stepCounter = 1
 
         val connection = createConnection(migrationPackage, env)
         try {
@@ -28,6 +29,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
                     versionService.saveVersion(connection, migrationVersion)
                 }
                 println("== [End] Migrate up $migrationVersion ==")
+                if (maxStep != null && ++stepCounter > maxStep) break;
             }
             connection.close()
         } catch (e: Exception) {

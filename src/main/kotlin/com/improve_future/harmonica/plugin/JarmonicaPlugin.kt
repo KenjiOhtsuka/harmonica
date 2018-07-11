@@ -71,11 +71,11 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
     override val taskType: JarmonicaTaskType = JarmonicaTaskType.Down
 
     override fun exec() {
-        val step = getProperty("step") as Long?
+        val step = getProperty("step") as Long? ?: 1
 
         jvmArgs = listOf<String>()
         args = buildJarmonicaArgument(
-                step?.toString() ?: ""
+                step?.toString()
         ).toList()
         super.exec()
     }

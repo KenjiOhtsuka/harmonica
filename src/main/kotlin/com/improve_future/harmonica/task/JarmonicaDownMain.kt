@@ -5,13 +5,17 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
     fun main(vararg args: String) {
         val migrationPackage = args[0]
         val env = args[3]
+        val maxStep = if (args[5] == "") null else args[5].toLong()
+        var stepCounter = 1
 
         val classList = findMigrationClassList(migrationPackage)
 
         val connection = createConnection(migrationPackage, env)
         try {
-            val migrationVersion = versionService.findCurrentMigrationVersion(connection)
-            if (migrationVersion.isNotEmpty()) {
+            while (true) {
+                val migrationVersion = versionService.findCurrentMigrationVersion(connection)
+                if (migrationVersion.isEmpty()) break
+
                 val classCandidateList =
                         versionService.filterClassCandidateWithVersion(
                                 classList, migrationVersion)
@@ -29,6 +33,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
                     versionService.removeVersion(connection, migrationVersion!!)
                 }
                 println("== [End] Migrate down $migrationVersion ==")
+                if (maxStep != null && ++stepCounter > maxStep) break
             }
             connection.close()
         } catch (e: Exception) {

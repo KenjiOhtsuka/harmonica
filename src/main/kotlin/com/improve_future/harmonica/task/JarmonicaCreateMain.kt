@@ -13,7 +13,7 @@ object JarmonicaCreateMain : JarmonicaTaskMain() {
 
         val migrationFile = Paths.get(
                 Paths.get(migrationDirectory, "migration").toFile().absolutePath,
-                versionService.composeNewMigrationName(migrationName) + ".kt"
+                "$migrationClassName.kt"
         ).toFile()
         migrationFile.parentFile.mkdirs()
         migrationFile.createNewFile()

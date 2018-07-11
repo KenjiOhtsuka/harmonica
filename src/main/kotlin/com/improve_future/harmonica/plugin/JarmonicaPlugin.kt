@@ -113,9 +113,3 @@ open class JarmonicaCreateTask : JarmonicaMigrationTask() {
         super.exec()
     }
 }
-
-enum class JarmonicaTaskType {
-    Up,
-    Down,
-    Create
-}

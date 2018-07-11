@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.document.view
 
+import com.improve_future.harmonica.document.helper.col
 import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.div
 import kotlinx.html.h1
@@ -11,12 +12,12 @@ object JarmonicaView : ViewInterface {
     override fun index(): String {
         return Template.default("Home") {
             row {
-                div("col") {
+                col {
                     h1 { +"Jarmonica" }
                 }
             }
             row {
-                div("col") {
+                col {
                     p { +"Jarmonica, migration with compiled Kotlin classes." }
                 }
             }

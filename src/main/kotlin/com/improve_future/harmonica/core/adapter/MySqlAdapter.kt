@@ -49,7 +49,11 @@ class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
         var sql = "ALTER TABLE $tableName"
         sql += " ADD COLUMN ${column.name} " + column.sqlType
         when (column) {
-            is IntegerColumn -> {}
+            is VarcharColumn -> {
+                sql +=
+                        if (column.size == null) "(255)"
+                        else "(" + column.size + ")"
+            }
         }
         if (!column.nullable) sql += " NOT NULL"
         if (column.hasDefault) {

@@ -41,13 +41,11 @@ object Template {
                                             a(JarmonicaView.path) {
                                                 +"Jarmonica"
                                             }
-
                                         }
                                         li {
                                             a(HarmonicaView.path) {
                                                 +"Harmonica"
                                             }
-
                                         }
                                     }
                                 }

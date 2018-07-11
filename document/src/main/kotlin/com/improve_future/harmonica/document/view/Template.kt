@@ -33,23 +33,20 @@ object Template {
                                 section {
                                     ul {
                                         li {
-                                            a() {
+                                            a(TopView.path) {
                                                 +"Top"
                                             }
                                         }
                                         li {
-                                            a() {
+                                            a(JarmonicaView.path) {
                                                 +"Jarmonica"
                                             }
 
                                         }
                                         li {
-                                            a() {
+                                            a(HarmonicaView.path) {
                                                 +"Harmonica"
                                             }
-
-                                        }
-                                        li {
 
                                         }
                                     }

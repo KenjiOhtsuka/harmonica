@@ -14,14 +14,14 @@ object Main {
 
     @JvmStatic
     fun main(vararg args: String) {
-        outputFile("index.html", TopView)
-        outputFile("jarmonica.html", JarmonicaView)
-        outputFile("harmonica.html", HarmonicaView)
+        arrayOf(TopView, JarmonicaView, HarmonicaView).forEach {
+            outputFile(it)
+        }
     }
 
-    private fun outputFile(path: String, view: ViewInterface) {
-        val file = File(Paths.get(sitePath.toString(), path).toString())
+    private fun outputFile(view: ViewInterface) {
+        val file = File(Paths.get(sitePath.toString(), view.path).toString())
         FileWriter(file).use { it.write(view.index()) }
-        println("Output " + path.toString() + ".")
+        println("Output " + view.path + ".")
     }
 }

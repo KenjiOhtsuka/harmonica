@@ -6,6 +6,6 @@ class DateColumn(name: String) : AbstractColumn(name, java.sql.Types.DATE) {
     var default: Date? = null
     override val hasDefault: Boolean
         get() = default != null
-    override val defaultForSql: String?
+    override val sqlDefault: String?
         get() = default?.toString()
 }

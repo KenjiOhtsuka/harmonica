@@ -45,14 +45,15 @@ class PostgreSqlAdapter(connection: Connection) : DbAdapter(connection) {
 
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
         var sql = "ALTER TABLE $tableName"
-        sql += " ADD COLUMN ${column.name}"
+        sql += " ADD COLUMN ${column.name} " + column.sqlType
         when (column) {
             is IntegerColumn -> {}
         }
         if (!column.nullable) sql += " NOT NULL"
         if (column.hasDefault) {
-            sql += " DEFAULT " + column.defaultForSql
+            sql += " DEFAULT " + column.sqlDefault
         }
+        sql += ";"
         connection.execute(sql)
     }
 }

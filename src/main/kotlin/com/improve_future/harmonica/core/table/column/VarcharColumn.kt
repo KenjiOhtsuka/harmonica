@@ -5,6 +5,6 @@ class VarcharColumn(name: String) : AbstractColumn(name, java.sql.Types.VARCHAR)
     var default: String? = null
     override val hasDefault: Boolean
         get() = default != null
-    override val defaultForSql: String?
+    override val sqlDefault: String?
         get() = default?.let { "'$default'" }
 }

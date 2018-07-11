@@ -15,7 +15,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             return "db"
         }
 
-    protected val directoryPath: String
+    private val directoryPath: String
         get() {
             if (project.extensions.extraProperties.has("directoryPath"))
                 return project.extensions.extraProperties["directoryPath"] as String
@@ -24,13 +24,11 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             return "src/main/kotlin/db"
         }
 
-    protected val env: String
+    private val env: String
         get() {
             if (project.extensions.extraProperties.has("env"))
                 return project.extensions.extraProperties["env"] as String
-            if (project.hasProperty("env"))
-                return project.properties["env"] as String
-            return "Default"
+            return getProperty("env") ?: "Default"
         }
 
     protected fun buildJarmonicaArgument(
@@ -42,5 +40,13 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             it.taskType = taskType
             args.forEach { arg -> it.add(arg) }
         }
+    }
+
+    protected fun getProperty(name: String): String? {
+        return if (project.hasProperty(name))
+            project.properties[name] as String
+        else
+            null
+
     }
 }

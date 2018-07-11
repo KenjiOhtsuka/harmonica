@@ -83,6 +83,10 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
 //    }
 
     override fun exec() {
+        var step: Long? = null
+        if (project.hasProperty("step"))
+            step = project.properties["step"] as Long
+
         jvmArgs = listOf<String>()
         args = buildJarmonicaArgument().toList()
         super.exec()
@@ -93,6 +97,10 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
     override val taskType: JarmonicaTaskType = JarmonicaTaskType.Down
 
     override fun exec() {
+        var step: Long? = null
+        if (project.hasProperty("step"))
+            step = project.properties["step"] as Long
+
         jvmArgs = listOf<String>()
         args = buildJarmonicaArgument().toList()
         super.exec()

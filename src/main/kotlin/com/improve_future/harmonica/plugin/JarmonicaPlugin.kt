@@ -55,32 +55,6 @@ class JarmonicaPlugin : Plugin<Project> {
 
 open class JarmonicaUpTask : JarmonicaMigrationTask() {
     override val taskType = JarmonicaTaskType.Up
-//    private val env: String
-//        get() {
-//            if (project.extensions.extraProperties.has("env"))
-//                return project.extensions.extraProperties["env"] as String
-//            if (project.hasProperty("env"))
-//                return project.properties["env"] as String
-//            return "default"
-//        }
-
-//    companion object {
-//        val engine: KotlinJsr223JvmLocalScriptEngine =
-//                ScriptEngineManager().getEngineByName("kotlin")
-//                        as KotlinJsr223JvmLocalScriptEngine
-//    }
-//
-//    private fun findConfigFile(): File {
-//        return File("test") //Paths.get(migrationPackage, "config", "$env").toFile()
-//    }
-//
-//    fun loadConfigFile(): DbConfig {
-//        return engine.eval(findConfigFile().readText()) as DbConfig
-//    }
-//
-//    fun findMigrationDir(): File {
-//        return Paths.get(migrationPackage, "migration").toFile()
-//    }
 
     override fun exec() {
         var step: Long? = null

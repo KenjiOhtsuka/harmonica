@@ -50,6 +50,9 @@ class PostgreSqlAdapter(connection: Connection) : DbAdapter(connection) {
             is IntegerColumn -> {}
         }
         if (!column.nullable) sql += " NOT NULL"
+        if (column.hasDefault) {
+            sql += " DEFAULT " + column.defaultForSql
+        }
         connection.execute(sql)
     }
 }

@@ -2,10 +2,7 @@ package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.table.TableBuilder
-import com.improve_future.harmonica.core.table.column.AbstractColumn
-import com.improve_future.harmonica.core.table.column.AddingColumnOption
-import com.improve_future.harmonica.core.table.column.IntegerColumn
-import com.improve_future.harmonica.core.table.column.VarcharColumn
+import com.improve_future.harmonica.core.table.column.*
 
 class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
@@ -49,6 +46,15 @@ class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
     }
 
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var sql = "ALTER TABLE $tableName"
+        sql += " ADD COLUMN ${column.name}"
+        when (column) {
+            is IntegerColumn -> {}
+        }
+        if (!column.nullable) sql += " NOT NULL"
+        if (column.hasDefault) {
+            sql += " DEFAULT " + column.defaultForSql
+        }
+        connection.execute(sql)
     }
 }

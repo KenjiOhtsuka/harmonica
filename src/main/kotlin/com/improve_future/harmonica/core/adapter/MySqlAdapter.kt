@@ -2,9 +2,7 @@ package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.table.TableBuilder
-import com.improve_future.harmonica.core.table.column.AbstractColumn
-import com.improve_future.harmonica.core.table.column.IntegerColumn
-import com.improve_future.harmonica.core.table.column.VarcharColumn
+import com.improve_future.harmonica.core.table.column.*
 
 class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
@@ -37,5 +35,30 @@ class MySqlAdapter(connection: Connection) : DbAdapter(connection) {
             if (!column.nullable) sql += " NOT NULL"
             return sql
         }
+    }
+
+    override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
+        var sql = "CREATE"
+        if (unique) sql += " UNIQUE"
+        //sql += " INDEX ${tableName}_$columnName ON $tableName($columnName);"
+        sql += " INDEX ON $tableName($columnName);"
+        connection.execute(sql)
+    }
+
+    override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
+        var sql = "ALTER TABLE $tableName"
+        sql += " ADD COLUMN ${column.name} " + column.sqlType
+        when (column) {
+            is VarcharColumn -> {
+                sql +=
+                        if (column.size == null) "(255)"
+                        else "(" + column.size + ")"
+            }
+        }
+        if (!column.nullable) sql += " NOT NULL"
+        if (column.hasDefault) {
+            sql += " DEFAULT " + column.sqlDefault
+        }
+        connection.execute(sql)
     }
 }

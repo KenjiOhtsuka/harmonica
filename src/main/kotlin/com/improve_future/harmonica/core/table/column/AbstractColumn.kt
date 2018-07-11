@@ -45,4 +45,9 @@ abstract class AbstractColumn(val name: String, val type: Type) {
     }
 
     var nullable = true
+
+
+    abstract val sqlDefault: String?
+
+    abstract val hasDefault: Boolean
 }

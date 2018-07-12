@@ -22,7 +22,7 @@ class PostgreSqlAdapterTest {
                         PostgreSqlAdapter, integerColumn)
 
         assertEquals(
-                "  int INTEGER NOT NULL",
+                "int INTEGER NOT NULL",
                 expression)
     }
 }

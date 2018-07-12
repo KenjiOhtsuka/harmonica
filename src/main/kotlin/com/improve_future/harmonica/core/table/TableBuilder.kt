@@ -83,7 +83,7 @@ class TableBuilder {
             size: Int? = null,
             nullable: Boolean = true,
             default: String? = null): AbstractColumn {
-        return varchar(columnName, size, nullable)
+        return varchar(columnName, size, nullable, default)
     }
 
     /**

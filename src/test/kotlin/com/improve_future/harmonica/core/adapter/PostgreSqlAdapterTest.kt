@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 import kotlin.test.asserter
 
 class PostgreSqlAdapterTest {
-    val buildColumnDeclarationFunctionForTest =
+    private val buildColumnDeclarationFunctionForTest =
             PostgreSqlAdapter.Companion::class.java.getDeclaredMethod(
                     "buildColumnDeclarationForCreateTableSql",
                     AbstractColumn::class.java).also { it.isAccessible = true }
@@ -21,7 +21,6 @@ class PostgreSqlAdapterTest {
         fun buildIntegerDeclaration() =
                 buildColumnDeclarationFunctionForTest.invoke(
                         PostgreSqlAdapter, integerColumn)
-
         assertEquals(
                 "int INTEGER",
                 buildIntegerDeclaration())
@@ -79,10 +78,10 @@ class PostgreSqlAdapterTest {
         assertEquals(
                 "boolean BOOL NOT NULL DEFAULT TRUE",
                 buildBooleanDeclaration())
+        booleanColumn.default = false
         booleanColumn.nullable = true
         assertEquals(
-                "boolean BOOL DEFAULT TRUE",
+                "boolean BOOL DEFAULT FALSE",
                 buildBooleanDeclaration())
-
     }
 }

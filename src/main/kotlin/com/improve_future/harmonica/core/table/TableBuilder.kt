@@ -63,12 +63,11 @@ class TableBuilder {
             size: Int? = null,
             nullable: Boolean = true,
             default: String? = null): AbstractColumn {
-        val varcharColumn = VarcharColumn(columnName)
-        varcharColumn.also {
+        return addColumn(VarcharColumn(columnName).also {
             it.nullable = nullable
+            it.default = default
             it.size = size
-        }
-        return addColumn(varcharColumn)
+        })
     }
 
     /**
@@ -95,9 +94,10 @@ class TableBuilder {
             columnName: String,
             nullable: Boolean = false,
             default: Boolean? = null): AbstractColumn {
-        val booleanColumn = BooleanColumn(columnName)
-        booleanColumn.nullable = nullable
-        return addColumn(booleanColumn)
+        return addColumn(BooleanColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
     }
 
     /**
@@ -116,7 +116,13 @@ class TableBuilder {
     /**
      * unlimited length
      */
-    fun text(columnName: String): AbstractColumn {
-        return addColumn(TextColumn(columnName))
+    fun text(
+            columnName: String,
+            nullable: Boolean = true,
+            default: String? = null): AbstractColumn {
+        return addColumn(TextColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
     }
 }

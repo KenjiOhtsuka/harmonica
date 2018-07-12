@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.table.column.AbstractColumn
+import com.improve_future.harmonica.core.table.column.BooleanColumn
 import com.improve_future.harmonica.core.table.column.IntegerColumn
 import com.improve_future.harmonica.core.table.column.VarcharColumn
 import org.junit.Test
@@ -59,5 +60,29 @@ class PostgreSqlAdapterTest {
         assertEquals(
                 "varchar VARCHAR DEFAULT 'varchar'",
                 buildVarcharDeclaration())
+    }
+
+    @Test
+    fun testBuildColumnDeclarationForBoolean() {
+        val booleanColumn = BooleanColumn("boolean")
+        fun buildBooleanDeclaration() =
+                buildColumnDeclarationFunctionForTest.invoke(
+                        PostgreSqlAdapter, booleanColumn)
+        assertEquals(
+                "boolean BOOL",
+                buildBooleanDeclaration())
+        booleanColumn.nullable = false
+        assertEquals(
+                "boolean BOOL NOT NULL",
+                buildBooleanDeclaration())
+        booleanColumn.default = true
+        assertEquals(
+                "boolean BOOL NOT NULL DEFAULT TRUE",
+                buildBooleanDeclaration())
+        booleanColumn.nullable = true
+        assertEquals(
+                "boolean BOOL DEFAULT TRUE",
+                buildBooleanDeclaration())
+
     }
 }

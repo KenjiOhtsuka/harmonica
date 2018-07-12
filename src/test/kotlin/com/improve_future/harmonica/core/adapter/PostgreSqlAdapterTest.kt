@@ -35,6 +35,30 @@ class PostgreSqlAdapterTest {
     }
 
     @Test
+    fun testBuildColumnDeclarationForDecimal() {
+        val decimalColumn = DecimalColumn("decimal")
+
+        fun buildIntegerDeclaration() =
+                buildColumnDeclarationFunctionForTest.invoke(
+                        PostgreSqlAdapter, decimalColumn)
+        assertEquals(
+                "decimal DECIMAL",
+                buildIntegerDeclaration())
+        decimalColumn.nullable = false
+        assertEquals(
+                "decimal DECIMAL NOT NULL",
+                buildIntegerDeclaration())
+        decimalColumn.default = 1.0
+        assertEquals(
+                "decimal DECIMAL NOT NULL DEFAULT 1.0",
+                buildIntegerDeclaration())
+        decimalColumn.nullable = true
+        assertEquals(
+                "decimal DECIMAL DEFAULT 1.0",
+                buildIntegerDeclaration())
+    }
+
+    @Test
     fun testBuildColumnDeclarationForVarchar() {
         val varcharColumn = VarcharColumn("varchar")
         fun buildVarcharDeclaration() =

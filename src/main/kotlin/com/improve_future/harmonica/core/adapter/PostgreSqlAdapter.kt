@@ -3,9 +3,7 @@ package com.improve_future.harmonica.core.adapter
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.table.TableBuilder
-import com.improve_future.harmonica.core.table.column.AbstractColumn
-import com.improve_future.harmonica.core.table.column.AddingColumnOption
-import com.improve_future.harmonica.core.table.column.IntegerColumn
+import com.improve_future.harmonica.core.table.column.*
 
 class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
@@ -28,7 +26,19 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
         ): String {
             var sql = column.name + " " + column.sqlType
             when (column) {
-                is IntegerColumn -> {}
+                is VarcharColumn -> {
+                    if (column.size != null)
+                        sql += "(" + column.size.toString() + ")"
+                }
+                is DecimalColumn -> {
+                    if (column.precision != null) {
+                        sql += "(" + column.precision.toString()
+                        if (column.scale == null) {
+                            sql += ", " + column.scale.toString()
+                        }
+                        sql += ")"
+                    }
+                }
             }
             if (!column.nullable) sql += " NOT NULL"
             if (column.hasDefault) {

@@ -27,8 +27,12 @@ class TableBuilder {
             scale: Int? = null,
             nullable: Boolean = true,
             default: Double? = null): AbstractColumn {
-        val decimalColumn = DecimalColumn(columnName)
-        decimalColumn.nullable = nullable
+        val decimalColumn = DecimalColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+            it.precision = precision
+            it.scale = scale
+        }
         return addColumn(decimalColumn)
     }
 

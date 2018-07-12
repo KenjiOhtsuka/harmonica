@@ -8,8 +8,8 @@ import java.io.Closeable
 import java.sql.*
 
 open class Connection(
-        val config: DbConfig
-): Closeable {
+        override val config: DbConfig
+): Closeable, ConnectionInterface {
     private lateinit var coreConnection: java.sql.Connection
 
     private fun connect(config: DbConfig) {
@@ -27,7 +27,7 @@ open class Connection(
         coreConnection.autoCommit = false
     }
 
-    val javaConnection: java.sql.Connection
+    private val javaConnection: java.sql.Connection
     get () {
         if (isClosed) connect(config)
 
@@ -49,7 +49,7 @@ open class Connection(
 //                buildConnectionUriFromDbConfig(config)))
     }
 
-    val isClosed: Boolean
+    private val isClosed: Boolean
     get() { return coreConnection.isClosed }
 
     init {
@@ -91,7 +91,7 @@ open class Connection(
         }
     }
 
-    open fun transaction(block: Connection.() -> Unit) {
+    override fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
         if (PluginConfig.hasExposed()) {
             TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).let {
@@ -136,7 +136,7 @@ open class Connection(
     /**
      * Execute SQL
      */
-    fun execute(sql: String): Boolean {
+    override fun execute(sql: String): Boolean {
         return if (PluginConfig.hasExposed()) {
             val tr = TransactionManager.currentOrNull()
             if (tr == null) {
@@ -157,7 +157,7 @@ open class Connection(
         }
     }
 
-    fun doesTableExist(tableName: String): Boolean {
+    override fun doesTableExist(tableName: String): Boolean {
         val resultSet = javaConnection.metaData.getTables(
                 null, null, tableName, null)
         val result = resultSet.next()
@@ -165,7 +165,7 @@ open class Connection(
         return result
     }
 
-    fun createStatement(): Statement {
+    override fun createStatement(): Statement {
         return javaConnection.createStatement()
     }
 }

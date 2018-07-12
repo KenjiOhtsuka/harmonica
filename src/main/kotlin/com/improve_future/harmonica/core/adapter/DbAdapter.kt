@@ -1,11 +1,12 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.Connection
+import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.AbstractColumn
 import com.improve_future.harmonica.core.table.column.AddingColumnOption
 
-abstract class DbAdapter(val connection: Connection) {
+abstract class DbAdapter(val connection: ConnectionInterface) {
     fun createTable(tableName: String, block: TableBuilder.() -> Any) {
         createTable(tableName, TableBuilder().apply { block() })
     }

@@ -7,7 +7,7 @@ import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
 abstract class AbstractMigration {
-    lateinit var connection: Connection
+    lateinit var connection: ConnectionInterface
 
     private val adapter: DbAdapter by lazy {
         when (connection.config.dbms) {

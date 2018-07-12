@@ -17,7 +17,7 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
         }
         sql += tableBuilder.columnList.
                 joinToString(",\n") {
-                    buildColumnDeclarationForCreateTableSql(it)
+                    "  " + buildColumnDeclarationForCreateTableSql(it)
                 }
         sql += "\n);"
         connection.execute(sql)
@@ -26,12 +26,14 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
     companion object {
         private fun buildColumnDeclarationForCreateTableSql(column: AbstractColumn
         ): String {
-            var sql = "  "
-            sql += column.name + " " + column.sqlType
+            var sql = column.name + " " + column.sqlType
             when (column) {
                 is IntegerColumn -> {}
             }
             if (!column.nullable) sql += " NOT NULL"
+            if (column.hasDefault) {
+                sql += " DEFAULT " + column.sqlDefault
+            }
             return sql
         }
     }
@@ -45,15 +47,8 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
     }
 
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
-        var sql = "ALTER TABLE $tableName"
-        sql += " ADD COLUMN ${column.name} " + column.sqlType
-        when (column) {
-            is IntegerColumn -> {}
-        }
-        if (!column.nullable) sql += " NOT NULL"
-        if (column.hasDefault) {
-            sql += " DEFAULT " + column.sqlDefault
-        }
+        var sql = "ALTER TABLE $tableName ADD COLUMN "
+        sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
         connection.execute(sql)
     }

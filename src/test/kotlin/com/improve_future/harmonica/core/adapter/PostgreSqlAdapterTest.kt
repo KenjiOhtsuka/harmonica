@@ -1,12 +1,8 @@
 package com.improve_future.harmonica.core.adapter
 
-import com.improve_future.harmonica.core.table.column.AbstractColumn
-import com.improve_future.harmonica.core.table.column.BooleanColumn
-import com.improve_future.harmonica.core.table.column.IntegerColumn
-import com.improve_future.harmonica.core.table.column.VarcharColumn
+import com.improve_future.harmonica.core.table.column.*
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.asserter
 
 class PostgreSqlAdapterTest {
     private val buildColumnDeclarationFunctionForTest =
@@ -83,5 +79,28 @@ class PostgreSqlAdapterTest {
         assertEquals(
                 "boolean BOOL DEFAULT FALSE",
                 buildBooleanDeclaration())
+    }
+
+    @Test
+    fun testBuildColumnDeclarationForText() {
+        val textColumn = TextColumn("text")
+        fun buildTextDeclaration() =
+                buildColumnDeclarationFunctionForTest.invoke(
+                        PostgreSqlAdapter, textColumn)
+        assertEquals(
+                "text TEXT",
+                buildTextDeclaration())
+        textColumn.nullable = false
+        assertEquals(
+                "text TEXT NOT NULL",
+                buildTextDeclaration())
+        textColumn.default = "text text"
+        assertEquals(
+                "text TEXT NOT NULL DEFAULT 'text text'",
+                buildTextDeclaration())
+        textColumn.nullable = true
+        assertEquals(
+                "text TEXT DEFAULT 'text text'",
+                buildTextDeclaration())
     }
 }

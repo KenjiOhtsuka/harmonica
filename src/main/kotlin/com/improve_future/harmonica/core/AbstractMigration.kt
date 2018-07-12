@@ -146,11 +146,7 @@ abstract class AbstractMigration {
         connection.execute(sql)
     }
 
-    open fun up() {
+    open fun up() { }
 
-    }
-
-    open fun down() {
-
-    }
+    open fun down() { }
 }

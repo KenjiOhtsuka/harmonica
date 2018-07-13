@@ -22,11 +22,12 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint.
      */
     fun decimal(
-            columnName: String,
-            precision: Int? = null,
-            scale: Int? = null,
-            nullable: Boolean = true,
-            default: Double? = null): AbstractColumn {
+        columnName: String,
+        precision: Int? = null,
+        scale: Int? = null,
+        nullable: Boolean = true,
+        default: Double? = null
+    ): AbstractColumn {
         val decimalColumn = DecimalColumn(columnName).also {
             it.nullable = nullable
             it.default = default
@@ -42,9 +43,10 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun integer(
-            columnName: String,
-            nullable: Boolean = true,
-            default: Int? = null): AbstractColumn {
+        columnName: String,
+        nullable: Boolean = true,
+        default: Int? = null
+    ): AbstractColumn {
         val integerColumn = IntegerColumn(columnName)
         integerColumn.nullable = nullable
         return addColumn(integerColumn)
@@ -59,10 +61,11 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun varchar(
-            columnName: String,
-            size: Int? = null,
-            nullable: Boolean = true,
-            default: String? = null): AbstractColumn {
+        columnName: String,
+        size: Int? = null,
+        nullable: Boolean = true,
+        default: String? = null
+    ): AbstractColumn {
         return addColumn(VarcharColumn(columnName).also {
             it.nullable = nullable
             it.default = default
@@ -78,10 +81,11 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun string(
-            columnName: String,
-            size: Int? = null,
-            nullable: Boolean = true,
-            default: String? = null): AbstractColumn {
+        columnName: String,
+        size: Int? = null,
+        nullable: Boolean = true,
+        default: String? = null
+    ): AbstractColumn {
         return varchar(columnName, size, nullable, default)
     }
 
@@ -91,9 +95,10 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun boolean(
-            columnName: String,
-            nullable: Boolean = false,
-            default: Boolean? = null): AbstractColumn {
+        columnName: String,
+        nullable: Boolean = false,
+        default: Boolean? = null
+    ): AbstractColumn {
         return addColumn(BooleanColumn(columnName).also {
             it.nullable = nullable
             it.default = default
@@ -106,8 +111,9 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun date(
-            columnName: String,
-            nullable: Boolean = true): AbstractColumn {
+        columnName: String,
+        nullable: Boolean = true
+    ): AbstractColumn {
         val dateColumn = DateColumn(columnName)
         dateColumn.nullable = nullable
         return addColumn(dateColumn)
@@ -117,9 +123,10 @@ class TableBuilder {
      * unlimited length
      */
     fun text(
-            columnName: String,
-            nullable: Boolean = true,
-            default: String? = null): AbstractColumn {
+        columnName: String,
+        nullable: Boolean = true,
+        default: String? = null
+    ): AbstractColumn {
         return addColumn(TextColumn(columnName).also {
             it.nullable = nullable
             it.default = default

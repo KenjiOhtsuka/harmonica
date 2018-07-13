@@ -13,16 +13,16 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
             if (tableBuilder.columnList.size > 0) sql += ','
             sql += "\n"
         }
-        sql += tableBuilder.columnList.
-                joinToString(",\n") {
-                    "  " + buildColumnDeclarationForCreateTableSql(it)
-                }
+        sql += tableBuilder.columnList.joinToString(",\n") {
+            "  " + buildColumnDeclarationForCreateTableSql(it)
+        }
         sql += "\n);"
         connection.execute(sql)
     }
 
     companion object {
-        private fun buildColumnDeclarationForCreateTableSql(column: AbstractColumn
+        private fun buildColumnDeclarationForCreateTableSql(
+            column: AbstractColumn
         ): String {
             var sql = column.name + " " + column.sqlType
             when (column) {
@@ -33,7 +33,7 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
                 is DecimalColumn -> {
                     if (column.precision != null) {
                         sql += "(" + column.precision.toString()
-                        if (column.scale == null) {
+                        if (column.scale != null) {
                             sql += ", " + column.scale.toString()
                         }
                         sql += ")"

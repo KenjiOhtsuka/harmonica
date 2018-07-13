@@ -13,26 +13,27 @@ abstract class AbstractColumn(val name: String, private val type: Type) {
                 Types.BIT -> "BIT"
                 Types.BOOLEAN -> "BOOL"
 
-                // NUMBER
+            // NUMBER
                 Types.BIGINT -> "BIGINT" // BITSERIAL
                 Types.SMALLINT -> "SMALLINT"
                 Types.INTEGER -> "INTEGER" // SERIAL
                 Types.NUMERIC -> "NUMERIC"
+                Types.DECIMAL -> "DECIMAL"
                 Types.DOUBLE -> "DOUBLE PRECISION"
                 Types.REAL -> "REAL"
 
-                // LETTER
+            // LETTER
                 Types.CHAR -> "CHARACTER"
                 Types.VARCHAR -> "VARCHAR"
                 Types.LONGVARCHAR -> "TEXT"
                 Types.LONGNVARCHAR -> "TEXT"
 
-                // BINARY
+            // BINARY
                 Types.LONGVARBINARY -> "BYTEA"
                 Types.BINARY -> "BIT VARYING"
                 Types.BLOB -> "BLOB"
 
-                // DATE AND TIME
+            // DATE AND TIME
                 Types.DATE -> "DATE"
                 Types.TIMESTAMP -> "TIMESTAMP" // TIME WITH TIMEZONE, TIMESTAMP WITH TIMEZONE
 

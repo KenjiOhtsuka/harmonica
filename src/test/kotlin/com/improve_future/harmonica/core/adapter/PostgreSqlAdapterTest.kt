@@ -6,125 +6,161 @@ import kotlin.test.assertEquals
 
 class PostgreSqlAdapterTest {
     private val buildColumnDeclarationFunctionForTest =
-            PostgreSqlAdapter.Companion::class.java.getDeclaredMethod(
-                    "buildColumnDeclarationForCreateTableSql",
-                    AbstractColumn::class.java).also { it.isAccessible = true }
+        PostgreSqlAdapter.Companion::class.java.getDeclaredMethod(
+            "buildColumnDeclarationForCreateTableSql",
+            AbstractColumn::class.java
+        ).also { it.isAccessible = true }
 
     @Test
     fun testBuildColumnDeclarationForInteger() {
         val integerColumn = IntegerColumn("int")
 
         fun buildIntegerDeclaration() =
-                buildColumnDeclarationFunctionForTest.invoke(
-                        PostgreSqlAdapter, integerColumn)
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, integerColumn
+            ) as String
         assertEquals(
-                "int INTEGER",
-                buildIntegerDeclaration())
+            "int INTEGER",
+            buildIntegerDeclaration()
+        )
         integerColumn.nullable = false
         assertEquals(
-                "int INTEGER NOT NULL",
-                buildIntegerDeclaration())
+            "int INTEGER NOT NULL",
+            buildIntegerDeclaration()
+        )
         integerColumn.default = 1
         assertEquals(
-                "int INTEGER NOT NULL DEFAULT 1",
-                buildIntegerDeclaration())
+            "int INTEGER NOT NULL DEFAULT 1",
+            buildIntegerDeclaration()
+        )
         integerColumn.nullable = true
         assertEquals(
-                "int INTEGER DEFAULT 1",
-                buildIntegerDeclaration())
+            "int INTEGER DEFAULT 1",
+            buildIntegerDeclaration()
+        )
     }
 
     @Test
     fun testBuildColumnDeclarationForDecimal() {
         val decimalColumn = DecimalColumn("decimal")
 
-        fun buildIntegerDeclaration() =
-                buildColumnDeclarationFunctionForTest.invoke(
-                        PostgreSqlAdapter, decimalColumn)
+        fun buildDecimalDeclaration() =
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, decimalColumn
+            ) as String
         assertEquals(
-                "decimal DECIMAL",
-                buildIntegerDeclaration())
+            "decimal DECIMAL",
+            buildDecimalDeclaration()
+        )
+        decimalColumn.precision = 5
+        assertEquals(
+            "decimal DECIMAL(5)",
+            buildDecimalDeclaration()
+        )
+        decimalColumn.scale = 3
+        assertEquals(
+            "decimal DECIMAL(5, 3)",
+            buildDecimalDeclaration()
+        )
         decimalColumn.nullable = false
         assertEquals(
-                "decimal DECIMAL NOT NULL",
-                buildIntegerDeclaration())
+            "decimal DECIMAL(5, 3) NOT NULL",
+            buildDecimalDeclaration()
+        )
         decimalColumn.default = 1.0
         assertEquals(
-                "decimal DECIMAL NOT NULL DEFAULT 1.0",
-                buildIntegerDeclaration())
+            "decimal DECIMAL(5, 3) NOT NULL DEFAULT 1.0",
+            buildDecimalDeclaration()
+        )
         decimalColumn.nullable = true
         assertEquals(
-                "decimal DECIMAL DEFAULT 1.0",
-                buildIntegerDeclaration())
+            "decimal DECIMAL(5, 3) DEFAULT 1.0",
+            buildDecimalDeclaration()
+        )
     }
 
     @Test
     fun testBuildColumnDeclarationForVarchar() {
         val varcharColumn = VarcharColumn("varchar")
         fun buildVarcharDeclaration() =
-                buildColumnDeclarationFunctionForTest.invoke(
-                        PostgreSqlAdapter, varcharColumn)
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, varcharColumn
+            ) as String
         assertEquals(
-                "varchar VARCHAR",
-                buildVarcharDeclaration())
+            "varchar VARCHAR",
+            buildVarcharDeclaration()
+        )
         varcharColumn.nullable = false
         assertEquals(
-                "varchar VARCHAR NOT NULL",
-                buildVarcharDeclaration())
+            "varchar VARCHAR NOT NULL",
+            buildVarcharDeclaration()
+        )
         varcharColumn.default = "varchar"
         assertEquals(
-                "varchar VARCHAR NOT NULL DEFAULT 'varchar'",
-                buildVarcharDeclaration())
+            "varchar VARCHAR NOT NULL DEFAULT 'varchar'",
+            buildVarcharDeclaration()
+        )
         varcharColumn.nullable = true
         assertEquals(
-                "varchar VARCHAR DEFAULT 'varchar'",
-                buildVarcharDeclaration())
+            "varchar VARCHAR DEFAULT 'varchar'",
+            buildVarcharDeclaration()
+        )
     }
 
     @Test
     fun testBuildColumnDeclarationForBoolean() {
         val booleanColumn = BooleanColumn("boolean")
         fun buildBooleanDeclaration() =
-                buildColumnDeclarationFunctionForTest.invoke(
-                        PostgreSqlAdapter, booleanColumn)
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, booleanColumn
+            ) as String
         assertEquals(
-                "boolean BOOL",
-                buildBooleanDeclaration())
+            "boolean BOOL",
+            buildBooleanDeclaration()
+        )
         booleanColumn.nullable = false
         assertEquals(
-                "boolean BOOL NOT NULL",
-                buildBooleanDeclaration())
+            "boolean BOOL NOT NULL",
+            buildBooleanDeclaration()
+        )
         booleanColumn.default = true
         assertEquals(
-                "boolean BOOL NOT NULL DEFAULT TRUE",
-                buildBooleanDeclaration())
+            "boolean BOOL NOT NULL DEFAULT TRUE",
+            buildBooleanDeclaration()
+        )
         booleanColumn.default = false
         booleanColumn.nullable = true
         assertEquals(
-                "boolean BOOL DEFAULT FALSE",
-                buildBooleanDeclaration())
+            "boolean BOOL DEFAULT FALSE",
+            buildBooleanDeclaration()
+        )
     }
 
     @Test
     fun testBuildColumnDeclarationForText() {
         val textColumn = TextColumn("text")
         fun buildTextDeclaration() =
-                buildColumnDeclarationFunctionForTest.invoke(
-                        PostgreSqlAdapter, textColumn)
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, textColumn
+            ) as String
         assertEquals(
-                "text TEXT",
-                buildTextDeclaration())
+            "text TEXT",
+            buildTextDeclaration()
+        )
         textColumn.nullable = false
         assertEquals(
-                "text TEXT NOT NULL",
-                buildTextDeclaration())
+            "text TEXT NOT NULL",
+            buildTextDeclaration()
+        )
         textColumn.default = "text text"
         assertEquals(
-                "text TEXT NOT NULL DEFAULT 'text text'",
-                buildTextDeclaration())
+            "text TEXT NOT NULL DEFAULT 'text text'",
+            buildTextDeclaration()
+        )
         textColumn.nullable = true
         assertEquals(
-                "text TEXT DEFAULT 'text text'",
-                buildTextDeclaration())
+            "text TEXT DEFAULT 'text text'",
+            buildTextDeclaration()
+        )
     }
 }

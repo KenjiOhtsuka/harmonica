@@ -24,8 +24,9 @@ class StubConnection : ConnectionInterface {
     }
 
     @Deprecated(
-            "Cause Error",
-            ReplaceWith("Can't be replaced. It's created only to meet interface."))
+        "Cause Error",
+        ReplaceWith("Can't be replaced. It's created only to meet interface.")
+    )
     override fun createStatement(): Statement {
         return Statement::class.java.newInstance()
     }

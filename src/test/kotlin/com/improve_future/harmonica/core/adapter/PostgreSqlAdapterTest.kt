@@ -105,6 +105,11 @@ class PostgreSqlAdapterTest {
             "varchar VARCHAR DEFAULT 'varchar'",
             buildVarcharDeclaration()
         )
+        varcharColumn.size = 10
+        assertEquals(
+            "varchar VARCHAR(10) DEFAULT 'varchar'",
+            buildVarcharDeclaration()
+        )
     }
 
     @Test

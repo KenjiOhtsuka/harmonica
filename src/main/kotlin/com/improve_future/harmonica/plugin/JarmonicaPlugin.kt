@@ -19,19 +19,22 @@ class JarmonicaPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         // register plugin action
         val javaConvention = project.convention
-                .getPlugin(JavaPluginConvention::class.java)
-        fun <T:JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
+            .getPlugin(JavaPluginConvention::class.java)
+
+        fun <T : JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
             return project.tasks.create(name, task).apply {
                 group = PluginConfig.groupName
-                classpath(javaConvention.sourceSets
-                        .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath)
+                classpath(
+                    javaConvention.sourceSets
+                        .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath
+                )
                 conventionMapping.map(
-                        "jvmArgs",
-                        groovyClosure {
-                            if (project.hasProperty("applicationDefaultJvmArgs"))
-                                project.property("applicationDefaultJvmArgs")
-                            else java.util.Collections.emptyList<Any>()
-                        }
+                    "jvmArgs",
+                    groovyClosure {
+                        if (project.hasProperty("applicationDefaultJvmArgs"))
+                            project.property("applicationDefaultJvmArgs")
+                        else java.util.Collections.emptyList<Any>()
+                    }
                 )
             }
         }
@@ -57,11 +60,11 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
     override val taskType = JarmonicaTaskType.Up
 
     override fun exec() {
-        val step = getProperty("step") as Long?
+        val step = getProperty("step")?.toLong()
 
         jvmArgs = listOf<String>()
         args = buildJarmonicaArgument(
-                step?.toString() ?: ""
+            step?.toString() ?: ""
         ).toList()
         super.exec()
     }
@@ -71,11 +74,11 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
     override val taskType: JarmonicaTaskType = JarmonicaTaskType.Down
 
     override fun exec() {
-        val step = getProperty("step") as Long?
+        val step = getProperty("step")?.toLong() ?: 1
 
         jvmArgs = listOf<String>()
         args = buildJarmonicaArgument(
-                step?.toString() ?: ""
+            step?.toString()
         ).toList()
         super.exec()
     }

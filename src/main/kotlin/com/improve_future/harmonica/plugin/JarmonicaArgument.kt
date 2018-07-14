@@ -9,18 +9,20 @@ class JarmonicaArgument() {
 
     fun toArray(): Array<String> {
         return arrayOf(
-                migrationPackage,
-                taskType.name,
-                migrationDirectory,
-                env) + additionalArgList.toTypedArray()
+            migrationPackage,
+            taskType.name,
+            migrationDirectory,
+            env
+        ) + additionalArgList.toTypedArray()
     }
 
     fun toList(): List<String> {
         return listOf(
-                migrationPackage,
-                taskType.name,
-                migrationDirectory,
-                env) + additionalArgList
+            migrationPackage,
+            taskType.name,
+            migrationDirectory,
+            env
+        ) + additionalArgList
     }
 
     fun add(arg: String): JarmonicaArgument {

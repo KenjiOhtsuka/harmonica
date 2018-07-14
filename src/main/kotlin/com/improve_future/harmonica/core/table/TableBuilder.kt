@@ -22,13 +22,18 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint.
      */
     fun decimal(
-            columnName: String,
-            precision: Int? = null,
-            scale: Int? = null,
-            nullable: Boolean = true,
-            default: Double? = null): AbstractColumn {
-        val decimalColumn = DecimalColumn(columnName)
-        decimalColumn.nullable = nullable
+        columnName: String,
+        precision: Int? = null,
+        scale: Int? = null,
+        nullable: Boolean = true,
+        default: Double? = null
+    ): AbstractColumn {
+        val decimalColumn = DecimalColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+            it.precision = precision
+            it.scale = scale
+        }
         return addColumn(decimalColumn)
     }
 
@@ -38,12 +43,14 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun integer(
-            columnName: String,
-            nullable: Boolean = true,
-            default: Int? = null): AbstractColumn {
-        val integerColumn = IntegerColumn(columnName)
-        integerColumn.nullable = nullable
-        return addColumn(integerColumn)
+        columnName: String,
+        nullable: Boolean = true,
+        default: Long? = null
+    ): AbstractColumn {
+        return addColumn(IntegerColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
     }
 
     /**
@@ -55,16 +62,16 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun varchar(
-            columnName: String,
-            size: Int? = null,
-            nullable: Boolean = true,
-            default: String? = null): AbstractColumn {
-        val varcharColumn = VarcharColumn(columnName)
-        varcharColumn.also {
+        columnName: String,
+        size: Int? = null,
+        nullable: Boolean = true,
+        default: String? = null
+    ): AbstractColumn {
+        return addColumn(VarcharColumn(columnName).also {
             it.nullable = nullable
+            it.default = default
             it.size = size
-        }
-        return addColumn(varcharColumn)
+        })
     }
 
     /**
@@ -75,11 +82,12 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun string(
-            columnName: String,
-            size: Int? = null,
-            nullable: Boolean = true,
-            default: String? = null): AbstractColumn {
-        return varchar(columnName, size, nullable)
+        columnName: String,
+        size: Int? = null,
+        nullable: Boolean = true,
+        default: String? = null
+    ): AbstractColumn {
+        return varchar(columnName, size, nullable, default)
     }
 
     /**
@@ -88,12 +96,14 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun boolean(
-            columnName: String,
-            nullable: Boolean = false,
-            default: Boolean? = null): AbstractColumn {
-        val booleanColumn = BooleanColumn(columnName)
-        booleanColumn.nullable = nullable
-        return addColumn(booleanColumn)
+        columnName: String,
+        nullable: Boolean = false,
+        default: Boolean? = null
+    ): AbstractColumn {
+        return addColumn(BooleanColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
     }
 
     /**
@@ -102,8 +112,9 @@ class TableBuilder {
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun date(
-            columnName: String,
-            nullable: Boolean = true): AbstractColumn {
+        columnName: String,
+        nullable: Boolean = true
+    ): AbstractColumn {
         val dateColumn = DateColumn(columnName)
         dateColumn.nullable = nullable
         return addColumn(dateColumn)
@@ -112,7 +123,14 @@ class TableBuilder {
     /**
      * unlimited length
      */
-    fun text(columnName: String): AbstractColumn {
-        return addColumn(TextColumn(columnName))
+    fun text(
+        columnName: String,
+        nullable: Boolean = true,
+        default: String? = null
+    ): AbstractColumn {
+        return addColumn(TextColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
     }
 }

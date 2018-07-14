@@ -9,6 +9,18 @@ import kotlinx.html.div
 fun FlowContent.row(
         classes : String? = null,
         block : DIV.() -> Unit = {}
+) = divWithClass("row")
+
+@HtmlTagMarker
+fun FlowContent.col(
+        classes : String? = null,
+        block : DIV.() -> Unit = {}
+) = divWithClass("col")
+
+private fun FlowContent.divWithClass(
+        fixedClass: String,
+        classes : String? = null,
+        block : DIV.() -> Unit = {}
 ) {
-    return div(if (classes.isNullOrEmpty()) "row" else "$classes,row", block)
+    return div(if (classes.isNullOrEmpty()) fixedClass else "$classes, $fixedClass", block)
 }

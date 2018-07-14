@@ -3,7 +3,7 @@ package com.improve_future.harmonica.plugin
 import com.improve_future.harmonica.core.AbstractMigration
 import org.gradle.api.tasks.TaskAction
 
-open class MigrationUpTask: AbstractMigrationTask() {
+open class MigrationUpTask : AbstractMigrationTask() {
     @TaskAction
     fun migrateUp() {
         val connection = createConnection()
@@ -18,7 +18,7 @@ open class MigrationUpTask: AbstractMigrationTask() {
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {
                     val migration: AbstractMigration =
-                            readMigration(file.readText())
+                        readMigration(file.readText())
                     migration.connection = connection
                     migration.up()
                     versionService.saveVersion(connection, migrationVersion)

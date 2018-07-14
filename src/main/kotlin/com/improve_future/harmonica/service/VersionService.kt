@@ -11,10 +11,12 @@ import java.util.*
 class VersionService(private val migrationTableName: String) {
     fun setupHarmonicaMigrationTable(connection: Connection) {
         if (!connection.doesTableExist(migrationTableName)) {
-            connection.execute("""
+            connection.execute(
+                """
                 CREATE TABLE harmonica_migration (
                     version VARCHAR(255)
-                )""".trimIndent())
+                )""".trimIndent()
+            )
         }
     }
 
@@ -28,7 +30,8 @@ class VersionService(private val migrationTableName: String) {
         val resultSet: ResultSet
         try {
             resultSet = statement.executeQuery(
-                    "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version';")
+                "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version';"
+            )
             resultSet.next()
             result = (resultSet.getLong(1) > 0)
         } catch (e: Exception) {
@@ -40,28 +43,38 @@ class VersionService(private val migrationTableName: String) {
         return result
     }
 
+    /**
+     * Insert record of the specified version into version control table
+     */
     fun saveVersion(connection: Connection, version: String) {
         connection.execute(
-                "INSERT INTO $migrationTableName(version) VALUES('$version');")
+            "INSERT INTO $migrationTableName(version) VALUES('$version');"
+        )
     }
 
+    /**
+     * Remove record of the specified version from version control table
+     */
     fun removeVersion(connection: Connection, version: String) {
         connection.execute(
-                "DELETE FROM $migrationTableName WHERE version = '$version'")
+            "DELETE FROM $migrationTableName WHERE version = '$version'"
+        )
     }
 
     fun findCurrentMigrationVersion(connection: Connection): String {
-        var result: String = ""
+        var result = ""
         if (!connection.doesTableExist(migrationTableName))
             return result
 
         val statement = connection.createStatement()
         try {
-            val resultSet = statement.executeQuery("""
+            val resultSet = statement.executeQuery(
+                """
                 SELECT version
                   FROM $migrationTableName
                  ORDER BY version DESC
-                 LIMIT 1""".trimIndent())
+                 LIMIT 1""".trimIndent()
+            )
             if (resultSet.next()) result = resultSet.getString(1)
             resultSet.close()
             statement.close()
@@ -85,10 +98,10 @@ class VersionService(private val migrationTableName: String) {
     /**
      * Pick up version string from class name
      *
-     * class name is like `M20180101001010101010_Migration`.
+     * class name is like `M20180101001010101010nMigration`.
      */
     fun pickUpVersionFromClassName(name: String): String {
-        val endIndex = name.lastIndexOf('_')
+        val endIndex = name.lastIndexOf(migrationSuffixString)
         val startIndex = name.substring(0, endIndex).lastIndexOf(migrationHeadString)
         return name.substring(startIndex + migrationHeadString.length, endIndex)
     }
@@ -97,30 +110,33 @@ class VersionService(private val migrationTableName: String) {
      * Date format to use for Version Number
      */
     private val dateFormat: SimpleDateFormat =
-            SimpleDateFormat("yyyyMMddHHmmssSSS")
+        SimpleDateFormat("yyyyMMddHHmmssSSS")
 
     /**
      * Create new version number
      */
-    fun createNewVersionNumber(): String {
+    private fun createNewVersionNumber(): String {
         return dateFormat.format(Date())
     }
-
-    private val migrationHeadString = "M"
 
     /**
      * Create new migration file/class name
      */
     fun composeNewMigrationName(migrationName: String): String {
         val version = createNewVersionNumber()
-        return "$migrationHeadString${version}_$migrationName"
+        return migrationHeadString + version + migrationSuffixString + migrationName
     }
 
     fun filterClassCandidateWithVersion(
-            classList: List<Class<out AbstractMigration>>, version: String
+        classList: List<Class<out AbstractMigration>>, version: String
     ): List<Class<out AbstractMigration>> {
         return classList.filter {
             pickUpVersionFromClassName(it.simpleName) == version
         }
+    }
+
+    companion object {
+        private const val migrationHeadString = "M"
+        private const val migrationSuffixString = "_"
     }
 }

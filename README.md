@@ -35,7 +35,7 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
     }
 
     override fun down() {
-        dropTable("size_table_name")
+        dropTable("table_name")
     }
 }
 ```

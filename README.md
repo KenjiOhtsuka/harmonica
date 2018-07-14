@@ -57,3 +57,7 @@ Pull requests are welcomed!! Please feel free to use it, and to contribute.
 ## Links
 
 * [API Document](https://kenjiohtsuka.github.io/harmonica/api/harmonica/index.html)
+
+## Test Project
+
+Test with real database is in different repository, [Harmonica Test](https://github.com/KenjiOhtsuka/harmonica_test)

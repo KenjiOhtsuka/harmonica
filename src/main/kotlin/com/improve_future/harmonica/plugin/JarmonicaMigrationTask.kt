@@ -47,6 +47,5 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             project.properties[name] as String
         else
             null
-
     }
 }

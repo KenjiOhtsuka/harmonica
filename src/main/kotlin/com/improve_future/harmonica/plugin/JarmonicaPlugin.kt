@@ -64,7 +64,7 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
 
         jvmArgs = listOf<String>()
         args = buildJarmonicaArgument(
-            step?.toString() ?: ""
+            step.toString()
         ).toList()
         super.exec()
     }
@@ -78,7 +78,7 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
 
         jvmArgs = listOf<String>()
         args = buildJarmonicaArgument(
-            step?.toString()
+            step.toString()
         ).toList()
         super.exec()
     }

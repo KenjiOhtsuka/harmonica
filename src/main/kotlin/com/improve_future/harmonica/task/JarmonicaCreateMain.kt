@@ -18,7 +18,7 @@ object JarmonicaCreateMain : JarmonicaTaskMain() {
         migrationFile.parentFile.mkdirs()
         migrationFile.createNewFile()
         migrationFile.writeText(
-            """package ${args[0]}
+            """package ${args[0]}.migration
 
 import com.improve_future.harmonica.core.AbstractMigration
 

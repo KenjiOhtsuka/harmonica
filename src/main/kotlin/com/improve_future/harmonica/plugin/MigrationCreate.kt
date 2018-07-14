@@ -9,23 +9,24 @@ import java.util.*
 
 open class MigrationCreate : AbstractTask() {
     private val migrationName: String
-    get() {
-        if (project.hasProperty("migrationName"))
-            return project.properties["migrationName"] as String
-        return "Migration"
-    }
+        get() {
+            if (project.hasProperty("migrationName"))
+                return project.properties["migrationName"] as String
+            return "Migration"
+        }
 
     private val versionService = VersionService("")
 
     @TaskAction
     fun createMigration() {
         val migrationFile = Paths.get(
-                findMigrationDir().absolutePath,
-                versionService.composeNewMigrationName(migrationName) + ".kts"
+            findMigrationDir().absolutePath,
+            versionService.composeNewMigrationName(migrationName) + ".kts"
         ).toFile()
         migrationFile.parentFile.mkdirs()
         migrationFile.createNewFile()
-        migrationFile.writeText("""import com.improve_future.harmonica.core.AbstractMigration
+        migrationFile.writeText(
+            """import com.improve_future.harmonica.core.AbstractMigration
 
 /**
  * $migrationName
@@ -41,7 +42,8 @@ object : AbstractMigration() {
     override fun down() {
         dropTable("table_name")
     }
-}""")
+}"""
+        )
         println("Created ${migrationFile.absolutePath}")
     }
 }

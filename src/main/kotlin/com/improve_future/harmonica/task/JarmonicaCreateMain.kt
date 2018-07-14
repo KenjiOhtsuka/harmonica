@@ -28,8 +28,10 @@ import com.improve_future.harmonica.core.AbstractMigration
 class $migrationClassName : AbstractMigration() {
     override fun up() {
         createTable("table_name") {
-            integer("column_1")
-            varchar("column_2")
+            integer("integer_column", default = 8)
+            varchar("varchar_column", size = 10, nullable = false)
+            decimal("decimal_column", precision = 5, scale = 2)
+            text("text_column", default = "default value")
         }
     }
 

@@ -27,13 +27,15 @@ import com.improve_future.harmonica.core.AbstractMigration
 class M20180624011127699_HolloWorld : AbstractMigration() {
     override fun up() {
         createTable("table_name") {
-            integer("column_1", nullable = false)
-            varchar("column_2")
+            integer("integer_column", default = 1)
+            varchar("varchar_column", size = 10, nullable = false)
+            decimal("decimal_column", 5, 2, default = 3)
+            text("text_column", default = "default value")
         }
     }
 
     override fun down() {
-        dropTable("table_name")
+        dropTable("size_table_name")
     }
 }
 ```

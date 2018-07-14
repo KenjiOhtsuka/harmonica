@@ -60,4 +60,4 @@ Pull requests are welcomed!! Please feel free to use it, and to contribute.
 
 ## Test Project
 
-Test with real database is in different repository, [Harmonica Test](https://github.com/KenjiOhtsuka/harmonica_test)
+Test with real database is in different repository, [Harmonica Test](https://github.com/KenjiOhtsuka/harmonica_test).

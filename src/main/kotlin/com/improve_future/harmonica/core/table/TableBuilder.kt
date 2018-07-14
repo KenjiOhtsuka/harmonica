@@ -45,11 +45,12 @@ class TableBuilder {
     fun integer(
         columnName: String,
         nullable: Boolean = true,
-        default: Int? = null
+        default: Long? = null
     ): AbstractColumn {
-        val integerColumn = IntegerColumn(columnName)
-        integerColumn.nullable = nullable
-        return addColumn(integerColumn)
+        return addColumn(IntegerColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
     }
 
     /**

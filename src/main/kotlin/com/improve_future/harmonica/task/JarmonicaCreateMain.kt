@@ -12,12 +12,15 @@ object JarmonicaCreateMain : JarmonicaTaskMain() {
         val migrationClassName = versionService.composeNewMigrationName(migrationName)
 
         val migrationFile = Paths.get(
-                Paths.get(migrationDirectory, "migration").toFile().absolutePath,
-                "$migrationClassName.kt"
+            Paths.get(migrationDirectory, "migration").toFile().absolutePath,
+            "$migrationClassName.kt"
         ).toFile()
         migrationFile.parentFile.mkdirs()
         migrationFile.createNewFile()
-        migrationFile.writeText("""import com.improve_future.harmonica.core.AbstractMigration
+        migrationFile.writeText(
+            """package ${args[0]}
+
+import com.improve_future.harmonica.core.AbstractMigration
 
 /**
  * $migrationName
@@ -33,7 +36,8 @@ class $migrationClassName : AbstractMigration() {
     override fun down() {
         dropTable("table_name")
     }
-}""")
+}"""
+        )
         println("Created ${migrationFile.absolutePath}")
     }
 }

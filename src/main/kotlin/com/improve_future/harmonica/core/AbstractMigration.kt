@@ -39,8 +39,9 @@ abstract class AbstractMigration {
      * valid only for MySQL.
      */
     private fun addColumn(
-            tableName: String, column: AbstractColumn,
-            first: Boolean = false, justBeforeColumnName: String? = null) {
+        tableName: String, column: AbstractColumn,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
         val option = AddingColumnOption().also {
             it.first = first
             it.justBeforeColumn = justBeforeColumnName
@@ -57,10 +58,11 @@ abstract class AbstractMigration {
      * (valid only for MySQL)
      */
     fun addIntegerColumn(
-            tableName: String, columnName: String,
-            nullable: Boolean = true, default: Long? = null,
-            first: Boolean = false,
-            justBeforeColumnName: String? = null) {
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: Long? = null,
+        first: Boolean = false,
+        justBeforeColumnName: String? = null
+    ) {
         val integerColumn = IntegerColumn(columnName)
         integerColumn.also {
             it.nullable = nullable
@@ -77,9 +79,10 @@ abstract class AbstractMigration {
      * (valid only for MySQL)
      */
     fun addVarcharColumn(
-            tableName: String, columnName: String,
-            nullable: Boolean = true, default: String? = null,
-            first: Boolean = false, justBeforeColumnName: String? = null) {
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: String? = null,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
         val varcharColumn = VarcharColumn(columnName)
         varcharColumn.also {
             it.nullable = nullable
@@ -96,9 +99,10 @@ abstract class AbstractMigration {
      * (valid only for MySQL)
      */
     fun addBooleanColumn(
-            tableName: String, columnName: String,
-            nullable: Boolean = true, default: Boolean? = null,
-            first: Boolean = false, justBeforeColumnName: String? = null) {
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: Boolean? = null,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
         val booleanColumn = BooleanColumn(columnName)
         booleanColumn.also {
             it.nullable = nullable
@@ -115,9 +119,10 @@ abstract class AbstractMigration {
      * valid only for MySQL
      */
     fun addTextColumn(
-            tableName: String, columnName: String,
-            nullable: Boolean = true, default: String? = null,
-            first: Boolean = false, justBeforeColumnName: String? = null) {
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: String? = null,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
         val textColumn = TextColumn(columnName)
         textColumn.also {
             it.nullable = nullable
@@ -146,7 +151,7 @@ abstract class AbstractMigration {
         connection.execute(sql)
     }
 
-    open fun up() { }
+    open fun up() {}
 
-    open fun down() { }
+    open fun down() {}
 }

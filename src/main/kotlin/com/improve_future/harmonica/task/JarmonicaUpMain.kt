@@ -29,7 +29,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
                     versionService.saveVersion(connection, migrationVersion)
                 }
                 println("== [End] Migrate up $migrationVersion ==")
-                if (maxStep != null && ++stepCounter > maxStep) break;
+                if (maxStep != null && ++stepCounter > maxStep) break
             }
             connection.close()
         } catch (e: Exception) {

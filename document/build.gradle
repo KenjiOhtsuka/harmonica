@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.improve_future.harmonica'
-version '1.0-SNAPSHOT'
+version rootProject.version
 
 repositories {
     mavenCentral()

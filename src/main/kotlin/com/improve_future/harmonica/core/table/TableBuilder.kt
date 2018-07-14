@@ -122,6 +122,8 @@ class TableBuilder {
 
     /**
      * unlimited length
+     *
+     * @param default Invalid for MySQL
      */
     fun text(
         columnName: String,

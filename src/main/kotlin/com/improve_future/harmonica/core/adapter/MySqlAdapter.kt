@@ -1,6 +1,5 @@
 package com.improve_future.harmonica.core.adapter
 
-import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
@@ -13,27 +12,42 @@ class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
             if (tableBuilder.columnList.size > 0) sql += ','
             sql += "\n"
         }
-        sql += tableBuilder.columnList.
-                joinToString(",\n") {
-                    buildColumnDeclarationForCreateTableSql(it)
-                }
+        sql += tableBuilder.columnList.joinToString(",\n") {
+            "  " + buildColumnDeclarationForCreateTableSql(it)
+        }
         sql += "\n);"
         connection.execute(sql)
     }
 
     companion object {
-        private fun buildColumnDeclarationForCreateTableSql(column: AbstractColumn
+        private fun buildColumnDeclarationForCreateTableSql(
+            column: AbstractColumn
         ): String {
-            var sql = "  "
-            sql += column.name + " " + column.sqlType
+            var sql = column.name + " " + column.sqlType
             when (column) {
                 is VarcharColumn -> {
                     sql +=
                             if (column.size == null) "(255)"
                             else "(" + column.size + ")"
                 }
+                is DecimalColumn -> {
+                    if (column.precision != null) {
+                        sql += "(" + column.precision.toString()
+                        if (column.scale != null) {
+                            sql += ", " + column.scale.toString()
+                        }
+                        sql += ")"
+                    }
+                }
             }
             if (!column.nullable) sql += " NOT NULL"
+            if (column.hasDefault) {
+                when (column) {
+                    !is TextColumn -> {
+                        sql += " DEFAULT " + column.sqlDefault
+                    }
+                }
+            }
             return sql
         }
     }
@@ -49,17 +63,8 @@ class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
         var sql = "ALTER TABLE $tableName"
         sql += " ADD COLUMN ${column.name} " + column.sqlType
-        when (column) {
-            is VarcharColumn -> {
-                sql +=
-                        if (column.size == null) "(255)"
-                        else "(" + column.size + ")"
-            }
-        }
-        if (!column.nullable) sql += " NOT NULL"
-        if (column.hasDefault) {
-            sql += " DEFAULT " + column.sqlDefault
-        }
+        sql += buildColumnDeclarationForCreateTableSql(column)
+        sql += ";"
         connection.execute(sql)
     }
 }

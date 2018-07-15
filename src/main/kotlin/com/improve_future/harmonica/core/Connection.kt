@@ -8,15 +8,15 @@ import java.io.Closeable
 import java.sql.*
 
 open class Connection(
-        override val config: DbConfig
-): Closeable, ConnectionInterface {
+    override val config: DbConfig
+) : Closeable, ConnectionInterface {
     private lateinit var coreConnection: java.sql.Connection
 
     private fun connect(config: DbConfig) {
         coreConnection = object : java.sql.Connection by DriverManager.getConnection(
-                buildConnectionUriFromDbConfig(config),
-                config.user,
-                config.password
+            buildConnectionUriFromDbConfig(config),
+            config.user,
+            config.password
         ) {
             override fun setTransactionIsolation(level: Int) {}
         }
@@ -28,15 +28,15 @@ open class Connection(
     }
 
     private val javaConnection: java.sql.Connection
-    get () {
-        if (isClosed) connect(config)
+        get () {
+            if (isClosed) connect(config)
 
-        return if (PluginConfig.hasExposed())
-            coreConnection
+            return if (PluginConfig.hasExposed())
+                coreConnection
 //            TransactionManager.current().connection
-        else
-            coreConnection
-    }
+            else
+                coreConnection
+        }
 
     private var database: Database? = null
 
@@ -50,7 +50,9 @@ open class Connection(
     }
 
     private val isClosed: Boolean
-    get() { return coreConnection.isClosed }
+        get() {
+            return coreConnection.isClosed
+        }
 
     init {
 //        val ds = InitialContext().lookup(
@@ -85,7 +87,7 @@ open class Connection(
                     Dbms.SQLite ->
                         ""
                     Dbms.Oracle ->
-                            ""
+                        ""
                 }
             }
         }
@@ -159,7 +161,8 @@ open class Connection(
 
     override fun doesTableExist(tableName: String): Boolean {
         val resultSet = javaConnection.metaData.getTables(
-                null, null, tableName, null)
+            null, null, tableName, null
+        )
         val result = resultSet.next()
         resultSet.close()
         return result

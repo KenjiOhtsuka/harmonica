@@ -71,6 +71,13 @@ abstract class AbstractMigration {
         addColumn(tableName, integerColumn, first, justBeforeColumnName)
     }
 
+    /**
+     * Add new decimal column to existing table.
+     *
+     * @param first You add column at first of the columns (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be add just after
+     * (valid only for MySQL)
+     */
     fun addDecimalColumn(
         tableName: String, columnName: String,
         precision: Int? = null, scale: Int? = null,

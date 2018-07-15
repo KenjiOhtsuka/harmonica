@@ -5,6 +5,7 @@ import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
+import java.time.LocalDate
 import java.util.*
 
 abstract class AbstractMigration {
@@ -145,7 +146,27 @@ abstract class AbstractMigration {
      */
     fun addDateColumn(
         tableName: String, columnName: String,
-        nullable: Boolean = true, default: Date? = null,
+        nullable: Boolean = true, default: Date,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateColumn = DateColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
+        }
+        addColumn(tableName, dateColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new date column to existing table, with String default value.
+     *
+     * @param default Must be formatted as yyyy-MM-dd
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
+    fun addDateColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: String? = null,
         first: Boolean = false, justBeforeColumnName: String? = null
     ) {
         val dateColumn = DateColumn(columnName).also {
@@ -164,11 +185,12 @@ abstract class AbstractMigration {
      */
     fun addDateColumn(
         tableName: String, columnName: String,
-        nullable: Boolean = true, default: String,
+        nullable: Boolean = true, default: LocalDate,
         first: Boolean = false, justBeforeColumnName: String? = null
     ) {
         val dateColumn = DateColumn(columnName).also {
             it.nullable = nullable
+            it.defaultLocalDate = default
         }
         addColumn(tableName, dateColumn, first, justBeforeColumnName)
     }

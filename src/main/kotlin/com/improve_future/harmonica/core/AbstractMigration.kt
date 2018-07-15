@@ -5,6 +5,7 @@ import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
+import java.util.*
 
 abstract class AbstractMigration {
     lateinit var connection: ConnectionInterface
@@ -133,6 +134,42 @@ abstract class AbstractMigration {
             it.default = default
         }
         addColumn(tableName, booleanColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new date column to existing table.
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addDateColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: Date? = null,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateColumn = DateColumn(columnName).also {
+            it.nullable = nullable
+        }
+        addColumn(tableName, dateColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new date column to existing table, with String default value.
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
+    fun addDateColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: String,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateColumn = DateColumn(columnName).also {
+            it.nullable = false
+        }
+        addColumn(tableName, dateColumn, first, justBeforeColumnName)
     }
 
     /**

@@ -7,5 +7,4 @@ class BooleanColumn(name: String) : AbstractColumn(name, java.sql.Types.BOOLEAN)
     var default: Boolean? = null
     override val hasDefault: Boolean
         get() = default != null
-
 }

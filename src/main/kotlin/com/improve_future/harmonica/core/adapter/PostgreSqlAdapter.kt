@@ -1,6 +1,5 @@
 package com.improve_future.harmonica.core.adapter
 
-import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*

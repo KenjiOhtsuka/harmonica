@@ -1,9 +1,11 @@
 package com.improve_future.harmonica.core
 
+import com.improve_future.harmonica.core.table.column.DateColumn
 import com.improve_future.harmonica.core.table.column.DecimalColumn
 import com.improve_future.harmonica.core.table.column.TextColumn
 import com.improve_future.harmonica.core.table.column.VarcharColumn
 import org.junit.Test
+import java.util.*
 import kotlin.test.assertEquals
 
 class AbstractMigrationTest {
@@ -81,6 +83,30 @@ class AbstractMigrationTest {
         assertEquals(false, varcharColumn.nullable)
         assertEquals("default value", varcharColumn.default)
         val addingOption = varcharAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)
+    }
+
+    @Test
+    fun testAddDateColumn() {
+        val migration = StubMigration()
+        val defaultDate = Date()
+        migration.addDateColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = defaultDate,
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val dateAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals("table_name", dateAddingColumn.tableName)
+        val dateColumn = dateAddingColumn.column as DateColumn
+        assertEquals("column_name", dateColumn.name)
+        assertEquals(false, dateColumn.nullable)
+        assertEquals(defaultDate, dateColumn.default)
+        val addingOption = dateAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
     }

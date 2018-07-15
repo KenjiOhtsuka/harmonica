@@ -2,6 +2,8 @@ package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.table.column.*
 import org.junit.Test
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.test.assertEquals
 
 class PostgreSqlAdapterTest {
@@ -166,6 +168,37 @@ class PostgreSqlAdapterTest {
         assertEquals(
             "text TEXT DEFAULT 'text text'",
             buildTextDeclaration()
+        )
+    }
+
+    @Test
+    fun testBuildColumnDeclarationForDate() {
+        val dateColumn = DateColumn("date")
+        fun buildDateDeclaration() =
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, dateColumn
+            ) as String
+        assertEquals(
+            "date DATE",
+            buildDateDeclaration()
+        )
+        dateColumn.nullable = false
+        assertEquals(
+            "date DATE NOT NULL",
+            buildDateDeclaration()
+        )
+        val defaultDate = Date()
+        dateColumn.default = defaultDate
+        val dateSql =
+            SimpleDateFormat("yyyy-MM-dd").format(defaultDate)
+        assertEquals(
+            "date DATE NOT NULL DEFAULT '$dateSql'",
+            buildDateDeclaration()
+        )
+        dateColumn.nullable = true
+        assertEquals(
+            "date DATE DEFAULT '$dateSql'",
+            buildDateDeclaration()
         )
     }
 }

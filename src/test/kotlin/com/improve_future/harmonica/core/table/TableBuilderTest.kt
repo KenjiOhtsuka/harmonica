@@ -2,6 +2,7 @@ package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.table.TableBuilder
 import org.junit.Test
+import java.util.*
 import kotlin.test.assertEquals
 
 class TableBuilderTest {
@@ -24,5 +25,16 @@ class TableBuilderTest {
         assertEquals(10, varcharColumn.size)
         assertEquals(false, varcharColumn.nullable)
         assertEquals("test string", varcharColumn.default)
+    }
+
+    @Test
+    fun testDate() {
+        val tb = TableBuilder()
+        val defaultDate = Date()
+        tb.date("name", false, defaultDate)
+        val dateColumn = tb.columnList.first() as DateColumn
+        assertEquals("name", dateColumn.name)
+        assertEquals(false, dateColumn.nullable)
+        assertEquals(defaultDate, dateColumn.default)
     }
 }

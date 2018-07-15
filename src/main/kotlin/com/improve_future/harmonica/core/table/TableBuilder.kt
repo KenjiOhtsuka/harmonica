@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.table
 
 import com.improve_future.harmonica.core.table.column.*
+import java.util.*
 
 typealias Type = Int
 
@@ -114,10 +115,13 @@ class TableBuilder {
      */
     fun date(
         columnName: String,
-        nullable: Boolean = true
+        nullable: Boolean = true,
+        default: Date? = null
     ): AbstractColumn {
-        val dateColumn = DateColumn(columnName)
-        dateColumn.nullable = nullable
+        val dateColumn = DateColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        }
         return addColumn(dateColumn)
     }
 

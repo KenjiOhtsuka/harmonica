@@ -150,6 +150,7 @@ abstract class AbstractMigration {
     ) {
         val dateColumn = DateColumn(columnName).also {
             it.nullable = nullable
+            it.default = default
         }
         addColumn(tableName, dateColumn, first, justBeforeColumnName)
     }
@@ -167,7 +168,7 @@ abstract class AbstractMigration {
         first: Boolean = false, justBeforeColumnName: String? = null
     ) {
         val dateColumn = DateColumn(columnName).also {
-            it.nullable = false
+            it.nullable = nullable
         }
         addColumn(tableName, dateColumn, first, justBeforeColumnName)
     }

@@ -71,6 +71,22 @@ abstract class AbstractMigration {
         addColumn(tableName, integerColumn, first, justBeforeColumnName)
     }
 
+    fun addDecimalColumn(
+        tableName: String, columnName: String,
+        precision: Int? = null, scale: Int? = null,
+        nullable: Boolean = true, default: Double? = null,
+        first: Boolean = false,
+        justBeforeColumnName: String? = null
+    ) {
+        val decimalColumn = DecimalColumn(columnName).also {
+            it.precision = precision
+            it.scale = scale
+            it.nullable = nullable
+            it.default = default
+        }
+        addColumn(tableName, decimalColumn, first, justBeforeColumnName)
+    }
+
     /**
      * Add new varchar column to existing table.
      *
@@ -79,12 +95,13 @@ abstract class AbstractMigration {
      * (valid only for MySQL)
      */
     fun addVarcharColumn(
-        tableName: String, columnName: String,
+        tableName: String, columnName: String, size: Int? = null,
         nullable: Boolean = true, default: String? = null,
         first: Boolean = false, justBeforeColumnName: String? = null
     ) {
         val varcharColumn = VarcharColumn(columnName)
         varcharColumn.also {
+            it.size = size
             it.nullable = nullable
             it.default = default
         }

@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 
 class DateColumnTest {
     @Test
-    fun testDateConversion() {
+    fun testInstanceVariables() {
         val dateColumn = DateColumn("name")
         assertEquals("name", dateColumn.name)
 
@@ -27,16 +27,25 @@ class DateColumnTest {
         dateColumn.default = "2345-08-19"
         assertEquals(true, dateColumn.hasDefault)
         assertEquals("2345-08-19", dateColumn.default)
-        val calendar = Calendar.getInstance()
-        calendar.set(2345, 7, 19)
         val actualDate = Calendar.getInstance()
         actualDate.time = dateColumn.defaultDate
-        arrayOf(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH).forEach {
-            assertEquals(calendar.get(it), actualDate.get(it))
-        }
+        assertEquals(2345, actualDate.get(Calendar.YEAR))
+        assertEquals(8, actualDate.get(Calendar.MONTH) + 1)
+        assertEquals(19, actualDate.get(Calendar.DAY_OF_MONTH))
         assertEquals(
             LocalDate.of(2345, 8, 19), dateColumn.defaultLocalDate
         )
+
+        val calendar = Calendar.getInstance()
+        val date = calendar.let {
+            it.set(2543, 11, 23)
+            it.time
+        }
+        dateColumn.defaultDate = date
+        assertEquals(true, dateColumn.hasDefault)
+        assertEquals("2543-12-23", dateColumn.default)
+        assertEquals(date, dateColumn.defaultDate)
+        assertEquals(LocalDate.of(2543, 12, 23), dateColumn.defaultLocalDate)
 
         val localDate = LocalDate.of(2435, 10, 6)
         dateColumn.defaultLocalDate = localDate

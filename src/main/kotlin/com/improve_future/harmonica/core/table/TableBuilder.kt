@@ -145,7 +145,7 @@ class TableBuilder {
     }
 
     /**
-     * add date column of LocalDate default value
+     * add date column of `java.time.LocalDate` default value
      *
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */

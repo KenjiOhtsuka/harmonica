@@ -17,6 +17,7 @@ class DateColumn(name: String) : AbstractColumn(name, java.sql.Types.DATE) {
     var defaultDate: Date? = null
     var defaultLocalDate: LocalDate?
         get() {
+            defaultDate ?: return null
             val calendar = Calendar.getInstance()
             calendar.time = defaultDate
             return LocalDate.of(

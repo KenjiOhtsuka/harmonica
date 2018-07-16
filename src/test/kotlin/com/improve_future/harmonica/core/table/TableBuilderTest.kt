@@ -35,6 +35,6 @@ class TableBuilderTest {
         val dateColumn = tb.columnList.first() as DateColumn
         assertEquals("name", dateColumn.name)
         assertEquals(false, dateColumn.nullable)
-        assertEquals(defaultDate, dateColumn.default)
+        assertEquals(defaultDate, dateColumn.defaultDate)
     }
 }

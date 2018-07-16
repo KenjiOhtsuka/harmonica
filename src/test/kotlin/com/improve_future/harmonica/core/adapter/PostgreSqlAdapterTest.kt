@@ -188,7 +188,7 @@ class PostgreSqlAdapterTest {
             buildDateDeclaration()
         )
         val defaultDate = Date()
-        dateColumn.default = defaultDate
+        dateColumn.defaultDate = defaultDate
         val dateSql =
             SimpleDateFormat("yyyy-MM-dd").format(defaultDate)
         assertEquals(

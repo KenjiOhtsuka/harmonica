@@ -105,7 +105,7 @@ class AbstractMigrationTest {
         val dateColumn = dateAddingColumn.column as DateColumn
         assertEquals("column_name", dateColumn.name)
         assertEquals(false, dateColumn.nullable)
-        assertEquals(defaultDate, dateColumn.default)
+        assertEquals(defaultDate, dateColumn.defaultDate)
         val addingOption = dateAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)

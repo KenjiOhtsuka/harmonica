@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.table
 
 import com.improve_future.harmonica.core.table.column.*
+import java.time.LocalDate
 import java.util.*
 
 typealias Type = Int
@@ -109,18 +110,53 @@ class TableBuilder {
     }
 
     /**
-     * add date column
+     * add date column of `java.util.Date` default value.
      *
      * @param nullable null constraint. `false` means `NOT NULL` constraint
      */
     fun date(
         columnName: String,
         nullable: Boolean = true,
-        default: Date? = null
+        default: Date
+    ): AbstractColumn {
+        val dateColumn = DateColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
+        }
+        return addColumn(dateColumn)
+    }
+
+    /**
+     * add date column of no default value or `String` default value
+     *
+     * @param default Must be formatted as yyyy-MM-dd
+     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     */
+    fun date(
+        columnName: String,
+        nullable: Boolean = true,
+        default: String? = null
     ): AbstractColumn {
         val dateColumn = DateColumn(columnName).also {
             it.nullable = nullable
             it.default = default
+        }
+        return addColumn(dateColumn)
+    }
+
+    /**
+     * add date column of LocalDate default value
+     *
+     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     */
+    fun date(
+        columnName: String,
+        nullable: Boolean = true,
+        default: LocalDate
+    ): AbstractColumn {
+        val dateColumn = DateColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultLocalDate = default
         }
         return addColumn(dateColumn)
     }

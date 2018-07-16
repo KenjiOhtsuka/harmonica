@@ -2,7 +2,6 @@ package com.improve_future.harmonica.core.table.column
 
 import org.junit.Test
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -29,19 +28,27 @@ class DateColumnTest {
         assertEquals(true, dateColumn.hasDefault)
         assertEquals("2345-08-19", dateColumn.default)
         val calendar = Calendar.getInstance()
-        calendar.set(2345, 8, 19)
-        val expectedDate = calendar.time
-        assertEquals(
-            calendar.time,
-            dateColumn.defaultDate)
+        calendar.set(2345, 7, 19)
+        val actualDate = Calendar.getInstance()
+        actualDate.time = dateColumn.defaultDate
+        arrayOf(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH).forEach {
+            assertEquals(calendar.get(it), actualDate.get(it))
+        }
         assertEquals(
             LocalDate.of(2345, 8, 19), dateColumn.defaultLocalDate
         )
 
-        dateColumn.defaultLocalDate = LocalDate.of(2435, 18, 9)
+        val localDate = LocalDate.of(2435, 10, 6)
+        dateColumn.defaultLocalDate = localDate
         assertEquals(true, dateColumn.hasDefault)
-        assertEquals("2345-18-09", dateColumn.default)
-        calendar.time = dateColumn.defaultDate
-        //assertEquals()
+        assertEquals("2435-10-06", dateColumn.default)
+        actualDate.time = dateColumn.defaultDate
+        assertEquals(2435, actualDate.get(Calendar.YEAR))
+        assertEquals(10, actualDate.get(Calendar.MONTH) + 1)
+        assertEquals(6, actualDate.get(Calendar.DAY_OF_MONTH))
+        assertEquals(localDate, dateColumn.defaultLocalDate)
+
+        dateColumn.default = null
+        checkAllNull()
     }
 }

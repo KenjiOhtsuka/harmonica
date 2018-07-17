@@ -8,12 +8,43 @@ import kotlin.test.assertEquals
 class TableBuilderTest {
     @Test
     fun testInteger() {
-        val tb = TableBuilder()
+        var tb = TableBuilder()
+        tb.integer("name")
+        var integerColumn = tb.columnList.first() as IntegerColumn
+        assertEquals("name", integerColumn.name)
+        assertEquals(true, integerColumn.nullable)
+        assertEquals(null, integerColumn.default)
+
+        tb = TableBuilder()
         tb.integer("name", false, 1)
-        val integerColumn = tb.columnList.first() as IntegerColumn
+        integerColumn = tb.columnList.first() as IntegerColumn
         assertEquals("name", integerColumn.name)
         assertEquals(false, integerColumn.nullable)
         assertEquals(1L, integerColumn.default)
+    }
+
+    @Test
+    fun testDecimal() {
+        var tb = TableBuilder()
+        tb.decimal("name")
+        var decimalColumn = tb.columnList.first() as DecimalColumn
+        assertEquals("name", decimalColumn.name)
+        assertEquals(null, decimalColumn.precision)
+        assertEquals(null, decimalColumn.scale)
+        assertEquals(true, decimalColumn.nullable)
+        assertEquals(null, decimalColumn.default)
+
+        tb = TableBuilder()
+        tb.decimal(
+            "name", 10, 5,
+            false, 1.1
+        )
+        decimalColumn = tb.columnList.first() as DecimalColumn
+        assertEquals("name", decimalColumn.name)
+        assertEquals(10, decimalColumn.precision)
+        assertEquals(5, decimalColumn.scale)
+        assertEquals(false, decimalColumn.nullable)
+        assertEquals(1.1, decimalColumn.default)
     }
 
     @Test

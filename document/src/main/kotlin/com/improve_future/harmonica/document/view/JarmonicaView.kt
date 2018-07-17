@@ -5,14 +5,14 @@ import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 
 object JarmonicaView : AbstractView() {
-    override val title = "Jarmonica introduction"
+    override val articleTitle = "Jarmonica introduction"
     override val pathKey = "jarmonica"
 
     override fun index(): String {
-        return Template.default(title) {
+        return Template.default(articleTitle) {
             row {
                 col {
-                    h1 { +title }
+                    h1 { +articleTitle }
                 }
             }
             row {
@@ -70,6 +70,16 @@ object JarmonicaView : AbstractView() {
                             col {
                                 pre {
                                     code {
+                                        +"""
+                                            `- src
+                                              `- main
+                                                `- kotlin
+                                                  `- db
+                                                    |- config
+                                                    | |- Default.kt <- default configuration file
+                                                    | `- Custom.kt <- you can create own configuration file
+                                                    `- migration
+                                        """.trimIndent()
 
                                     }
                                 }

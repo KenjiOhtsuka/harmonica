@@ -11,13 +11,107 @@
         <div class="col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down">
           <section>
             <ul>
-              <li><a href="index.html">Top</a></li>
-              <li><a href="jarmonica.html">Jarmonica</a></li>
-              <li><a href="harmonica.html">Harmonica</a></li>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="jarmonica.html">Jarmonica introduction</a></li>
+              <li><a href="harmonica.html">Harmonica introduction</a></li>
+              <li><a href="migration_method.html">Migration method</a></li>
             </ul>
           </section>
         </div>
-        <div class="col-xl-11 col-lg-10 col-md-10 col-sm-9 col-xs-12"></div>
+        <div class="col-xl-11 col-lg-10 col-md-10 col-sm-9 col-xs-12">
+          <div class="row">
+            <div class="col">
+              <h1>Migration method</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col"></div>
+          </div>
+          <section>
+            <div class="row">
+              <div class="col">
+                <h2>Create migration file</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p>First, create migration files.</p>
+                <pre><code>./gradlew jarmonicaCreate</code></pre>
+              </div>
+            </div>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>Parameters</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <dl>
+                    <dt>migrationName</dt>
+                    <dd>
+                      <p>This parameter <code>migrationName</code>specifies migration name.</p>
+                      <figure>
+                        <figcaption>Usage</figcaption>
+                        <pre><code>./gradlew jarmonicaCreate -PmigrationName=&quot;HelloWorld&quot;</code></pre>
+                      </figure>
+                      <figure>
+                        <figcaption>Output</figcaption>
+                        <pre><code></code></pre>
+                      </figure>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </section>
+          </section>
+          <section>
+            <div class="row">
+              <div class="col">
+                <h2>Migrate</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p>Migrate by the following command.</p>
+                <pre><code>./gradlew jarmonicaUp</code></pre>
+                <p>This command migrates all migrationswhich are not migrated at that time.</p>
+              </div>
+            </div>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>Parameter</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <dl>
+                    <dt>env</dt>
+                    <dd></dd>
+                    <dt>step</dt>
+                    <dd></dd>
+                  </dl>
+                </div>
+              </div>
+            </section>
+          </section>
+          <section>
+            <div class="row">
+              <div class="col">
+                <h2>Table creation</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p>For</p>
+                <pre>
+                  <div class="col"></div>
+                </pre>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
     <footer></footer>

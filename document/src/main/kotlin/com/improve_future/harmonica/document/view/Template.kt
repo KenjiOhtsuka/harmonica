@@ -38,7 +38,7 @@ object Template {
                                         Site.structure.forEach {
                                             val view = it as AbstractView
                                             li {
-                                                a(it.path) { +it.title }
+                                                a(it.path) { +it.articleTitle }
                                             }
                                         }
                                     }

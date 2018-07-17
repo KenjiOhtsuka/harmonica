@@ -6,14 +6,14 @@ import kotlinx.html.h1
 import kotlinx.html.p
 
 object HarmonicaView : AbstractView() {
-    override val title = "Harmonica introduction"
+    override val articleTitle = "Harmonica introduction"
     override val pathKey = "harmonica"
 
     override fun index(): String {
-        return Template.default(title) {
+        return Template.default(articleTitle) {
             row {
                 col {
-                    h1 { +title }
+                    h1 { +articleTitle }
                 }
             }
             row {

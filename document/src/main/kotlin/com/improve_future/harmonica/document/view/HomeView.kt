@@ -4,14 +4,14 @@ import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 
 object HomeView : AbstractView() {
-    override val title = "Home"
+    override val articleTitle = "Home"
     override val pathKey = "index"
 
     override fun index(): String {
-        return Template.default("Home") {
+        return Template.default(articleTitle) {
             row {
                 div("col") {
-                    h1 { +"Home" }
+                    h1 { +articleTitle }
                 }
             }
             row {

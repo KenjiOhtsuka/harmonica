@@ -61,8 +61,7 @@ class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
     }
 
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
-        var sql = "ALTER TABLE $tableName"
-        sql += " ADD COLUMN ${column.name} " + column.sqlType
+        var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
         connection.execute(sql)

@@ -2,7 +2,6 @@ package com.improve_future.harmonica.core.table.column
 
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.asserter
 
 class BooleanColumnTest {
     @Test
@@ -13,10 +12,10 @@ class BooleanColumnTest {
         booleanColumn.default = true
         assertEquals("TRUE", booleanColumn.sqlDefault)
         assertEquals(true, booleanColumn.hasDefault)
-        booleanColumn.default = true
+        booleanColumn.default = false
         assertEquals("FALSE", booleanColumn.sqlDefault)
         assertEquals(true, booleanColumn.hasDefault)
-        booleanColumn.default = false
+        booleanColumn.default = null
         assertEquals(false, booleanColumn.hasDefault)
     }
 }

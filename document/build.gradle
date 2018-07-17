@@ -2,7 +2,7 @@ import java.nio.file.Paths
 
 plugins {
     id 'groovy'
-    id 'org.jetbrains.kotlin.jvm' version '1.2.51'
+    id 'org.jetbrains.kotlin.jvm'
     id 'application'
 }
 

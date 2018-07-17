@@ -100,10 +100,6 @@ pluginBundle {
     }
 }
 
-test {
-    useJUnitPlatform()
-}
-
 dokka {
     outputFormat = 'html'
     outputDirectory = Paths.get("docs", "api").toString()

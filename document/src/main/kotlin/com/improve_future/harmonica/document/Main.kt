@@ -1,9 +1,6 @@
 package com.improve_future.harmonica.document
 
-import com.improve_future.harmonica.document.view.HarmonicaView
-import com.improve_future.harmonica.document.view.JarmonicaView
-import com.improve_future.harmonica.document.view.TopView
-import com.improve_future.harmonica.document.view.ViewInterface
+import com.improve_future.harmonica.document.view.*
 import java.io.*
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -14,7 +11,7 @@ object Main {
 
     @JvmStatic
     fun main(vararg args: String) {
-        arrayOf(TopView, JarmonicaView, HarmonicaView).forEach {
+        arrayOf(TopView, JarmonicaView, HarmonicaView, MigrationMethod).forEach {
             outputFile(it)
         }
     }

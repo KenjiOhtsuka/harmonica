@@ -10,7 +10,7 @@ object TopView : ViewInterface {
         return Template.default("Home") {
             row {
                 div("col") {
-                    h1 { "Home" }
+                    h1 { +"Home" }
                 }
             }
             row {

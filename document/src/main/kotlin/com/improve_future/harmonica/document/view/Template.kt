@@ -12,10 +12,12 @@ object Template {
                 head {
                     title(title)
                     link(
-                            "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css",
-                            rel = "stylesheet") {
+                        "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css",
+                        rel = "stylesheet"
+                    ) {
                         attributes["crossorigin"] = "anonymous"
-                        attributes["integrity"] = "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+                        attributes["integrity"] =
+                                "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
                     }
 //                    link(
 //                            "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css",

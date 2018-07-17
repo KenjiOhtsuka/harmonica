@@ -10,7 +10,7 @@ object HarmonicaView : ViewInterface{
     override val path = "harmonica.html"
 
     override fun index(): String {
-        return Template.default("Home") {
+        return Template.default("Harmonica introduction") {
             row {
                 col {
                     h1 { +"Harmonica" }

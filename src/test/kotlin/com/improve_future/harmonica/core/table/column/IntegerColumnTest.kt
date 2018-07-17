@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 class IntegerColumnTest {
     @Test
-    fun testInstanceVariables() {
+    fun testInstanceVariable() {
         val integerColumn = IntegerColumn("name")
         assertEquals("name", integerColumn.name)
         assertEquals(false, integerColumn.hasDefault)

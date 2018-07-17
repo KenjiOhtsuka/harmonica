@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 
 class DateColumnTest {
     @Test
-    fun testInstanceVariables() {
+    fun testInstanceVariable() {
         val dateColumn = DateColumn("name")
         assertEquals("name", dateColumn.name)
 

@@ -6,8 +6,8 @@ import kotlinx.html.div
 import kotlinx.html.h1
 import kotlinx.html.p
 
-object HarmonicaView : ViewInterface{
-    override val path = "harmonica.html"
+object HarmonicaView : ViewInterface {
+    override val pathKey = "harmonica"
 
     override fun index(): String {
         return Template.default("Harmonica introduction") {

@@ -4,7 +4,7 @@ import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 
 object TopView : ViewInterface {
-    override val path = "index.html"
+    override val pathKey = "index"
 
     override fun index(): String {
         return Template.default("Home") {

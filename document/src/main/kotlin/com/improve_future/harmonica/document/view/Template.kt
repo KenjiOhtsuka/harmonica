@@ -35,17 +35,17 @@ object Template {
                                 section {
                                     ul {
                                         li {
-                                            a(TopView.path) {
+                                            a(TopView.pathKey) {
                                                 +"Top"
                                             }
                                         }
                                         li {
-                                            a(JarmonicaView.path) {
+                                            a(JarmonicaView.pathKey) {
                                                 +"Jarmonica"
                                             }
                                         }
                                         li {
-                                            a(HarmonicaView.path) {
+                                            a(HarmonicaView.pathKey) {
                                                 +"Harmonica"
                                             }
                                         }

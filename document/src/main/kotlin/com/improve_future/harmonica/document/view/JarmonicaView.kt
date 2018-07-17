@@ -5,7 +5,7 @@ import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 
 object JarmonicaView : ViewInterface {
-    override val path = "jarmonica.html"
+    override val pathKey = "jarmonica"
 
     override fun index(): String {
         return Template.default("Jarmonica introduction") {

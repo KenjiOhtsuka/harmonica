@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.document.view
 
 interface ViewInterface {
-    val path: String
+    val pathKey: String
 
     fun index(): String
 }

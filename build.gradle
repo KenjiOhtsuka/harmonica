@@ -1,7 +1,7 @@
 import java.nio.file.Paths
 
 buildscript {
-    ext.kotlin_version = '1.2.50'
+    ext.kotlin_version = '1.2.51'
 
     repositories {
         jcenter()
@@ -98,6 +98,10 @@ pluginBundle {
             displayName = 'DB Migration Plugin'
         }
     }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 dokka {

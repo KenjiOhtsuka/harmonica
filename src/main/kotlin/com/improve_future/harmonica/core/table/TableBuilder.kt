@@ -100,7 +100,7 @@ class TableBuilder {
      */
     fun boolean(
         columnName: String,
-        nullable: Boolean = false,
+        nullable: Boolean = true,
         default: Boolean? = null
     ): AbstractColumn {
         return addColumn(BooleanColumn(columnName).also {

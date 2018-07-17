@@ -37,4 +37,22 @@ class TableBuilderTest {
         assertEquals(false, dateColumn.nullable)
         assertEquals(defaultDate, dateColumn.defaultDate)
     }
+
+    @Test
+    fun testBoolean() {
+        var tb = TableBuilder()
+        tb.boolean("name")
+        var booleanColumn = tb.columnList.first() as BooleanColumn
+        assertEquals("name", booleanColumn.name)
+        assertEquals(true, booleanColumn.nullable)
+        assertEquals(null, booleanColumn.default)
+
+        tb = TableBuilder()
+        val defaultBoolean = true
+        tb.boolean("name", false, defaultBoolean)
+        booleanColumn = tb.columnList.first() as BooleanColumn
+        assertEquals("name", booleanColumn.name)
+        assertEquals(false, booleanColumn.nullable)
+        assertEquals(defaultBoolean, booleanColumn.default)
+    }
 }

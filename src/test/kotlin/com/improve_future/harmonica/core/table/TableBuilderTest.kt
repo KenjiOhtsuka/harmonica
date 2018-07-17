@@ -29,10 +29,17 @@ class TableBuilderTest {
 
     @Test
     fun testDate() {
-        val tb = TableBuilder()
+        var tb = TableBuilder()
+        tb.date("name")
+        var dateColumn = tb.columnList.first() as DateColumn
+        assertEquals("name", dateColumn.name)
+        assertEquals(true, dateColumn.nullable)
+        assertEquals(null, dateColumn.default)
+
+        tb = TableBuilder()
         val defaultDate = Date()
         tb.date("name", false, defaultDate)
-        val dateColumn = tb.columnList.first() as DateColumn
+        dateColumn = tb.columnList.first() as DateColumn
         assertEquals("name", dateColumn.name)
         assertEquals(false, dateColumn.nullable)
         assertEquals(defaultDate, dateColumn.defaultDate)

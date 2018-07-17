@@ -27,11 +27,33 @@ import com.improve_future.harmonica.core.AbstractMigration
 class M20180624011127699_HolloWorld : AbstractMigration() {
     override fun up() {
         createTable("table_name") {
+            boolean("boolean_column", nullable = false, default = true)
             integer("integer_column", default = 1)
-            varchar("varchar_column", size = 10, nullable = false)
             decimal("decimal_column", 5, 2, default = 3)
+            varchar("varchar_column", size = 10, nullable = false)
             text("text_column", default = "default value")
+            date("date_column_1", default = "2019-01-01")
+            date("date_column_2", default = Date())
+            date("date_column_3", default = LocalDate.of(2018, 2, 2))
         }
+
+        addBooleanColumn(
+            "table_name", "added_boolean",
+            default = true, nullable = false
+        )
+        addIntegerColumn(
+            "table_name", "added_integer", nullable = false
+        )
+        addDecimalColumn("table_name" "added_decimal")
+        addVarcharColumn(
+            "table_name", "added_boolean",
+            default = "default", nullable = false
+        )
+        addTextColumn("table_name", "added_text")
+        addDateColumn(
+            "table_name", "added_date",
+            default = LocalDate.of(2018, 12, 11)
+        )
     }
 
     override fun down() {

@@ -11,7 +11,7 @@ object JarmonicaView : ViewInterface {
         return Template.default("Jarmonica introduction") {
             row {
                 col {
-                    h1 { +"Jarmonica" }
+                    h1 { +"Jarmonica introduction" }
                 }
             }
             row {

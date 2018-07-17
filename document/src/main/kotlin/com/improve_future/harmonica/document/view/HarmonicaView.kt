@@ -13,7 +13,7 @@ object HarmonicaView : ViewInterface{
         return Template.default("Harmonica introduction") {
             row {
                 col {
-                    h1 { +"Harmonica" }
+                    h1 { +"Harmonica introduction" }
                 }
             }
             row {

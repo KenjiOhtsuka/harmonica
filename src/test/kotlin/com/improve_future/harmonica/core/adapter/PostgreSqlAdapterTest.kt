@@ -201,4 +201,9 @@ class PostgreSqlAdapterTest {
             buildDateDeclaration()
         )
     }
+
+    @Test
+    fun testAddColumnForInteger() {
+        // ToDo
+    }
 }

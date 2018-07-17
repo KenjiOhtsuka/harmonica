@@ -34,4 +34,9 @@ class MySqlAdapterTest {
             buildTextDeclaration()
         )
     }
+
+    @Test
+    fun testAddColumnForInteger() {
+        // ToDo
+    }
 }

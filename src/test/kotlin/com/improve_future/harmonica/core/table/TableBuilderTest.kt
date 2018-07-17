@@ -49,9 +49,17 @@ class TableBuilderTest {
 
     @Test
     fun testVarchar() {
-        val tb = TableBuilder()
+        var tb = TableBuilder()
+        tb.varchar("name")
+        var varcharColumn = tb.columnList.first() as VarcharColumn
+        assertEquals("name", varcharColumn.name)
+        assertEquals(null, varcharColumn.size)
+        assertEquals(true, varcharColumn.nullable)
+        assertEquals(null, varcharColumn.default)
+
+        tb = TableBuilder()
         tb.varchar("name", 10, false, "test string")
-        val varcharColumn = tb.columnList.first() as VarcharColumn
+        varcharColumn = tb.columnList.first() as VarcharColumn
         assertEquals("name", varcharColumn.name)
         assertEquals(10, varcharColumn.size)
         assertEquals(false, varcharColumn.nullable)

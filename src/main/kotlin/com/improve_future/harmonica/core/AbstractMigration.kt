@@ -120,6 +120,9 @@ abstract class AbstractMigration {
     /**
      * Add new boolean column to existing table.
      *
+     * In PostgreSQL, BOOLEAN column will be added.
+     * In MySQL, TINYINT column will be added.
+     *
      * @param first You add column at first of the columns (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * (valid only for MySQL)

@@ -1,10 +1,11 @@
 package com.improve_future.harmonica.document.view
 
-object MigrationMethod : ViewInterface {
+object MigrationMethod : AbstractView() {
+    override val title = "Migration method"
     override val pathKey = "migration_method"
 
     override fun index(): String {
-        return Template.default("Migration method") {
+        return Template.default(title) {
 
         }
     }

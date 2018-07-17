@@ -3,7 +3,8 @@ package com.improve_future.harmonica.document.view
 import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 
-object TopView : ViewInterface {
+object HomeView : AbstractView() {
+    override val title = "Home"
     override val pathKey = "index"
 
     override fun index(): String {

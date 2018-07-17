@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.document.view
 
+import com.improve_future.harmonica.document.Site
 import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
@@ -34,19 +35,10 @@ object Template {
                             div("col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down") {
                                 section {
                                     ul {
-                                        li {
-                                            a(TopView.pathKey) {
-                                                +"Top"
-                                            }
-                                        }
-                                        li {
-                                            a(JarmonicaView.pathKey) {
-                                                +"Jarmonica"
-                                            }
-                                        }
-                                        li {
-                                            a(HarmonicaView.pathKey) {
-                                                +"Harmonica"
+                                        Site.structure.forEach {
+                                            val view = it as AbstractView
+                                            li {
+                                                a(it.path) { +it.title }
                                             }
                                         }
                                     }

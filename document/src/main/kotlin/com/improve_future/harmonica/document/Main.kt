@@ -10,12 +10,12 @@ object Main {
 
     @JvmStatic
     fun main(vararg args: String) {
-        arrayOf(TopView, JarmonicaView, HarmonicaView, MigrationMethod).forEach {
+        arrayOf(HomeView, JarmonicaView, HarmonicaView, MigrationMethod).forEach {
             outputFile(it)
         }
     }
 
-    private fun outputFile(view: ViewInterface) {
+    private fun outputFile(view: AbstractView) {
         val file = File(
             Paths.get(sitePath.toString(), view.pathKey).toString() + ".html"
         )

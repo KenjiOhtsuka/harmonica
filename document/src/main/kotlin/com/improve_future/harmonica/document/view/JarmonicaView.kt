@@ -4,14 +4,15 @@ import com.improve_future.harmonica.document.helper.col
 import com.improve_future.harmonica.document.helper.row
 import kotlinx.html.*
 
-object JarmonicaView : ViewInterface {
+object JarmonicaView : AbstractView() {
+    override val title = "Jarmonica introduction"
     override val pathKey = "jarmonica"
 
     override fun index(): String {
-        return Template.default("Jarmonica introduction") {
+        return Template.default(title) {
             row {
                 col {
-                    h1 { +"Jarmonica introduction" }
+                    h1 { +title }
                 }
             }
             row {

@@ -35,6 +35,7 @@ abstract class AbstractColumn(val name: String, private val type: Type) {
 
             // DATE AND TIME
                 Types.DATE -> "DATE"
+                Types.TIME -> "TIME"
                 Types.TIMESTAMP -> "TIMESTAMP" // TIME WITH TIMEZONE, TIMESTAMP WITH TIMEZONE
 
                 Types.SQLXML -> "XML"

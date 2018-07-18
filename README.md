@@ -27,6 +27,9 @@ import com.improve_future.harmonica.core.AbstractMigration
 class M20180624011127699_HolloWorld : AbstractMigration() {
     override fun up() {
         createTable("table_name") {
+            // If you add the next line,
+            // migration doesn't create auto incremental id column.
+            // id = false
             boolean("boolean_column", nullable = false, default = true)
             integer("integer_column", default = 1)
             decimal("decimal_column", 5, 2, default = 3)

@@ -5,8 +5,6 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
 
-typealias Type = Int
-
 class TableBuilder {
     lateinit var tableName: String
     internal val columnList = mutableListOf<AbstractColumn>()

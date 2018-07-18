@@ -218,6 +218,27 @@ abstract class AbstractMigration {
         addColumn(tableName, textColumn, first, justBeforeColumnName)
     }
 
+    /**
+     * Add new BLOB column to existing table.
+     *
+     * @param default Not valid for MySQL
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addBlobColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: ByteArray? = null,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val blobColumn = BlobColumn(columnName)
+        blobColumn.also {
+            it.nullable = nullable
+            it.default = default
+        }
+        addColumn(tableName, blobColumn, first, justBeforeColumnName)
+    }
+
     fun createIndex(tableName: String, columnName: String) {
         println("Add Index: $tableName $columnName")
         adapter.createIndex(tableName, columnName)

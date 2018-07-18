@@ -8,13 +8,12 @@ typealias Type = Int
 
 class TableBuilder {
     lateinit var tableName: String
-    val columnList = mutableListOf<AbstractColumn>()
+    internal val columnList = mutableListOf<AbstractColumn>()
     /** Specify add auto incremental id column or not */
     var id = true
 
-    private fun addColumn(column: AbstractColumn): AbstractColumn {
+    private fun addColumn(column: AbstractColumn) {
         columnList.add(column)
-        return column
     }
 
     /**
@@ -30,14 +29,14 @@ class TableBuilder {
         scale: Int? = null,
         nullable: Boolean = true,
         default: Double? = null
-    ): AbstractColumn {
+    ) {
         val decimalColumn = DecimalColumn(columnName).also {
             it.nullable = nullable
             it.default = default
             it.precision = precision
             it.scale = scale
         }
-        return addColumn(decimalColumn)
+        addColumn(decimalColumn)
     }
 
     /**
@@ -49,8 +48,8 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: Long? = null
-    ): AbstractColumn {
-        return addColumn(IntegerColumn(columnName).also {
+    ) {
+        addColumn(IntegerColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
@@ -69,8 +68,8 @@ class TableBuilder {
         size: Int? = null,
         nullable: Boolean = true,
         default: String? = null
-    ): AbstractColumn {
-        return addColumn(VarcharColumn(columnName).also {
+    ) {
+        addColumn(VarcharColumn(columnName).also {
             it.nullable = nullable
             it.default = default
             it.size = size
@@ -89,8 +88,8 @@ class TableBuilder {
         size: Int? = null,
         nullable: Boolean = true,
         default: String? = null
-    ): AbstractColumn {
-        return varchar(columnName, size, nullable, default)
+    ) {
+        varchar(columnName, size, nullable, default)
     }
 
     /**
@@ -102,8 +101,8 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: Boolean? = null
-    ): AbstractColumn {
-        return addColumn(BooleanColumn(columnName).also {
+    ) {
+        addColumn(BooleanColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
@@ -118,12 +117,12 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: Date
-    ): AbstractColumn {
+    ) {
         val dateColumn = DateColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
         }
-        return addColumn(dateColumn)
+        addColumn(dateColumn)
     }
 
     /**
@@ -136,12 +135,12 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: String? = null
-    ): AbstractColumn {
+    ) {
         val dateColumn = DateColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         }
-        return addColumn(dateColumn)
+        addColumn(dateColumn)
     }
 
     /**
@@ -153,12 +152,12 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: LocalDate
-    ): AbstractColumn {
+    ) {
         val dateColumn = DateColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalDate = default
         }
-        return addColumn(dateColumn)
+        addColumn(dateColumn)
     }
 
     /**
@@ -170,8 +169,8 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: String? = null
-    ): AbstractColumn {
-        return addColumn(TextColumn(columnName).also {
+    ) {
+        addColumn(TextColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
@@ -186,8 +185,8 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: ByteArray? = null
-    ): AbstractColumn {
-        return addColumn(BlobColumn(columnName).also {
+    ) {
+        addColumn(BlobColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })

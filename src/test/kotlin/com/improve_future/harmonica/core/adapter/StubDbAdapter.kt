@@ -6,12 +6,13 @@ import com.improve_future.harmonica.core.table.column.AddingColumnOption
 import com.improve_future.harmonica.stub.core.StubConnection
 
 class StubDbAdapter : DbAdapter(StubConnection()) {
-    val addingColumnList = mutableListOf<AddingColumn>()
+    internal val addingColumnList = mutableListOf<AddingColumn>()
 
-    data class AddingColumn(
+    internal data class AddingColumn(
         val tableName: String,
         val column: AbstractColumn,
-        val option: AddingColumnOption)
+        val option: AddingColumnOption
+    )
 
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
     }

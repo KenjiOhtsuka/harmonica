@@ -19,7 +19,7 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
         connection.execute(sql)
     }
 
-    companion object : DbAdapter.CompanionInterface {
+    internal companion object : DbAdapter.CompanionInterface() {
         private fun buildColumnDeclarationForCreateTableSql(
             column: AbstractColumn
         ): String {
@@ -49,6 +49,7 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
         override fun sqlType(column: AbstractColumn): String {
             return when (column) {
                 is DateTimeColumn -> "TIMESTAMP"
+                is BlobColumn -> "BLOB"
                 else -> super.sqlType(column)
             }
         }

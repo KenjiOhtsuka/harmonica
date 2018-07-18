@@ -100,5 +100,40 @@ class TableBuilderTest {
         assertEquals("name", booleanColumn.name)
         assertEquals(false, booleanColumn.nullable)
         assertEquals(defaultBoolean, booleanColumn.default)
+        assertEquals(true, booleanColumn.hasDefault)
+    }
+
+    @Test
+    fun testTimestamp() {
+        // ToDo
+    }
+
+    @Test
+    fun testDateTime() {
+        // ToDo
+    }
+
+    @Test
+    fun testTime() {
+        // ToDo
+    }
+
+    @Test
+    fun testBlob() {
+        var tb = TableBuilder()
+        tb.blob("name")
+        var blobColumn = tb.columnList.first() as BlobColumn
+        assertEquals("name", blobColumn.name)
+        assertEquals(true, blobColumn.nullable)
+        assertEquals(null, blobColumn.default)
+
+        tb = TableBuilder()
+        val defaultBlob = byteArrayOf(1, 2, 3, 4, 5)
+        tb.blob("name", false, defaultBlob)
+        blobColumn = tb.columnList.first() as BlobColumn
+        assertEquals("name", blobColumn.name)
+        assertEquals(false, blobColumn.nullable)
+        assertEquals(defaultBlob, blobColumn.default)
+        assertEquals(true, blobColumn.hasDefault)
     }
 }

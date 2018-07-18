@@ -131,4 +131,24 @@ class AbstractMigrationTest {
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
     }
+
+    @Test
+    fun testAddTimeColumn() {
+        // ToDo
+    }
+
+    @Test
+    fun testAddDateTimeColumn() {
+        // ToDo
+    }
+
+    @Test
+    fun testAddTimestampColumn() {
+        // ToDo
+    }
+
+    @Test
+    fun testAddBlobColumn() {
+        // ToDo
+    }
 }

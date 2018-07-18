@@ -181,7 +181,7 @@ class TableBuilder {
      *
      * @param default Invalid for MySQL
      */
-    fun blog(
+    fun blob(
         columnName: String,
         nullable: Boolean = true,
         default: ByteArray? = null

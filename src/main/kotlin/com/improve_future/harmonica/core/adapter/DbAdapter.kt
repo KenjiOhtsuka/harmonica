@@ -18,24 +18,26 @@ abstract class DbAdapter(val connection: ConnectionInterface) {
 
     abstract fun createIndex(tableName: String, columnName: String, unique: Boolean = false)
 
-    fun dropIndex(tableName: String, indexName: String) {
+    internal fun dropIndex(tableName: String, indexName: String) {
         connection.execute("DROP INDEX $indexName ON $tableName;")
     }
 
-    abstract fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption)
+    internal abstract fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption)
 
     fun removeColumn(tableName: String, columnName: String) {
         connection.execute("ALTER TABLE $tableName DROP COLUMN $columnName;")
     }
 
-    interface CompanionInterface {
-        fun sqlType(column: AbstractColumn): String {
+    internal open class CompanionInterface {
+        open fun sqlType(column: AbstractColumn): String {
             return when (column) {
                 is IntegerColumn -> "INTEGER"
                 is VarcharColumn -> "VARCHAR"
                 is DecimalColumn -> "DECIMAL"
                 is TextColumn -> "TEXT"
                 is BlobColumn -> "BLOB"
+                is DateColumn -> "DATE"
+                is TimeColumn -> "TIME"
                 else -> throw Exception()
             }
         }

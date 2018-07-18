@@ -2,6 +2,7 @@ package com.improve_future.harmonica.core.table
 
 import com.improve_future.harmonica.core.table.column.*
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.*
 
 typealias Type = Int
@@ -189,6 +190,51 @@ class TableBuilder {
         addColumn(BlobColumn(columnName).also {
             it.nullable = nullable
             it.default = default
+        })
+    }
+
+    /**
+     * add Time column
+     */
+    fun time(
+        columnName: String,
+        nullable: Boolean = true,
+        default: LocalTime? = null
+    ) {
+        addColumn(TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultLocalTime = default
+        })
+    }
+
+    /**
+     * add Time column
+     *
+     * @param default Format as HH:mm:ss[.SSS][ zzz].
+     * `22:21:22.123`, `22:21:22`, `12:23:34` can be accepted.
+     */
+    fun time(
+        columnName: String,
+        nullable: Boolean = true,
+        default: String
+    ) {
+        addColumn(TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
+    }
+
+    /**
+     * add Time column
+     */
+    fun time(
+        columnName: String,
+        nullable: Boolean = true,
+        default: Date
+    ) {
+        addColumn(TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
         })
     }
 }

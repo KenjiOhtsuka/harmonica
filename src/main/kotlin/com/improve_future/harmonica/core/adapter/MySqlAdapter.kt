@@ -43,7 +43,8 @@ class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
             if (!column.nullable) sql += " NOT NULL"
             if (column.hasDefault) {
                 when (column) {
-                    !is TextColumn -> {
+                    is TextColumn, is BlobColumn -> Unit
+                    else -> {
                         sql += " DEFAULT " + column.sqlDefault
                     }
                 }

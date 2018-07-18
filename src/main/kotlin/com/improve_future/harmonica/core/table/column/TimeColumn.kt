@@ -40,4 +40,5 @@ internal class TimeColumn(name: String) : AbstractColumn(name, java.sql.Types.TI
         }
     override val sqlDefault = "'$default'"
     override val hasDefault = default != null
+    // ToDo: With time zone
 }

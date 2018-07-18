@@ -8,7 +8,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.JavaExec
 
-fun <T> T.groovyClosure(function: () -> Unit) = object : Closure<Unit>(this) {
+internal fun <T> T.groovyClosure(function: () -> Unit) = object : Closure<Unit>(this) {
     @Suppress("unused")
     fun doCall() {
         function()
@@ -57,7 +57,7 @@ class JarmonicaPlugin : Plugin<Project> {
 
 
 open class JarmonicaUpTask : JarmonicaMigrationTask() {
-    override val taskType = JarmonicaTaskType.Up
+    override internal val taskType = JarmonicaTaskType.Up
 
     override fun exec() {
         val step = getProperty("step")?.toLong()

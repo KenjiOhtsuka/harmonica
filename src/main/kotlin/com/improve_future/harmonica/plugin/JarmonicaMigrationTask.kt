@@ -3,7 +3,7 @@ package com.improve_future.harmonica.plugin
 import org.gradle.api.tasks.JavaExec
 
 abstract class JarmonicaMigrationTask : JavaExec() {
-    abstract val taskType: JarmonicaTaskType
+    abstract internal val taskType: JarmonicaTaskType
 
     protected val migrationPackage: String
         get() {

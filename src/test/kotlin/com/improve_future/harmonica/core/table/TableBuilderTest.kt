@@ -2,6 +2,7 @@ package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.table.TableBuilder
 import org.junit.Test
+import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -115,7 +116,20 @@ class TableBuilderTest {
 
     @Test
     fun testTime() {
-        // ToDo
+        var tb = TableBuilder()
+        tb.time("name")
+        var timeColumn = tb.columnList.first() as TimeColumn
+        assertEquals("name", timeColumn.name)
+        assertEquals(true, timeColumn.nullable)
+        assertEquals(null, timeColumn.default)
+
+        tb = TableBuilder()
+        val defaultTime = LocalTime.now()
+        tb.time("name", false, defaultTime)
+        timeColumn = tb.columnList.first() as TimeColumn
+        assertEquals("name", timeColumn.name)
+        assertEquals(false, timeColumn.nullable)
+        assertEquals(defaultTime, timeColumn.defaultLocalTime)
     }
 
     @Test
@@ -134,6 +148,5 @@ class TableBuilderTest {
         assertEquals("name", blobColumn.name)
         assertEquals(false, blobColumn.nullable)
         assertEquals(defaultBlob, blobColumn.default)
-        assertEquals(true, blobColumn.hasDefault)
     }
 }

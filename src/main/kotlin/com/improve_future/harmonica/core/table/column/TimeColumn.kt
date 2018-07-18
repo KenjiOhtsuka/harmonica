@@ -8,15 +8,15 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 internal class TimeColumn(name: String) : AbstractColumn(name, java.sql.Types.TIME) {
-    val formatter = DateTimeFormatter.ofPattern("H[H]:m[m][:s[s]][ zzz]")
+    private val formatter = DateTimeFormatter.ofPattern("H[H]:m[m][:s[s]][.SSS][ zzz]")
     var default: String?
         get() {
-            return defaultLocalTime.toString()
+            return defaultLocalTime?.toString()
         }
         set(value) {
-            defaultLocalTime = LocalTime.parse(
-                value, formatter
-            )
+            defaultLocalTime = value?.let {
+                LocalTime.parse(it, formatter)
+            }
         }
     var defaultDate: Date?
         set(value) {
@@ -35,10 +35,8 @@ internal class TimeColumn(name: String) : AbstractColumn(name, java.sql.Types.TI
             }
         }
     var defaultLocalTime: LocalTime? = null
-        set(value) {
-            default = value.toString()
-        }
+
     override val sqlDefault = "'$default'"
-    override val hasDefault = default != null
-    // ToDo: With time zone
+    override val hasDefault
+        get() = defaultLocalTime != null
 }

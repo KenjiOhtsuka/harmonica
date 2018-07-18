@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.table.column.*
+import com.improve_future.harmonica.stub.core.StubConnection
 import org.junit.Test
 import java.text.SimpleDateFormat
 import java.util.*
@@ -204,6 +205,18 @@ class PostgreSqlAdapterTest {
 
     @Test
     fun testAddColumnForInteger() {
-        // ToDo
+        val connection = StubConnection()
+        val adapter = PostgreSqlAdapter(connection)
+
+        val integerColumn = IntegerColumn("integer")
+
+        adapter.addColumn(
+            "table_name", integerColumn,
+            AddingColumnOption()
+        )
+        assertEquals(
+            "ALTER TABLE table_name ADD COLUMN integer INTEGER;",
+            connection.executedSqlList.first()
+        )
     }
 }

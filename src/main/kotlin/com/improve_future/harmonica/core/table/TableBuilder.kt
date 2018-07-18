@@ -162,7 +162,7 @@ class TableBuilder {
     }
 
     /**
-     * unlimited length
+     * add TEXT column, unlimited length string
      *
      * @param default Invalid for MySQL
      */
@@ -172,6 +172,22 @@ class TableBuilder {
         default: String? = null
     ): AbstractColumn {
         return addColumn(TextColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
+    }
+
+    /**
+     * add BLOB column
+     *
+     * @param default Invalid for MySQL
+     */
+    fun blog(
+        columnName: String,
+        nullable: Boolean = true,
+        default: ByteArray? = null
+    ): AbstractColumn {
+        return addColumn(BlobColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })

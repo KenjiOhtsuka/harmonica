@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.core.table.column.*
+import org.jetbrains.kotlin.daemon.common.toHexString
 import org.junit.Test
 import java.time.LocalTime
 import java.util.*
@@ -173,6 +174,29 @@ class AbstractMigrationTest {
 
     @Test
     fun testAddBlobColumn() {
-        // ToDo
-    }
+        val migration = StubMigration()
+        migration.addBlobColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = "abcdefg".toByteArray(),
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val blobAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals(
+            "table_name",
+            blobAddingColumn.tableName
+        )
+        val blobColumn = blobAddingColumn.column as BlobColumn
+        assertEquals("column_name", blobColumn.name)
+        assertEquals(false, blobColumn.nullable)
+        assertEquals(
+            "abcdefg".toByteArray().toHexString(),
+            blobColumn.default?.toHexString()
+        )
+        val addingOption = blobAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)   }
 }

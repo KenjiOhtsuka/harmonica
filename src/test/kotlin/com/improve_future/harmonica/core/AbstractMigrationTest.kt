@@ -2,6 +2,7 @@ package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.core.table.column.*
 import org.junit.Test
+import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -134,12 +135,35 @@ class AbstractMigrationTest {
 
     @Test
     fun testAddTimeColumn() {
-        // ToDo
+        val migration = StubMigration()
+        val defaultLocalTime = LocalTime.of(
+            1, 2, 3, 100000004
+        )
+        migration.addTimeColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = defaultLocalTime,
+            withTimeZone = true,
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val timeAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals("table_name", timeAddingColumn.tableName)
+        val timeColumn = timeAddingColumn.column as TimeColumn
+        assertEquals("column_name", timeColumn.name)
+        assertEquals(false, timeColumn.nullable)
+        assertEquals(defaultLocalTime, timeColumn.defaultLocalTime)
+        assertEquals(true, timeColumn.withTimeZone)
+        val addingOption = timeAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)
     }
 
     @Test
     fun testAddDateTimeColumn() {
-        // ToDo
+
     }
 
     @Test

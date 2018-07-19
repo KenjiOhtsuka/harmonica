@@ -1,10 +1,13 @@
 package com.improve_future.harmonica.core.table
 
+import com.improve_future.harmonica.core.MigrationDsl
 import com.improve_future.harmonica.core.table.column.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
+@MigrationDsl
 class TableBuilder {
     lateinit var tableName: String
     internal val columnList = mutableListOf<AbstractColumn>()
@@ -20,7 +23,7 @@ class TableBuilder {
      *
      * @param precision The number of digits in the number.
      * @param scale The number of digits to the right of the decimal point in the number.
-     * @param nullable null constraint. `false` means `NOT NULL` constraint.
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun decimal(
         columnName: String,
@@ -41,7 +44,7 @@ class TableBuilder {
     /**
      * Add integer column.
      *
-     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun integer(
         columnName: String,
@@ -60,7 +63,7 @@ class TableBuilder {
      * variable with limit
      *
      * @param size For MySQL, `null` means 255.
-     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun varchar(
         columnName: String,
@@ -80,7 +83,7 @@ class TableBuilder {
      *
      * Alias for varchar.
      *
-     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun string(
         columnName: String,
@@ -94,7 +97,7 @@ class TableBuilder {
     /**
      * add boolean column
      *
-     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun boolean(
         columnName: String,
@@ -110,7 +113,7 @@ class TableBuilder {
     /**
      * add date column of `java.util.Date` default value.
      *
-     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun date(
         columnName: String,
@@ -128,7 +131,7 @@ class TableBuilder {
      * add date column of no default value or `String` default value
      *
      * @param default Must be formatted as yyyy-MM-dd
-     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun date(
         columnName: String,
@@ -145,7 +148,7 @@ class TableBuilder {
     /**
      * add date column of `java.time.LocalDate` default value
      *
-     * @param nullable null constraint. `false` means `NOT NULL` constraint
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun date(
         columnName: String,
@@ -162,6 +165,7 @@ class TableBuilder {
     /**
      * add TEXT column, unlimited length string
      *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Invalid for MySQL
      */
     fun text(
@@ -178,6 +182,7 @@ class TableBuilder {
     /**
      * add BLOB column
      *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Invalid for MySQL
      */
     fun blob(
@@ -193,46 +198,192 @@ class TableBuilder {
 
     /**
      * add Time column
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun time(
         columnName: String,
         nullable: Boolean = true,
-        default: LocalTime? = null
+        default: LocalTime? = null,
+        withTimeZone: Boolean = false
     ) {
         addColumn(TimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalTime = default
+            it.withTimeZone = withTimeZone
         })
     }
 
     /**
      * add Time column
      *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Format as HH:mm:ss[.SSS][ zzz].
      * `22:21:22.123`, `22:21:22`, `12:23:34` can be accepted.
      */
     fun time(
         columnName: String,
         nullable: Boolean = true,
-        default: String
+        default: String,
+        withTimeZone: Boolean = false
     ) {
         addColumn(TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+            it.withTimeZone = withTimeZone
+        })
+    }
+
+    /**
+     * add Time column
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     */
+    fun time(
+        columnName: String,
+        nullable: Boolean = true,
+        default: Date,
+        withTimeZone: Boolean = false
+    ) {
+        addColumn(TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
+            it.withTimeZone = withTimeZone
+        })
+    }
+
+    /**
+     * add TIMESTAMP column
+     *
+     * ## MySQL
+     *
+     * If you store the value,
+     * and then change the time zone and retrieve the value,
+     * the retrieved value is different from the value you stored.
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param withTimeZone Valid only for PostgreSQL.
+     */
+    fun timestamp(
+        columnName: String,
+        nullable: Boolean = true,
+        default: String? = null,
+        withTimeZone: Boolean = true
+    ) {
+        addColumn(TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+            it.withTimeZone = withTimeZone
+        })
+    }
+
+    /**
+     * add TIMESTAMP column
+     *
+     * ## MySQL
+     *
+     * If you store the value,
+     * and then change the time zone and retrieve the value,
+     * the retrieved value is different from the value you stored.
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param withTimeZone Valid only for PostgreSQL.
+     */
+    fun timestamp(
+        columnName: String,
+        nullable: Boolean = true,
+        default: Date,
+        withTimeZone: Boolean = true
+    ) {
+        addColumn(TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
+            it.withTimeZone = withTimeZone
+        })
+    }
+
+    /**
+     * add TIMESTAMP column
+     *
+     * ## MySQL
+     *
+     * If you store the value,
+     * and then change the time zone and retrieve the value,
+     * the retrieved value is different from the value you stored.
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param withTimeZone Valid only for PostgreSQL.
+     */
+    fun timestamp(
+        columnName: String,
+        nullable: Boolean = true,
+        default: LocalDateTime,
+        withTimeZone: Boolean = true
+    ) {
+        addColumn(TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultLocalDateTime = default
+            it.withTimeZone = withTimeZone
+        })
+    }
+
+    /**
+     * add DATETIME column
+     *
+     * ## PostgreSQL
+     *
+     * There is no `DATETIME` type, so add `TIMESTAMP` column, instead.
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     */
+    fun datetime(
+        columnName: String,
+        nullable: Boolean = true,
+        default: Date? = null
+    ) {
+        addColumn(DateTimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
+        })
+    }
+
+    /**
+     * add DATETIME column
+     *
+     * ## PostgreSQL
+     *
+     * There is no `DATETIME` type, so add `TIMESTAMP` column, instead.
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     */
+    fun datetime(
+        columnName: String,
+        nullable: Boolean = true,
+        default: String? = null
+    ) {
+        addColumn(DateTimeColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
     }
 
     /**
-     * add Time column
+     * add DATETIME column
+     *
+     * ## PostgreSQL
+     *
+     * There is no `DATETIME` type, so add `TIMESTAMP` column, instead.
+     *
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
-    fun time(
+    fun datetime(
         columnName: String,
         nullable: Boolean = true,
-        default: Date
+        default: LocalDateTime
     ) {
-        addColumn(TimeColumn(columnName).also {
+        addColumn(DateTimeColumn(columnName).also {
             it.nullable = nullable
-            it.defaultDate = default
+            it.defaultLocalDateTime = default
         })
     }
 }

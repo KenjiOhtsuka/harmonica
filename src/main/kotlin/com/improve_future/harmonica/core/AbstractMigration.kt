@@ -6,8 +6,10 @@ import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.*
 
+@MigrationDsl
 abstract class AbstractMigration {
     lateinit var connection: ConnectionInterface
 
@@ -18,6 +20,7 @@ abstract class AbstractMigration {
         }
     }
 
+    @MigrationDsl
     fun createTable(name: String, block: TableBuilder.() -> Unit) {
         println("Create Table: $name")
         adapter.createTable(name, block)
@@ -237,6 +240,20 @@ abstract class AbstractMigration {
             it.default = default
         }
         addColumn(tableName, blobColumn, first, justBeforeColumnName)
+    }
+
+    fun addTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: LocalTime?,
+        withTimeZone: Boolean = false,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timeColumn = TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultLocalTime = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timeColumn, first, justBeforeColumnName)
     }
 
     fun createIndex(tableName: String, columnName: String) {

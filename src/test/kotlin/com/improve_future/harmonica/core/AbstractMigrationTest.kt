@@ -195,7 +195,34 @@ class AbstractMigrationTest {
 
     @Test
     fun testAddTimestampColumn() {
-        // ToDo
+        val migration = StubMigration()
+        val defaultLocalDateTime = LocalDateTime.now()
+        migration.addTimestampColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = defaultLocalDateTime,
+            withTimeZone = true,
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val timestampAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals(
+            "table_name",
+            timestampAddingColumn.tableName
+        )
+        val timestampColumn = timestampAddingColumn.column as TimestampColumn
+        assertEquals("column_name", timestampColumn.name)
+        assertEquals(false, timestampColumn.nullable)
+        assertEquals(true, timestampColumn.withTimeZone)
+        assertEquals(
+            defaultLocalDateTime.toString(),
+            timestampColumn.default
+        )
+        val addingOption = timestampAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)
     }
 
     @Test

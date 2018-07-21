@@ -2,7 +2,6 @@ $dokka.format:html
 $dokka.linkExtension:html
 
 com.improve_future.harmonica.core
-com.improve_future.harmonica.core.adapter
 com.improve_future.harmonica.core.config
 com.improve_future.harmonica.core.table
 com.improve_future.harmonica.plugin

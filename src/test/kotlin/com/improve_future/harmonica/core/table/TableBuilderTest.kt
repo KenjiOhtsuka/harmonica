@@ -148,7 +148,36 @@ class TableBuilderTest {
 
     @Test
     fun testDateTime() {
-        // ToDo
+        var tb = TableBuilder()
+        tb.dateTime("name")
+        var dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(true, dateTimeColumn.nullable)
+        assertEquals(null, dateTimeColumn.default)
+
+        tb = TableBuilder()
+        val defaultDate = Date()
+        tb.dateTime("name", default = defaultDate)
+        dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(true, dateTimeColumn.nullable)
+        assertEquals(defaultDate, dateTimeColumn.defaultDate)
+
+        tb = TableBuilder()
+        var defaultLocalDateTime = LocalDateTime.now()
+        tb.dateTime("name", default = defaultLocalDateTime)
+        dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(true, dateTimeColumn.nullable)
+        assertEquals(defaultLocalDateTime, dateTimeColumn.defaultLocalDateTime)
+
+        tb = TableBuilder()
+        defaultLocalDateTime = LocalDateTime.now()
+        tb.dateTime("name", false, defaultLocalDateTime)
+        dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(false, dateTimeColumn.nullable)
+        assertEquals(defaultLocalDateTime, dateTimeColumn.defaultLocalDateTime)
     }
 
     @Test
@@ -159,14 +188,16 @@ class TableBuilderTest {
         assertEquals("name", timeColumn.name)
         assertEquals(true, timeColumn.nullable)
         assertEquals(null, timeColumn.default)
+        assertEquals(false, timeColumn.withTimeZone)
 
         tb = TableBuilder()
         val defaultTime = LocalTime.now()
-        tb.time("name", false, defaultTime)
+        tb.time("name", false, defaultTime, true)
         timeColumn = tb.columnList.first() as TimeColumn
         assertEquals("name", timeColumn.name)
         assertEquals(false, timeColumn.nullable)
         assertEquals(defaultTime, timeColumn.defaultLocalTime)
+        assertEquals(true, timeColumn.withTimeZone)
     }
 
     @Test

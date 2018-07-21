@@ -336,10 +336,10 @@ class TableBuilder {
      *
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
-    fun datetime(
+    fun dateTime(
         columnName: String,
         nullable: Boolean = true,
-        default: Date? = null
+        default: Date
     ) {
         addColumn(DateTimeColumn(columnName).also {
             it.nullable = nullable
@@ -356,7 +356,7 @@ class TableBuilder {
      *
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
-    fun datetime(
+    fun dateTime(
         columnName: String,
         nullable: Boolean = true,
         default: String? = null
@@ -376,7 +376,7 @@ class TableBuilder {
      *
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
-    fun datetime(
+    fun dateTime(
         columnName: String,
         nullable: Boolean = true,
         default: LocalDateTime

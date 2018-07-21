@@ -204,6 +204,42 @@ class PostgreSqlAdapterTest {
     }
 
     @Test
+    fun testBuildColumnDeclarationForTime() {
+        val timeColumn = TimeColumn("time")
+        fun buildTimeDeclaration() =
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, timeColumn
+            ) as String
+        assertEquals(
+            "time TIME",
+            buildTimeDeclaration()
+        )
+        timeColumn.nullable = false
+        assertEquals(
+            "time TIME NOT NULL",
+            buildTimeDeclaration()
+        )
+        val defaultTime = Date()
+        timeColumn.defaultDate = defaultTime
+        val timeSql =
+            SimpleDateFormat("HH:mm:ss.SSS").format(defaultTime)
+        assertEquals(
+            "time TIME NOT NULL DEFAULT '$timeSql'",
+            buildTimeDeclaration()
+        )
+        timeColumn.nullable = true
+        assertEquals(
+            "time TIME DEFAULT '$timeSql'",
+            buildTimeDeclaration()
+        )
+        timeColumn.withTimeZone = true
+        assertEquals(
+            "time TIME WITH TIME ZONE DEFAULT '$timeSql'",
+            buildTimeDeclaration()
+        )
+    }
+
+    @Test
     fun testAddColumnForInteger() {
         val connection = StubConnection()
         val adapter = PostgreSqlAdapter(connection)
@@ -232,7 +268,7 @@ class PostgreSqlAdapterTest {
             AddingColumnOption()
         )
         assertEquals(
-            "ALTER TABLE table_name ADD COLUMN blob BLOB;",
+            "ALTER TABLE table_name ADD COLUMN blob BYTEA;",
             connection.executedSqlList.first()
         )
     }

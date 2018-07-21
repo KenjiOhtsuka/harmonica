@@ -7,7 +7,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-internal class TimeColumn(name: String) : AbstractColumn(name, java.sql.Types.TIME) {
+internal class TimeColumn(name: String) : AbstractColumn(name), TimeZoneInterface {
     private val formatter = DateTimeFormatter.ofPattern("H[H]:m[m][:s[s]][.SSS][ zzz]")
     var default: String?
         get() {
@@ -36,9 +36,9 @@ internal class TimeColumn(name: String) : AbstractColumn(name, java.sql.Types.TI
         }
     var defaultLocalTime: LocalTime? = null
 
-    override val sqlDefault = "'$default'"
+    override val sqlDefault
+        get() = "'$default'"
     override val hasDefault
         get() = defaultLocalTime != null
-    /** The default value is `false */
-    var withTimeZone = false
+    override var withTimeZone = false
 }

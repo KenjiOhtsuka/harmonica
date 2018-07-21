@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
-internal class DateColumn(name: String) : AbstractColumn(name, java.sql.Types.DATE) {
+internal class DateColumn(name: String) : AbstractColumn(name) {
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     var default: String?

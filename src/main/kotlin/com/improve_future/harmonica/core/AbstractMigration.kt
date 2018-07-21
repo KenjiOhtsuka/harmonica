@@ -225,6 +225,10 @@ abstract class AbstractMigration {
     /**
      * Add new BLOB column to existing table.
      *
+     * ## PostgreSQL
+     *
+     * add BYTEA column instead, because PstgreSQL doesn't have BLOB type.
+     *
      * @param default Not valid for MySQL
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
@@ -252,13 +256,58 @@ abstract class AbstractMigration {
      */
     fun addTimeColumn(
         tableName: String, columnName: String,
-        nullable: Boolean = false, default: LocalTime?,
+        nullable: Boolean = false, default: LocalTime,
         withTimeZone: Boolean = false,
         first: Boolean = false, justBeforeColumnName: String? = null
     ) {
         val timeColumn = TimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalTime = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new TIME column to existing table.
+     *
+     * @param default Must be formatted as `HH:MM:ss.SSS`.
+     * @param withTimeZone Valid only for PostgreSQL.
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: String? = null,
+        withTimeZone: Boolean = false,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timeColumn = TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new TIME column to existing table.
+     *
+     * @param withTimeZone Valid only for PostgreSQL
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: Date,
+        withTimeZone: Boolean = false,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timeColumn = TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
             it.withTimeZone = withTimeZone
         }
         addColumn(tableName, timeColumn, first, justBeforeColumnName)

@@ -7,9 +7,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 internal abstract class AbstractDateTimeColumn(
-    name: String,
-    sqlType: Type
-) : AbstractColumn(name, sqlType) {
+    name: String
+) : AbstractColumn(name) {
     private val formatter = DateTimeFormatter.ofPattern(
         "yyyy-M[M]-d[d][ H[H]:m[m][:s[s]][.SSS][ zzz]]"
     )

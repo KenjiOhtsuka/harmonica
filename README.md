@@ -30,16 +30,29 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
             // If you add the next line,
             // migration doesn't create auto incremental id column.
             // id = false
+
+            // You can easily define columns with their type name.
             boolean("boolean_column", nullable = false, default = true)
             integer("integer_column", default = 1)
             decimal("decimal_column", 5, 2, default = 3)
             varchar("varchar_column", size = 10, nullable = false)
             text("text_column", default = "default value")
+            blob("blob_column", default = "abcde".toByteArray())
             date("date_column_1", default = "2019-01-01")
             date("date_column_2", default = Date())
             date("date_column_3", default = LocalDate.of(2018, 2, 2))
+            time("time_column_1", default = "11:22:33")
+            time("time_column_2", default = Date())
+            time("time_column_3", default = LocalTime.now(), nullable = false)
+            dateTime("date_tiem_column_1", default = "2011-11-12 12:34:56")
+            dateTime("date_time_column_2", default = Date())
+            dateTime("date_time_column_3", default = LocalDateTime.now())
+            timestamp("timestamp_column_1", default = "2012-10-04 1:2:3")
+            timestamp("timestamp_column_2", default = Date())
+            timestamp("timestamp_column_3", default = LocalDateTime.now())
         }
 
+        // When you add column, `add*****Column` method works.
         addBooleanColumn(
             "table_name", "added_boolean",
             default = true, nullable = false
@@ -57,6 +70,9 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
             "table_name", "added_date",
             default = LocalDate.of(2018, 12, 11)
         )
+
+        // When you add index, use `addIndex`.
+        // addIndex("table_name", "column_name")
     }
 
     override fun down() {

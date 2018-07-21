@@ -182,6 +182,10 @@ class TableBuilder {
     /**
      * add BLOB column
      *
+     * ## PostgreSQL
+     *
+     * Add BYTEA column instead, because PostgreSQL doesn't have BLOB type.
+     *
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Invalid for MySQL
      */

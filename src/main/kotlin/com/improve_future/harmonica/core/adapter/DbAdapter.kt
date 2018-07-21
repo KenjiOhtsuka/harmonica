@@ -34,10 +34,13 @@ abstract class DbAdapter(val connection: ConnectionInterface) {
                 is IntegerColumn -> "INTEGER"
                 is VarcharColumn -> "VARCHAR"
                 is DecimalColumn -> "DECIMAL"
+                is BooleanColumn -> "BOOL"
                 is TextColumn -> "TEXT"
                 is BlobColumn -> "BLOB"
                 is DateColumn -> "DATE"
                 is TimeColumn -> "TIME"
+                is DateTimeColumn -> "DATETIME"
+                is TimestampColumn -> "TIMESTAMP"
                 else -> throw Exception()
             }
         }

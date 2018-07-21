@@ -169,7 +169,7 @@ class AbstractMigrationTest {
             "table_name",
             "column_name",
             nullable = false,
-            default = "abcdefg".toByteArray(),
+            default = Date(),
             first = true,
             justBeforeColumnName = "previous_column"
         )

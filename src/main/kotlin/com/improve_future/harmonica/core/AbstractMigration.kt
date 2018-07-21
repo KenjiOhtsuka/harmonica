@@ -6,8 +6,11 @@ import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 
+@MigrationDsl
 abstract class AbstractMigration {
     lateinit var connection: ConnectionInterface
 
@@ -18,6 +21,7 @@ abstract class AbstractMigration {
         }
     }
 
+    @MigrationDsl
     fun createTable(name: String, block: TableBuilder.() -> Unit) {
         println("Create Table: $name")
         adapter.createTable(name, block)
@@ -218,6 +222,185 @@ abstract class AbstractMigration {
         addColumn(tableName, textColumn, first, justBeforeColumnName)
     }
 
+    /**
+     * Add new BLOB column to existing table.
+     *
+     * @param default Not valid for MySQL
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addBlobColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: ByteArray? = null,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val blobColumn = BlobColumn(columnName)
+        blobColumn.also {
+            it.nullable = nullable
+            it.default = default
+        }
+        addColumn(tableName, blobColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new TIME column to existing table.
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: LocalTime?,
+        withTimeZone: Boolean = false,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timeColumn = TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultLocalTime = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
+     * ## PostgreSQL
+     *
+     * TIMESTAMP column will be added instead.
+     *
+     * @param default Must be formed like yyyy-MM-dd HH:MM:SS
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addDateTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: String? = null,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateTimeColumn = DateTimeColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        }
+        addColumn(tableName, dateTimeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
+     * ## PostgreSQL
+     *
+     * TIMESTAMP column will be added instead.     *
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addDateTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: Date,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateTimeColumn = DateTimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
+        }
+        addColumn(tableName, dateTimeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
+     * ## PostgreSQL
+     *
+     * TIMESTAMP column will be added instead.     *
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addDateTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: LocalDateTime,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateTimeColumn = DateTimeColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultLocalDateTime = default
+        }
+        addColumn(tableName, dateTimeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
+     * @param default Must be formatted as `yyyy-MM-dd HH:mm:SS`.
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimestampColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: String? = null,
+        withTimeZone: Boolean = true,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timestampColumn = TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timestampColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimestampColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: Date,
+        withTimeZone: Boolean = true,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timestampColumn = TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultDate = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timestampColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimestampColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: LocalDateTime,
+        withTimeZone: Boolean = true,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timestampColumn = TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.defaultLocalDateTime = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timestampColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Create Index
+     */
     fun createIndex(tableName: String, columnName: String) {
         println("Add Index: $tableName $columnName")
         adapter.createIndex(tableName, columnName)
@@ -228,6 +411,9 @@ abstract class AbstractMigration {
 //        // println("Add Index:")
 //    }
 
+    /**
+     * Drop Index
+     */
     fun dropIndex(tableName: String, indexName: String) {
         adapter.dropIndex(tableName, indexName)
         println("Drop Index: $tableName $indexName")

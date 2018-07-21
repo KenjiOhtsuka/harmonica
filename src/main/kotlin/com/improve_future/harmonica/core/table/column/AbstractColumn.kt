@@ -1,10 +1,13 @@
 package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.Index
-import com.improve_future.harmonica.core.table.Type
 import java.sql.Types
 
-abstract class AbstractColumn(val name: String, private val type: Type) {
+internal typealias Type = Int
+
+internal abstract class AbstractColumn(
+    val name: String, private val type: Type
+) {
     val indexList: MutableList<Index> = mutableListOf()
 
     val sqlType: String
@@ -35,6 +38,7 @@ abstract class AbstractColumn(val name: String, private val type: Type) {
 
             // DATE AND TIME
                 Types.DATE -> "DATE"
+                Types.TIME -> "TIME"
                 Types.TIMESTAMP -> "TIMESTAMP" // TIME WITH TIMEZONE, TIMESTAMP WITH TIMEZONE
 
                 Types.SQLXML -> "XML"

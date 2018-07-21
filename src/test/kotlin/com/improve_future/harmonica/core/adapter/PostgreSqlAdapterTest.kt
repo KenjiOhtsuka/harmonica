@@ -219,4 +219,21 @@ class PostgreSqlAdapterTest {
             connection.executedSqlList.first()
         )
     }
+
+    @Test
+    fun testAddBlobForBlob() {
+        val connection = StubConnection()
+        val adapter = PostgreSqlAdapter(connection)
+
+        val blobColumn = BlobColumn("blob")
+
+        adapter.addColumn(
+            "table_name", blobColumn,
+            AddingColumnOption()
+        )
+        assertEquals(
+            "ALTER TABLE table_name ADD COLUMN blob BLOB;",
+            connection.executedSqlList.first()
+        )
+    }
 }

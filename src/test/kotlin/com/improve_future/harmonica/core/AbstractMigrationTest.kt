@@ -1,7 +1,10 @@
 package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.core.table.column.*
+import org.jetbrains.kotlin.daemon.common.toHexString
 import org.junit.Test
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -128,6 +131,125 @@ class AbstractMigrationTest {
         assertEquals(false, booleanColumn.nullable)
         assertEquals(defaultBoolean, booleanColumn.default)
         val addingOption = booleanAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)
+    }
+
+    @Test
+    fun testAddTimeColumn() {
+        val migration = StubMigration()
+        val defaultLocalTime = LocalTime.of(
+            1, 2, 3, 100000004
+        )
+        migration.addTimeColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = defaultLocalTime,
+            withTimeZone = true,
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val timeAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals("table_name", timeAddingColumn.tableName)
+        val timeColumn = timeAddingColumn.column as TimeColumn
+        assertEquals("column_name", timeColumn.name)
+        assertEquals(false, timeColumn.nullable)
+        assertEquals(defaultLocalTime, timeColumn.defaultLocalTime)
+        assertEquals(true, timeColumn.withTimeZone)
+        val addingOption = timeAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)
+    }
+
+    @Test
+    fun testAddDateTimeColumn() {
+        val migration = StubMigration()
+        val defaultLocalDateTime = LocalDateTime.now()
+        migration.addDateTimeColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = defaultLocalDateTime,
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val dateTimeAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals(
+            "table_name",
+            dateTimeAddingColumn.tableName
+        )
+        val dateTimeColumn = dateTimeAddingColumn.column as DateTimeColumn
+        assertEquals("column_name", dateTimeColumn.name)
+        assertEquals(false, dateTimeColumn.nullable)
+        assertEquals(
+            defaultLocalDateTime.toString(),
+            dateTimeColumn.default
+        )
+        val addingOption = dateTimeAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)    // ToDo
+    }
+
+    @Test
+    fun testAddTimestampColumn() {
+        val migration = StubMigration()
+        val defaultLocalDateTime = LocalDateTime.now()
+        migration.addTimestampColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = defaultLocalDateTime,
+            withTimeZone = true,
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val timestampAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals(
+            "table_name",
+            timestampAddingColumn.tableName
+        )
+        val timestampColumn = timestampAddingColumn.column as TimestampColumn
+        assertEquals("column_name", timestampColumn.name)
+        assertEquals(false, timestampColumn.nullable)
+        assertEquals(true, timestampColumn.withTimeZone)
+        assertEquals(
+            defaultLocalDateTime.toString(),
+            timestampColumn.default
+        )
+        val addingOption = timestampAddingColumn.option
+        assertEquals(true, addingOption.first)
+        assertEquals("previous_column", addingOption.justBeforeColumn)
+    }
+
+    @Test
+    fun testAddBlobColumn() {
+        val migration = StubMigration()
+        migration.addBlobColumn(
+            "table_name",
+            "column_name",
+            nullable = false,
+            default = "abcdefg".toByteArray(),
+            first = true,
+            justBeforeColumnName = "previous_column"
+        )
+        val blobAddingColumn =
+            migration.adapter.addingColumnList.first()
+        assertEquals(
+            "table_name",
+            blobAddingColumn.tableName
+        )
+        val blobColumn = blobAddingColumn.column as BlobColumn
+        assertEquals("column_name", blobColumn.name)
+        assertEquals(false, blobColumn.nullable)
+        assertEquals(
+            "abcdefg".toByteArray().toHexString(),
+            blobColumn.default?.toHexString()
+        )
+        val addingOption = blobAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
     }

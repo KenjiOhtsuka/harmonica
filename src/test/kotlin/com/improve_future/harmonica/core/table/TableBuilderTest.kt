@@ -2,6 +2,8 @@ package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.table.TableBuilder
 import org.junit.Test
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -100,5 +102,119 @@ class TableBuilderTest {
         assertEquals("name", booleanColumn.name)
         assertEquals(false, booleanColumn.nullable)
         assertEquals(defaultBoolean, booleanColumn.default)
+        assertEquals(true, booleanColumn.hasDefault)
+    }
+
+    @Test
+    fun testTimestamp() {
+        var tb = TableBuilder()
+        tb.timestamp("name")
+        var timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(true, timestampColumn.nullable)
+        assertEquals(null, timestampColumn.default)
+        assertEquals(false, timestampColumn.withTimeZone)
+
+        tb = TableBuilder()
+        val defaultDate = Date()
+        tb.timestamp("name", default = defaultDate)
+        timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(true, timestampColumn.nullable)
+        assertEquals(defaultDate, timestampColumn.defaultDate)
+        assertEquals(false, timestampColumn.withTimeZone)
+
+        tb = TableBuilder()
+        var defaultLocalDateTime = LocalDateTime.now()
+        tb.timestamp("name", default = defaultLocalDateTime)
+        timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(true, timestampColumn.nullable)
+        assertEquals(defaultLocalDateTime, timestampColumn.defaultLocalDateTime)
+        assertEquals(false, timestampColumn.withTimeZone)
+
+        tb = TableBuilder()
+        defaultLocalDateTime = LocalDateTime.now()
+        tb.timestamp(
+            "name", false, defaultLocalDateTime,
+            true
+        )
+        timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(false, timestampColumn.nullable)
+        assertEquals(defaultLocalDateTime, timestampColumn.defaultLocalDateTime)
+        assertEquals(true, timestampColumn.withTimeZone)
+    }
+
+    @Test
+    fun testDateTime() {
+        var tb = TableBuilder()
+        tb.dateTime("name")
+        var dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(true, dateTimeColumn.nullable)
+        assertEquals(null, dateTimeColumn.default)
+
+        tb = TableBuilder()
+        val defaultDate = Date()
+        tb.dateTime("name", default = defaultDate)
+        dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(true, dateTimeColumn.nullable)
+        assertEquals(defaultDate, dateTimeColumn.defaultDate)
+
+        tb = TableBuilder()
+        var defaultLocalDateTime = LocalDateTime.now()
+        tb.dateTime("name", default = defaultLocalDateTime)
+        dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(true, dateTimeColumn.nullable)
+        assertEquals(defaultLocalDateTime, dateTimeColumn.defaultLocalDateTime)
+
+        tb = TableBuilder()
+        defaultLocalDateTime = LocalDateTime.now()
+        tb.dateTime("name", false, defaultLocalDateTime)
+        dateTimeColumn = tb.columnList.first() as DateTimeColumn
+        assertEquals("name", dateTimeColumn.name)
+        assertEquals(false, dateTimeColumn.nullable)
+        assertEquals(defaultLocalDateTime, dateTimeColumn.defaultLocalDateTime)
+    }
+
+    @Test
+    fun testTime() {
+        var tb = TableBuilder()
+        tb.time("name")
+        var timeColumn = tb.columnList.first() as TimeColumn
+        assertEquals("name", timeColumn.name)
+        assertEquals(true, timeColumn.nullable)
+        assertEquals(null, timeColumn.default)
+        assertEquals(false, timeColumn.withTimeZone)
+
+        tb = TableBuilder()
+        val defaultTime = LocalTime.now()
+        tb.time("name", false, defaultTime, true)
+        timeColumn = tb.columnList.first() as TimeColumn
+        assertEquals("name", timeColumn.name)
+        assertEquals(false, timeColumn.nullable)
+        assertEquals(defaultTime, timeColumn.defaultLocalTime)
+        assertEquals(true, timeColumn.withTimeZone)
+    }
+
+    @Test
+    fun testBlob() {
+        var tb = TableBuilder()
+        tb.blob("name")
+        var blobColumn = tb.columnList.first() as BlobColumn
+        assertEquals("name", blobColumn.name)
+        assertEquals(true, blobColumn.nullable)
+        assertEquals(null, blobColumn.default)
+
+        tb = TableBuilder()
+        val defaultBlob = byteArrayOf(1, 2, 3, 4, 5)
+        tb.blob("name", false, defaultBlob)
+        blobColumn = tb.columnList.first() as BlobColumn
+        assertEquals("name", blobColumn.name)
+        assertEquals(false, blobColumn.nullable)
+        assertEquals(defaultBlob, blobColumn.default)
     }
 }

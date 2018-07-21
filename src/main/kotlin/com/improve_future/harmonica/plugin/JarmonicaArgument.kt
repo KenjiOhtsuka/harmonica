@@ -2,7 +2,7 @@ package com.improve_future.harmonica.plugin
 
 class JarmonicaArgument() {
     lateinit var migrationPackage: String
-    lateinit var taskType: JarmonicaTaskType
+    internal lateinit var taskType: JarmonicaTaskType
     lateinit var env: String
     lateinit var migrationDirectory: String
     private val additionalArgList = mutableListOf<String>()

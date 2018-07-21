@@ -1,6 +1,6 @@
 package com.improve_future.harmonica.config
 
-object PluginConfig {
+internal object PluginConfig {
     const val groupName = "migration"
 
     fun hasExposed(): Boolean {

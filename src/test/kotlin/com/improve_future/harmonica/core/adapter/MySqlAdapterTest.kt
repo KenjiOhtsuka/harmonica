@@ -1,9 +1,6 @@
 package com.improve_future.harmonica.core.adapter
 
-import com.improve_future.harmonica.core.table.column.AbstractColumn
-import com.improve_future.harmonica.core.table.column.AddingColumnOption
-import com.improve_future.harmonica.core.table.column.IntegerColumn
-import com.improve_future.harmonica.core.table.column.TextColumn
+import com.improve_future.harmonica.core.table.column.*
 import com.improve_future.harmonica.stub.core.StubConnection
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -41,7 +38,7 @@ class MySqlAdapterTest {
     @Test
     fun testAddColumnForInteger() {
         val connection = StubConnection()
-        val adapter = PostgreSqlAdapter(connection)
+        val adapter = MySqlAdapter(connection)
 
         val integerColumn = IntegerColumn("integer")
 
@@ -51,6 +48,23 @@ class MySqlAdapterTest {
         )
         assertEquals(
             "ALTER TABLE table_name ADD COLUMN integer INTEGER;",
+            connection.executedSqlList.first()
+        )
+    }
+
+    @Test
+    fun testAddColumnForBlob() {
+        val connection = StubConnection()
+        val adapter = MySqlAdapter(connection)
+
+        val blobColumn = BlobColumn("blob")
+
+        adapter.addColumn(
+            "table_name", blobColumn,
+            AddingColumnOption()
+        )
+        assertEquals(
+            "ALTER TABLE table_name ADD COLUMN blob BLOB;",
             connection.executedSqlList.first()
         )
     }

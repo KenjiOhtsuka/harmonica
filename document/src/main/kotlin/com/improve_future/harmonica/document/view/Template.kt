@@ -32,7 +32,7 @@ object Template {
                     div("container") {
                         row {
                             // side bar
-                            div("col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down") {
+                            div("col-xl-1 col-lg-2 col-md-3 col-sm-3 hidden-xs-down") {
                                 section {
                                     ul {
                                         Site.structure.forEach {
@@ -45,7 +45,7 @@ object Template {
                                 }
                             }
                             // main content
-                            div("col-xl-11 col-lg-10 col-md-10 col-sm-9 col-xs-12") {
+                            div("col-xl-11 col-lg-10 col-md-9 col-sm-9 col-xs-12") {
                                 block()
                             }
                         }

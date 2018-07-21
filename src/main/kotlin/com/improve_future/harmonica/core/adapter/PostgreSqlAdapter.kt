@@ -23,7 +23,7 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
         private fun buildColumnDeclarationForCreateTableSql(
             column: AbstractColumn
         ): String {
-            var sql = column.name + " " + column.sqlType
+            var sql = column.name + " " + sqlType(column)
             when (column) {
                 is VarcharColumn -> {
                     if (column.size != null)
@@ -49,7 +49,7 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
         override fun sqlType(column: AbstractColumn): String {
             return when (column) {
                 is DateTimeColumn -> "TIMESTAMP"
-                is BlobColumn -> "BLOB"
+                is BlobColumn -> "BYTEA"
                 else -> super.sqlType(column)
             }
         }

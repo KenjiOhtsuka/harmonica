@@ -225,6 +225,10 @@ abstract class AbstractMigration {
     /**
      * Add new BLOB column to existing table.
      *
+     * ## PostgreSQL
+     *
+     * add BYTEA column instead, because PstgreSQL doesn't have BLOB type.
+     *
      * @param default Not valid for MySQL
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.

@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.ConnectionInterface
+import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter.Companion.sqlType
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
@@ -19,11 +20,11 @@ class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
         connection.execute(sql)
     }
 
-    companion object {
+    internal companion object : DbAdapter.CompanionInterface() {
         private fun buildColumnDeclarationForCreateTableSql(
             column: AbstractColumn
         ): String {
-            var sql = column.name + " " + column.sqlType
+            var sql = column.name + " " + sqlType(column)
             when (column) {
                 is VarcharColumn -> {
                     sql +=

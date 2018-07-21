@@ -232,7 +232,7 @@ class PostgreSqlAdapterTest {
             AddingColumnOption()
         )
         assertEquals(
-            "ALTER TABLE table_name ADD COLUMN blob BLOB;",
+            "ALTER TABLE table_name ADD COLUMN blob BYTEA;",
             connection.executedSqlList.first()
         )
     }

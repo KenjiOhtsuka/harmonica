@@ -15,7 +15,7 @@ open class MigrationCreate : AbstractTask() {
             return "Migration"
         }
 
-    private val versionService = VersionService("")
+    private val versionService = VersionService("harmonica_migration")
 
     @TaskAction
     fun createMigration() {

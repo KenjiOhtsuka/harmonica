@@ -17,9 +17,7 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
 
     abstract fun createIndex(tableName: String, columnName: String, unique: Boolean = false)
 
-    fun dropIndex(tableName: String, indexName: String) {
-        connection.execute("DROP INDEX $indexName ON $tableName;")
-    }
+    abstract fun dropIndex(tableName: String, indexName: String)
 
     abstract fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption)
 

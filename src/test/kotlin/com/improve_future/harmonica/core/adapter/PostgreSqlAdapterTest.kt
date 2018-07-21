@@ -272,4 +272,16 @@ class PostgreSqlAdapterTest {
             connection.executedSqlList.first()
         )
     }
+
+    @Test
+    fun testDropIndex() {
+        val connection = StubConnection()
+        val adapter = PostgreSqlAdapter(connection)
+
+        adapter.dropIndex("table_name", "index_name")
+        assertEquals(
+            "DROP INDEX index_name;",
+            connection.executedSqlList.first()
+        )
+    }
 }

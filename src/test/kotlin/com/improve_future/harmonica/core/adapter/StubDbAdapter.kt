@@ -17,7 +17,13 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
     }
 
+    override fun renameTable(oldTableName: String, newTableName: String) {
+    }
+
     override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
+    }
+
+    override fun dropIndex(tableName: String, indexName: String) {
     }
 
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {

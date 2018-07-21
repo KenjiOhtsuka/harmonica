@@ -68,4 +68,9 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
         sql += ";"
         connection.execute(sql)
     }
+
+    override fun renameTable(oldTableName: String, newTableName: String) {
+        var sql = "RENAME TABLE $oldTableName TO $newTableName;"
+        connection.execute(sql)
+    }
 }

@@ -530,6 +530,17 @@ abstract class AbstractMigration {
     }
 
     /**
+     * Rename table.
+     *
+     * @param oldTableName
+     * @param newTableName
+     */
+    fun renameTable(oldTableName: String, newTableName: String) {
+        adapter.renameTable(oldTableName, newTableName)
+        println("Rename Table: $oldTableName => $newTableName")
+    }
+
+    /**
      * Execute SQL
      *
      * @param sql

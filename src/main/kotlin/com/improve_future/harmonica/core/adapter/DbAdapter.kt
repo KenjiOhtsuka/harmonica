@@ -5,27 +5,29 @@ import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
 internal abstract class DbAdapter(internal val connection: ConnectionInterface) {
-    internal fun createTable(tableName: String, block: TableBuilder.() -> Any) {
+    fun createTable(tableName: String, block: TableBuilder.() -> Any) {
         createTable(tableName, TableBuilder().apply { block() })
     }
 
-    internal abstract fun createTable(tableName: String, tableBuilder: TableBuilder)
+    abstract fun createTable(tableName: String, tableBuilder: TableBuilder)
 
-    internal fun dropTable(tableName: String) {
+    fun dropTable(tableName: String) {
         connection.execute("DROP TABLE $tableName;")
     }
 
-    internal abstract fun createIndex(tableName: String, columnName: String, unique: Boolean = false)
+    abstract fun createIndex(tableName: String, columnName: String, unique: Boolean = false)
 
-    internal fun dropIndex(tableName: String, indexName: String) {
+    fun dropIndex(tableName: String, indexName: String) {
         connection.execute("DROP INDEX $indexName ON $tableName;")
     }
 
-    internal abstract fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption)
+    abstract fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption)
 
-    internal fun removeColumn(tableName: String, columnName: String) {
+    fun removeColumn(tableName: String, columnName: String) {
         connection.execute("ALTER TABLE $tableName DROP COLUMN $columnName;")
     }
+
+    abstract fun renameTable(oldTableName: String, newTableName: String)
 
     internal open class CompanionInterface {
         open fun sqlType(column: AbstractColumn): String {

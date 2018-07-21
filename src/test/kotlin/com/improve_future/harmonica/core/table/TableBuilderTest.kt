@@ -2,6 +2,7 @@ package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.table.TableBuilder
 import org.junit.Test
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
@@ -106,7 +107,43 @@ class TableBuilderTest {
 
     @Test
     fun testTimestamp() {
-        // ToDo
+        var tb = TableBuilder()
+        tb.timestamp("name")
+        var timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(true, timestampColumn.nullable)
+        assertEquals(null, timestampColumn.default)
+        assertEquals(false, timestampColumn.withTimeZone)
+
+        tb = TableBuilder()
+        val defaultDate = Date()
+        tb.timestamp("name", default = defaultDate)
+        timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(true, timestampColumn.nullable)
+        assertEquals(defaultDate, timestampColumn.defaultDate)
+        assertEquals(false, timestampColumn.withTimeZone)
+
+        tb = TableBuilder()
+        var defaultLocalDateTime = LocalDateTime.now()
+        tb.timestamp("name", default = defaultLocalDateTime)
+        timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(true, timestampColumn.nullable)
+        assertEquals(defaultLocalDateTime, timestampColumn.defaultLocalDateTime)
+        assertEquals(false, timestampColumn.withTimeZone)
+
+        tb = TableBuilder()
+        defaultLocalDateTime = LocalDateTime.now()
+        tb.timestamp(
+            "name", false, defaultLocalDateTime,
+            true
+        )
+        timestampColumn = tb.columnList.first() as TimestampColumn
+        assertEquals("name", timestampColumn.name)
+        assertEquals(false, timestampColumn.nullable)
+        assertEquals(defaultLocalDateTime, timestampColumn.defaultLocalDateTime)
+        assertEquals(true, timestampColumn.withTimeZone)
     }
 
     @Test

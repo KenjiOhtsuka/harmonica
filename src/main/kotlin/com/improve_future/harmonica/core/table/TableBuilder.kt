@@ -268,7 +268,7 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: String? = null,
-        withTimeZone: Boolean = true
+        withTimeZone: Boolean = false
     ) {
         addColumn(TimestampColumn(columnName).also {
             it.nullable = nullable
@@ -293,7 +293,7 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: Date,
-        withTimeZone: Boolean = true
+        withTimeZone: Boolean = false
     ) {
         addColumn(TimestampColumn(columnName).also {
             it.nullable = nullable
@@ -318,7 +318,7 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: LocalDateTime,
-        withTimeZone: Boolean = true
+        withTimeZone: Boolean = false
     ) {
         addColumn(TimestampColumn(columnName).also {
             it.nullable = nullable

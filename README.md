@@ -72,7 +72,7 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
         )
 
         // When you add index, use `addIndex`.
-        // addIndex("table_name", "column_name")
+        // createIndex("table_name", "column_name")
     }
 
     override fun down() {

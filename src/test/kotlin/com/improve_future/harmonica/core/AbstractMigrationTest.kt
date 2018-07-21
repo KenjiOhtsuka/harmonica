@@ -3,6 +3,7 @@ package com.improve_future.harmonica.core
 import com.improve_future.harmonica.core.table.column.*
 import org.jetbrains.kotlin.daemon.common.toHexString
 import org.junit.Test
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
@@ -165,28 +166,29 @@ class AbstractMigrationTest {
     @Test
     fun testAddDateTimeColumn() {
         val migration = StubMigration()
+        val defaultLocalDateTime = LocalDateTime.now()
         migration.addDateTimeColumn(
             "table_name",
             "column_name",
             nullable = false,
-            default = Date(),
+            default = defaultLocalDateTime,
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val blobAddingColumn =
+        val dateTimeAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals(
             "table_name",
-            blobAddingColumn.tableName
+            dateTimeAddingColumn.tableName
         )
-        val blobColumn = blobAddingColumn.column as BlobColumn
-        assertEquals("column_name", blobColumn.name)
-        assertEquals(false, blobColumn.nullable)
+        val dateTimeColumn = dateTimeAddingColumn.column as DateTimeColumn
+        assertEquals("column_name", dateTimeColumn.name)
+        assertEquals(false, dateTimeColumn.nullable)
         assertEquals(
-            "abcdefg".toByteArray().toHexString(),
-            blobColumn.default?.toHexString()
+            defaultLocalDateTime.toString(),
+            dateTimeColumn.default
         )
-        val addingOption = blobAddingColumn.option
+        val addingOption = dateTimeAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)    // ToDo
     }

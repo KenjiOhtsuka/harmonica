@@ -57,7 +57,7 @@ class JarmonicaPlugin : Plugin<Project> {
 
 
 open class JarmonicaUpTask : JarmonicaMigrationTask() {
-    override internal val taskType = JarmonicaTaskType.Up
+    override val taskType = JarmonicaTaskType.Up
 
     override fun exec() {
         val step = getProperty("step")?.toLong()

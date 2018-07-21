@@ -203,6 +203,7 @@ class TableBuilder {
     /**
      * add Time column
      *
+     * @param withTimeZone Valid only for PostgreSQL.
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun time(
@@ -221,6 +222,7 @@ class TableBuilder {
     /**
      * add Time column
      *
+     * @param withTimeZone Valid only for PostgreSQL.
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Format as HH:mm:ss[.SSS][ zzz].
      * `22:21:22.123`, `22:21:22`, `12:23:34` can be accepted.
@@ -241,6 +243,7 @@ class TableBuilder {
     /**
      * add Time column
      *
+     * @param withTimeZone Valid only for PostgreSQL.
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      */
     fun time(

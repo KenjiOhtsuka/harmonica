@@ -1,6 +1,6 @@
 package com.improve_future.harmonica.core.table.column
 
-internal class DecimalColumn(name: String) : AbstractColumn(name, java.sql.Types.DECIMAL) {
+internal class DecimalColumn(name: String) : AbstractColumn(name) {
     override val sqlDefault: String?
         get() = default.toString()
     var default: Double? = null

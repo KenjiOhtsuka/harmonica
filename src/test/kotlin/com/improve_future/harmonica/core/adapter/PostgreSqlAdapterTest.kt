@@ -232,6 +232,11 @@ class PostgreSqlAdapterTest {
             "time TIME DEFAULT '$timeSql'",
             buildTimeDeclaration()
         )
+        timeColumn.withTimeZone = true
+        assertEquals(
+            "time TIME WITH TIME ZONE DEFAULT '$timeSql'",
+            buildTimeDeclaration()
+        )
     }
 
     @Test

@@ -5,6 +5,7 @@ com.improve_future.harmonica.core
 com.improve_future.harmonica.core.adapter
 com.improve_future.harmonica.core.config
 com.improve_future.harmonica.core.table
+com.improve_future.harmonica.core.table.column
 com.improve_future.harmonica.plugin
 com.improve_future.harmonica.service
 com.improve_future.harmonica.task

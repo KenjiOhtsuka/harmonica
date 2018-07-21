@@ -38,6 +38,11 @@ class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection)
                         sql += ")"
                     }
                 }
+                is TimeZoneInterface -> {
+                    if (column.withTimeZone) {
+                        sql += " WITH TIME ZONE"
+                    }
+                }
             }
             if (!column.nullable) sql += " NOT NULL"
             if (column.hasDefault) {

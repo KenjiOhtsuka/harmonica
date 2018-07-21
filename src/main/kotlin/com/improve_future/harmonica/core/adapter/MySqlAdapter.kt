@@ -5,7 +5,7 @@ import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter.Companion.sql
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
-class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
+internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
         var sql = "CREATE TABLE $tableName (\n"
         if (tableBuilder.id) {

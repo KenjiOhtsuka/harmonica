@@ -5,7 +5,7 @@ import com.improve_future.harmonica.core.table.column.AbstractColumn
 import com.improve_future.harmonica.core.table.column.AddingColumnOption
 import com.improve_future.harmonica.stub.core.StubConnection
 
-class StubDbAdapter : DbAdapter(StubConnection()) {
+internal class StubDbAdapter : DbAdapter(StubConnection()) {
     internal val addingColumnList = mutableListOf<AddingColumn>()
 
     internal data class AddingColumn(

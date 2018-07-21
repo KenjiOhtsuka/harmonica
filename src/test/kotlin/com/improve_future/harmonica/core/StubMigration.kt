@@ -4,7 +4,7 @@ import com.improve_future.harmonica.core.adapter.StubDbAdapter
 import com.improve_future.harmonica.stub.core.StubConnection
 import java.lang.reflect.Modifier
 
-class StubMigration : AbstractMigration() {
+internal class StubMigration : AbstractMigration() {
     private val delegateAdapterField = AbstractMigration::class.java
         .getDeclaredField("adapter\$delegate").also {
             it.isAccessible = true

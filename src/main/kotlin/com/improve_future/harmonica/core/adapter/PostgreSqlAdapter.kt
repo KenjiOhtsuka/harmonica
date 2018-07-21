@@ -4,7 +4,7 @@ import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
-class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
+internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
         var sql = "CREATE TABLE $tableName (\n"
         if (tableBuilder.id) {

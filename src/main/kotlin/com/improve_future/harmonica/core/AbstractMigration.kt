@@ -256,6 +256,33 @@ abstract class AbstractMigration {
         addColumn(tableName, timeColumn, first, justBeforeColumnName)
     }
 
+    fun addDateTimeColumn() {
+
+    }
+
+    fun addDateTimeColumn() {
+
+    }
+
+    fun addDateTimeColumn() {
+
+    }
+
+    fun addTimestampColumn() {
+
+    }
+
+    fun addTimestampColumn() {
+
+    }
+
+    fun addTimestampColumn() {
+
+    }
+
+    /**
+     * Create Index
+     */
     fun createIndex(tableName: String, columnName: String) {
         println("Add Index: $tableName $columnName")
         adapter.createIndex(tableName, columnName)
@@ -266,6 +293,9 @@ abstract class AbstractMigration {
 //        // println("Add Index:")
 //    }
 
+    /**
+     * Drop Index
+     */
     fun dropIndex(tableName: String, indexName: String) {
         adapter.dropIndex(tableName, indexName)
         println("Drop Index: $tableName $indexName")

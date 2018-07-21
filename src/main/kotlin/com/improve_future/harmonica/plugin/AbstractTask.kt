@@ -1,11 +1,8 @@
 package com.improve_future.harmonica.plugin
 
-import com.improve_future.harmonica.core.DbConfig
 import org.gradle.api.DefaultTask
-import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
 import java.io.File
 import java.nio.file.Paths
-import javax.script.ScriptEngineManager
 
 abstract class AbstractTask : DefaultTask() {
     protected val directoryPath: String

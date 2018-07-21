@@ -9,11 +9,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class VersionService(private val migrationTableName: String) {
-    fun setupHarmonicaMigrationTable(connection: Connection) {
+    internal fun setupHarmonicaMigrationTable(connection: Connection) {
         if (!connection.doesTableExist(migrationTableName)) {
             connection.execute(
                 """
-                CREATE TABLE harmonica_migration (
+                CREATE TABLE $migrationTableName (
                     version VARCHAR(255)
                 )""".trimIndent()
             )
@@ -24,7 +24,7 @@ class VersionService(private val migrationTableName: String) {
         return connection.createStatement()
     }
 
-    fun isVersionMigrated(connection: Connection, version: String): Boolean {
+    internal fun isVersionMigrated(connection: Connection, version: String): Boolean {
         val statement = createStatement(connection)
         val result: Boolean
         val resultSet: ResultSet
@@ -46,7 +46,7 @@ class VersionService(private val migrationTableName: String) {
     /**
      * Insert record of the specified version into version control table
      */
-    fun saveVersion(connection: Connection, version: String) {
+    internal fun saveVersion(connection: Connection, version: String) {
         connection.execute(
             "INSERT INTO $migrationTableName(version) VALUES('$version');"
         )
@@ -55,13 +55,13 @@ class VersionService(private val migrationTableName: String) {
     /**
      * Remove record of the specified version from version control table
      */
-    fun removeVersion(connection: Connection, version: String) {
+    internal fun removeVersion(connection: Connection, version: String) {
         connection.execute(
             "DELETE FROM $migrationTableName WHERE version = '$version'"
         )
     }
 
-    fun findCurrentMigrationVersion(connection: Connection): String {
+    internal fun findCurrentMigrationVersion(connection: Connection): String {
         var result = ""
         if (!connection.doesTableExist(migrationTableName))
             return result
@@ -91,7 +91,7 @@ class VersionService(private val migrationTableName: String) {
      *
      * class name is like `M20180101001010101010_Migration`.
      */
-    fun pickUpVersionFromClassName(clazz: Class<out Any>): String {
+    internal fun pickUpVersionFromClassName(clazz: Class<out Any>): String {
         return pickUpVersionFromClassName(clazz.name)
     }
 
@@ -100,7 +100,7 @@ class VersionService(private val migrationTableName: String) {
      *
      * class name is like `M20180101001010101010nMigration`.
      */
-    fun pickUpVersionFromClassName(name: String): String {
+    internal fun pickUpVersionFromClassName(name: String): String {
         val endIndex = name.lastIndexOf(migrationSuffixString)
         val startIndex = name.substring(0, endIndex).lastIndexOf(migrationHeadString)
         return name.substring(startIndex + migrationHeadString.length, endIndex)
@@ -122,12 +122,12 @@ class VersionService(private val migrationTableName: String) {
     /**
      * Create new migration file/class name
      */
-    fun composeNewMigrationName(migrationName: String): String {
+    internal fun composeNewMigrationName(migrationName: String): String {
         val version = createNewVersionNumber()
         return migrationHeadString + version + migrationSuffixString + migrationName
     }
 
-    fun filterClassCandidateWithVersion(
+    internal fun filterClassCandidateWithVersion(
         classList: List<Class<out AbstractMigration>>, version: String
     ): List<Class<out AbstractMigration>> {
         return classList.filter {
@@ -135,7 +135,7 @@ class VersionService(private val migrationTableName: String) {
         }
     }
 
-    companion object {
+    private companion object {
         private const val migrationHeadString = "M"
         private const val migrationSuffixString = "_"
     }

@@ -36,9 +36,9 @@ internal class TimeColumn(name: String) : AbstractColumn(name, java.sql.Types.TI
         }
     var defaultLocalTime: LocalTime? = null
 
-    override val sqlDefault = "'$default'"
+    override val sqlDefault
+        get() = "'$default'"
     override val hasDefault
         get() = defaultLocalTime != null
-    /** The default value is `false */
     var withTimeZone = false
 }

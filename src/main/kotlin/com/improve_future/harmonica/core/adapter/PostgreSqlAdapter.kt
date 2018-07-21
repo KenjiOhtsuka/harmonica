@@ -68,10 +68,19 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         connection.execute(sql)
     }
 
+    override fun dropIndex(tableName: String, indexName: String) {
+        connection.execute("DROP INDEX $indexName;")
+    }
+
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
+        connection.execute(sql)
+    }
+
+    override fun renameTable(oldTableName: String, newTableName: String) {
+        var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName;"
         connection.execute(sql)
     }
 }

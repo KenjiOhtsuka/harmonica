@@ -58,14 +58,24 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
         //sql += " INDEX ${tableName}_$columnName ON $tableName($columnName);"
-        sql += " INDEX ON $tableName($columnName);"
+        sql += " INDEX ${tableName}_${columnName}_idx ON $tableName ($columnName);"
         connection.execute(sql)
     }
+
+    override fun dropIndex(tableName: String, indexName: String) {
+        connection.execute("DROP INDEX $indexName ON $tableName;")
+    }
+
 
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
+        connection.execute(sql)
+    }
+
+    override fun renameTable(oldTableName: String, newTableName: String) {
+        var sql = "RENAME TABLE $oldTableName TO $newTableName;"
         connection.execute(sql)
     }
 }

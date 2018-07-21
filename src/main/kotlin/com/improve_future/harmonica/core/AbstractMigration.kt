@@ -103,6 +103,11 @@ abstract class AbstractMigration {
     /**
      * Add new varchar column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param size
+     * @param nullable
+     * @param default
      * @param first You add column at first of the columns (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be add just after
      * (valid only for MySQL)
@@ -127,6 +132,10 @@ abstract class AbstractMigration {
      * In PostgreSQL, BOOLEAN column will be added.
      * In MySQL, TINYINT column will be added.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
      * @param first You add column at first of the columns (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * (valid only for MySQL)
@@ -147,6 +156,10 @@ abstract class AbstractMigration {
     /**
      * Add new date column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -166,6 +179,9 @@ abstract class AbstractMigration {
     /**
      * Add new date column to existing table, with String default value.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
      * @param default Must be formatted as yyyy-MM-dd
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
@@ -186,6 +202,10 @@ abstract class AbstractMigration {
     /**
      * Add new date column to existing table, with String default value.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * (valid only for MySQL)
@@ -205,6 +225,10 @@ abstract class AbstractMigration {
     /**
      * Add new text column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -229,6 +253,9 @@ abstract class AbstractMigration {
      *
      * add BYTEA column instead, because PstgreSQL doesn't have BLOB type.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
      * @param default Not valid for MySQL
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
@@ -250,6 +277,11 @@ abstract class AbstractMigration {
     /**
      * Add new TIME column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
+     * @param withTimeZone Valid only in PostgreSQL
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -271,6 +303,9 @@ abstract class AbstractMigration {
     /**
      * Add new TIME column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
      * @param default Must be formatted as `HH:MM:ss.SSS`.
      * @param withTimeZone Valid only for PostgreSQL.
      * @param first You add column at first of the column (valid only for MySQL)
@@ -294,6 +329,10 @@ abstract class AbstractMigration {
     /**
      * Add new TIME column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
      * @param withTimeZone Valid only for PostgreSQL
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
@@ -320,6 +359,9 @@ abstract class AbstractMigration {
      *
      * TIMESTAMP column will be added instead.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
      * @param default Must be formed like yyyy-MM-dd HH:MM:SS
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
@@ -340,10 +382,13 @@ abstract class AbstractMigration {
     /**
      * Add new DATETIME column to existing table.
      *
-     * ## PostgreSQL
+     * In PostgreSQL, TIMESTAMP column will be added instead,
+     * becuse PostgreSQL.doesn't have DATETIME type.
      *
-     * TIMESTAMP column will be added instead.     *
-     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -363,10 +408,13 @@ abstract class AbstractMigration {
     /**
      * Add new DATETIME column to existing table.
      *
-     * ## PostgreSQL
+     * In PostgreSQL, TIMESTAMP column will be added instead,
+     * becuse PostgreSQL.doesn't have DATETIME type.
      *
-     * TIMESTAMP column will be added instead.     *
-     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -386,7 +434,11 @@ abstract class AbstractMigration {
     /**
      * Add new DATETIME column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
      * @param default Must be formatted as `yyyy-MM-dd HH:mm:SS`.
+     * @param withTimeZone Valid only in PostgreSQL
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -408,6 +460,10 @@ abstract class AbstractMigration {
     /**
      * Add new DATETIME column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param withTimeZone Valid only in PostgreSQL
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -429,6 +485,11 @@ abstract class AbstractMigration {
     /**
      * Add new DATETIME column to existing table.
      *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
+     * @param withTimeZone Valid only in PostgreSQL.
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * valid only for MySQL
@@ -468,12 +529,34 @@ abstract class AbstractMigration {
         println("Drop Index: $tableName $indexName")
     }
 
+    /**
+     * Rename table.
+     *
+     * @param oldTableName
+     * @param newTableName
+     */
+    fun renameTable(oldTableName: String, newTableName: String) {
+        adapter.renameTable(oldTableName, newTableName)
+        println("Rename Table: $oldTableName => $newTableName")
+    }
+
+    /**
+     * Execute SQL
+     *
+     * @param sql
+     */
     fun executeSql(sql: String) {
         println("Execute SQL")
         connection.execute(sql)
     }
 
+    /**
+     * Migrate up
+     */
     open fun up() {}
 
+    /**
+     * Migrate down
+     */
     open fun down() {}
 }

@@ -21,9 +21,11 @@ class TableBuilder {
     /**
      * Add decimal column
      *
+     * @param columnName
      * @param precision The number of digits in the number.
      * @param scale The number of digits to the right of the decimal point in the number.
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun decimal(
         columnName: String,
@@ -44,7 +46,9 @@ class TableBuilder {
     /**
      * Add integer column.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun integer(
         columnName: String,
@@ -62,8 +66,10 @@ class TableBuilder {
      *
      * variable with limit
      *
+     * @param columnName
      * @param size For MySQL, `null` means 255.
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun varchar(
         columnName: String,
@@ -83,7 +89,10 @@ class TableBuilder {
      *
      * Alias for varchar.
      *
+     * @param columnName
+     * @param size
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun string(
         columnName: String,
@@ -97,7 +106,9 @@ class TableBuilder {
     /**
      * add boolean column
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun boolean(
         columnName: String,
@@ -113,7 +124,9 @@ class TableBuilder {
     /**
      * add date column of `java.util.Date` default value.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun date(
         columnName: String,
@@ -130,8 +143,9 @@ class TableBuilder {
     /**
      * add date column of no default value or `String` default value
      *
-     * @param default Must be formatted as yyyy-MM-dd
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default Must be formatted as yyyy-MM-dd
      */
     fun date(
         columnName: String,
@@ -148,7 +162,9 @@ class TableBuilder {
     /**
      * add date column of `java.time.LocalDate` default value
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun date(
         columnName: String,
@@ -163,8 +179,9 @@ class TableBuilder {
     }
 
     /**
-     * add TEXT column, unlimited length string
+     * Add TEXT column, unlimited length string
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Invalid for MySQL
      */
@@ -180,12 +197,13 @@ class TableBuilder {
     }
 
     /**
-     * add BLOB column
+     * Add BLOB column
      *
      * ## PostgreSQL
      *
      * Add BYTEA column instead, because PostgreSQL doesn't have BLOB type.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Invalid for MySQL
      */
@@ -203,8 +221,10 @@ class TableBuilder {
     /**
      * add Time column
      *
-     * @param withTimeZone Valid only for PostgreSQL.
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @param withTimeZone Valid only for PostgreSQL.
      */
     fun time(
         columnName: String,
@@ -222,9 +242,10 @@ class TableBuilder {
     /**
      * add Time column
      *
-     * @param withTimeZone Valid only for PostgreSQL.
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Format as HH:mm:ss[.SSS][ zzz].
+     * @param withTimeZone Valid only for PostgreSQL.
      * `22:21:22.123`, `22:21:22`, `12:23:34` can be accepted.
      */
     fun time(
@@ -243,8 +264,10 @@ class TableBuilder {
     /**
      * add Time column
      *
-     * @param withTimeZone Valid only for PostgreSQL.
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @param withTimeZone Valid only for PostgreSQL.
      */
     fun time(
         columnName: String,
@@ -268,7 +291,9 @@ class TableBuilder {
      * and then change the time zone and retrieve the value,
      * the retrieved value is different from the value you stored.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      * @param withTimeZone Valid only for PostgreSQL.
      */
     fun timestamp(
@@ -293,7 +318,9 @@ class TableBuilder {
      * and then change the time zone and retrieve the value,
      * the retrieved value is different from the value you stored.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      * @param withTimeZone Valid only for PostgreSQL.
      */
     fun timestamp(
@@ -318,7 +345,9 @@ class TableBuilder {
      * and then change the time zone and retrieve the value,
      * the retrieved value is different from the value you stored.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      * @param withTimeZone Valid only for PostgreSQL.
      */
     fun timestamp(
@@ -341,7 +370,9 @@ class TableBuilder {
      *
      * There is no `DATETIME` type, so add `TIMESTAMP` column, instead.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun dateTime(
         columnName: String,
@@ -361,7 +392,9 @@ class TableBuilder {
      *
      * There is no `DATETIME` type, so add `TIMESTAMP` column, instead.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun dateTime(
         columnName: String,
@@ -381,7 +414,9 @@ class TableBuilder {
      *
      * There is no `DATETIME` type, so add `TIMESTAMP` column, instead.
      *
+     * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
      */
     fun dateTime(
         columnName: String,

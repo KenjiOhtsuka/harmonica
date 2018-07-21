@@ -12,7 +12,7 @@ open class DbConfig() {
     lateinit var password: String
     var sslmode: Boolean = false
 
-    constructor(block: DbConfig.() -> Unit): this() {
+    constructor(block: DbConfig.() -> Unit) : this() {
         this.block()
 
         if (port == -1) {
@@ -34,13 +34,13 @@ open class DbConfig() {
     fun toConnectionUrlString(): String {
         return when (dbms) {
             Dbms.PostgreSQL ->
-                    "postgresql://$user:$password@$host:$port/$dbName"
+                "postgresql://$user:$password@$host:$port/$dbName"
             Dbms.MySQL ->
-                    "jdbc:mysql://$host:$port/$dbName"
+                "jdbc:mysql://$host:$port/$dbName"
             Dbms.SQLite ->
-                    ""
+                ""
             Dbms.Oracle ->
-                    ""
+                ""
         }
     }
 }

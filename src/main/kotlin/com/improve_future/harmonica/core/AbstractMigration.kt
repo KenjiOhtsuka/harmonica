@@ -12,7 +12,7 @@ import java.util.*
 
 @MigrationDsl
 abstract class AbstractMigration {
-    lateinit var connection: ConnectionInterface
+    internal lateinit var connection: ConnectionInterface
 
     private val adapter: DbAdapter by lazy {
         when (connection.config.dbms) {

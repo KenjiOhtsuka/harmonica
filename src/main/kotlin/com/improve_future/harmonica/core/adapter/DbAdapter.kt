@@ -4,7 +4,7 @@ import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
-abstract class DbAdapter(val connection: ConnectionInterface) {
+internal abstract class DbAdapter(internal val connection: ConnectionInterface) {
     internal fun createTable(tableName: String, block: TableBuilder.() -> Any) {
         createTable(tableName, TableBuilder().apply { block() })
     }

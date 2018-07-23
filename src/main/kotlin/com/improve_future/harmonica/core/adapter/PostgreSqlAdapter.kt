@@ -63,7 +63,6 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
     override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
-        //sql += " INDEX ${tableName}_$columnName ON $tableName($columnName);"
         sql += " INDEX ON $tableName($columnName);"
         connection.execute(sql)
     }

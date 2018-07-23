@@ -59,6 +59,17 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
                 else -> super.sqlType(column)
             }
         }
+
+        override fun sqlIndexMethod(method: IndexMethod): String {
+            return when (method) {
+                IndexMethod.BTree -> "btree"
+                IndexMethod.Hash -> "hash"
+                IndexMethod.Gist -> "gist"
+                IndexMethod.SpGist -> "spgist"
+                IndexMethod.Gin -> "gin"
+                IndexMethod.BRin -> "brin"
+            }
+        }
     }
 
     override fun createIndex(
@@ -67,7 +78,9 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
     ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
-        sql += " INDEX ON $tableName($columnName);"
+        sql += " INDEX ON $tableName"
+        if (method != null) sql += " USING " + sqlIndexMethod(method)
+        sql += " ($columnName);"
         connection.execute(sql)
     }
 

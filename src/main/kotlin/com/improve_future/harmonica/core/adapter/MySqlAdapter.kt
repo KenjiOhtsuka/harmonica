@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.ConnectionInterface
-import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter.Companion.sqlType
+import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
@@ -54,7 +54,10 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
         }
     }
 
-    override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
+    override fun createIndex(
+        tableName: String, columnName: String, unique: Boolean,
+        method: IndexMethod?
+    ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
         sql += " INDEX ${tableName}_${columnName}_idx ON $tableName ($columnName);"

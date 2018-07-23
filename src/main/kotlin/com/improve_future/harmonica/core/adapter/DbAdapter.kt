@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.ConnectionInterface
+import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
@@ -15,7 +16,10 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
         connection.execute("DROP TABLE $tableName;")
     }
 
-    abstract fun createIndex(tableName: String, columnName: String, unique: Boolean = false)
+    abstract fun createIndex(
+        tableName: String, columnName: String, unique: Boolean = false,
+        method: IndexMethod? = null
+    )
 
     abstract fun dropIndex(tableName: String, indexName: String)
 

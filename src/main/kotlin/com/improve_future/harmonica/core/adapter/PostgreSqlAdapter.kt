@@ -83,4 +83,11 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName;"
         connection.execute(sql)
     }
+
+    override fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    ) {
+        val sql = "ALTER INDEX $oldIndexName RENAME TO $newIndexName;"
+        connection.execute(sql)
+    }
 }

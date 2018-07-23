@@ -36,6 +36,10 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
         )
     }
 
+    abstract fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    )
+
     internal open class CompanionInterface {
         open fun sqlType(column: AbstractColumn): String {
             return when (column) {

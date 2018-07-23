@@ -78,4 +78,13 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
         var sql = "RENAME TABLE $oldTableName TO $newTableName;"
         connection.execute(sql)
     }
+
+
+    override fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    ) {
+        val sql = "ALTER TABLE $tableName" +
+                " RENAME INDEX $oldIndexName TO $newIndexName"
+        connection.execute(sql)
+    }
 }

@@ -532,12 +532,12 @@ abstract class AbstractMigration {
     /**
      * Rename table.
      *
-     * @param oldTableName
-     * @param newTableName
+     * @param oldName Old table name.
+     * @param newName New table name.
      */
-    fun renameTable(oldTableName: String, newTableName: String) {
-        adapter.renameTable(oldTableName, newTableName)
-        println("Rename Table: $oldTableName => $newTableName")
+    fun renameTable(oldName: String, newName: String) {
+        adapter.renameTable(oldName, newName)
+        println("Rename Table: $oldName => $newName")
     }
 
     /**
@@ -554,6 +554,20 @@ abstract class AbstractMigration {
     ) {
         adapter.renameColumn(tableName, oldColumnName, newColumnName)
         println("Rename Column: $tableName.$oldColumnName => $newColumnName")
+    }
+
+    /**
+     * Rename index.
+     *
+     * @param tableName Table name.
+     * @param oldIndexName Old index name
+     * @param newIndexName New index name
+     */
+    fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    ) {
+        adapter.renameIndex(tableName, oldIndexName, newIndexName)
+        println("Rename Index: $oldIndexName => $newIndexName")
     }
 
     /**

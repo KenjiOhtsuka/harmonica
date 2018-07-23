@@ -3,6 +3,7 @@ package com.improve_future.harmonica.core
 import com.improve_future.harmonica.core.adapter.DbAdapter
 import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
+import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 import java.time.LocalDate
@@ -510,10 +511,17 @@ abstract class AbstractMigration {
 
     /**
      * Create Index
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param unique `true` for unique index. The default value is `false`
+     * @param method `null` means database default.
      */
-    fun createIndex(tableName: String, columnName: String) {
+    fun createIndex(
+        tableName: String, columnName: String,
+        unique: Boolean = false, method: IndexMethod? = null) {
         println("Add Index: $tableName $columnName")
-        adapter.createIndex(tableName, columnName)
+        adapter.createIndex(tableName, columnName, unique)
     }
 
 //    fun createIndex(tableName: String, columnNameArray: Array<String>) {

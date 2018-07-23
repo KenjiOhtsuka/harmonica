@@ -20,6 +20,9 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
     override fun renameTable(oldTableName: String, newTableName: String) {
     }
 
+    override fun renameColumn(tableName: String, oldColumnName: String, newColumnName: String) {
+    }
+
     override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
     }
 
@@ -29,4 +32,5 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
         addingColumnList.add(AddingColumn(tableName, column, option))
     }
+
 }

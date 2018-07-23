@@ -27,6 +27,10 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
 
     abstract fun renameTable(oldTableName: String, newTableName: String)
 
+    abstract fun renameColumn(
+        tableName: String, oldColumnName: String, newColumnName: String
+    )
+
     internal open class CompanionInterface {
         open fun sqlType(column: AbstractColumn): String {
             return when (column) {

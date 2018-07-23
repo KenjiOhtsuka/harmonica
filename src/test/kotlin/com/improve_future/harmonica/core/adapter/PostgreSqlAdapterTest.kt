@@ -284,4 +284,20 @@ class PostgreSqlAdapterTest {
             connection.executedSqlList.first()
         )
     }
+
+    @Test
+    fun testRenameColumn() {
+        val connection = StubConnection()
+        val adapter: DbAdapter = PostgreSqlAdapter(connection)
+
+        adapter.renameColumn(
+            "table_name",
+            "old_column_name",
+            "new_column_name"
+        )
+        assertEquals(
+            "ALTER TABLE table_name RENAME COLUMN old_column_name TO new_column_name;",
+            connection.executedSqlList.first()
+        )
+    }
 }

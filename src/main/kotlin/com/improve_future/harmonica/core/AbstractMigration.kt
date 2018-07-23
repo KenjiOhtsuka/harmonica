@@ -541,6 +541,20 @@ abstract class AbstractMigration {
     }
 
     /**
+     * Rename column
+     *
+     * @param tableName Table name
+     * @param oldColumnName Old column name
+     * @param newColumnName New column name
+     */
+    fun renameColumn(
+        tableName: String, oldColumnName: String, newColumnName: String
+    ) {
+        adapter.renameColumn(tableName, oldColumnName, newColumnName)
+        println("Rename Column: $tableName.$oldColumnName => $newColumnName")
+    }
+
+    /**
      * Execute SQL
      *
      * @param sql

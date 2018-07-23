@@ -83,9 +83,4 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName;"
         connection.execute(sql)
     }
-
-    override fun renameColumn(tableName: String, oldColumnName: String, newColumnName: String) {
-        var sql = "ALTER TABLE $tableName RENAME COLUMN $oldColumnName TO $newColumnName;"
-        connection.execute(sql)
-    }
 }

@@ -543,7 +543,7 @@ abstract class AbstractMigration {
     /**
      * Rename column
      *
-     * Not yet implemented for MySQL
+     * For MySQL, this can be used from version 8.0.
      *
      * @param tableName Table name
      * @param oldColumnName Old column name

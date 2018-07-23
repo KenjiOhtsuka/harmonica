@@ -52,6 +52,14 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
             }
             return sql
         }
+
+        override fun sqlIndexMethod(method: IndexMethod): String {
+            return when (method) {
+                IndexMethod.BTree -> "BTREE"
+                IndexMethod.Hash -> "HASH"
+                else -> throw Exception("MySQL doesn't support ${method.name}")
+            }
+        }
     }
 
     override fun createIndex(
@@ -60,7 +68,9 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
     ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
-        sql += " INDEX ${tableName}_${columnName}_idx ON $tableName ($columnName);"
+        sql += " INDEX ${tableName}_${columnName}_idx"
+        if (method != null) sql += " " + sqlIndexMethod(method)
+        sql += " ON $tableName ($columnName);"
         connection.execute(sql)
     }
 

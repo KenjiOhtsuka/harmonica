@@ -428,4 +428,21 @@ class TableBuilder {
             it.defaultLocalDateTime = default
         })
     }
+
+    /**
+     * Add reference column.
+     *
+     * @param name Table name in most cases.
+     * Column `${name}_id` will be created.
+     */
+    fun refer(
+        name: String,
+        nullable: Boolean = true,
+        default: Long? = null
+    ) {
+        addColumn(IntegerColumn(name + "_id").also {
+            it.nullable = nullable
+            it.default = default
+        })
+    }
 }

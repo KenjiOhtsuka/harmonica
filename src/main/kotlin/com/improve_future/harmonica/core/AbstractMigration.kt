@@ -578,6 +578,10 @@ abstract class AbstractMigration {
         println("Rename Index: $oldIndexName => $newIndexName")
     }
 
+    fun addForeignKey() {
+        // ToDo
+    }
+
     /**
      * Execute SQL
      *

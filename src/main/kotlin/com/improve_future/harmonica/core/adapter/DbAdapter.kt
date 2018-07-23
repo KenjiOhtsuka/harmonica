@@ -44,8 +44,8 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
         tableName: String, oldIndexName: String, newIndexName: String
     )
 
-    internal open class CompanionInterface {
-        open fun sqlType(column: AbstractColumn): String {
+    internal abstract class CompanionInterface {
+        protected open fun sqlType(column: AbstractColumn): String {
             return when (column) {
                 is IntegerColumn -> "INTEGER"
                 is VarcharColumn -> "VARCHAR"
@@ -60,5 +60,7 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
                 else -> throw Exception()
             }
         }
+
+        abstract fun sqlIndexMethod(method: IndexMethod): String
     }
 }

@@ -68,4 +68,9 @@ class MySqlAdapterTest {
             connection.executedSqlList.first()
         )
     }
+
+    @Test
+    fun testCreateIndex() {
+        // ToDo
+    }
 }

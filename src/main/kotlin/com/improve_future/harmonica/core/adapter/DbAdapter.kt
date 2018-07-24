@@ -61,6 +61,6 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
             }
         }
 
-        abstract fun sqlIndexMethod(method: IndexMethod): String?
+        abstract fun sqlIndexMethod(method: IndexMethod?): String?
     }
 }

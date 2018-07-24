@@ -53,7 +53,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
             return sql
         }
 
-        override fun sqlIndexMethod(method: IndexMethod): String? {
+        override fun sqlIndexMethod(method: IndexMethod?): String? {
             return when (method) {
                 IndexMethod.BTree -> "BTREE"
                 IndexMethod.Hash -> "HASH"
@@ -69,7 +69,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
         sql += " INDEX ${tableName}_${columnName}_idx"
-        if (method != null) sql += " " + sqlIndexMethod(method)
+        sqlIndexMethod(method)?.let { sql += " $it" }
         sql += " ON $tableName ($columnName);"
         connection.execute(sql)
     }

@@ -53,11 +53,11 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
             return sql
         }
 
-        override fun sqlIndexMethod(method: IndexMethod): String {
+        override fun sqlIndexMethod(method: IndexMethod): String? {
             return when (method) {
                 IndexMethod.BTree -> "BTREE"
                 IndexMethod.Hash -> "HASH"
-                else -> throw Exception("MySQL doesn't support ${method.name}")
+                else -> null
             }
         }
     }

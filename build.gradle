@@ -121,6 +121,7 @@ publish {
     publishVersion = project.version
     desc = "Kotlin Database Migration Took"
     website = 'https://github.com/KenjiOhtsuka/harmonica'
+    //repoName = ''
 }
 
 dokka {

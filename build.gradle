@@ -3,7 +3,7 @@ import java.nio.file.Paths
 buildscript {
     ext {
         kotlin_version = '1.2.51'
-        bintray_version = '0.8.1'
+        bintray_version = '0.8.0'
     }
 
     repositories {

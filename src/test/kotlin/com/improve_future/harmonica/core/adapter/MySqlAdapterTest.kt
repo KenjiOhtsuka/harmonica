@@ -2,7 +2,7 @@ package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.table.column.*
 import com.improve_future.harmonica.stub.core.StubConnection
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class MySqlAdapterTest {

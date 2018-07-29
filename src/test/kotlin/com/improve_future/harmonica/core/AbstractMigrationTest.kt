@@ -2,7 +2,7 @@ package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.core.table.column.*
 import org.jetbrains.kotlin.daemon.common.toHexString
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*

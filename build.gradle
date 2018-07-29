@@ -15,7 +15,7 @@ buildscript {
     }
     dependencies {
         // for release
-        classpath 'com.novoda:bintray-release:$bintray_version'
+        classpath "com.novoda:bintray-release:$bintray_version"
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.10"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -67,7 +67,7 @@ dependencies {
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
     testCompile "org.jetbrains.kotlin:kotlin-test"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit5"
 
     compile localGroovy()  // Groovy SDK
     compileOnly gradleApi()
@@ -116,6 +116,7 @@ pluginBundle {
 
 // for Bintray (jcenter)
 publish {
+    userOrg = "Kenji Otsuka"
     groupId = project.group
     artifactId = 'harmonica' // project.artifacts
     publishVersion = project.version

@@ -36,4 +36,12 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
         addingColumnList.add(AddingColumn(tableName, column, option))
     }
+
+    override fun addForeignKey(
+        tableName: String,
+        columnName: String,
+        referencedTableName: String,
+        referencedColumnName: String
+    ) {
+    }
 }

@@ -7,6 +7,13 @@ open class DbConfig() {
      */
     var host: String = "127.0.0.1"
     var port: Int = -1
+    /**
+     * Database Name
+     *
+     * ## SQLite
+     *
+     * Access to `$dbName.db` file..
+     */
     lateinit var dbName: String
     lateinit var user: String
     lateinit var password: String
@@ -38,7 +45,7 @@ open class DbConfig() {
             Dbms.MySQL ->
                 "jdbc:mysql://$host:$port/$dbName"
             Dbms.SQLite ->
-                ""
+                "jdbc:sqlite:$dbName.db"
             Dbms.Oracle ->
                 ""
         }

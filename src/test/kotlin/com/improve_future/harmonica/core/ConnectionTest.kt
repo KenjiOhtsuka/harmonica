@@ -16,18 +16,18 @@ class ConnectionTest {
             dbms = Dbms.MySQL
             dbName = "test"
         }) {}
-        var result =
-            method.invoke(Connection.Companion, mySqlConfig) as String
         assertEquals(
             "jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true",
-            result
+            method.invoke(Connection.Companion, mySqlConfig) as String
         )
         // SQLite
         val sqliteConfig = object : DbConfig({
             dbms = Dbms.SQLite
             dbName = "test"
         }) {}
-        result = method.invoke(Connection.Companion, sqliteConfig) as String
-        assertEquals("jdbc:sqlite:test.db", result)
+        assertEquals(
+            "jdbc:sqlite:test.db",
+            method.invoke(Connection.Companion, sqliteConfig) as String
+        )
     }
 }

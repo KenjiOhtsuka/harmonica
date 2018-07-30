@@ -587,12 +587,15 @@ abstract class AbstractMigration {
      * @param referencedColumn
      */
     fun addForeignKey(
-        table: String,
-        column: String,
-        referencedTable: String,
-        referencedColumn: String
+        tableName: String,
+        columnName: String,
+        referencedTableName: String,
+        referencedColumnName: String
     ) {
-        adapter.addFoeignKey
+        adapter.addForeignKey(
+            tableName, columnName,
+            referencedTableName, referencedColumnName
+        )
     }
 
     /**

@@ -37,19 +37,6 @@ open class DbConfig() {
             return DbConfig(block)
         }
     }
-
-    fun toConnectionUrlString(): String {
-        return when (dbms) {
-            Dbms.PostgreSQL ->
-                "postgresql://$user:$password@$host:$port/$dbName"
-            Dbms.MySQL ->
-                "jdbc:mysql://$host:$port/$dbName"
-            Dbms.SQLite ->
-                "jdbc:sqlite:$dbName.db"
-            Dbms.Oracle ->
-                ""
-        }
-    }
 }
 
 operator fun DbConfig.invoke(block: DbConfig.() -> Unit): DbConfig {

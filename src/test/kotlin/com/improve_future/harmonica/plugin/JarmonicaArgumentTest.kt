@@ -1,6 +1,6 @@
 package com.improve_future.harmonica.plugin
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class JarmonicaArgumentTest {

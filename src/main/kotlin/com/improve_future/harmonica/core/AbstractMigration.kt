@@ -3,6 +3,7 @@ package com.improve_future.harmonica.core
 import com.improve_future.harmonica.core.adapter.DbAdapter
 import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
+import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 import java.time.LocalDate
@@ -510,10 +511,17 @@ abstract class AbstractMigration {
 
     /**
      * Create Index
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param unique `true` for unique index. The default value is `false`
+     * @param method `null` means database default.
      */
-    fun createIndex(tableName: String, columnName: String) {
+    fun createIndex(
+        tableName: String, columnName: String,
+        unique: Boolean = false, method: IndexMethod? = null) {
         println("Add Index: $tableName $columnName")
-        adapter.createIndex(tableName, columnName)
+        adapter.createIndex(tableName, columnName, unique)
     }
 
 //    fun createIndex(tableName: String, columnNameArray: Array<String>) {
@@ -532,12 +540,62 @@ abstract class AbstractMigration {
     /**
      * Rename table.
      *
-     * @param oldTableName
-     * @param newTableName
+     * @param oldName Old table name.
+     * @param newName New table name.
      */
-    fun renameTable(oldTableName: String, newTableName: String) {
-        adapter.renameTable(oldTableName, newTableName)
-        println("Rename Table: $oldTableName => $newTableName")
+    fun renameTable(oldName: String, newName: String) {
+        adapter.renameTable(oldName, newName)
+        println("Rename Table: $oldName => $newName")
+    }
+
+    /**
+     * Rename column
+     *
+     * For MySQL, this can be used from version 8.0.
+     *
+     * @param tableName Table name
+     * @param oldColumnName Old column name
+     * @param newColumnName New column name
+     */
+    fun renameColumn(
+        tableName: String, oldColumnName: String, newColumnName: String
+    ) {
+        adapter.renameColumn(tableName, oldColumnName, newColumnName)
+        println("Rename Column: $tableName.$oldColumnName => $newColumnName")
+    }
+
+    /**
+     * Rename index.
+     *
+     * @param tableName Table name.
+     * @param oldIndexName Old index name
+     * @param newIndexName New index name
+     */
+    fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    ) {
+        adapter.renameIndex(tableName, oldIndexName, newIndexName)
+        println("Rename Index: $oldIndexName => $newIndexName")
+    }
+
+    /**
+     * Add koreign key constraint.
+     *
+     * @param table
+     * @param column
+     * @param referencedTable
+     * @param referencedColumn
+     */
+    fun addForeignKey(
+        tableName: String,
+        columnName: String,
+        referencedTableName: String,
+        referencedColumnName: String
+    ) {
+        adapter.addForeignKey(
+            tableName, columnName,
+            referencedTableName, referencedColumnName
+        )
     }
 
     /**

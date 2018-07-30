@@ -14,6 +14,12 @@
 <h2>PostgreSQL</h2>
 <p>TIMESTAMP column will be added instead.</p>
 <h3>Parameters</h3>
+<p><a name="tableName"></a>
+<code>tableName</code> - </p>
+<p><a name="columnName"></a>
+<code>columnName</code> - </p>
+<p><a name="nullable"></a>
+<code>nullable</code> - </p>
 <p><a name="default"></a>
 <code>default</code> - Must be formed like yyyy-MM-dd HH:MM:SS</p>
 <p><a name="first"></a>
@@ -26,9 +32,17 @@ valid only for MySQL</p>
 <a name="com.improve_future.harmonica.core.AbstractMigration$addDateTimeColumn(kotlin.String, kotlin.String, kotlin.Boolean, java.time.LocalDateTime, kotlin.Boolean, kotlin.String)"></a>
 <code><span class="keyword">fun </span><span class="identifier">addDateTimeColumn</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.AbstractMigration$addDateTimeColumn(kotlin.String, kotlin.String, kotlin.Boolean, java.time.LocalDateTime, kotlin.Boolean, kotlin.String)/tableName">tableName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.AbstractMigration$addDateTimeColumn(kotlin.String, kotlin.String, kotlin.Boolean, java.time.LocalDateTime, kotlin.Boolean, kotlin.String)/columnName">columnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.AbstractMigration$addDateTimeColumn(kotlin.String, kotlin.String, kotlin.Boolean, java.time.LocalDateTime, kotlin.Boolean, kotlin.String)/nullable">nullable</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.AbstractMigration$addDateTimeColumn(kotlin.String, kotlin.String, kotlin.Boolean, java.time.LocalDateTime, kotlin.Boolean, kotlin.String)/default">default</span><span class="symbol">:</span>&nbsp;<span class="identifier">LocalDateTime</span><span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.AbstractMigration$addDateTimeColumn(kotlin.String, kotlin.String, kotlin.Boolean, java.time.LocalDateTime, kotlin.Boolean, kotlin.String)/first">first</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.improve_future.harmonica.core.AbstractMigration$addDateTimeColumn(kotlin.String, kotlin.String, kotlin.Boolean, java.time.LocalDateTime, kotlin.Boolean, kotlin.String)/justBeforeColumnName">justBeforeColumnName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Add new DATETIME column to existing table.</p>
-<h2>PostgreSQL</h2>
-<p>TIMESTAMP column will be added instead.     *</p>
+<p>In PostgreSQL, TIMESTAMP column will be added instead,
+becuse PostgreSQL.doesn't have DATETIME type.</p>
 <h3>Parameters</h3>
+<p><a name="tableName"></a>
+<code>tableName</code> - </p>
+<p><a name="columnName"></a>
+<code>columnName</code> - </p>
+<p><a name="nullable"></a>
+<code>nullable</code> - </p>
+<p><a name="default"></a>
+<code>default</code> - </p>
 <p><a name="first"></a>
 <code>first</code> - You add column at first of the column (valid only for MySQL)</p>
 <p><a name="justBeforeColumnName"></a>

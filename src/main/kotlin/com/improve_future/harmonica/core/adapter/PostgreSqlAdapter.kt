@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.ConnectionInterface
+import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
@@ -58,13 +59,29 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
                 else -> super.sqlType(column)
             }
         }
+
+        override fun sqlIndexMethod(method: IndexMethod?): String? {
+            return when (method) {
+                IndexMethod.BTree -> "btree"
+                IndexMethod.Hash -> "hash"
+                IndexMethod.Gist -> "gist"
+                IndexMethod.SpGist -> "spgist"
+                IndexMethod.Gin -> "gin"
+                IndexMethod.BRin -> "brin"
+                else -> null
+            }
+        }
     }
 
-    override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
+    override fun createIndex(
+        tableName: String, columnName: String, unique: Boolean,
+        method: IndexMethod?
+    ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
-        //sql += " INDEX ${tableName}_$columnName ON $tableName($columnName);"
-        sql += " INDEX ON $tableName($columnName);"
+        sql += " INDEX ON $tableName"
+        sqlIndexMethod(method)?.let { sql += " USING $it" }
+        sql += " ($columnName);"
         connection.execute(sql)
     }
 
@@ -81,6 +98,24 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
 
     override fun renameTable(oldTableName: String, newTableName: String) {
         var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName;"
+        connection.execute(sql)
+    }
+
+    override fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    ) {
+        val sql = "ALTER INDEX $oldIndexName RENAME TO $newIndexName;"
+        connection.execute(sql)
+    }
+
+    override fun addForeignKey(
+        tableName: String, columnName: String,
+        referencedTableName: String, referencedColumnName: String
+    ) {
+        val sql = "ALTER TABLE $tableName" +
+                " ADD CONSTRAINT ${tableName}_${columnName}_fk" +
+                " FOREIGN KEY ($columnName)" +
+                " REFERENCES $referencedTableName ($referencedColumnName);"
         connection.execute(sql)
     }
 }

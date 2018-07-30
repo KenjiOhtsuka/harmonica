@@ -73,6 +73,9 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
 
         // When you add index, use `addIndex`.
         createIndex("table_name", "column_name")
+
+        // You can execute SQL directly.
+        executeSql("SELECT 1;")
     }
 
     override fun down() {

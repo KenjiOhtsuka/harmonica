@@ -7,6 +7,13 @@ open class DbConfig() {
      */
     var host: String = "127.0.0.1"
     var port: Int = -1
+    /**
+     * Database Name
+     *
+     * ## SQLite
+     *
+     * Access to `$dbName.db` file..
+     */
     lateinit var dbName: String
     lateinit var user: String
     lateinit var password: String
@@ -28,19 +35,6 @@ open class DbConfig() {
     companion object {
         fun create(block: DbConfig.() -> Unit): DbConfig {
             return DbConfig(block)
-        }
-    }
-
-    fun toConnectionUrlString(): String {
-        return when (dbms) {
-            Dbms.PostgreSQL ->
-                "postgresql://$user:$password@$host:$port/$dbName"
-            Dbms.MySQL ->
-                "jdbc:mysql://$host:$port/$dbName"
-            Dbms.SQLite ->
-                ""
-            Dbms.Oracle ->
-                ""
         }
     }
 }

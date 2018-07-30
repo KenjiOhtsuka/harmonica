@@ -2,7 +2,7 @@ package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.table.column.*
 import com.improve_future.harmonica.stub.core.StubConnection
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.test.assertEquals
@@ -283,5 +283,26 @@ class PostgreSqlAdapterTest {
             "DROP INDEX index_name;",
             connection.executedSqlList.first()
         )
+    }
+
+    @Test
+    fun testRenameColumn() {
+        val connection = StubConnection()
+        val adapter: DbAdapter = PostgreSqlAdapter(connection)
+
+        adapter.renameColumn(
+            "table_name",
+            "old_column_name",
+            "new_column_name"
+        )
+        assertEquals(
+            "ALTER TABLE table_name RENAME COLUMN old_column_name TO new_column_name;",
+            connection.executedSqlList.first()
+        )
+    }
+
+    @Test
+    fun testCreateIndex() {
+        // ToDo
     }
 }

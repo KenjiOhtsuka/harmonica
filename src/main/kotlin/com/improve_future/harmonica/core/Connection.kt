@@ -13,12 +13,21 @@ open class Connection(
     private lateinit var coreConnection: java.sql.Connection
 
     private fun connect(config: DbConfig) {
-        coreConnection = object : java.sql.Connection by DriverManager.getConnection(
-            buildConnectionUriFromDbConfig(config),
-            config.user,
-            config.password
-        ) {
-            override fun setTransactionIsolation(level: Int) {}
+        println(buildConnectionUriFromDbConfig(config))
+
+        var coreConnection: java.sql.Connection
+        if (config.dbms != Dbms.SQLite) {
+            coreConnection = object : java.sql.Connection by DriverManager.getConnection(
+                buildConnectionUriFromDbConfig(config),
+                config.user,
+                config.password
+            ) {
+                override fun setTransactionIsolation(level: Int) {}
+            }
+        } else {
+            coreConnection = DriverManager.getConnection(
+                buildConnectionUriFromDbConfig(config)
+            )
         }
         database =
                 if (PluginConfig.hasExposed())
@@ -85,7 +94,7 @@ open class Connection(
                     Dbms.MySQL ->
                         "jdbc:mysql://$host:$port/$dbName?autoReconnect=true"
                     Dbms.SQLite ->
-                        ""
+                        "jdbc:sqlite:$dbName.db"
                     Dbms.Oracle ->
                         ""
                 }

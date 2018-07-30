@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.ConnectionInterface
-import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter.Companion.sqlType
+import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
@@ -52,13 +52,25 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
             }
             return sql
         }
+
+        override fun sqlIndexMethod(method: IndexMethod?): String? {
+            return when (method) {
+                IndexMethod.BTree -> "BTREE"
+                IndexMethod.Hash -> "HASH"
+                else -> null
+            }
+        }
     }
 
-    override fun createIndex(tableName: String, columnName: String, unique: Boolean) {
+    override fun createIndex(
+        tableName: String, columnName: String, unique: Boolean,
+        method: IndexMethod?
+    ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
-        //sql += " INDEX ${tableName}_$columnName ON $tableName($columnName);"
-        sql += " INDEX ${tableName}_${columnName}_idx ON $tableName ($columnName);"
+        sql += " INDEX ${tableName}_${columnName}_idx"
+        sqlIndexMethod(method)?.let { sql += " $it" }
+        sql += " ON $tableName ($columnName);"
         connection.execute(sql)
     }
 
@@ -76,6 +88,26 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
 
     override fun renameTable(oldTableName: String, newTableName: String) {
         var sql = "RENAME TABLE $oldTableName TO $newTableName;"
+        connection.execute(sql)
+    }
+
+
+    override fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    ) {
+        val sql = "ALTER TABLE $tableName" +
+                " RENAME INDEX $oldIndexName TO $newIndexName"
+        connection.execute(sql)
+    }
+
+    override fun addForeignKey(
+        tableName: String, columnName: String,
+        referencedTableName: String, referencedColumnName: String
+    ) {
+        val sql = "ALTER TABLE $tableName" +
+                " ADD CONSTRAINT ${tableName}_${columnName}_fk" +
+                " FOREIGN KEY ($columnName) REFERENCES" +
+                " $referencedTableName ($referencedColumnName)"
         connection.execute(sql)
     }
 }

@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.ConnectionInterface
+import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
@@ -15,7 +16,10 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
         connection.execute("DROP TABLE $tableName;")
     }
 
-    abstract fun createIndex(tableName: String, columnName: String, unique: Boolean = false)
+    abstract fun createIndex(
+        tableName: String, columnName: String, unique: Boolean = false,
+        method: IndexMethod? = null
+    )
 
     abstract fun dropIndex(tableName: String, indexName: String)
 
@@ -27,8 +31,26 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
 
     abstract fun renameTable(oldTableName: String, newTableName: String)
 
-    internal open class CompanionInterface {
-        open fun sqlType(column: AbstractColumn): String {
+    fun renameColumn(
+        tableName: String, oldColumnName: String, newColumnName: String
+    ) {
+        connection.execute(
+            "ALTER TABLE $tableName" +
+                    " RENAME COLUMN $oldColumnName TO $newColumnName;"
+        )
+    }
+
+    abstract fun renameIndex(
+        tableName: String, oldIndexName: String, newIndexName: String
+    )
+
+    abstract fun addForeignKey(
+        tableName: String, columnName: String,
+        referencedTableName: String, referencedColumnName: String
+    )
+
+    internal abstract class CompanionInterface {
+        protected open fun sqlType(column: AbstractColumn): String {
             return when (column) {
                 is IntegerColumn -> "INTEGER"
                 is VarcharColumn -> "VARCHAR"
@@ -43,5 +65,7 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
                 else -> throw Exception()
             }
         }
+
+        protected abstract fun sqlIndexMethod(method: IndexMethod?): String?
     }
 }

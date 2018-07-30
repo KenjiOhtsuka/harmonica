@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.service
 
 import com.improve_future.harmonica.core.AbstractMigration
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

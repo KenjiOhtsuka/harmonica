@@ -113,7 +113,7 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         referencedTableName: String, referencedColumnName: String
     ) {
         val sql = "ALTER TABLE $tableName" +
-                " ADD CONSTRAINT ${columnName}_fk" +
+                " ADD CONSTRAINT ${tableName}_${columnName}_fk" +
                 " FOREIGN KEY ($columnName)" +
                 " REFERENCES $referencedTableName ($referencedColumnName);"
         connection.execute(sql)

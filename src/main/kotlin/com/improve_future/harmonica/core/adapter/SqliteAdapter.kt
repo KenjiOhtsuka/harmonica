@@ -32,14 +32,19 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
     }
 
     override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var sql = "ALTER TABLE $tableName ADD COLUMN "
+        sql += buildColumnDeclarationForCreateTableSql(column)
+        sql += ";"
+        connection.execute(sql)
     }
 
     override fun renameTable(oldTableName: String, newTableName: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName;"
+        connection.execute(sql)
     }
 
     override fun renameIndex(tableName: String, oldIndexName: String, newIndexName: String) {
+        // SQLite must drop index and create new index
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

@@ -44,6 +44,11 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
         tableName: String, oldIndexName: String, newIndexName: String
     )
 
+    abstract fun addForeignKey(
+        tableName: String, columnName: String,
+        referencedTableName: String, referencedColumnName: String
+    )
+
     internal abstract class CompanionInterface {
         protected open fun sqlType(column: AbstractColumn): String {
             return when (column) {

@@ -107,4 +107,15 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         val sql = "ALTER INDEX $oldIndexName RENAME TO $newIndexName;"
         connection.execute(sql)
     }
+
+    override fun addForeignKey(
+        tableName: String, columnName: String,
+        referencedTableName: String, referencedColumnName: String
+    ) {
+        val sql = "ALTER TABLE $tableName" +
+                " ADD CONSTRAINT ${columnName}_fk" +
+                " FOREIGN KEY ($columnName)" +
+                " REFERENCES $referencedTableName ($referencedColumnName);"
+        connection.execute(sql)
+    }
 }

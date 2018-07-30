@@ -99,4 +99,11 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
                 " RENAME INDEX $oldIndexName TO $newIndexName"
         connection.execute(sql)
     }
+
+    override fun addForeignKey(
+        tableName: String, columnName: String,
+        referencedTableName: String, referencedColumnName: String
+    ) {
+        val sql = ""
+    }
 }

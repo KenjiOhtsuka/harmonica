@@ -578,8 +578,21 @@ abstract class AbstractMigration {
         println("Rename Index: $oldIndexName => $newIndexName")
     }
 
-    fun addForeignKey() {
-        // ToDo
+    /**
+     * Add koreign key constraint.
+     *
+     * @param table
+     * @param column
+     * @param referencedTable
+     * @param referencedColumn
+     */
+    fun addForeignKey(
+        table: String,
+        column: String,
+        referencedTable: String,
+        referencedColumn: String
+    ) {
+        adapter.addFoeignKey
     }
 
     /**

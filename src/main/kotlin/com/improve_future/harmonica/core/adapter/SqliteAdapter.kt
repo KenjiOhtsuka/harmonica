@@ -54,6 +54,8 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         referencedTableName: String,
         referencedColumnName: String
     ) {
+        // SQLite doesn't support add Foreign Key function.
+        // Foreign key must be added on table creation.
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

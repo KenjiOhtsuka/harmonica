@@ -432,6 +432,8 @@ class TableBuilder {
     /**
      * Add reference column.
      *
+     * Create referenced column relating to `${name}_id` column.
+     *
      * @param name Table name in most cases.
      * Column `${name}_id` will be created.
      */

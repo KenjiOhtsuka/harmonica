@@ -57,6 +57,6 @@ internal abstract class AbstractColumn(
 
     abstract val hasDefault: Boolean
 
-    val referenceTable: String? = null
-    val referenceColumn: String? = null
+    var referenceTable: String? = null
+    var referenceColumn: String? = null
 }

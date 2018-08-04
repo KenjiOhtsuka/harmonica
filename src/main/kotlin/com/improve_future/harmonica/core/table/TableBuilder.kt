@@ -26,6 +26,7 @@ class TableBuilder {
      * @param scale The number of digits to the right of the decimal point in the number.
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun decimal(
         columnName: String,
@@ -33,7 +34,7 @@ class TableBuilder {
         scale: Int? = null,
         nullable: Boolean = true,
         default: Double? = null
-    ) {
+    ): ColumnBuilder {
         val decimalColumn = DecimalColumn(columnName).also {
             it.nullable = nullable
             it.default = default
@@ -41,6 +42,7 @@ class TableBuilder {
             it.scale = scale
         }
         addColumn(decimalColumn)
+        return ColumnBuilder(decimalColumn)
     }
 
     /**
@@ -295,18 +297,21 @@ class TableBuilder {
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
      * @param withTimeZone Valid only for PostgreSQL.
+     * @return
      */
     fun timestamp(
         columnName: String,
         nullable: Boolean = true,
         default: String? = null,
         withTimeZone: Boolean = false
-    ) {
-        addColumn(TimestampColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimestampColumn(columnName).also {
             it.nullable = nullable
             it.default = default
             it.withTimeZone = withTimeZone
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -322,18 +327,21 @@ class TableBuilder {
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
      * @param withTimeZone Valid only for PostgreSQL.
+     * @return
      */
     fun timestamp(
         columnName: String,
         nullable: Boolean = true,
         default: Date,
         withTimeZone: Boolean = false
-    ) {
-        addColumn(TimestampColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimestampColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
             it.withTimeZone = withTimeZone
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -349,18 +357,21 @@ class TableBuilder {
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
      * @param withTimeZone Valid only for PostgreSQL.
+     * @return
      */
     fun timestamp(
         columnName: String,
         nullable: Boolean = true,
         default: LocalDateTime,
         withTimeZone: Boolean = false
-    ) {
-        addColumn(TimestampColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimestampColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalDateTime = default
             it.withTimeZone = withTimeZone
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -378,11 +389,13 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: Date
-    ) {
-        addColumn(DateTimeColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateTimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
         })
+        addColumn(builder.build())
+        return builder
     }
 
     /**
@@ -395,16 +408,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun dateTime(
         columnName: String,
         nullable: Boolean = true,
         default: String? = null
-    ) {
-        addColumn(DateTimeColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateTimeColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
+        addColumn(builder.build())
+        return builder
     }
 
     /**
@@ -422,11 +438,13 @@ class TableBuilder {
         columnName: String,
         nullable: Boolean = true,
         default: LocalDateTime
-    ) {
-        addColumn(DateTimeColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateTimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalDateTime = default
         })
+        addColumn(builder.build())
+        return builder
     }
 
     /**
@@ -441,10 +459,12 @@ class TableBuilder {
         name: String,
         nullable: Boolean = true,
         default: Long? = null
-    ) {
-        addColumn(IntegerColumn(name + "_id").also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(IntegerColumn(name + "_id").also {
             it.nullable = nullable
             it.default = default
         })
+        addColumn(builder.build())
+        return builder
     }
 }

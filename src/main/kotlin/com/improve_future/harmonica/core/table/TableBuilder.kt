@@ -51,12 +51,14 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @param unsigned Valid only for MySQL.
      * @return
      */
     fun integer(
         columnName: String,
         nullable: Boolean = true,
-        default: Long? = null
+        default: Long? = null,
+        unsigned: Boolean = false
     ): ColumnBuilder {
         val builder = ColumnBuilder(IntegerColumn(columnName).also {
             it.nullable = nullable

@@ -7,4 +7,5 @@ internal class IntegerColumn(name: String) : AbstractColumn(name) {
         get() = default?.toString()
     var default: Long? = null
 
+    var unsigned = false
 }

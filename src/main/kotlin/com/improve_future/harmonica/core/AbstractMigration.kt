@@ -62,6 +62,11 @@ abstract class AbstractMigration {
     /**
      * Add new integer column to existing table.
      *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param nullable
+     * @param default
+     * @param unsigned Valid only for MySQL.
      * @param first You add column at first of the column (valid only for MySQL)
      * @param justBeforeColumnName Column name the new column to be added just after.
      * (valid only for MySQL)
@@ -69,6 +74,7 @@ abstract class AbstractMigration {
     fun addIntegerColumn(
         tableName: String, columnName: String,
         nullable: Boolean = true, default: Long? = null,
+        unsigned: Boolean = false,
         first: Boolean = false,
         justBeforeColumnName: String? = null
     ) {
@@ -76,6 +82,7 @@ abstract class AbstractMigration {
         integerColumn.also {
             it.nullable = nullable
             it.default = default
+            it.unsigned = unsigned
         }
         addColumn(tableName, integerColumn, first, justBeforeColumnName)
     }

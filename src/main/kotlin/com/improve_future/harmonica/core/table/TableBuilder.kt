@@ -75,18 +75,21 @@ class TableBuilder {
      * @param size For MySQL, `null` means 255.
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun varchar(
         columnName: String,
         size: Int? = null,
         nullable: Boolean = true,
         default: String? = null
-    ) {
-        addColumn(VarcharColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(VarcharColumn(columnName).also {
             it.nullable = nullable
             it.default = default
             it.size = size
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -98,14 +101,15 @@ class TableBuilder {
      * @param size
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun string(
         columnName: String,
         size: Int? = null,
         nullable: Boolean = true,
         default: String? = null
-    ) {
-        varchar(columnName, size, nullable, default)
+    ): ColumnBuilder {
+        return varchar(columnName, size, nullable, default)
     }
 
     /**
@@ -114,16 +118,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun boolean(
         columnName: String,
         nullable: Boolean = true,
         default: Boolean? = null
-    ) {
-        addColumn(BooleanColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(BooleanColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -132,17 +139,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun date(
         columnName: String,
         nullable: Boolean = true,
         default: Date
-    ) {
-        val dateColumn = DateColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
-        }
-        addColumn(dateColumn)
+        })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -151,17 +160,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Must be formatted as yyyy-MM-dd
+     * @return
      */
     fun date(
         columnName: String,
         nullable: Boolean = true,
         default: String? = null
-    ) {
-        val dateColumn = DateColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateColumn(columnName).also {
             it.nullable = nullable
             it.default = default
-        }
-        addColumn(dateColumn)
+        })
+        addColumn(builder.column)
+        return builder
     }
 
     /**

@@ -9,7 +9,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
         var sql = "CREATE TABLE $tableName (\n"
         if (tableBuilder.id) {
-            sql += "  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY"
+            sql += "  id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY"
             if (tableBuilder.columnList.size > 0) sql += ','
             sql += "\n"
         }
@@ -38,6 +38,11 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
                             sql += ", " + column.scale.toString()
                         }
                         sql += ")"
+                    }
+                }
+                is IntegerColumn -> {
+                    if (column.unsigned) {
+                        sql += " UNSIGNED"
                     }
                 }
             }

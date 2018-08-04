@@ -181,17 +181,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun date(
         columnName: String,
         nullable: Boolean = true,
         default: LocalDate
-    ) {
-        val dateColumn = DateColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalDate = default
-        }
-        addColumn(dateColumn)
+        })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -200,16 +202,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Invalid for MySQL
+     * @return
      */
     fun text(
         columnName: String,
         nullable: Boolean = true,
         default: String? = null
-    ) {
-        addColumn(TextColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TextColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -222,16 +227,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default Invalid for MySQL
+     * @return
      */
     fun blob(
         columnName: String,
         nullable: Boolean = true,
         default: ByteArray? = null
-    ) {
-        addColumn(BlobColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(BlobColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -241,18 +249,21 @@ class TableBuilder {
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
      * @param withTimeZone Valid only for PostgreSQL.
+     * @return
      */
     fun time(
         columnName: String,
         nullable: Boolean = true,
         default: LocalTime? = null,
         withTimeZone: Boolean = false
-    ) {
-        addColumn(TimeColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalTime = default
             it.withTimeZone = withTimeZone
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -263,18 +274,21 @@ class TableBuilder {
      * @param default Format as HH:mm:ss[.SSS][ zzz].
      * @param withTimeZone Valid only for PostgreSQL.
      * `22:21:22.123`, `22:21:22`, `12:23:34` can be accepted.
+     * @return
      */
     fun time(
         columnName: String,
         nullable: Boolean = true,
         default: String,
         withTimeZone: Boolean = false
-    ) {
-        addColumn(TimeColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimeColumn(columnName).also {
             it.nullable = nullable
             it.default = default
             it.withTimeZone = withTimeZone
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -284,18 +298,21 @@ class TableBuilder {
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
      * @param withTimeZone Valid only for PostgreSQL.
+     * @return
      */
     fun time(
         columnName: String,
         nullable: Boolean = true,
         default: Date,
         withTimeZone: Boolean = false
-    ) {
-        addColumn(TimeColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
             it.withTimeZone = withTimeZone
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**
@@ -398,6 +415,7 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun dateTime(
         columnName: String,

@@ -40,6 +40,11 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
                         sql += ")"
                     }
                 }
+                is IntegerColumn -> {
+                    if (column.unsigned) {
+                        sql += " UNSIGNED"
+                    }
+                }
             }
             if (!column.nullable) sql += " NOT NULL"
             if (column.hasDefault) {

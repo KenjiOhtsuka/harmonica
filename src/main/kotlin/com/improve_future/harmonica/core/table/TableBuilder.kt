@@ -51,16 +51,19 @@ class TableBuilder {
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
      * @param default
+     * @return
      */
     fun integer(
         columnName: String,
         nullable: Boolean = true,
         default: Long? = null
-    ) {
-        addColumn(IntegerColumn(columnName).also {
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(IntegerColumn(columnName).also {
             it.nullable = nullable
             it.default = default
         })
+        addColumn(builder.column)
+        return builder
     }
 
     /**

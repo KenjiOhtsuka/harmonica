@@ -590,16 +590,16 @@ abstract class AbstractMigration {
     /**
      * Add koreign key constraint.
      *
-     * @param table
-     * @param column
-     * @param referencedTable
-     * @param referencedColumn
+     * @param tableName
+     * @param columnName
+     * @param referencedTableName
+     * @param referencedColumnName
      */
     fun addForeignKey(
         tableName: String,
         columnName: String,
         referencedTableName: String,
-        referencedColumnName: String
+        referencedColumnName: String = "id"
     ) {
         adapter.addForeignKey(
             tableName, columnName,

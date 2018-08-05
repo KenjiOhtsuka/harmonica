@@ -486,19 +486,27 @@ class TableBuilder {
      *
      * Create referenced column relating to `${name}_id` column.
      *
-     * @param name Table name in most cases.
+     * @param tableName Table name in most cases.
      * Column `${name}_id` will be created.
+     * @param nullable
+     * @param default
+     * @param columnName
+     * @return
      */
     fun refer(
-        name: String,
+        tableName: String,
         nullable: Boolean = true,
-        default: Long? = null
+        default: Long? = null,
+        columnName: String = "id"
     ): ColumnBuilder {
-        val builder = ColumnBuilder(IntegerColumn(name + "_id").also {
-            it.nullable = nullable
-            it.default = default
-        })
-        addColumn(builder.build())
+        val builder =
+            integer(
+                tableName + "_" + columnName,
+                nullable = nullable,
+                default = default,
+                unsigned = true
+            )
+        builder.refer(tableName, columnName)
         return builder
     }
 }

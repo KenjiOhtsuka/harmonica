@@ -49,6 +49,8 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
             if (column.hasDefault) {
                 sql += " DEFAULT " + column.sqlDefault
             }
+            if (column.hasReference)
+                sql += " REFERENCES ${column.referenceTable} (${column.referenceColumn})"
             return sql
         }
 

@@ -59,4 +59,12 @@ internal abstract class AbstractColumn(
 
     var referenceTable: String? = null
     var referenceColumn: String? = null
+
+    val hasReference: Boolean
+        get() {
+            return !(
+                    referenceTable.isNullOrBlank() ||
+                            referenceColumn.isNullOrBlank()
+                    )
+        }
 }

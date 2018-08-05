@@ -55,6 +55,8 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
                     }
                 }
             }
+            if (column.hasReference)
+                sql += " REFERENCES ${column.referenceTable} (${column.referenceColumn})"
             return sql
         }
 

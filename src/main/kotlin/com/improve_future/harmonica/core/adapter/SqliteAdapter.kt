@@ -69,6 +69,8 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
             if (column.hasDefault) {
                 sql += " DEFAULT " + column.sqlDefault
             }
+            if (column.hasReference)
+                sql += " REFERENCES ${column.referenceTable} (${column.referenceColumn})"
             return sql
         }
 

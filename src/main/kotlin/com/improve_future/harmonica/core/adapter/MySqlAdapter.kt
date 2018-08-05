@@ -112,7 +112,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
         referencedTableName: String, referencedColumnName: String
     ) {
         val sql = "ALTER TABLE $tableName" +
-                " ADD CONSTRAINT ${tableName}_${columnName}_fk" +
+                " ADD CONSTRAINT ${tableName}_${columnName}_fkey" +
                 " FOREIGN KEY ($columnName) REFERENCES" +
                 " $referencedTableName ($referencedColumnName)"
         connection.execute(sql)

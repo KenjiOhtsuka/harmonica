@@ -67,4 +67,6 @@ internal abstract class AbstractColumn(
                             referenceColumn.isNullOrBlank()
                     )
         }
+
+    var comment: String? = null
 }

@@ -18,6 +18,13 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         }
         sql += "\n);"
         connection.execute(sql)
+
+        tableBuilder.columnList.forEach {
+            if (it.hasComment) {
+                val sql = "COMMENT ON COLUMN ${tableName}.${it.name} IS '${it.comment}';"
+            }
+        }
+        connection.execute(sql)
     }
 
     internal companion object : DbAdapter.CompanionInterface() {

@@ -59,7 +59,6 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-
     internal companion object : DbAdapter.CompanionInterface() {
         private fun buildColumnDeclarationForCreateTableSql(
             column: AbstractColumn

@@ -69,4 +69,9 @@ internal abstract class AbstractColumn(
         }
 
     var comment: String? = null
+
+    val hasComment: Boolean
+        get() {
+            return comment != null
+        }
 }

@@ -19,9 +19,13 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         sql += "\n);"
         connection.execute(sql)
 
+        if (tableBuilder.comment != null) {
+            sql = "COMMENT ON TABLE $tableName IS '${tableBuilder.comment}';"
+            connection.execute(sql)
+        }
         tableBuilder.columnList.forEach {
             if (it.hasComment) {
-                val sql = "COMMENT ON COLUMN ${tableName}.${it.name} IS '${it.comment}';"
+                val sql = "COMMENT ON COLUMN $tableName.${it.name} IS '${it.comment}';"
             }
         }
         connection.execute(sql)

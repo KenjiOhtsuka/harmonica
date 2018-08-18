@@ -11,6 +11,7 @@ import java.util.*
 class TableBuilder {
     lateinit var tableName: String
     internal val columnList = mutableListOf<AbstractColumn>()
+    internal var comment: String? = null
     /** Specify add auto incremental id column or not */
     var id = true
 
@@ -508,5 +509,14 @@ class TableBuilder {
             )
         builder.refer(tableName, columnName)
         return builder
+    }
+
+    /**
+     * Add table comment
+     *
+     * @param text Table comment.
+     */
+    fun comment(text: String) {
+        comment = text
     }
 }

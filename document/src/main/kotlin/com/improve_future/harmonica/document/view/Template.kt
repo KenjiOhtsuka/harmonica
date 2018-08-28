@@ -11,6 +11,8 @@ object Template {
             appendln("<!DOCTYPE html>")
             appendHTML().html {
                 head {
+                    meta(name="charset", content="UTF-8")
+                    meta(name="viewport", content="width=devise-width, initial-scale=1.0")
                     title(title)
                     link(
                         "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css",

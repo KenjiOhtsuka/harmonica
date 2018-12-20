@@ -67,4 +67,11 @@ internal abstract class AbstractColumn(
                             referenceColumn.isNullOrBlank()
                     )
         }
+
+    var comment: String? = null
+
+    val hasComment: Boolean
+        get() {
+            return comment != null
+        }
 }

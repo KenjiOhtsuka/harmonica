@@ -44,14 +44,68 @@ object JarmonicaView : AbstractView() {
                                 h4 {
                                     +"build.gradle"
                                 }
-                            }
-                        }
-                        row {
-                            col {
+                                p {
+                                    +"Write "
+                                    code { +"build.gradle" }
+                                    +" as follows."
+                                }
+
                                 pre {
                                     code {
                                         +"""
+buildscript {
+    ext.kotlin_version = '1.2.51'
+    ext.harmonica_version = '1.1.10'
 
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${'$'}kotlin_version"
+        // required for plugin
+        classpath "com.github.KenjiOhtsuka:harmonica:harmonica_version"
+    }
+}
+
+group 'com.improve_future'
+version ext.harmonica_version
+
+apply plugin: 'kotlin'
+// required for gradle commands
+apply plugin: 'jarmonica'
+
+// Default value is src/main/kotlin/db
+extensions.extraProperties["directoryPath"] =
+        "src/main/kotlin/com/improve_future/harmonica_test/jarmonica"
+// Default value is db
+extensions.extraProperties["migrationPackage"] =
+        "com.improve_future.harmonica_test.jarmonica"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    // required
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${'$'}kotlin
+_version"
+    // required
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: kotlin_version
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
+
+    // JDBC Driver (SQLite, MySQL or PostgreSQL), prepare for your DBMS
+    compile files('/lib/postgresql-42.2.2.jar')
+    compile files('/lib/mysql-connector-java-8.0.11.jar')
+
+    //required
+    compile "com.github.KenjiOhtsuka:harmonica:${'$'}harmonica_version"
+}
                                             """.trimIndent()
                                     }
                                 }
@@ -64,10 +118,15 @@ object JarmonicaView : AbstractView() {
                                 h4 {
                                     +"Directory and file structure"
                                 }
-                            }
-                        }
-                        row {
-                            col {
+                                p {
+                                    +("Directory and file structure must be as follows." +
+                                            " You must create at least one configuration class" +
+                                            " There are 2 configuration files, ")
+                                    code { +"Default.kt" }
+                                    + " and "
+                                    code { +"Custom.kt"}
+                                    + "."
+                                }
                                 pre {
                                     code {
                                         +"""
@@ -80,8 +139,10 @@ object JarmonicaView : AbstractView() {
                                                     | `- Custom.kt <- you can create own configuration file
                                                     `- migration
                                         """.trimIndent()
-
                                     }
+                                }
+                                p {
+                                    +""
                                 }
                             }
                         }

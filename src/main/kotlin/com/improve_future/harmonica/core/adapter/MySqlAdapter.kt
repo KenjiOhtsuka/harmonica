@@ -16,7 +16,10 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
         sql += tableBuilder.columnList.joinToString(",\n") {
             "  " + buildColumnDeclarationForCreateTableSql(it)
         }
-        sql += "\n);"
+        sql += "\n)"
+        if (tableBuilder.comment != null)
+            sql += "\ncomment='${tableBuilder.comment}'"
+        sql += ";"
         connection.execute(sql)
     }
 
@@ -57,6 +60,8 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
             }
             if (column.hasReference)
                 sql += " REFERENCES ${column.referenceTable} (${column.referenceColumn})"
+            if (column.hasComment)
+                sql += " COMMENT '${column.comment}'"
             return sql
         }
 
@@ -94,7 +99,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
     }
 
     override fun renameTable(oldTableName: String, newTableName: String) {
-        var sql = "RENAME TABLE $oldTableName TO $newTableName;"
+        val sql = "RENAME TABLE $oldTableName TO $newTableName;"
         connection.execute(sql)
     }
 

@@ -32,6 +32,9 @@ open class Connection(
                 if (PluginConfig.hasExposed())
                     Database.connect({ coreConnection })
                 else null
+        if (config.dbms == Dbms.SQLite) {
+            TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
+        }
         coreConnection.autoCommit = false
     }
 

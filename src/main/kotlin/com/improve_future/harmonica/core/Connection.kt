@@ -32,6 +32,9 @@ open class Connection(
                 if (PluginConfig.hasExposed())
                     Database.connect({ coreConnection })
                 else null
+        if (config.dbms == Dbms.SQLite) {
+            TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
+        }
         coreConnection.autoCommit = false
     }
 
@@ -104,7 +107,7 @@ open class Connection(
     override fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
         if (PluginConfig.hasExposed()) {
-            TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL).let {
+            TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel).let {
                 try {
                     block()
                     it.commit()
@@ -150,7 +153,7 @@ open class Connection(
         return if (PluginConfig.hasExposed()) {
             val tr = TransactionManager.currentOrNull()
             if (tr == null) {
-                val newTr = TransactionManager.currentOrNew(DEFAULT_ISOLATION_LEVEL)
+                val newTr = TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
                 newTr.exec(sql)
                 newTr.close()
             } else {

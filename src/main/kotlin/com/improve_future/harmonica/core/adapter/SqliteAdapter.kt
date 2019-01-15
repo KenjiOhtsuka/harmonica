@@ -18,6 +18,7 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
             "  " + buildColumnDeclarationForCreateTableSql(it)
         }
         sql += "\n);"
+        connection.execute(sql)
     }
 
     override fun createIndex(tableName: String, columnName: String, unique: Boolean, method: IndexMethod?) {

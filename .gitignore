@@ -11,6 +11,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/**/dbnavigator.xml
+.idea/**/php.xml
 
 # Sensitive or high-churn files
 .idea/**/dataSources/

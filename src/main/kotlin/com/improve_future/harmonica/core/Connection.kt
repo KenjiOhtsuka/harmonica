@@ -16,13 +16,14 @@ open class Connection(
         println(buildConnectionUriFromDbConfig(config))
 
         if (config.dbms != Dbms.SQLite) {
-            coreConnection = object : java.sql.Connection by DriverManager.getConnection(
-                buildConnectionUriFromDbConfig(config),
-                config.user,
-                config.password
-            ) {
-                override fun setTransactionIsolation(level: Int) {}
-            }
+            coreConnection =
+                    object : java.sql.Connection by DriverManager.getConnection(
+                        buildConnectionUriFromDbConfig(config),
+                        config.user,
+                        config.password
+                    ) {
+                        override fun setTransactionIsolation(level: Int) {}
+                    }
         } else {
             coreConnection = DriverManager.getConnection(
                 buildConnectionUriFromDbConfig(config)
@@ -33,7 +34,8 @@ open class Connection(
                     Database.connect({ coreConnection })
                 else null
         if (config.dbms == Dbms.SQLite) {
-            TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
+            TransactionManager.manager.defaultIsolationLevel =
+                    java.sql.Connection.TRANSACTION_SERIALIZABLE
         }
         coreConnection.autoCommit = false
     }
@@ -107,17 +109,18 @@ open class Connection(
     override fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
         if (PluginConfig.hasExposed()) {
-            TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel).let {
-                try {
-                    block()
-                    it.commit()
-                    it.close()
-                } catch (e: Exception) {
-                    it.rollback()
-                    it.close()
-                    throw e
+            TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
+                .let {
+                    try {
+                        block()
+                        it.commit()
+                        it.close()
+                    } catch (e: Exception) {
+                        it.rollback()
+                        it.close()
+                        throw e
+                    }
                 }
-            }
         } else {
             try {
                 block()
@@ -153,7 +156,9 @@ open class Connection(
         return if (PluginConfig.hasExposed()) {
             val tr = TransactionManager.currentOrNull()
             if (tr == null) {
-                val newTr = TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
+                val newTr = TransactionManager.currentOrNew(
+                    TransactionManager.manager.defaultIsolationLevel
+                )
                 newTr.exec(sql)
                 newTr.close()
             } else {

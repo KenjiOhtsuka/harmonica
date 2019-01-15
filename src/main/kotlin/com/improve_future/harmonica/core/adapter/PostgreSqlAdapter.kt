@@ -5,7 +5,8 @@ import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
-internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
+internal class PostgreSqlAdapter(connection: ConnectionInterface) :
+    DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
         var sql = "CREATE TABLE $tableName (\n"
         if (tableBuilder.id) {
@@ -26,7 +27,8 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         }
         tableBuilder.columnList.forEach {
             if (it.hasComment) {
-                sql = "COMMENT ON COLUMN $tableName.${it.name} IS '${it.comment}';"
+                sql = "COMMENT ON COLUMN $tableName.${it.name} IS" +
+                        " '${it.comment}';"
                 connection.execute(sql)
             }
         }
@@ -103,7 +105,11 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) : DbAdapter(co
         connection.execute("DROP INDEX $indexName;")
     }
 
-    override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
+    override fun addColumn(
+        tableName: String,
+        column: AbstractColumn,
+        option: AddingColumnOption
+    ) {
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"

@@ -17,7 +17,7 @@ Now, this tool is for PostgreSQL, MySQL and SQLite.
 With this library, you can write database migration like as follows.
 
 ```kotlin
-package your.package.migration
+package your.migration
 
 import com.improve_future.harmonica.core.AbstractMigration
 
@@ -60,12 +60,12 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
         addIntegerColumn(
             "table_name", "added_integer", nullable = false
         )
-        addDecimalColumn("table_name" "added_decimal")
+        addDecimalColumn("table_name", "added_decimal_column_name")
         addVarcharColumn(
-            "table_name", "added_boolean",
+            "table_name", "added_boolean_column_name",
             default = "default", nullable = false
         )
-        addTextColumn("table_name", "added_text")
+        addTextColumn("table_name", "added_text_column_name")
         addDateColumn(
             "table_name", "added_date",
             default = LocalDate.of(2018, 12, 11)

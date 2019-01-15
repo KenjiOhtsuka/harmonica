@@ -70,6 +70,25 @@ class MySqlAdapterTest {
     }
 
     @Test
+    fun testAddForeignKey() {
+        val connection = StubConnection()
+        val adapter = MySqlAdapter(connection)
+
+        adapter.addForeignKey(
+            "table_name", "column_name",
+            "referenced_table_name", "referenced_column_name"
+        )
+
+        assertEquals(
+            "ALTER TABLE table_name" +
+                    " ADD CONSTRAINT table_name_column_name_fkey" +
+                    " FOREIGN KEY (column_name)" +
+                    " REFERENCES referenced_table_name (referenced_column_name);",
+            connection.executedSqlList.first()
+        )
+    }
+
+    @Test
     fun testCreateIndex() {
         // ToDo
     }

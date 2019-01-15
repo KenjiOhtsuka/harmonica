@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.core
 
+import com.improve_future.harmonica.core.adapter.StubDbAdapter
 import com.improve_future.harmonica.core.table.column.*
 import org.jetbrains.kotlin.daemon.common.toHexString
 import org.junit.jupiter.api.Test
@@ -190,7 +191,10 @@ class AbstractMigrationTest {
         )
         val addingOption = dateTimeAddingColumn.option
         assertEquals(true, addingOption.first)
-        assertEquals("previous_column", addingOption.justBeforeColumn)    // ToDo
+        assertEquals(
+            "previous_column",
+            addingOption.justBeforeColumn
+        )    // ToDo
     }
 
     @Test
@@ -252,5 +256,34 @@ class AbstractMigrationTest {
         val addingOption = blobAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+    }
+
+    @Test
+    fun testAddForeignKey() {
+        val migration = StubMigration()
+        migration.addForeignKey(
+            "table_name",
+            "column_name",
+            "referenced_table_name"
+        )
+
+        var addingForeignKey = migration.adapter.addingForeignKeyList.last()
+        assertEquals("table_name", addingForeignKey.tableName)
+        assertEquals("column_name", addingForeignKey.columnName)
+        assertEquals("referenced_table_name", addingForeignKey.referencedTableName)
+        assertEquals("id", addingForeignKey.referencedColumnName)
+
+        migration.addForeignKey(
+            "table_name",
+            "column_name",
+            "referenced_table_name",
+            "referenced_column_name"
+        )
+
+        addingForeignKey = migration.adapter.addingForeignKeyList.last()
+        assertEquals("table_name", addingForeignKey.tableName)
+        assertEquals("column_name", addingForeignKey.columnName)
+        assertEquals("referenced_table_name", addingForeignKey.referencedTableName)
+        assertEquals("referenced_column_name", addingForeignKey.referencedColumnName)
     }
 }

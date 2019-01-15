@@ -2,7 +2,6 @@ package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.config.PluginConfig
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.io.Closeable
 import java.sql.*
@@ -33,7 +32,7 @@ open class Connection(
                 if (PluginConfig.hasExposed())
                     Database.connect({ coreConnection })
                 else null
-        if (config.dbms == Dbms.SQLite) {
+        if (config.dbms == Dbms.SQLite && PluginConfig.hasExposed()) {
             TransactionManager.manager.defaultIsolationLevel =
                     java.sql.Connection.TRANSACTION_SERIALIZABLE
         }

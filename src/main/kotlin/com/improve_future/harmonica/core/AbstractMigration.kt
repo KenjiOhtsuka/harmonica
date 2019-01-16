@@ -588,7 +588,7 @@ abstract class AbstractMigration {
     }
 
     /**
-     * Add koreign key constraint.
+     * Add foreign key constraint.
      *
      * @param tableName
      * @param columnName
@@ -608,6 +608,7 @@ abstract class AbstractMigration {
     }
 
     /**
+     * Drop foreign key constraint.
      *表示
     select * from information_schema.table_constraints WHERE constraint_type = 'FOREIGN KEY' AND table_name = 'eip_t_acl_user_role_map';
     追加

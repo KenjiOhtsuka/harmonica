@@ -65,4 +65,12 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
             )
         )
     }
+
+    override fun dropForeignKey(
+        tableName: String,
+        columnName: String,
+        keyName: String
+    ) {
+        TODO("not implemented")
+    }
 }

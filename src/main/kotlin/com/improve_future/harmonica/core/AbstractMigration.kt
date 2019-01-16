@@ -528,7 +528,8 @@ abstract class AbstractMigration {
      */
     fun createIndex(
         tableName: String, columnName: String,
-        unique: Boolean = false, method: IndexMethod? = null) {
+        unique: Boolean = false, method: IndexMethod? = null
+    ) {
         println("Add Index: $tableName $columnName")
         adapter.createIndex(tableName, columnName, unique)
     }
@@ -627,13 +628,15 @@ abstract class AbstractMigration {
     fun dropForeignKey(
         tableName: String,
         columnName: String,
-        referencedTableName: String,
-        referencedColumnName: String
+        keyName: String
     ) {
         adapter.dropForeignKey(
-            tableName, columnName,
-            referencedTableName, referencedColumnName
+            tableName, columnName, keyName
         )
+    }
+
+    fun dropForeignKey(tableName: String, columnName: String) {
+        adapter.dropForeignKey(tableName, columnName)
     }
 
     /**

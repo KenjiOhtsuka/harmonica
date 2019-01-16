@@ -138,4 +138,12 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
                 " REFERENCES $referencedTableName ($referencedColumnName);"
         connection.execute(sql)
     }
+
+    override fun dropForeignKey(
+        tableName: String,
+        columnName: String,
+        keyName: String
+    ) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

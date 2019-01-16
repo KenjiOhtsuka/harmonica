@@ -2,7 +2,6 @@ package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.config.PluginConfig
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.DEFAULT_ISOLATION_LEVEL
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.io.Closeable
 import java.sql.*
@@ -16,13 +15,14 @@ open class Connection(
         println(buildConnectionUriFromDbConfig(config))
 
         if (config.dbms != Dbms.SQLite) {
-            coreConnection = object : java.sql.Connection by DriverManager.getConnection(
-                buildConnectionUriFromDbConfig(config),
-                config.user,
-                config.password
-            ) {
-                override fun setTransactionIsolation(level: Int) {}
-            }
+            coreConnection =
+                    object : java.sql.Connection by DriverManager.getConnection(
+                        buildConnectionUriFromDbConfig(config),
+                        config.user,
+                        config.password
+                    ) {
+                        override fun setTransactionIsolation(level: Int) {}
+                    }
         } else {
             coreConnection = DriverManager.getConnection(
                 buildConnectionUriFromDbConfig(config)
@@ -32,8 +32,9 @@ open class Connection(
                 if (PluginConfig.hasExposed())
                     Database.connect({ coreConnection })
                 else null
-        if (config.dbms == Dbms.SQLite) {
-            TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
+        if (config.dbms == Dbms.SQLite && PluginConfig.hasExposed()) {
+            TransactionManager.manager.defaultIsolationLevel =
+                    java.sql.Connection.TRANSACTION_SERIALIZABLE
         }
         coreConnection.autoCommit = false
     }
@@ -107,17 +108,18 @@ open class Connection(
     override fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
         if (PluginConfig.hasExposed()) {
-            TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel).let {
-                try {
-                    block()
-                    it.commit()
-                    it.close()
-                } catch (e: Exception) {
-                    it.rollback()
-                    it.close()
-                    throw e
+            TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
+                .let {
+                    try {
+                        block()
+                        it.commit()
+                        it.close()
+                    } catch (e: Exception) {
+                        it.rollback()
+                        it.close()
+                        throw e
+                    }
                 }
-            }
         } else {
             try {
                 block()
@@ -153,7 +155,9 @@ open class Connection(
         return if (PluginConfig.hasExposed()) {
             val tr = TransactionManager.currentOrNull()
             if (tr == null) {
-                val newTr = TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
+                val newTr = TransactionManager.currentOrNew(
+                    TransactionManager.manager.defaultIsolationLevel
+                )
                 newTr.exec(sql)
                 newTr.close()
             } else {

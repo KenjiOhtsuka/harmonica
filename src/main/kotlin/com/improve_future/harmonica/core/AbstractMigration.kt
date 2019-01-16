@@ -615,6 +615,7 @@ abstract class AbstractMigration {
     ALTER TABLE  EIP_T_ACL_USER_ROLE_MAP ADD FOREIGN KEY (ROLE_ID) REFERENCES EIP_T_ACL_ROLE (ROLE_ID) ON DELETE CASCADE;
     削除
     ALTER TABLE eip_t_acl_user_role_map DROP CONSTRAINT {制約名};
+
     MySQL
     表示
     show create TABLE eip_t_acl_user_role_map
@@ -627,11 +628,12 @@ abstract class AbstractMigration {
         tableName: String,
         columnName: String,
         referencedTableName: String,
-        referencedColunName: String
+        referencedColumnName: String
     ) {
-//        adapter.dropForeignKey(
-//
-//        )
+        adapter.dropForeignKey(
+            tableName, columnName,
+            referencedTableName, referencedColumnName
+        )
     }
 
     /**

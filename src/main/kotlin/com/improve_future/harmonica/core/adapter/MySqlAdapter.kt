@@ -122,4 +122,14 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
                 " $referencedTableName ($referencedColumnName);"
         connection.execute(sql)
     }
+
+    override fun dropForeignKey(
+        tableName: String,
+        columnName: String,
+        keyName: String
+    ) {
+        val sql = "ALTER TABLE $tableName" +
+                " DROP FOREIGN KEY $keyName;"
+        connection.execute(sql)
+    }
 }

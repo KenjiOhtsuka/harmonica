@@ -610,31 +610,27 @@ abstract class AbstractMigration {
 
     /**
      * Drop foreign key constraint.
-     *表示
-    select * from information_schema.table_constraints WHERE constraint_type = 'FOREIGN KEY' AND table_name = 'eip_t_acl_user_role_map';
-    追加
-    ALTER TABLE  EIP_T_ACL_USER_ROLE_MAP ADD FOREIGN KEY (ROLE_ID) REFERENCES EIP_T_ACL_ROLE (ROLE_ID) ON DELETE CASCADE;
-    削除
-    ALTER TABLE eip_t_acl_user_role_map DROP CONSTRAINT {制約名};
-
-    MySQL
-    表示
-    show create TABLE eip_t_acl_user_role_map
-    追加
-    ALTER TABLE  EIP_T_ACL_USER_ROLE_MAP ADD FOREIGN KEY (ROLE_ID) REFERENCES EIP_T_ACL_ROLE (ROLE_ID) ON DELETE CASCADE;
-    削除
-    ALTER TABLE eip_t_acl_user_role_map DROP FOREIGN KEY {制約名}
+     *
+     * @param tableName
+     * @param columnName
+     * @param keyConstraintName Foreign key constraint name.
      */
     fun dropForeignKey(
         tableName: String,
         columnName: String,
-        keyName: String
+        keyConstraintName: String
     ) {
         adapter.dropForeignKey(
-            tableName, columnName, keyName
+            tableName, columnName, keyConstraintName
         )
     }
 
+    /**
+     * Drop foreign key constraint.
+     *
+     * @param tableName
+     * @param columnName
+     */
     fun dropForeignKey(tableName: String, columnName: String) {
         adapter.dropForeignKey(tableName, columnName)
     }

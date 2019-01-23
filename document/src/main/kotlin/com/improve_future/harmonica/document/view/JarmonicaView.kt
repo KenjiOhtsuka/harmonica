@@ -91,8 +91,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${'$'}kotlin
-_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${'$'}kotlin_version"
     // required
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version

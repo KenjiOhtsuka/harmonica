@@ -123,9 +123,9 @@ _version"
                                             " You must create at least one configuration class" +
                                             " There are 2 configuration files, ")
                                     code { +"Default.kt" }
-                                    + " and "
-                                    code { +"Custom.kt"}
-                                    + "."
+                                    +" and "
+                                    code { +"Custom.kt" }
+                                    +"."
                                 }
                                 pre {
                                     code {
@@ -148,45 +148,62 @@ _version"
                         }
                     }
                 }
-                section {
-                    row {
-                        col {
+                row {
+                    col {
+                        section {
                             h3 { +"Migrate" }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
+                            section {
                                 h4 { +"Create migration file" }
+                                pre {
+                                    code {
+                                        +"./gradlew jarmonicaCreate"
+                                    }
+                                }
+                                section {
+                                    h5 { +"Option" }
+                                    dl {
+                                        dt { +"env" }
+                                        dd {}
+                                        dt { +"migrationName" }
+                                        dd {
+                                            +"Specify migration name."
+                                        }
+                                    }
+                                }
                             }
-                        }
-                        row {
-                            col {
-
+                            section {
+                                h4 { +"Run migrations" }
+                                pre {
+                                    code {
+                                        "./gradlew jarmonicaUp"
+                                    }
+                                }
+                                section {
+                                    h5 { +"Option" }
+                                    dl {
+                                        dt { +"env" }
+                                        dd {
+                                            +"Specify config object."
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
-                                h4 { +"Migrate" }
-                            }
-                        }
-                        row {
-                            col {
-
-                            }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
-                                h4 { +"Revert the migration" }
-                            }
-                        }
-                        row {
-                            col {
-
+                            section {
+                                h4 { +"Revert migrations" }
+                                pre {
+                                    code {
+                                        "./gradlew jarmonicaDown"
+                                    }
+                                }
+                                section {
+                                    h5 { +"Option" }
+                                    dl {
+                                        dt { +"env" }
+                                        dd {
+                                            +"Specify config object."
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

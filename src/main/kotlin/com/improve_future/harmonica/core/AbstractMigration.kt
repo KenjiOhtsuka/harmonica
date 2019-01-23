@@ -543,8 +543,8 @@ abstract class AbstractMigration {
      * Drop Index
      */
     fun dropIndex(tableName: String, indexName: String) {
-        adapter.dropIndex(tableName, indexName)
         println("Drop Index: $tableName $indexName")
+        adapter.dropIndex(tableName, indexName)
     }
 
     /**
@@ -554,8 +554,8 @@ abstract class AbstractMigration {
      * @param newName New table name.
      */
     fun renameTable(oldName: String, newName: String) {
-        adapter.renameTable(oldName, newName)
         println("Rename Table: $oldName => $newName")
+        adapter.renameTable(oldName, newName)
     }
 
     /**
@@ -570,8 +570,8 @@ abstract class AbstractMigration {
     fun renameColumn(
         tableName: String, oldColumnName: String, newColumnName: String
     ) {
-        adapter.renameColumn(tableName, oldColumnName, newColumnName)
         println("Rename Column: $tableName.$oldColumnName => $newColumnName")
+        adapter.renameColumn(tableName, oldColumnName, newColumnName)
     }
 
     /**
@@ -584,8 +584,8 @@ abstract class AbstractMigration {
     fun renameIndex(
         tableName: String, oldIndexName: String, newIndexName: String
     ) {
-        adapter.renameIndex(tableName, oldIndexName, newIndexName)
         println("Rename Index: $oldIndexName => $newIndexName")
+        adapter.renameIndex(tableName, oldIndexName, newIndexName)
     }
 
     /**
@@ -602,6 +602,7 @@ abstract class AbstractMigration {
         referencedTableName: String,
         referencedColumnName: String = "id"
     ) {
+        println("Add foreign key: $tableName.$columnName - $referencedTableName.$referencedColumnName")
         adapter.addForeignKey(
             tableName, columnName,
             referencedTableName, referencedColumnName
@@ -620,6 +621,7 @@ abstract class AbstractMigration {
         columnName: String,
         keyConstraintName: String
     ) {
+        println("Drop foreign key: $tableName.$columnName ($keyConstraintName)")
         adapter.dropForeignKey(
             tableName, columnName, keyConstraintName
         )
@@ -632,6 +634,7 @@ abstract class AbstractMigration {
      * @param columnName
      */
     fun dropForeignKey(tableName: String, columnName: String) {
+        println("Drop foreign key: $tableName.$columnName")
         adapter.dropForeignKey(tableName, columnName)
     }
 

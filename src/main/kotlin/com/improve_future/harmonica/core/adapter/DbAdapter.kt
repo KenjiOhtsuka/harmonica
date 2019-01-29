@@ -17,7 +17,7 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
     }
 
     abstract fun createIndex(
-        tableName: String, columnName: String, unique: Boolean = false,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean = false,
         method: IndexMethod? = null
     )
 

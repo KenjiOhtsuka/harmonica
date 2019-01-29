@@ -16,25 +16,25 @@ open class Connection(
 
         if (config.dbms != Dbms.SQLite) {
             coreConnection =
-                    object : java.sql.Connection by DriverManager.getConnection(
-                        buildConnectionUriFromDbConfig(config),
-                        config.user,
-                        config.password
-                    ) {
-                        override fun setTransactionIsolation(level: Int) {}
-                    }
+                object : java.sql.Connection by DriverManager.getConnection(
+                    buildConnectionUriFromDbConfig(config),
+                    config.user,
+                    config.password
+                ) {
+                    override fun setTransactionIsolation(level: Int) {}
+                }
         } else {
             coreConnection = DriverManager.getConnection(
                 buildConnectionUriFromDbConfig(config)
             )
         }
         database =
-                if (PluginConfig.hasExposed())
-                    Database.connect({ coreConnection })
-                else null
+            if (PluginConfig.hasExposed())
+                Database.connect({ coreConnection })
+            else null
         if (config.dbms == Dbms.SQLite && PluginConfig.hasExposed()) {
             TransactionManager.manager.defaultIsolationLevel =
-                    java.sql.Connection.TRANSACTION_SERIALIZABLE
+                java.sql.Connection.TRANSACTION_SERIALIZABLE
         }
         coreConnection.autoCommit = false
     }

@@ -54,8 +54,8 @@ object JarmonicaView : AbstractView() {
                                     code {
                                         +"""
 buildscript {
-    ext.kotlin_version = '1.2.51'
-    ext.harmonica_version = '1.1.10'
+    ext.kotlin_version = '1.3.11'
+    ext.harmonica_version = '1.1.12'
 
     repositories {
         jcenter()
@@ -91,8 +91,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${'$'}kotlin
-_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${'$'}kotlin_version"
     // required
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
@@ -123,9 +122,9 @@ _version"
                                             " You must create at least one configuration class" +
                                             " There are 2 configuration files, ")
                                     code { +"Default.kt" }
-                                    + " and "
-                                    code { +"Custom.kt"}
-                                    + "."
+                                    +" and "
+                                    code { +"Custom.kt" }
+                                    +"."
                                 }
                                 pre {
                                     code {
@@ -148,45 +147,62 @@ _version"
                         }
                     }
                 }
-                section {
-                    row {
-                        col {
+                row {
+                    col {
+                        section {
                             h3 { +"Migrate" }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
+                            section {
                                 h4 { +"Create migration file" }
+                                pre {
+                                    code {
+                                        +"./gradlew jarmonicaCreate"
+                                    }
+                                }
+                                section {
+                                    h5 { +"Option" }
+                                    dl {
+                                        dt { +"env" }
+                                        dd {}
+                                        dt { +"migrationName" }
+                                        dd {
+                                            +"Specify migration name."
+                                        }
+                                    }
+                                }
                             }
-                        }
-                        row {
-                            col {
-
+                            section {
+                                h4 { +"Run migrations" }
+                                pre {
+                                    code {
+                                        +"./gradlew jarmonicaUp"
+                                    }
+                                }
+                                section {
+                                    h5 { +"Option" }
+                                    dl {
+                                        dt { +"env" }
+                                        dd {
+                                            +"Specify config object."
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
-                                h4 { +"Migrate" }
-                            }
-                        }
-                        row {
-                            col {
-
-                            }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
-                                h4 { +"Revert the migration" }
-                            }
-                        }
-                        row {
-                            col {
-
+                            section {
+                                h4 { +"Revert migrations" }
+                                pre {
+                                    code {
+                                        +"./gradlew jarmonicaDown"
+                                    }
+                                }
+                                section {
+                                    h5 { +"Option" }
+                                    dl {
+                                        dt { +"env" }
+                                        dd {
+                                            +"Specify config object."
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

@@ -30,7 +30,7 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
     }
 
     override fun createIndex(
-        tableName: String, columnName: String, unique: Boolean,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean,
         method: IndexMethod?
     ) {
     }

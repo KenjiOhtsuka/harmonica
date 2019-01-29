@@ -75,14 +75,14 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
     }
 
     override fun createIndex(
-        tableName: String, columnName: String, unique: Boolean,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean,
         method: IndexMethod?
     ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
-        sql += " INDEX ${tableName}_${columnName}_idx"
+        sql += " INDEX ${tableName}_${columnNameArray.joinToString("_")}_idx"
         sqlIndexMethod(method)?.let { sql += " $it" }
-        sql += " ON $tableName ($columnName);"
+        sql += " ON $tableName (${columnNameArray.joinToString(", ")});"
         connection.execute(sql)
     }
 

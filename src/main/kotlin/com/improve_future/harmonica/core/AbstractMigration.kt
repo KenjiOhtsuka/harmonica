@@ -16,6 +16,9 @@ import java.util.*
 abstract class AbstractMigration {
     internal lateinit var connection: ConnectionInterface
 
+    val config
+        get() = connection.config
+
     private val adapter: DbAdapter by lazy {
         when (connection.config.dbms) {
             Dbms.SQLite -> SqliteAdapter(connection)
@@ -531,20 +534,56 @@ abstract class AbstractMigration {
         unique: Boolean = false, method: IndexMethod? = null
     ) {
         println("Add Index: $tableName $columnName")
-        adapter.createIndex(tableName, columnName, unique)
+        adapter.createIndex(tableName, arrayOf(columnName), unique, method)
     }
 
-//    fun createIndex(tableName: String, columnNameArray: Array<String>) {
-//        // ToDo
-//        // println("Add Index:")
+    /**
+     * Create Index
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param unique `true` for unique index. The default value is `false`
+     * @param method `null` means database default.
+     */
+    fun createIndex(
+        tableName: String, columnNameArray: Array<String>,
+        unique: Boolean = false, method: IndexMethod? = null
+    ) {
+        println("Add Index: $tableName (${columnNameArray.joinToString(", ")})")
+        adapter.createIndex(tableName, columnNameArray, unique, method)
+    }
+
+    /**
+     * Create Index
+     *
+     * @param tableName Table name.
+     * @param columnNameCollection Column name collection (List, Set).
+     * @param unique `true` for unique index. The default value is `false`
+     * @param method `null` means database default.
+     */
+    fun createIndex(
+        tableName: String, columnNameCollection: Collection<String>,
+        unique: Boolean = false, method: IndexMethod? = null
+    ) = createIndex(
+        tableName,
+        columnNameCollection.toTypedArray(),
+        unique,
+        method
+    )
+
+//    fun createIndex(
+//        tableName: String, vararg columnNameArray: String,
+//        unique: Boolean = false, method: IndexMethod? = null, a :Int
+//    ) {
+//        createIndex(tableName, columnNameArray as Array<String>, unique, method)
 //    }
 
     /**
      * Drop Index
      */
     fun dropIndex(tableName: String, indexName: String) {
-        adapter.dropIndex(tableName, indexName)
         println("Drop Index: $tableName $indexName")
+        adapter.dropIndex(tableName, indexName)
     }
 
     /**
@@ -554,8 +593,8 @@ abstract class AbstractMigration {
      * @param newName New table name.
      */
     fun renameTable(oldName: String, newName: String) {
-        adapter.renameTable(oldName, newName)
         println("Rename Table: $oldName => $newName")
+        adapter.renameTable(oldName, newName)
     }
 
     /**
@@ -570,8 +609,8 @@ abstract class AbstractMigration {
     fun renameColumn(
         tableName: String, oldColumnName: String, newColumnName: String
     ) {
-        adapter.renameColumn(tableName, oldColumnName, newColumnName)
         println("Rename Column: $tableName.$oldColumnName => $newColumnName")
+        adapter.renameColumn(tableName, oldColumnName, newColumnName)
     }
 
     /**
@@ -584,8 +623,8 @@ abstract class AbstractMigration {
     fun renameIndex(
         tableName: String, oldIndexName: String, newIndexName: String
     ) {
-        adapter.renameIndex(tableName, oldIndexName, newIndexName)
         println("Rename Index: $oldIndexName => $newIndexName")
+        adapter.renameIndex(tableName, oldIndexName, newIndexName)
     }
 
     /**
@@ -602,6 +641,7 @@ abstract class AbstractMigration {
         referencedTableName: String,
         referencedColumnName: String = "id"
     ) {
+        println("Add foreign key: $tableName.$columnName - $referencedTableName.$referencedColumnName")
         adapter.addForeignKey(
             tableName, columnName,
             referencedTableName, referencedColumnName
@@ -620,6 +660,7 @@ abstract class AbstractMigration {
         columnName: String,
         keyConstraintName: String
     ) {
+        println("Drop foreign key: $tableName.$columnName ($keyConstraintName)")
         adapter.dropForeignKey(
             tableName, columnName, keyConstraintName
         )
@@ -632,6 +673,7 @@ abstract class AbstractMigration {
      * @param columnName
      */
     fun dropForeignKey(tableName: String, columnName: String) {
+        println("Drop foreign key: $tableName.$columnName")
         adapter.dropForeignKey(tableName, columnName)
     }
 

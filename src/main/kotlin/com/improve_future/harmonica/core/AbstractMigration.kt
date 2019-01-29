@@ -16,6 +16,9 @@ import java.util.*
 abstract class AbstractMigration {
     internal lateinit var connection: ConnectionInterface
 
+    val config
+        get() = connection.config
+
     private val adapter: DbAdapter by lazy {
         when (connection.config.dbms) {
             Dbms.SQLite -> SqliteAdapter(connection)

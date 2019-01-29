@@ -174,7 +174,7 @@ dependencies {
                                 h4 { +"Run migrations" }
                                 pre {
                                     code {
-                                        "./gradlew jarmonicaUp"
+                                        +"./gradlew jarmonicaUp"
                                     }
                                 }
                                 section {
@@ -191,7 +191,7 @@ dependencies {
                                 h4 { +"Revert migrations" }
                                 pre {
                                     code {
-                                        "./gradlew jarmonicaDown"
+                                        +"./gradlew jarmonicaDown"
                                     }
                                 }
                                 section {

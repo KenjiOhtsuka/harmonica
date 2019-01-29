@@ -531,12 +531,48 @@ abstract class AbstractMigration {
         unique: Boolean = false, method: IndexMethod? = null
     ) {
         println("Add Index: $tableName $columnName")
-        adapter.createIndex(tableName, columnName, unique)
+        adapter.createIndex(tableName, arrayOf(columnName), unique, method)
     }
 
-//    fun createIndex(tableName: String, columnNameArray: Array<String>) {
-//        // ToDo
-//        // println("Add Index:")
+    /**
+     * Create Index
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param unique `true` for unique index. The default value is `false`
+     * @param method `null` means database default.
+     */
+    fun createIndex(
+        tableName: String, columnNameArray: Array<String>,
+        unique: Boolean = false, method: IndexMethod? = null
+    ) {
+        println("Add Index: $tableName (${columnNameArray.joinToString(", ")})")
+        adapter.createIndex(tableName, columnNameArray, unique, method)
+    }
+
+    /**
+     * Create Index
+     *
+     * @param tableName Table name.
+     * @param columnNameCollection Column name collection (List, Set).
+     * @param unique `true` for unique index. The default value is `false`
+     * @param method `null` means database default.
+     */
+    fun createIndex(
+        tableName: String, columnNameCollection: Collection<String>,
+        unique: Boolean = false, method: IndexMethod? = null
+    ) = createIndex(
+        tableName,
+        columnNameCollection.toTypedArray(),
+        unique,
+        method
+    )
+
+//    fun createIndex(
+//        tableName: String, vararg columnNameArray: String,
+//        unique: Boolean = false, method: IndexMethod? = null, a :Int
+//    ) {
+//        createIndex(tableName, columnNameArray as Array<String>, unique, method)
 //    }
 
     /**

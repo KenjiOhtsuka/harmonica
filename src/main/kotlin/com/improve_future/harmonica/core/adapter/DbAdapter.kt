@@ -17,13 +17,17 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
     }
 
     abstract fun createIndex(
-        tableName: String, columnName: String, unique: Boolean = false,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean = false,
         method: IndexMethod? = null
     )
 
     abstract fun dropIndex(tableName: String, indexName: String)
 
-    abstract fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption)
+    abstract fun addColumn(
+        tableName: String,
+        column: AbstractColumn,
+        option: AddingColumnOption
+    )
 
     fun removeColumn(tableName: String, columnName: String) {
         connection.execute("ALTER TABLE $tableName DROP COLUMN $columnName;")
@@ -48,6 +52,24 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
         tableName: String, columnName: String,
         referencedTableName: String, referencedColumnName: String
     )
+
+    fun dropForeignKey(
+        tableName: String, columnName: String
+    ) {
+        dropForeignKey(
+            tableName, columnName,
+            buildForeignKeyName(tableName, columnName)
+        )
+    }
+
+    abstract fun dropForeignKey(
+        tableName: String, columnName: String,
+        keyName: String
+    )
+
+    protected open fun buildForeignKeyName(
+        tableName: String, columnName: String
+    ) = "${tableName}_${columnName}_fkey"
 
     internal abstract class CompanionInterface {
         protected open fun sqlType(column: AbstractColumn): String {

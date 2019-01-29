@@ -30,7 +30,7 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
     }
 
     override fun createIndex(
-        tableName: String, columnName: String, unique: Boolean,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean,
         method: IndexMethod?
     ) {
     }
@@ -64,5 +64,13 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
                 tableName, columnName, referencedTableName, referencedColumnName
             )
         )
+    }
+
+    override fun dropForeignKey(
+        tableName: String,
+        columnName: String,
+        keyName: String
+    ) {
+        TODO("not implemented")
     }
 }

@@ -21,9 +21,9 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         connection.execute(sql)
     }
 
-    override fun createIndex(tableName: String, columnName: String, unique: Boolean, method: IndexMethod?) {
-        var sql = "CREATE INDEX ${tableName}_${columnName}_idx"
-        sql += " ON $tableName ($columnName);"
+    override fun createIndex(tableName: String, columnNameArray: Array<String>, unique: Boolean, method: IndexMethod?) {
+        var sql = "CREATE INDEX ${tableName}_${columnNameArray.joinToString(",")}_idx"
+        sql += " ON $tableName (${columnNameArray.joinToString(",")});"
         connection.execute(sql)
     }
 
@@ -57,6 +57,14 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
     ) {
         // SQLite doesn't support add Foreign Key function.
         // Foreign key must be added on table creation.
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dropForeignKey(
+        tableName: String,
+        columnName: String,
+        keyName: String
+    ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

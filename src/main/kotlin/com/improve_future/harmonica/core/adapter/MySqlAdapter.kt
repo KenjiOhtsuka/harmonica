@@ -75,14 +75,14 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
     }
 
     override fun createIndex(
-        tableName: String, columnName: String, unique: Boolean,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean,
         method: IndexMethod?
     ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
-        sql += " INDEX ${tableName}_${columnName}_idx"
+        sql += " INDEX ${tableName}_${columnNameArray.joinToString("_")}_idx"
         sqlIndexMethod(method)?.let { sql += " $it" }
-        sql += " ON $tableName ($columnName);"
+        sql += " ON $tableName (${columnNameArray.joinToString(", ")});"
         connection.execute(sql)
     }
 
@@ -120,6 +120,16 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
                 " ADD CONSTRAINT ${tableName}_${columnName}_fkey" +
                 " FOREIGN KEY ($columnName) REFERENCES" +
                 " $referencedTableName ($referencedColumnName);"
+        connection.execute(sql)
+    }
+
+    override fun dropForeignKey(
+        tableName: String,
+        columnName: String,
+        keyName: String
+    ) {
+        val sql = "ALTER TABLE $tableName" +
+                " DROP FOREIGN KEY $keyName;"
         connection.execute(sql)
     }
 }

@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.Index
-import java.sql.Types
+
 
 internal typealias Type = Int
 

@@ -7,6 +7,7 @@ import com.improve_future.harmonica.core.table.column.*
 
 internal class PostgreSqlAdapter(connection: ConnectionInterface) :
     DbAdapter(connection) {
+
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
         var sql = "CREATE TABLE $tableName (\n"
         if (tableBuilder.id) {
@@ -90,14 +91,14 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
     }
 
     override fun createIndex(
-        tableName: String, columnName: String, unique: Boolean,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean,
         method: IndexMethod?
     ) {
         var sql = "CREATE"
         if (unique) sql += " UNIQUE"
         sql += " INDEX ON $tableName"
         sqlIndexMethod(method)?.let { sql += " USING $it" }
-        sql += " ($columnName);"
+        sql += " (${columnNameArray.joinToString(", ")});"
         connection.execute(sql)
     }
 
@@ -136,6 +137,15 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
                 " ADD CONSTRAINT ${tableName}_${columnName}_fkey" +
                 " FOREIGN KEY ($columnName)" +
                 " REFERENCES $referencedTableName ($referencedColumnName);"
+        connection.execute(sql)
+    }
+
+    override fun dropForeignKey(
+        tableName: String,
+        columnName: String,
+        keyName: String
+    ) {
+        val sql = "ALTER TABLE $tableName DROP CONSTRAINT $keyName;"
         connection.execute(sql)
     }
 }

@@ -60,10 +60,10 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val decimalAddingColumn =
+        var decimalAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", decimalAddingColumn.tableName)
-        val decimalColumn = decimalAddingColumn.column as DecimalColumn
+        var decimalColumn = decimalAddingColumn.column as DecimalColumn
         assertEquals("column_name", decimalColumn.name)
         assertEquals(5, decimalColumn.precision)
         assertEquals(2, decimalColumn.scale)
@@ -72,6 +72,17 @@ class AbstractMigrationTest {
         val addingOption = decimalAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("1 + 2.0")
+        migration.addDecimalColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        decimalAddingColumn =
+            migration.adapter.addingColumnList.last()
+        decimalColumn = decimalAddingColumn.column as DecimalColumn
+        assertEquals(rawSql.sql, decimalColumn.sqlDefault)
     }
 
     @Test

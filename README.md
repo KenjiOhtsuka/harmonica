@@ -28,7 +28,7 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
     override fun up() {
         createTable("table_name") {
             // If you add the next line,
-            // migration doesn't create auto incremental id column.
+            // the migration doesn't create auto incremental id column.
             // id = false
 
             // You can easily define columns with their type name.

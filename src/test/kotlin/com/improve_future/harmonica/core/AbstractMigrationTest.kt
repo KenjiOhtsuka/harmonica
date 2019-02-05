@@ -97,10 +97,10 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val varcharAddingColumn =
+        var varcharAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", varcharAddingColumn.tableName)
-        val varcharColumn = varcharAddingColumn.column as VarcharColumn
+        var varcharColumn = varcharAddingColumn.column as VarcharColumn
         assertEquals("column_name", varcharColumn.name)
         assertEquals(10, varcharColumn.size)
         assertEquals(false, varcharColumn.nullable)
@@ -108,6 +108,17 @@ class AbstractMigrationTest {
         val addingOption = varcharAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("'A' || 'B'")
+        migration.addVarcharColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        varcharAddingColumn =
+            migration.adapter.addingColumnList.last()
+        varcharColumn = varcharAddingColumn.column as VarcharColumn
+        assertEquals(rawSql.sql, varcharColumn.sqlDefault)
     }
 
     @Test

@@ -213,10 +213,10 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val timeAddingColumn =
+        var timeAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", timeAddingColumn.tableName)
-        val timeColumn = timeAddingColumn.column as TimeColumn
+        var timeColumn = timeAddingColumn.column as TimeColumn
         assertEquals("column_name", timeColumn.name)
         assertEquals(false, timeColumn.nullable)
         assertEquals(defaultLocalTime, timeColumn.defaultLocalTime)
@@ -224,6 +224,16 @@ class AbstractMigrationTest {
         val addingOption = timeAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("CURRENT_TIMESTAMP")
+        migration.addTimeColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        timeAddingColumn = migration.adapter.addingColumnList.last()
+        timeColumn = timeAddingColumn.column as TimeColumn
+        assertEquals(rawSql.sql, timeColumn.sqlDefault)
     }
 
     @Test

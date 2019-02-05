@@ -21,19 +21,30 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val textAddingColumn =
+        var textAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals(
             "table_name",
             textAddingColumn.tableName
         )
-        val textColumn = textAddingColumn.column as TextColumn
+        var textColumn = textAddingColumn.column as TextColumn
         assertEquals("column_name", textColumn.name)
         assertEquals(false, textColumn.nullable)
         assertEquals("default value", textColumn.default)
         val addingOption = textAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("'A' || 'B'")
+        migration.addTextColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        textAddingColumn =
+            migration.adapter.addingColumnList.last()
+        textColumn = textAddingColumn.column as TextColumn
+        assertEquals(rawSql.sql, textColumn.sqlDefault)
     }
 
     @Test

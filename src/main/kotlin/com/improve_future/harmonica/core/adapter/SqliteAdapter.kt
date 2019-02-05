@@ -21,8 +21,13 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         connection.execute(sql)
     }
 
-    override fun createIndex(tableName: String, columnNameArray: Array<String>, unique: Boolean, method: IndexMethod?) {
-        var sql = "CREATE INDEX ${tableName}_${columnNameArray.joinToString(",")}_idx"
+    override fun createIndex(
+        tableName: String, columnNameArray: Array<String>, unique: Boolean,
+        method: IndexMethod?
+    ) {
+        var sql = "CREATE "
+        if (unique) sql += "UNIQUE "
+        sql += "INDEX ${tableName}_${columnNameArray.joinToString("_")}_idx"
         sql += " ON $tableName (${columnNameArray.joinToString(",")});"
         connection.execute(sql)
     }
@@ -32,7 +37,11 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         connection.execute(sql)
     }
 
-    override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
+    override fun addColumn(
+        tableName: String,
+        column: AbstractColumn,
+        option: AddingColumnOption
+    ) {
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
@@ -44,7 +53,11 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         connection.execute(sql)
     }
 
-    override fun renameIndex(tableName: String, oldIndexName: String, newIndexName: String) {
+    override fun renameIndex(
+        tableName: String,
+        oldIndexName: String,
+        newIndexName: String
+    ) {
         // SQLite must drop index and create new index
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

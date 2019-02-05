@@ -2,15 +2,14 @@ package com.improve_future.harmonica.core.table.column
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class AbstractColumnTest {
     @Test
     fun testHasReference() {
         val column = object : AbstractColumn("column") {
-            override val sqlDefault: String?
-                get() = TODO("not implemented")
-            override val hasDefault: Boolean
-                get() = TODO("not implemented")
+            override var sqlDefault: String? = null
         }
 
         assertEquals(false, column.hasReference)
@@ -21,5 +20,11 @@ class AbstractColumnTest {
         column.referenceTable = "reference_table"
         column.referenceColumn = "reference_column"
         assertEquals(true, column.hasReference)
+
+        assertFalse(column.hasDefault)
+        column.sqlDefault = ""
+        assertTrue(column.hasDefault)
+        column.sqlDefault = null
+        assertFalse(column.hasDefault)
     }
 }

@@ -18,7 +18,7 @@ internal class DateColumn(name: String) : AbstractColumn(name) {
     var defaultDate: Date? = null
         set(value) {
             field = value
-            sqlDefault = "'$default'"
+            sqlDefault = default?.let { "'$it'" }
         }
 
     var defaultLocalDate: LocalDate?

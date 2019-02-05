@@ -8,7 +8,7 @@ internal class IntegerColumn(name: String) : AbstractColumn(name) {
     var default: Long?
         get() = sqlDefault?.toLongOrNull()
         set(value) {
-            sqlDefault = default?.toString()
+            sqlDefault = value?.toString()
         }
 
     var unsigned = false

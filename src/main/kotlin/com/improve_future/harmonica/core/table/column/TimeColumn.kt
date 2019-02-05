@@ -38,7 +38,7 @@ internal class TimeColumn(name: String) : AbstractColumn(name), TimeZoneInterfac
     var defaultLocalTime: LocalTime? = null
         set(value) {
             field = value
-            sqlDefault = "'$value'"
+            sqlDefault = value?.let { "'$it'" }
         }
 
     override var sqlDefault: String? = null

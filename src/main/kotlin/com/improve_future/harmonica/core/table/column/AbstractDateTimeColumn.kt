@@ -22,10 +22,20 @@ internal abstract class AbstractDateTimeColumn(
             }
         }
     var defaultLocalDateTime: LocalDateTime? = null
+        set(value) {
+            field = value
+            sqlDefault =
+                value?.let { "'" + defaultLocalDateTime.toString() + "'" }
+        }
     var defaultDate: Date?
         get() {
             return defaultLocalDateTime?.let {
-                Date.from(ZonedDateTime.of(it, ZoneId.systemDefault()).toInstant())
+                Date.from(
+                    ZonedDateTime.of(
+                        it,
+                        ZoneId.systemDefault()
+                    ).toInstant()
+                )
             }
         }
         set(value) {
@@ -34,8 +44,5 @@ internal abstract class AbstractDateTimeColumn(
             }
         }
 
-    override val sqlDefault
-        get() = "'" + defaultLocalDateTime.toString() + "'"
-    override val hasDefault
-        get() = defaultLocalDateTime != null
+    override var sqlDefault: String? = null
 }

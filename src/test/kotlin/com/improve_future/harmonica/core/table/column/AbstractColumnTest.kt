@@ -7,10 +7,7 @@ class AbstractColumnTest {
     @Test
     fun testHasReference() {
         val column = object : AbstractColumn("column") {
-            override val sqlDefault: String?
-                get() = TODO("not implemented")
-            override val hasDefault: Boolean
-                get() = TODO("not implemented")
+            override var sqlDefault: String? = null
         }
 
         assertEquals(false, column.hasReference)

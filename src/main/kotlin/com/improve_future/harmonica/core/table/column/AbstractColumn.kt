@@ -56,7 +56,8 @@ internal abstract class AbstractColumn(
 
     abstract var sqlDefault: String?
 
-    val hasDefault: Boolean = sqlDefault != null
+    val hasDefault: Boolean
+        get() = sqlDefault != null
 
     var referenceTable: String? = null
     var referenceColumn: String? = null

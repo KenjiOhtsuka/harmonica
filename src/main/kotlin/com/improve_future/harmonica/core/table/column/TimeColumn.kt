@@ -1,5 +1,6 @@
 package com.improve_future.harmonica.core.table.column
 
+import com.improve_future.harmonica.core.RawSql
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -35,10 +36,12 @@ internal class TimeColumn(name: String) : AbstractColumn(name), TimeZoneInterfac
             }
         }
     var defaultLocalTime: LocalTime? = null
+        set(value) {
+            field = value
+            sqlDefault = value?.let { "'$it'" }
+        }
 
-    override val sqlDefault
-        get() = "'$default'"
-    override val hasDefault
-        get() = defaultLocalTime != null
+    override var sqlDefault: String? = null
+
     override var withTimeZone = false
 }

@@ -21,19 +21,30 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val textAddingColumn =
+        var textAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals(
             "table_name",
             textAddingColumn.tableName
         )
-        val textColumn = textAddingColumn.column as TextColumn
+        var textColumn = textAddingColumn.column as TextColumn
         assertEquals("column_name", textColumn.name)
         assertEquals(false, textColumn.nullable)
         assertEquals("default value", textColumn.default)
         val addingOption = textAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("'A' || 'B'")
+        migration.addTextColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        textAddingColumn =
+            migration.adapter.addingColumnList.last()
+        textColumn = textAddingColumn.column as TextColumn
+        assertEquals(rawSql.sql, textColumn.sqlDefault)
     }
 
     @Test
@@ -49,10 +60,10 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val decimalAddingColumn =
+        var decimalAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", decimalAddingColumn.tableName)
-        val decimalColumn = decimalAddingColumn.column as DecimalColumn
+        var decimalColumn = decimalAddingColumn.column as DecimalColumn
         assertEquals("column_name", decimalColumn.name)
         assertEquals(5, decimalColumn.precision)
         assertEquals(2, decimalColumn.scale)
@@ -61,6 +72,17 @@ class AbstractMigrationTest {
         val addingOption = decimalAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("1 + 2.0")
+        migration.addDecimalColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        decimalAddingColumn =
+            migration.adapter.addingColumnList.last()
+        decimalColumn = decimalAddingColumn.column as DecimalColumn
+        assertEquals(rawSql.sql, decimalColumn.sqlDefault)
     }
 
     @Test
@@ -75,10 +97,10 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val varcharAddingColumn =
+        var varcharAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", varcharAddingColumn.tableName)
-        val varcharColumn = varcharAddingColumn.column as VarcharColumn
+        var varcharColumn = varcharAddingColumn.column as VarcharColumn
         assertEquals("column_name", varcharColumn.name)
         assertEquals(10, varcharColumn.size)
         assertEquals(false, varcharColumn.nullable)
@@ -86,6 +108,17 @@ class AbstractMigrationTest {
         val addingOption = varcharAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("'A' || 'B'")
+        migration.addVarcharColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        varcharAddingColumn =
+            migration.adapter.addingColumnList.last()
+        varcharColumn = varcharAddingColumn.column as VarcharColumn
+        assertEquals(rawSql.sql, varcharColumn.sqlDefault)
     }
 
     @Test
@@ -100,16 +133,36 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val dateAddingColumn =
+        var dateAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", dateAddingColumn.tableName)
-        val dateColumn = dateAddingColumn.column as DateColumn
+        var dateColumn = dateAddingColumn.column as DateColumn
         assertEquals("column_name", dateColumn.name)
         assertEquals(false, dateColumn.nullable)
         assertEquals(defaultDate, dateColumn.defaultDate)
-        val addingOption = dateAddingColumn.option
+        var addingOption = dateAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("CURRENT_TIMESTAMP")
+        migration.addDateColumn(
+            "table_name",
+            "column_name",
+            nullable = true,
+            default = rawSql,
+            first = false
+        )
+        dateAddingColumn =
+            migration.adapter.addingColumnList.last()
+        assertEquals("table_name", dateAddingColumn.tableName)
+        dateColumn = dateAddingColumn.column as DateColumn
+        assertEquals("column_name", dateColumn.name)
+        assertEquals(true, dateColumn.nullable)
+        assertEquals(rawSql.sql, dateColumn.sqlDefault)
+        addingOption = dateAddingColumn.option
+        assertEquals(false, addingOption.first)
+        assertEquals(null, addingOption.justBeforeColumn)
+
     }
 
     @Test
@@ -124,16 +177,25 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val booleanAddingColumn =
-            migration.adapter.addingColumnList.first()
+        var booleanAddingColumn = migration.adapter.addingColumnList.first()
         assertEquals("table_name", booleanAddingColumn.tableName)
-        val booleanColumn = booleanAddingColumn.column as BooleanColumn
+        var booleanColumn = booleanAddingColumn.column as BooleanColumn
         assertEquals("column_name", booleanColumn.name)
         assertEquals(false, booleanColumn.nullable)
         assertEquals(defaultBoolean, booleanColumn.default)
         val addingOption = booleanAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("TRUE AND FALSE")
+        migration.addBooleanColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        booleanAddingColumn = migration.adapter.addingColumnList.last()
+        booleanColumn = booleanAddingColumn.column as BooleanColumn
+        assertEquals(rawSql.sql, booleanColumn.sqlDefault)
     }
 
     @Test
@@ -151,10 +213,10 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val timeAddingColumn =
+        var timeAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", timeAddingColumn.tableName)
-        val timeColumn = timeAddingColumn.column as TimeColumn
+        var timeColumn = timeAddingColumn.column as TimeColumn
         assertEquals("column_name", timeColumn.name)
         assertEquals(false, timeColumn.nullable)
         assertEquals(defaultLocalTime, timeColumn.defaultLocalTime)
@@ -162,6 +224,16 @@ class AbstractMigrationTest {
         val addingOption = timeAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("CURRENT_TIMESTAMP")
+        migration.addTimeColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        timeAddingColumn = migration.adapter.addingColumnList.last()
+        timeColumn = timeAddingColumn.column as TimeColumn
+        assertEquals(rawSql.sql, timeColumn.sqlDefault)
     }
 
     @Test
@@ -270,7 +342,10 @@ class AbstractMigrationTest {
         var addingForeignKey = migration.adapter.addingForeignKeyList.last()
         assertEquals("table_name", addingForeignKey.tableName)
         assertEquals("column_name", addingForeignKey.columnName)
-        assertEquals("referenced_table_name", addingForeignKey.referencedTableName)
+        assertEquals(
+            "referenced_table_name",
+            addingForeignKey.referencedTableName
+        )
         assertEquals("id", addingForeignKey.referencedColumnName)
 
         migration.addForeignKey(
@@ -283,7 +358,13 @@ class AbstractMigrationTest {
         addingForeignKey = migration.adapter.addingForeignKeyList.last()
         assertEquals("table_name", addingForeignKey.tableName)
         assertEquals("column_name", addingForeignKey.columnName)
-        assertEquals("referenced_table_name", addingForeignKey.referencedTableName)
-        assertEquals("referenced_column_name", addingForeignKey.referencedColumnName)
+        assertEquals(
+            "referenced_table_name",
+            addingForeignKey.referencedTableName
+        )
+        assertEquals(
+            "referenced_column_name",
+            addingForeignKey.referencedColumnName
+        )
     }
 }

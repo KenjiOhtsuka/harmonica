@@ -91,6 +91,34 @@ abstract class AbstractMigration {
     }
 
     /**
+     * Add new integer column to existing table.
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param nullable
+     * @param default
+     * @param unsigned Valid only for MySQL.
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
+    fun addIntegerColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: RawSql,
+        unsigned: Boolean = false,
+        first: Boolean = false,
+        justBeforeColumnName: String? = null
+    ) {
+        val integerColumn = IntegerColumn(columnName)
+        integerColumn.also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+            it.unsigned = unsigned
+        }
+        addColumn(tableName, integerColumn, first, justBeforeColumnName)
+    }
+
+    /**
      * Add new decimal column to existing table.
      *
      * @param first You add column at first of the columns (valid only for MySQL)
@@ -109,6 +137,29 @@ abstract class AbstractMigration {
             it.scale = scale
             it.nullable = nullable
             it.default = default
+        }
+        addColumn(tableName, decimalColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new decimal column to existing table.
+     *
+     * @param first You add column at first of the columns (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be add just after
+     * (valid only for MySQL)
+     */
+    fun addDecimalColumn(
+        tableName: String, columnName: String,
+        precision: Int? = null, scale: Int? = null,
+        nullable: Boolean = true, default: RawSql,
+        first: Boolean = false,
+        justBeforeColumnName: String? = null
+    ) {
+        val decimalColumn = DecimalColumn(columnName).also {
+            it.precision = precision
+            it.scale = scale
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         }
         addColumn(tableName, decimalColumn, first, justBeforeColumnName)
     }
@@ -140,6 +191,33 @@ abstract class AbstractMigration {
     }
 
     /**
+     * Add new varchar column to existing table.
+     *
+     * @param tableName
+     * @param columnName
+     * @param size
+     * @param nullable
+     * @param default
+     * @param first You add column at first of the columns (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be add just after
+     * (valid only for MySQL)
+     */
+    fun addVarcharColumn(
+        tableName: String, columnName: String, size: Int? = null,
+        nullable: Boolean = true, default: RawSql,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val varcharColumn = VarcharColumn(columnName)
+        varcharColumn.also {
+            it.size = size
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+        }
+        addColumn(tableName, varcharColumn, first, justBeforeColumnName)
+    }
+
+
+    /**
      * Add new boolean column to existing table.
      *
      * In PostgreSQL, BOOLEAN column will be added.
@@ -162,6 +240,33 @@ abstract class AbstractMigration {
         booleanColumn.also {
             it.nullable = nullable
             it.default = default
+        }
+        addColumn(tableName, booleanColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new boolean column to existing table.
+     *
+     * In PostgreSQL, BOOLEAN column will be added.
+     * In MySQL, TINYINT column will be added.
+     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
+     * @param first You add column at first of the columns (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
+    fun addBooleanColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: RawSql,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val booleanColumn = BooleanColumn(columnName)
+        booleanColumn.also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         }
         addColumn(tableName, booleanColumn, first, justBeforeColumnName)
     }
@@ -236,6 +341,29 @@ abstract class AbstractMigration {
     }
 
     /**
+     * Add new date column to existing table.
+     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addDateColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: RawSql,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateColumn = DateColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+        }
+        addColumn(tableName, dateColumn, first, justBeforeColumnName)
+    }
+
+    /**
      * Add new text column to existing table.
      *
      * @param tableName
@@ -255,6 +383,30 @@ abstract class AbstractMigration {
         textColumn.also {
             it.nullable = nullable
             it.default = default
+        }
+        addColumn(tableName, textColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new text column to existing table.
+     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTextColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: RawSql,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val textColumn = TextColumn(columnName)
+        textColumn.also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         }
         addColumn(tableName, textColumn, first, justBeforeColumnName)
     }
@@ -283,6 +435,34 @@ abstract class AbstractMigration {
         blobColumn.also {
             it.nullable = nullable
             it.default = default
+        }
+        addColumn(tableName, blobColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new BLOB column to existing table.
+     *
+     * ## PostgreSQL
+     *
+     * add BYTEA column instead, because PstgreSQL doesn't have BLOB type.
+     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default Not valid for MySQL
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addBlobColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: RawSql,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val blobColumn = BlobColumn(columnName)
+        blobColumn.also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         }
         addColumn(tableName, blobColumn, first, justBeforeColumnName)
     }
@@ -360,6 +540,32 @@ abstract class AbstractMigration {
         val timeColumn = TimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new TIME column to existing table.
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param nullable
+     * @param default
+     * @param withTimeZone Valid only for PostgreSQL
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: RawSql,
+        withTimeZone: Boolean = false,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timeColumn = TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
             it.withTimeZone = withTimeZone
         }
         addColumn(tableName, timeColumn, first, justBeforeColumnName)
@@ -447,6 +653,32 @@ abstract class AbstractMigration {
     /**
      * Add new DATETIME column to existing table.
      *
+     * In PostgreSQL, TIMESTAMP column will be added instead,
+     * becuse PostgreSQL.doesn't have DATETIME type.
+     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addDateTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: RawSql,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val dateTimeColumn = DateTimeColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+        }
+        addColumn(tableName, dateTimeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
      * @param tableName
      * @param columnName
      * @param nullable
@@ -516,6 +748,32 @@ abstract class AbstractMigration {
         val timestampColumn = TimestampColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalDateTime = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timestampColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new DATETIME column to existing table.
+     *
+     * @param tableName
+     * @param columnName
+     * @param nullable
+     * @param default
+     * @param withTimeZone Valid only in PostgreSQL.
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimestampColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: RawSql,
+        withTimeZone: Boolean = true,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timestampColumn = TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
             it.withTimeZone = withTimeZone
         }
         addColumn(tableName, timestampColumn, first, justBeforeColumnName)

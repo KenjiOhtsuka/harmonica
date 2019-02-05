@@ -1,11 +1,15 @@
 package com.improve_future.harmonica.core.table.column
 
+import com.improve_future.harmonica.core.RawSql
+
 internal class IntegerColumn(name: String) : AbstractColumn(name) {
-    override val hasDefault: Boolean
-        get() = default != null
-    override val sqlDefault: String?
-        get() = default?.toString()
-    var default: Long? = null
+    override var sqlDefault: String? = null
+
+    var default: Long?
+        get() = sqlDefault?.toLongOrNull()
+        set(value) {
+            sqlDefault = value?.toString()
+        }
 
     var unsigned = false
 }

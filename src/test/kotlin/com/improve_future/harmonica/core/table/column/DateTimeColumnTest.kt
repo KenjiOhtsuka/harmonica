@@ -2,6 +2,7 @@ package com.improve_future.harmonica.core.table.column
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class DateTimeColumnTest {
     @Test
@@ -18,5 +19,7 @@ class DateTimeColumnTest {
         assertEquals(24, dateTimeColumn.defaultLocalDateTime?.minute)
         assertEquals(23, dateTimeColumn.defaultLocalDateTime?.second)
         assertEquals(234000000, dateTimeColumn.defaultLocalDateTime?.nano)
+        dateTimeColumn.defaultLocalDateTime = null
+        assertNull(dateTimeColumn.sqlDefault)
     }
 }

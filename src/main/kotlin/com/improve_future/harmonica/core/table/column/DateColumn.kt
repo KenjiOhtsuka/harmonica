@@ -14,7 +14,13 @@ internal class DateColumn(name: String) : AbstractColumn(name) {
         set(value) {
             defaultDate = value?.let { dateFormat.parse(value) }
         }
+
     var defaultDate: Date? = null
+        set(value) {
+            field = value
+            sqlDefault = default?.let { "'$it'" }
+        }
+
     var defaultLocalDate: LocalDate?
         get() {
             defaultDate ?: return null
@@ -30,8 +36,5 @@ internal class DateColumn(name: String) : AbstractColumn(name) {
             default = value?.toString()
         }
 
-    override val hasDefault: Boolean
-        get() = default != null
-    override val sqlDefault: String?
-        get() = "'$default'"
+    override var sqlDefault: String? = null
 }

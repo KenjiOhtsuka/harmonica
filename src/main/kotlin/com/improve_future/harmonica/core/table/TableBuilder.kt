@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.table
 
 import com.improve_future.harmonica.core.MigrationDsl
+import com.improve_future.harmonica.core.RawSql
 import com.improve_future.harmonica.core.table.column.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -47,6 +48,33 @@ class TableBuilder {
     }
 
     /**
+     * Add decimal column
+     *
+     * @param columnName
+     * @param precision The number of digits in the number.
+     * @param scale The number of digits to the right of the decimal point in the number.
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @return
+     */
+    fun decimal(
+        columnName: String,
+        precision: Int? = null,
+        scale: Int? = null,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        val decimalColumn = DecimalColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+            it.precision = precision
+            it.scale = scale
+        }
+        addColumn(decimalColumn)
+        return ColumnBuilder(decimalColumn)
+    }
+
+    /**
      * Add integer column.
      *
      * @param columnName
@@ -64,6 +92,29 @@ class TableBuilder {
         val builder = ColumnBuilder(IntegerColumn(columnName).also {
             it.nullable = nullable
             it.default = default
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
+     * Add integer column.
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @param unsigned Valid only for MySQL.
+     * @return
+     */
+    fun integer(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql,
+        unsigned: Boolean = false
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(IntegerColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         })
         addColumn(builder.column)
         return builder
@@ -98,6 +149,32 @@ class TableBuilder {
     /**
      * add varchar column
      *
+     * variable with limit
+     *
+     * @param columnName
+     * @param size For MySQL, `null` means 255.
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @return
+     */
+    fun varchar(
+        columnName: String,
+        size: Int? = null,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(VarcharColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+            it.size = size
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
+     * add varchar column
+     *
      * Alias for varchar.
      *
      * @param columnName
@@ -116,6 +193,27 @@ class TableBuilder {
     }
 
     /**
+     * add varchar column
+     *
+     * Alias for varchar.
+     *
+     * @param columnName
+     * @param size
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @return
+     */
+    fun string(
+        columnName: String,
+        size: Int? = null,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        return varchar(columnName, size, nullable, default)
+    }
+
+
+    /**
      * add boolean column
      *
      * @param columnName
@@ -131,6 +229,27 @@ class TableBuilder {
         val builder = ColumnBuilder(BooleanColumn(columnName).also {
             it.nullable = nullable
             it.default = default
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
+     * add boolean column
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @return
+     */
+    fun boolean(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(BooleanColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         })
         addColumn(builder.column)
         return builder
@@ -200,6 +319,27 @@ class TableBuilder {
     }
 
     /**
+     * add date column of `java.time.LocalDate` default value
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @return
+     */
+    fun date(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
      * Add TEXT column, unlimited length string
      *
      * @param columnName
@@ -215,6 +355,27 @@ class TableBuilder {
         val builder = ColumnBuilder(TextColumn(columnName).also {
             it.nullable = nullable
             it.default = default
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
+     * Add TEXT column, unlimited length string
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default Invalid for MySQL
+     * @return
+     */
+    fun text(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TextColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         })
         addColumn(builder.column)
         return builder
@@ -240,6 +401,31 @@ class TableBuilder {
         val builder = ColumnBuilder(BlobColumn(columnName).also {
             it.nullable = nullable
             it.default = default
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
+     * Add BLOB column
+     *
+     * ## PostgreSQL
+     *
+     * Add BYTEA column instead, because PostgreSQL doesn't have BLOB type.
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default Invalid for MySQL
+     * @return
+     */
+    fun blob(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(BlobColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         })
         addColumn(builder.column)
         return builder
@@ -312,6 +498,30 @@ class TableBuilder {
         val builder = ColumnBuilder(TimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
+            it.withTimeZone = withTimeZone
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
+     * add Time column
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @param withTimeZone Valid only for PostgreSQL.
+     * @return
+     */
+    fun time(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql,
+        withTimeZone: Boolean = false
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
             it.withTimeZone = withTimeZone
         })
         addColumn(builder.column)
@@ -409,6 +619,36 @@ class TableBuilder {
     }
 
     /**
+     * add TIMESTAMP column
+     *
+     * ## MySQL
+     *
+     * If you store the value,
+     * and then change the time zone and retrieve the value,
+     * the retrieved value is different from the value you stored.
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @param withTimeZone Valid only for PostgreSQL.
+     * @return
+     */
+    fun timestamp(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql,
+        withTimeZone: Boolean = false
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(TimestampColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+            it.withTimeZone = withTimeZone
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
      * add DATETIME column
      *
      * ## PostgreSQL
@@ -477,6 +717,30 @@ class TableBuilder {
         val builder = ColumnBuilder(DateTimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultLocalDateTime = default
+        })
+        addColumn(builder.build())
+        return builder
+    }
+
+    /**
+     * add DATETIME column
+     *
+     * ## PostgreSQL
+     *
+     * There is no `DATETIME` type, so add `TIMESTAMP` column, instead.
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     */
+    fun dateTime(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(DateTimeColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
         })
         addColumn(builder.build())
         return builder

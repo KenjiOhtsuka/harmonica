@@ -1,3 +1,3 @@
 package com.improve_future.harmonica.core
 
-data class Raw(val sql: String)
+data class RawSql(var sql: String)

@@ -4,8 +4,10 @@ import org.jetbrains.kotlin.daemon.common.toHexString
 
 internal class BlobColumn(name: String) : AbstractColumn(name) {
     var default: ByteArray? = null
-    override val sqlDefault
-        get() = default?.let { "E'\\\\x" + it.toHexString() + "'" }
-    override val hasDefault
-        get() = default != null
+        set(value) {
+            field = value
+            sqlDefault = value?.let { "E'\\\\x" + it.toHexString() + "'" }
+        }
+
+    override var sqlDefault: String? = null
 }

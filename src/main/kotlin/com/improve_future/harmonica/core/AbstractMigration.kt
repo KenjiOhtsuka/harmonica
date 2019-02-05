@@ -91,6 +91,34 @@ abstract class AbstractMigration {
     }
 
     /**
+     * Add new integer column to existing table.
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param nullable
+     * @param default
+     * @param unsigned Valid only for MySQL.
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
+    fun addIntegerColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: RawSql,
+        unsigned: Boolean = false,
+        first: Boolean = false,
+        justBeforeColumnName: String? = null
+    ) {
+        val integerColumn = IntegerColumn(columnName)
+        integerColumn.also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+            it.unsigned = unsigned
+        }
+        addColumn(tableName, integerColumn, first, justBeforeColumnName)
+    }
+
+    /**
      * Add new decimal column to existing table.
      *
      * @param first You add column at first of the columns (valid only for MySQL)
@@ -360,6 +388,32 @@ abstract class AbstractMigration {
         val timeColumn = TimeColumn(columnName).also {
             it.nullable = nullable
             it.defaultDate = default
+            it.withTimeZone = withTimeZone
+        }
+        addColumn(tableName, timeColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new TIME column to existing table.
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param nullable
+     * @param default
+     * @param withTimeZone Valid only for PostgreSQL
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * valid only for MySQL
+     */
+    fun addTimeColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = false, default: RawSql,
+        withTimeZone: Boolean = false,
+        first: Boolean = false, justBeforeColumnName: String? = null
+    ) {
+        val timeColumn = TimeColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
             it.withTimeZone = withTimeZone
         }
         addColumn(tableName, timeColumn, first, justBeforeColumnName)

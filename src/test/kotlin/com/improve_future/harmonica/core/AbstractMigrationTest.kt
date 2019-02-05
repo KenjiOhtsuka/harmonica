@@ -177,16 +177,25 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val booleanAddingColumn =
-            migration.adapter.addingColumnList.first()
+        var booleanAddingColumn = migration.adapter.addingColumnList.first()
         assertEquals("table_name", booleanAddingColumn.tableName)
-        val booleanColumn = booleanAddingColumn.column as BooleanColumn
+        var booleanColumn = booleanAddingColumn.column as BooleanColumn
         assertEquals("column_name", booleanColumn.name)
         assertEquals(false, booleanColumn.nullable)
         assertEquals(defaultBoolean, booleanColumn.default)
         val addingOption = booleanAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("TRUE AND FALSE")
+        migration.addBooleanColumn(
+            "table_name",
+            "column_name",
+            default = rawSql
+        )
+        booleanAddingColumn = migration.adapter.addingColumnList.last()
+        booleanColumn = booleanAddingColumn.column as BooleanColumn
+        assertEquals(rawSql.sql, booleanColumn.sqlDefault)
     }
 
     @Test

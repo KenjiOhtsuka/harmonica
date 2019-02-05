@@ -319,7 +319,7 @@ class TableBuilder {
     }
 
     /**
-     * add date column of `java.time.LocalDate` default value
+     * add date column of `RawSql` default value
      *
      * @param columnName
      * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.

@@ -20,6 +20,5 @@ class BlobColumnTest {
         blobColumn.default = null
         assertEquals(null, blobColumn.default)
         assertEquals(false, blobColumn.hasDefault)
-
     }
 }

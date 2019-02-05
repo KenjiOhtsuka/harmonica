@@ -100,16 +100,36 @@ class AbstractMigrationTest {
             first = true,
             justBeforeColumnName = "previous_column"
         )
-        val dateAddingColumn =
+        var dateAddingColumn =
             migration.adapter.addingColumnList.first()
         assertEquals("table_name", dateAddingColumn.tableName)
-        val dateColumn = dateAddingColumn.column as DateColumn
+        var dateColumn = dateAddingColumn.column as DateColumn
         assertEquals("column_name", dateColumn.name)
         assertEquals(false, dateColumn.nullable)
         assertEquals(defaultDate, dateColumn.defaultDate)
-        val addingOption = dateAddingColumn.option
+        var addingOption = dateAddingColumn.option
         assertEquals(true, addingOption.first)
         assertEquals("previous_column", addingOption.justBeforeColumn)
+
+        val rawSql = RawSql("CURRENT_TIMESTAMP")
+        migration.addDateColumn(
+            "table_name",
+            "column_name",
+            nullable = true,
+            default = rawSql,
+            first = false
+        )
+        dateAddingColumn =
+            migration.adapter.addingColumnList.last()
+        assertEquals("table_name", dateAddingColumn.tableName)
+        dateColumn = dateAddingColumn.column as DateColumn
+        assertEquals("column_name", dateColumn.name)
+        assertEquals(true, dateColumn.nullable)
+        assertEquals(rawSql.sql, dateColumn.sqlDefault)
+        addingOption = dateAddingColumn.option
+        assertEquals(false, addingOption.first)
+        assertEquals(null, addingOption.justBeforeColumn)
+
     }
 
     @Test
@@ -270,7 +290,10 @@ class AbstractMigrationTest {
         var addingForeignKey = migration.adapter.addingForeignKeyList.last()
         assertEquals("table_name", addingForeignKey.tableName)
         assertEquals("column_name", addingForeignKey.columnName)
-        assertEquals("referenced_table_name", addingForeignKey.referencedTableName)
+        assertEquals(
+            "referenced_table_name",
+            addingForeignKey.referencedTableName
+        )
         assertEquals("id", addingForeignKey.referencedColumnName)
 
         migration.addForeignKey(
@@ -283,7 +306,13 @@ class AbstractMigrationTest {
         addingForeignKey = migration.adapter.addingForeignKeyList.last()
         assertEquals("table_name", addingForeignKey.tableName)
         assertEquals("column_name", addingForeignKey.columnName)
-        assertEquals("referenced_table_name", addingForeignKey.referencedTableName)
-        assertEquals("referenced_column_name", addingForeignKey.referencedColumnName)
+        assertEquals(
+            "referenced_table_name",
+            addingForeignKey.referencedTableName
+        )
+        assertEquals(
+            "referenced_column_name",
+            addingForeignKey.referencedColumnName
+        )
     }
 }

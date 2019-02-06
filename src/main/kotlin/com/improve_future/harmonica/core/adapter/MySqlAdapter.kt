@@ -5,7 +5,8 @@ import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
-internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connection) {
+internal class MySqlAdapter(connection: ConnectionInterface) :
+    DbAdapter(connection) {
     override fun createTable(tableName: String, tableBuilder: TableBuilder) {
         var sql = "CREATE TABLE $tableName (\n"
         if (tableBuilder.id) {
@@ -31,8 +32,8 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
             when (column) {
                 is VarcharColumn -> {
                     sql +=
-                            if (column.size == null) "(255)"
-                            else "(" + column.size + ")"
+                        if (column.size == null) "(255)"
+                        else "(" + column.size + ")"
                 }
                 is DecimalColumn -> {
                     if (column.precision != null) {
@@ -91,7 +92,11 @@ internal class MySqlAdapter(connection: ConnectionInterface) : DbAdapter(connect
     }
 
 
-    override fun addColumn(tableName: String, column: AbstractColumn, option: AddingColumnOption) {
+    override fun addColumn(
+        tableName: String,
+        column: AbstractColumn,
+        option: AddingColumnOption
+    ) {
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"

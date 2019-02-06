@@ -115,6 +115,12 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
         connection.execute(sql)
+
+        if (!column.hasComment) return
+
+        sql = "COMMENT ON COLUMN $tableName.${column.name} IS" +
+                " '${column.comment}';"
+        connection.execute(sql)
     }
 
     override fun renameTable(oldTableName: String, newTableName: String) {

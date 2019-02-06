@@ -74,7 +74,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
-    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: '1.2.41'
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: kotlin_version
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
 

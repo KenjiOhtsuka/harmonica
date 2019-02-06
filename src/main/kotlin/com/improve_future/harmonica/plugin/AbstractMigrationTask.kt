@@ -5,6 +5,7 @@ import com.improve_future.harmonica.service.VersionService
 import org.gradle.api.tasks.Input
 
 abstract class AbstractMigrationTask : AbstractHarmonicaTask() {
+    /** The table name to store executed migration version IDs. */
     private val migrationTableName: String = "harmonica_migration"
     protected val versionService: VersionService
 

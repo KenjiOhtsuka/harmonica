@@ -21,7 +21,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             if (project.extensions.extraProperties.has("directoryPath"))
                 return project.extensions.extraProperties["directoryPath"] as String
             if (project.extensions.extraProperties.has("migrationPackage"))
-                "src/main/kotlin/" + migrationPackage.replace(".", "/")
+                return "src/main/kotlin/" + migrationPackage.replace(".", "/")
             return "src/main/kotlin/db"
         }
 

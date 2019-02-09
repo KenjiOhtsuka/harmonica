@@ -16,7 +16,9 @@ abstract class JarmonicaTaskMain {
         classLoader = ClassLoader.getSystemClassLoader()
     }
 
-    protected fun createConnection(packageName: String, env: String): Connection {
+    protected fun createConnection(
+        packageName: String, env: String
+    ): Connection {
         return Connection(loadDbConfig(packageName, env))
     }
 
@@ -26,7 +28,9 @@ abstract class JarmonicaTaskMain {
         return classList.toList().sortedBy { it.name }
     }
 
-    private fun loadDbConfig(packageName: String, env: String = "Default"): DbConfig {
+    private fun loadDbConfig(
+        packageName: String, env: String = "Default"
+    ): DbConfig {
         val reflections = Reflections(packageName)
         val classList = reflections.getSubTypesOf(DbConfig::class.java)
         classList.forEach {

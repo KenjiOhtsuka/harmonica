@@ -10,7 +10,9 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             if (project.extensions.extraProperties.has("migrationPackage"))
                 return project.extensions.extraProperties["migrationPackage"] as String
             if (project.extensions.extraProperties.has("directoryPath"))
-                return directoryPath.removePrefix("src/main/kotlin/").replace("/", ".")
+                return directoryPath
+                    .replace(Regex("^src/main/(kotlin|java)/"), "")
+                    .replace("/", ".")
             return "db"
         }
 

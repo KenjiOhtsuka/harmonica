@@ -34,7 +34,8 @@ abstract class JarmonicaTaskMain {
         val reflections = Reflections(packageName)
         val classList = reflections.getSubTypesOf(DbConfig::class.java)
         classList.forEach {
-            if (it.simpleName == env) return it.newInstance()
+            if (it.simpleName == env)
+                return it.getDeclaredField("INSTANCE").get(it) as DbConfig
         }
         throw Exception("no config was found.")
     }

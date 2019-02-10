@@ -1,5 +1,3 @@
-import java.nio.file.Paths
-
 plugins {
     id 'groovy'
     id 'org.jetbrains.kotlin.jvm'
@@ -15,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    //Fill this in with the version of kotlinx in use in your project
+    // Fill this in with the version of kotlinx in use in your project
     def kotlinx_html_version = "0.6.11"
     // include for server side
     implementation "org.jetbrains.kotlinx:kotlinx-html-jvm:${kotlinx_html_version}"

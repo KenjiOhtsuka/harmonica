@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Harmonica.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.improve_future.harmonica.plugin
@@ -31,6 +31,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
                     .replace(Regex("^src/main/(kotlin|java)/"), "")
                     .replace("/", ".")
             return "db"
+            //project.group.toString() + "." + project.name //+ ".db"
         }
 
     private val directoryPath: String

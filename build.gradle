@@ -50,6 +50,14 @@ apply plugin: 'java-gradle-plugin'
 apply plugin: 'org.jetbrains.dokka'
 //apply plugin: 'jacoco'
 
+allprojects {
+    //val kotlinVersion by extra { "1.2.0-rc-39" }
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
 repositories {
     mavenCentral()
     maven {
@@ -58,6 +66,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":core"))
     compileOnly 'org.jetbrains.exposed:exposed:0.10.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable

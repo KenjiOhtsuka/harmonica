@@ -1,6 +1,6 @@
 package com.improve_future.harmonica.core
 
-import com.improve_future.harmonica.config.PluginConfig
+import com.improve_future.harmonica.core.plugin.PluginConfigInterface
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.io.Closeable

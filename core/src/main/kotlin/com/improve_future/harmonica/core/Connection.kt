@@ -1,7 +1,6 @@
 package com.improve_future.harmonica.core
 
-import com.improve_future.harmonica.core.plugin.PluginConfigInterface
-import org.jetbrains.exposed.sql.Database
+import com.improve_future.harmonica.core.plugin.ProjectConfig
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.io.Closeable
 import java.sql.*
@@ -29,10 +28,10 @@ open class Connection(
             )
         }
         database =
-            if (PluginConfig.hasExposed())
-                Database.connect({ coreConnection })
+            if (ProjectConfig.hasExposed())
+                org.jetbrains.exposed.sql.Database.connect({ coreConnection })
             else null
-        if (config.dbms == Dbms.SQLite && PluginConfig.hasExposed()) {
+        if (config.dbms == Dbms.SQLite && ProjectConfig.hasExposed()) {
             TransactionManager.manager.defaultIsolationLevel =
                 java.sql.Connection.TRANSACTION_SERIALIZABLE
         }
@@ -43,14 +42,14 @@ open class Connection(
         get () {
             if (isClosed) connect(config)
 
-            return if (PluginConfig.hasExposed())
+            return if (ProjectConfig.hasExposed())
                 coreConnection
 //            TransactionManager.current().connection
             else
                 coreConnection
         }
 
-    private var database: Database? = null
+    private var database: org.jetbrains.exposed.sql.Database? = null
 
     override fun close() {
         if (!isClosed) javaConnection.close()
@@ -62,9 +61,7 @@ open class Connection(
     }
 
     private val isClosed: Boolean
-        get() {
-            return coreConnection.isClosed
-        }
+        get() = coreConnection.isClosed
 
     init {
 //        val ds = InitialContext().lookup(
@@ -107,7 +104,7 @@ open class Connection(
 
     override fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
-        if (PluginConfig.hasExposed()) {
+        if (ProjectConfig.hasExposed()) {
             TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
                 .let {
                     try {
@@ -152,7 +149,7 @@ open class Connection(
      * Execute SQL
      */
     override fun execute(sql: String): Boolean {
-        return if (PluginConfig.hasExposed()) {
+        return if (ProjectConfig.hasExposed()) {
             val tr = TransactionManager.currentOrNull()
             if (tr == null) {
                 val newTr = TransactionManager.currentOrNew(

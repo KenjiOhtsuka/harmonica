@@ -30,18 +30,7 @@ plugins {
     id 'java-library'
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier = 'sources'
-}
 
-task javadocJar(type: Jar) {
-    from javadoc
-    archiveClassifier = 'javadoc'
-}
-
-group 'com.improve_future'
-version '1.1.18'
 
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'kotlin'
@@ -51,10 +40,20 @@ apply plugin: 'org.jetbrains.dokka'
 //apply plugin: 'jacoco'
 
 allprojects {
+    group 'com.improve_future'
+    version '1.1.18'
     //val kotlinVersion by extra { "1.2.0-rc-39" }
     repositories {
-        google()
         jcenter()
+    }
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        archiveClassifier = 'sources'
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        archiveClassifier = 'javadoc'
     }
 }
 

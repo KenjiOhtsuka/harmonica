@@ -21,9 +21,6 @@ plugins {
     kotlin("jvm") //version "1.3.20"
 }
 
-group = "com.improve_future"
-version = "1.1.18"
-
 repositories {
     mavenCentral()
 }
@@ -91,3 +88,45 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     //useJunitJupiter
 }
+
+//def pomConfig = {
+//    licenses {
+//        license {
+//            name "GNU General Public License, Version 3.0"
+//            url "https://www.gnu.org/licenses/gpl-3.0"
+//            distribution "repo"
+//        }
+//    }
+//    developers {
+//        developer {
+//            id "kenjiohtsuka"
+//            name "Kenji Otsuka"
+//            email "kok.fdcm@gmail.com"
+//        }
+//    }
+//
+//    scm {
+//        url githubUrl
+//    }
+//}
+//
+//// Create the publication with the pom configuration:
+//publishing {
+//    publications {
+//        MyPublication(MavenPublication) {
+//            from components.java
+//                    artifact sourcesJar
+//                    artifact javadocJar
+//                    groupId 'com.improve_future'
+//            artifactId "harmonica"
+//            version project.version
+//                    pom.withXml {
+//                        def root = asNode()
+//                        root.appendNode('description', 'Kotlin Database Migration Tool')
+//                        root.appendNode('name', 'Harmonica')
+//                        root.appendNode('url', githubUrl)
+//                        root.children().last() + pomConfig
+//                    }
+//        }
+//    }
+//}

@@ -1,3 +1,20 @@
+/*
+ * This file is part of Harmonica.
+ *
+ * Harmonica is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Harmonica is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Harmonica.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.improve_future.harmonica.plugin
 
 import org.gradle.api.tasks.JavaExec
@@ -14,6 +31,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
                     .replace(Regex("^src/main/(kotlin|java)/"), "")
                     .replace("/", ".")
             return "db"
+            //project.group.toString() + "." + project.name //+ ".db"
         }
 
     private val directoryPath: String
@@ -35,6 +53,15 @@ abstract class JarmonicaMigrationTask : JavaExec() {
     protected fun buildJarmonicaArgument(
         vararg args: String
     ): JarmonicaArgument {
+//        println(directoryPath)
+//        println(project.displayName)
+//        println(project.rootProject.name)
+//        println(
+//            directoryPath
+//                .replace(Regex("^src/main/(kotlin|java)/"), "")
+//                .replace("/", ".")
+//        )
+
         return JarmonicaArgument().also {
             it.migrationDirectory = directoryPath
             it.migrationPackage = migrationPackage

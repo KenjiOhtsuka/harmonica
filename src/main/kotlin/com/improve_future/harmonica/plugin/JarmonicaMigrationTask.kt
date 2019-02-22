@@ -53,6 +53,15 @@ abstract class JarmonicaMigrationTask : JavaExec() {
     protected fun buildJarmonicaArgument(
         vararg args: String
     ): JarmonicaArgument {
+//        println(directoryPath)
+//        println(project.displayName)
+//        println(project.rootProject.name)
+//        println(
+//            directoryPath
+//                .replace(Regex("^src/main/(kotlin|java)/"), "")
+//                .replace("/", ".")
+//        )
+
         return JarmonicaArgument().also {
             it.migrationDirectory = directoryPath
             it.migrationPackage = migrationPackage

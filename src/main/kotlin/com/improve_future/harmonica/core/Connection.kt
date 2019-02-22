@@ -117,6 +117,8 @@ open class Connection(
                         "jdbc:sqlite:$dbName.db"
                     Dbms.Oracle ->
                         ""
+                    Dbms.SQLServer ->
+                        ""
                 }
             }
         }

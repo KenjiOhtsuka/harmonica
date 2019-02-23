@@ -5,9 +5,9 @@ dependencies {
     compileOnly("org.jetbrains.exposed:exposed:0.10.2")
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
     implementation(
-        group: "org.jetbrains.kotlin",
-        name: "kotlin-compiler-embeddable",
-        version: kotlin_version
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-compiler-embeddable",
+            version: kotlin_version
     )
 
     /* JDBC */
@@ -18,33 +18,33 @@ dependencies {
     testImplementation("org.xerial:sqlite-jdbc:3.21.0.1")
 //    testCompile 'com.oracle:ojdbc6:12.1.0.1-atlassian-hosted'
     testImplementation(
-        group: "com.microsoft.sqlserver",
-        name: "mssql-jdbc",
-        version: "6.2.1.jre7"
+            group: "com.microsoft.sqlserver",
+            name: "mssql-jdbc",
+            version: "6.2.1.jre7"
     )
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
     implementation(
-        group: "org.jetbrains.kotlin",
-        name: "kotlin-script-runtime",
-        version: kotlin_version
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-script-runtime",
+            version: kotlin_version
     )
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
     implementation(
-        group: "org.jetbrains.kotlin",
-        name: "kotlin-script-util",
-        version: kotlin_version
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-script-util",
+            version: kotlin_version
     )
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
     implementation(
-        group: "org.jetbrains.kotlin",
-        name: "kotlin-reflect",
-        version: kotlin_version
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-reflect",
+            version: kotlin_version
     )
 
     implementation(
-        group: "org.reflections",
-        name: "reflections",
-        version: "0.9.11"
+            group: "org.reflections",
+            name: "reflections",
+            version: "0.9.11"
     )
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")

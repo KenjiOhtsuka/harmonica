@@ -39,8 +39,8 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
-        dependencies {
-    allprojects {
+    dependencies {
+        allprojects {
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
             classpath "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
             //classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
@@ -134,7 +134,7 @@ dependencies {
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
 
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    
+
     implementation localGroovy()  // Groovy SDK
     compileOnly gradleApi()
 }

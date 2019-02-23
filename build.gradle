@@ -19,26 +19,38 @@
 import java.nio.file.Paths
 
 buildscript {
+    allprojects {
+        ext {
+            kotlin_version = '1.3.20'
+        }
+    }
     ext {
-        kotlin_version = '1.3.20'
         bintray_version = '0.8.0'
     }
 
+    allprojects {
+        repositories {
+            jcenter()
+            mavenCentral()
+        }
+    }
     repositories {
-        jcenter()
-        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
+        }
+    }
+        dependencies {
+    allprojects {
+            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+            classpath "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+            //classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
+            classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
         }
     }
     dependencies {
         // for release
         classpath "com.novoda:bintray-release:$bintray_version"
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.10"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-        //classpath group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
     }
 }
 
@@ -48,20 +60,19 @@ plugins {
     id 'java-library'
 }
 
-
-
 apply plugin: "com.gradle.plugin-publish"
-apply plugin: 'kotlin'
 apply plugin: 'java-gradle-plugin'
 //apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'org.jetbrains.dokka'
 //apply plugin: 'jacoco'
 
 allprojects {
+    apply plugin: 'kotlin'
     group 'com.improve_future'
     version '1.1.18'
     //val kotlinVersion by extra { "1.2.0-rc-39" }
     repositories {
+        mavenCentral()
         jcenter()
     }
     task sourcesJar(type: Jar) {
@@ -73,10 +84,26 @@ allprojects {
         from javadoc
         archiveClassifier = 'javadoc'
     }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = ["-Xjsr305=strict"]
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = ["-Xjsr305=strict"]
+        }
+    }
+    dependencies {
+        //implementation(kotlin("stdlib-jdk8"))
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    }
 }
 
 repositories {
-    mavenCentral()
     maven {
         url "https://dl.bintray.com/kotlin/exposed"
     }
@@ -85,7 +112,6 @@ repositories {
 dependencies {
     implementation(project(":core"))
     compileOnly 'org.jetbrains.exposed:exposed:0.10.2'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: kotlin_version
 
@@ -111,19 +137,6 @@ dependencies {
 
     implementation localGroovy()  // Groovy SDK
     compileOnly gradleApi()
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = ["-Xjsr305=strict"]
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = ["-Xjsr305=strict"]
-    }
 }
 
 gradlePlugin {

@@ -100,6 +100,9 @@ allprojects {
     dependencies {
         //implementation(kotlin("stdlib-jdk8"))
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        testImplementation "org.jetbrains.kotlin:kotlin-test"
+        testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
+
     }
 }
 
@@ -131,10 +134,7 @@ dependencies {
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
 
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
-
-    testImplementation "org.jetbrains.kotlin:kotlin-test"
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
-
+    
     implementation localGroovy()  // Groovy SDK
     compileOnly gradleApi()
 }

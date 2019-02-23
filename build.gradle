@@ -70,7 +70,7 @@ allprojects {
     apply plugin: 'kotlin'
     group 'com.improve_future'
     version '1.1.18'
-    //val kotlinVersion by extra { "1.2.0-rc-39" }
+    
     repositories {
         mavenCentral()
         jcenter()
@@ -102,7 +102,6 @@ allprojects {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         testImplementation "org.jetbrains.kotlin:kotlin-test"
         testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
-
     }
 }
 
@@ -168,6 +167,28 @@ pluginBundle {
 }
 
 def githubUrl = 'https://github.com/KenjiOhtsuka/harmonica'
+
+def pomConfig = {
+    licenses {
+        license {
+            name "GNU General Public License, Version 3.0"
+            url "https://www.gnu.org/licenses/gpl-3.0"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "kenjiohtsuka"
+            name "Kenji Otsuka"
+            email "kok.fdcm@gmail.com"
+        }
+    }
+
+    scm {
+        url githubUrl
+    }
+}
+
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
@@ -200,27 +221,6 @@ bintray {
 dokka {
     outputFormat = 'html'
     outputDirectory = Paths.get("docs", "api").toString()
-}
-
-def pomConfig = {
-    licenses {
-        license {
-            name "GNU General Public License, Version 3.0"
-            url "https://www.gnu.org/licenses/gpl-3.0"
-            distribution "repo"
-        }
-    }
-    developers {
-        developer {
-            id "kenjiohtsuka"
-            name "Kenji Otsuka"
-            email "kok.fdcm@gmail.com"
-        }
-    }
-
-    scm {
-        url githubUrl
-    }
 }
 
 // Create the publication with the pom configuration:

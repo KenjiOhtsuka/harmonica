@@ -1,0 +1,131 @@
+import java.nio.file.Paths
+
+plugins {
+  id "com.jfrog.bintray" version "1.8.4"
+  id 'maven-publish'
+  id 'java-library'
+  id "org.jetbrains.kotlin.jvm" version '1.3.21'
+}
+
+task sourcesJar(type: Jar) {
+  from sourceSets.main.allJava
+  archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+  from javadoc
+  archiveClassifier = 'javadoc'
+}
+
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'org.jetbrains.dokka'
+apply plugin: "com.gradle.plugin-publish"
+apply plugin: 'kotlin'
+
+// for Gradle Plugin
+pluginBundle {
+  website = 'https://github.com/KenjiOhtsuka/harmonica'
+  vcsUrl = 'https://github.com/KenjiOhtsuka/harmonica'
+  description = 'Kotlin Database Migration Tool'
+  tags = ['kotlin', 'database', 'migration']
+
+  plugins {
+    harmonica {
+      id = 'com.improve_future.harmonica'
+      displayName = 'DB Migration Plugin'
+    }
+  }
+}
+
+gradlePlugin {
+  plugins {
+    harmonica {
+      id = 'harmonica'
+      implementationClass = 'com.improve_future.harmonica.plugin.HarmonicaPlugin'
+    }
+    jarmonica {
+      id = 'jarmonica'
+      implementationClass = 'com.improve_future.harmonica.plugin.JarmonicaPlugin'
+    }
+  }
+}
+
+dependencies {
+  implementation project(':core')
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
+  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: kotlin_version
+  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
+  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
+  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
+  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: kotlin_version
+  compileOnly gradleApi()
+  testImplementation "org.jetbrains.kotlin:kotlin-test"
+  testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
+}
+
+def githubUrl = 'https://github.com/KenjiOhtsuka/harmonica'
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  pkg {
+    repo = 'm'
+    name = 'Harmonica'
+    userOrg = 'kenjiohtsuka'
+    licenses = ['GPL-3.0']
+    vcsUrl = githubUrl
+
+    version {
+      name = project.version
+      released = new Date()
+      vcsTag = project.version
+    }
+  }
+}
+
+dokka {
+  outputFormat = 'html'
+  outputDirectory = Paths.get("docs", "api").toString()
+}
+
+def pomConfig = {
+  licenses {
+    license {
+      name "GNU General Public License, Version 3.0"
+      url "https://www.gnu.org/licenses/gpl-3.0"
+      distribution "repo"
+    }
+  }
+  developers {
+    developer {
+      id "kenjiohtsuka"
+      name "Kenji Otsuka"
+      email "kok.fdcm@gmail.com"
+    }
+  }
+
+  scm {
+    url githubUrl
+  }
+}
+
+// Create the publication with the pom configuration:
+publishing {
+  publications {
+    MyPublication(MavenPublication) {
+      from components.java
+      artifact sourcesJar
+      artifact javadocJar
+      groupId 'com.improve_future'
+      artifactId "harmonica"
+      version project.version
+      pom.withXml {
+        def root = asNode()
+        root.appendNode('description', 'Kotlin Database Migration Tool')
+        root.appendNode('name', 'Harmonica')
+        root.appendNode('url', githubUrl)
+        root.children().last() + pomConfig
+      }
+    }
+  }
+}

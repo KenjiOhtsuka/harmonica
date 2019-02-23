@@ -35,7 +35,7 @@
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">Connection</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.Connection$<init>(com.improve_future.harmonica.core.DbConfig)/config">config</span><span class="symbol">:</span>&nbsp;<a href="../-db-config/index.html"><span class="identifier">DbConfig</span></a><span class="symbol">)</span></code></td>
+<code><span class="identifier">Connection</span><span class="symbol">(</span><span class="identifier" id="Connection$<init>(DbConfig)/config">config</span><span class="symbol">:</span>&nbsp;<a href="../-db-config/index.html"><span class="identifier">DbConfig</span></a><span class="symbol">)</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -73,14 +73,14 @@
 <p><a href="does-table-exist.html">doesTableExist</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">doesTableExist</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.Connection$doesTableExist(kotlin.String)/tableName">tableName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">doesTableExist</span><span class="symbol">(</span><span class="identifier" id="Connection$doesTableExist(kotlin.String)/tableName">tableName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="execute.html">execute</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">execute</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.Connection$execute(kotlin.String)/sql">sql</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">execute</span><span class="symbol">(</span><span class="identifier" id="Connection$execute(kotlin.String)/sql">sql</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
 <p>Execute SQL</p>
 </td>
 </tr>
@@ -89,7 +89,7 @@
 <p><a href="transaction.html">transaction</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">transaction</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.Connection$transaction(kotlin.Function1((com.improve_future.harmonica.core.Connection, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Connection</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">transaction</span><span class="symbol">(</span><span class="identifier" id="Connection$transaction(kotlin.Function1((Connection, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">Connection</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 </tbody>
 </table>
@@ -101,7 +101,7 @@
 <p><a href="create.html">create</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">create</span><span class="symbol">(</span><span class="identifier" id="com.improve_future.harmonica.core.Connection.Companion$create(kotlin.Function1((com.improve_future.harmonica.core.DbConfig, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../-db-config/index.html"><span class="identifier">DbConfig</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Connection</span></a></code></td>
+<code><span class="keyword">fun </span><span class="identifier">create</span><span class="symbol">(</span><span class="identifier" id="Connection.Companion$create(kotlin.Function1((DbConfig, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../-db-config/index.html"><span class="identifier">DbConfig</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="./index.html"><span class="identifier">Connection</span></a></code></td>
 </tr>
 </tbody>
 </table>

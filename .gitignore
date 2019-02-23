@@ -8,6 +8,7 @@
 # Project specific stuff
 document_test.iml
 harmonica_test.iml
+harmonica.iml
 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -66,7 +67,7 @@ fabric.properties
 #
 
 .gradle
-/build/
+build/
 
 # Ignore Gradle GUI config
 gradle-app.setting

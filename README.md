@@ -19,7 +19,7 @@ With this library, you can write database migration like as follows.
 ```kotlin
 package your.migration
 
-import com.improve_future.harmonica.core.AbstractMigration
+import AbstractMigration
 
 /**
  * HolloWorld

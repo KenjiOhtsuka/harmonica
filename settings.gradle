@@ -18,4 +18,5 @@
 
 rootProject.name = 'harmonica'
 include 'document'
-
+include 'core'
+include 'plugin'

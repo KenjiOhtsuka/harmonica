@@ -117,7 +117,7 @@ class VersionService(private val migrationTableName: String) {
      *
      * class name is like `M20180101001010101010nMigration`.
      */
-    internal fun pickUpVersionFromClassName(name: String): String {
+    fun pickUpVersionFromClassName(name: String): String {
         val endIndex = name.lastIndexOf(migrationSuffixString)
         val startIndex = name.substring(0, endIndex).lastIndexOf(migrationHeadString)
         return name.substring(startIndex + migrationHeadString.length, endIndex)

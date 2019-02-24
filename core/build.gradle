@@ -21,8 +21,14 @@ compileTestKotlin {
 dependencies {
   compileOnly 'org.jetbrains.exposed:exposed:0.10.2'
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
+  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: kotlin_version
   // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
   implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
+  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
+  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
+  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
+  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: kotlin_version
   implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
   testImplementation "mysql:mysql-connector-java:5.1.44"

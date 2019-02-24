@@ -22,9 +22,6 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
         val migrationPackage = args[0]
-//        (classLoader as URLClassLoader).urLs.forEach {
-//            println(it)
-//        }
         val env = args[3]
         val maxStep = if (args[4] == "null") null else args[4].toLong()
         var stepCounter = 1

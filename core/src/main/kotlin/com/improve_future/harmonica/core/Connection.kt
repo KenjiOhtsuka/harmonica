@@ -30,8 +30,6 @@ open class Connection(
     private lateinit var coreConnection: java.sql.Connection
 
     private fun connect(config: DbConfig) {
-        println(buildConnectionUriFromDbConfig(config))
-
         if (config.dbms != Dbms.SQLite) {
             coreConnection =
                 object : java.sql.Connection by DriverManager.getConnection(
@@ -116,6 +114,8 @@ open class Connection(
                         "jdbc:mysql://$host:$port/$dbName?autoReconnect=true"
                     Dbms.SQLite ->
                         "jdbc:sqlite:$dbName.db"
+                    Dbms.H2 ->
+                        "jdbc:h2:mem:$dbName"
                     Dbms.Oracle ->
                         ""
                     Dbms.SQLServer ->

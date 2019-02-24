@@ -53,12 +53,6 @@ gradlePlugin {
 dependencies {
   implementation project(':core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
-  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: kotlin_version
-  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
-  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
-  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
-  implementation group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: kotlin_version
   compileOnly gradleApi()
   testImplementation "org.jetbrains.kotlin:kotlin-test"
   testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"

@@ -23,5 +23,6 @@ enum class Dbms {
     MySQL,
     SQLite,
     Oracle,
-    SQLServer
+    SQLServer,
+    H2
 }

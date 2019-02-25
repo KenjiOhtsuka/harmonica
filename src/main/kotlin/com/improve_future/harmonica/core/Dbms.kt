@@ -24,5 +24,5 @@ enum class Dbms {
     SQLite,
     Oracle,
     SQLServer,
-    H2DB
+    H2
 }

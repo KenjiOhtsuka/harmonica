@@ -31,7 +31,8 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
         val connection = createConnection(migrationPackage, env)
         try {
             while (true) {
-                val migrationVersion = versionService.findCurrentMigrationVersion(connection)
+                val migrationVersion =
+                    versionService.findCurrentMigrationVersion(connection)
                 if (migrationVersion.isEmpty()) break
 
                 val classCandidateList =

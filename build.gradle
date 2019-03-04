@@ -76,7 +76,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.jetbrains.exposed:exposed:0.10.2'
+    implementation 'org.jetbrains.exposed:exposed:0.10.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: kotlin_version

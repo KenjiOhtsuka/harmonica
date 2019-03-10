@@ -87,7 +87,10 @@ class M20180624011127699_HolloWorld : AbstractMigration() {
 
 ## Usage, Command
 
-Please look at [Wiki](https://github.com/KenjiOhtsuka/harmonica/wiki).
+* [Wiki](https://github.com/KenjiOhtsuka/harmonica/wiki): Command usage.
+* Demo
+    * [Development Instruction](https://improve-future.com/en/spring-boot-with-db-migration.html): Explanation of how to develop the application with Spring Boot and Harmonica.
+    * [The code](https://github.com/KenjiOhtsuka/harmonica_demo): The code of above explanation.
 
 ## Caution
 

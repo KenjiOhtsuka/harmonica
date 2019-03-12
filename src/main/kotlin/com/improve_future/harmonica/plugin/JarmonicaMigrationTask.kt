@@ -77,6 +77,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             it.migrationPackage = migrationPackage
             it.env = env
             it.taskType = taskType
+            it.tableNamePluralization = tableNamePluralization
             args.forEach { arg -> it.add(arg) }
         }
     }

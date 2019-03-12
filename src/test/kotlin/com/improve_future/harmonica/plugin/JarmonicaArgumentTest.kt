@@ -31,12 +31,35 @@ class JarmonicaArgumentTest {
         arg.migrationPackage = "package"
 
         var expectedList = mutableListOf(
-            "package", "Up", "directory", "env"
+            "package", "Up", "directory", "env", "false"
         )
         assertEquals(expectedList, arg.toList())
 
         arg.add("")
         expectedList.add("")
         assertEquals(expectedList, arg.toList())
+    }
+
+    @Test
+    fun testToArray() {
+        val arg = JarmonicaArgument()
+        arg.migrationDirectory = "directory"
+        arg.taskType = JarmonicaTaskType.Up
+        arg.env = "env"
+        arg.migrationPackage = "package"
+
+        var expectedArray = arrayOf(
+            "package", "Up", "directory", "env", "false"
+        )
+        var actualArray = arg.toArray()
+        assertEquals(expectedArray.size, actualArray.size)
+        for (i in 0 until expectedArray.size)
+            assertEquals(expectedArray[i], actualArray[i])
+
+        arg.add("")
+        expectedArray += arrayOf("")
+        actualArray = arg.toArray()
+        for (i in 0 until expectedArray.size)
+            assertEquals(expectedArray[i], actualArray[i])
     }
 }

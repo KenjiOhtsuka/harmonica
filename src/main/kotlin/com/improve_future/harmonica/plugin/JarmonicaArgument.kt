@@ -23,6 +23,7 @@ class JarmonicaArgument() {
     internal lateinit var taskType: JarmonicaTaskType
     lateinit var env: String
     lateinit var migrationDirectory: String
+    internal var tableNamePluralization: Boolean = false
     private val additionalArgList = mutableListOf<String>()
 
     fun toArray(): Array<String> {
@@ -30,21 +31,27 @@ class JarmonicaArgument() {
             migrationPackage,
             taskType.name,
             migrationDirectory,
-            env
+            env,
+            tableNamePluralization.toString()
         ) + additionalArgList.toTypedArray()
     }
 
     fun toList(): List<String> {
-        return listOf(
-            migrationPackage,
-            taskType.name,
-            migrationDirectory,
-            env
-        ) + additionalArgList
+        return toArray().toList()
     }
 
     fun add(arg: String): JarmonicaArgument {
         additionalArgList.add(arg)
         return this
+    }
+
+    companion object {
+        fun parse(args: Array<out String>): JarmonicaArgument {
+            return JarmonicaArgument().also {
+                it.migrationPackage = args[0]
+                it.migrationDirectory = args[2]
+                it.env = args[3]
+            }
+        }
     }
 }

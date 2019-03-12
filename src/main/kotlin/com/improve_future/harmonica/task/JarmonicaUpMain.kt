@@ -41,7 +41,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
 
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {
-                    val migration = migrationClass.newInstance()
+                    val migration = migrationClass.getConstructor().newInstance()
                     migration.connection = connection
                     migration.up()
                     versionService.saveVersion(connection, migrationVersion)

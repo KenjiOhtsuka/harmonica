@@ -46,7 +46,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
 
                 println("== [Start] Migrate down $migrationVersion ==")
                 connection.transaction {
-                    val migration = migrationClass.newInstance()
+                    val migration = migrationClass.getConstructor().newInstance()
                     migration.connection = connection
                     migration.down()
                     versionService.removeVersion(connection, migrationVersion!!)

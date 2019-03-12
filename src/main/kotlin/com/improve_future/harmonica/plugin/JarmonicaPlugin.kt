@@ -26,12 +26,13 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.JavaExec
 
-internal fun <T> T.groovyClosure(function: () -> Unit) = object : Closure<Unit>(this) {
-    @Suppress("unused")
-    fun doCall() {
-        function()
+internal fun <T> T.groovyClosure(function: () -> Unit) =
+    object : Closure<Unit>(this) {
+        @Suppress("unused")
+        fun doCall() {
+            function()
+        }
     }
-}
 
 class JarmonicaPlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -39,7 +40,10 @@ class JarmonicaPlugin : Plugin<Project> {
         val javaConvention = project.convention
             .getPlugin(JavaPluginConvention::class.java)
 
-        fun <T : JavaExec> createTaskBase(name: String, task: Class<T>): JavaExec {
+        fun <T : JavaExec> createTaskBase(
+            name: String,
+            task: Class<T>
+        ): JavaExec {
             return project.tasks.create(name, task).apply {
                 group = PluginConfig.groupName
                 classpath(
@@ -58,15 +62,21 @@ class JarmonicaPlugin : Plugin<Project> {
         }
         createTaskBase("jarmonicaUp", JarmonicaUpTask::class.java).run {
             description = "Compile and migrate up."
-            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaUpMain" })
+            conventionMapping(
+                "main",
+                { "com.improve_future.harmonica.task.JarmonicaUpMain" })
         }
         createTaskBase("jarmonicaDown", JarmonicaDownTask::class.java).run {
             description = "Compile and migrate down."
-            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaDownMain" })
+            conventionMapping(
+                "main",
+                { "com.improve_future.harmonica.task.JarmonicaDownMain" })
         }
         createTaskBase("jarmonicaCreate", JarmonicaCreateTask::class.java).run {
             description = "Create migrate file."
-            conventionMapping("main", { "com.improve_future.harmonica.task.JarmonicaCreateMain" })
+            conventionMapping(
+                "main",
+                { "com.improve_future.harmonica.task.JarmonicaCreateMain" })
         }
         //conventionMapping("main",
         //        MainClassConvention(project, ???({ run.getClasspath() })))

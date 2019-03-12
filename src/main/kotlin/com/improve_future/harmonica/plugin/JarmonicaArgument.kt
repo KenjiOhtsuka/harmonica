@@ -51,7 +51,13 @@ class JarmonicaArgument() {
                 it.migrationPackage = args[0]
                 it.migrationDirectory = args[2]
                 it.env = args[3]
+                it.tableNamePluralization = args[4] == "true"
             }
+        }
+
+        fun parseStringStep(stepString: String): Long? {
+            // ToDo: stepString is to be checked with "" or "null"
+            return if (stepString == "") null else stepString.toLong()
         }
     }
 }

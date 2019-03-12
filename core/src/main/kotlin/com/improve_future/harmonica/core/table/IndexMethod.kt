@@ -16,7 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'harmonica'
-include 'document'
-include 'core'
+package com.improve_future.harmonica.core.table
 
+enum class IndexMethod {
+    BTree,
+    Hash,
+    /** Only for PostgreSQL */
+    Gist,
+    /** Only for PostgreSQL */
+    SpGist,
+    /** Only for PostgreSQL */
+    Gin,
+    /** Only for PostgreSQL */
+    BRin
+}

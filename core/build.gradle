@@ -1,0 +1,93 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+dependencies {
+    compileOnly("org.jetbrains.exposed:exposed:0.10.2")
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
+    implementation(
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-compiler-embeddable",
+            version: kotlin_version
+    )
+
+    /* JDBC */
+    testImplementation("mysql:mysql-connector-java:5.1.44")
+    //testCompile "mysql:mysql-connector-mxj:5.0.12"
+    testImplementation("org.postgresql:postgresql:9.4.1212.jre6")
+    //testCompile 'com.opentable.components:otj-pg-embedded:0.9.0'
+    testImplementation("org.xerial:sqlite-jdbc:3.21.0.1")
+//    testCompile 'com.oracle:ojdbc6:12.1.0.1-atlassian-hosted'
+    testImplementation(
+            group: "com.microsoft.sqlserver",
+            name: "mssql-jdbc",
+            version: "6.2.1.jre7"
+    )
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
+    implementation(
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-script-runtime",
+            version: kotlin_version
+    )
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
+    implementation(
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-script-util",
+            version: kotlin_version
+    )
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
+    implementation(
+            group: "org.jetbrains.kotlin",
+            name: "kotlin-reflect",
+            version: kotlin_version
+    )
+
+    implementation(
+            group: "org.reflections",
+            name: "reflections",
+            version: "0.9.11"
+    )
+
+    implementation(localGroovy())  // Groovy SDK
+    compileOnly(gradleApi())
+}
+
+//def pomConfig = {
+//    licenses {
+//        license {
+//            name "GNU General Public License, Version 3.0"
+//            url "https://www.gnu.org/licenses/gpl-3.0"
+//            distribution "repo"
+//        }
+//    }
+//    developers {
+//        developer {
+//            id "kenjiohtsuka"
+//            name "Kenji Otsuka"
+//            email "kok.fdcm@gmail.com"
+//        }
+//    }
+//
+//    scm {
+//        url githubUrl
+//    }
+//}
+//
+//// Create the publication with the pom configuration:
+//publishing {
+//    publications {
+//        MyPublication(MavenPublication) {
+//            from components.java
+//                    artifact sourcesJar
+//                    artifact javadocJar
+//                    groupId 'com.improve_future'
+//            artifactId "harmonica"
+//            version project.version
+//                    pom.withXml {
+//                        def root = asNode()
+//                        root.appendNode('description', 'Kotlin Database Migration Tool')
+//                        root.appendNode('name', 'Harmonica')
+//                        root.appendNode('url', githubUrl)
+//                        root.children().last() + pomConfig
+//                    }
+//        }
+//    }
+//}

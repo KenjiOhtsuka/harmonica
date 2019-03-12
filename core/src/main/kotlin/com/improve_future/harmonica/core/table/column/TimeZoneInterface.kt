@@ -16,7 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'harmonica'
-include 'document'
-include 'core'
+package com.improve_future.harmonica.core.table.column
 
+internal interface TimeZoneInterface {
+    var withTimeZone: Boolean
+}

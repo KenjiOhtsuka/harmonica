@@ -33,6 +33,7 @@ import java.util.*
 @MigrationDsl
 abstract class AbstractMigration {
     internal lateinit var connection: ConnectionInterface
+    internal var tableNameIsInPluralForm = false
 
     val config
         get() = connection.config

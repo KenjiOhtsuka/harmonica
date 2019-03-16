@@ -78,8 +78,6 @@ class JarmonicaPlugin : Plugin<Project> {
                 "main",
                 { "com.improve_future.harmonica.task.JarmonicaCreateMain" })
         }
-        //conventionMapping("main",
-        //        MainClassConvention(project, ???({ run.getClasspath() })))
     }
 }
 

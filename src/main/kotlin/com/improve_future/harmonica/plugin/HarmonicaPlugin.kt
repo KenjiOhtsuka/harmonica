@@ -27,14 +27,17 @@ open class HarmonicaPlugin: Plugin<Project> {
         project.tasks.run {
             create("harmonicaUp", MigrationUpTask::class.java) {
                 it.group = PluginConfig.groupName
+                it.description = "Migrate up."˚
             }
 
             create("harmonicaCreate", MigrationCreate::class.java) {
                 it.group = PluginConfig.groupName
+                it.description = "Migrate down."
             }
 
             create("harmonicaDown", MigrationDownTask::class.java) {
                 it.group = PluginConfig.groupName
+                it.description = "Create migration file."
             }
         }
     }

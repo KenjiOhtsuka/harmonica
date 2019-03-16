@@ -73,7 +73,7 @@ class JarmonicaPlugin : Plugin<Project> {
                 { "com.improve_future.harmonica.task.JarmonicaDownMain" })
         }
         createTaskBase("jarmonicaCreate", JarmonicaCreateTask::class.java).run {
-            description = "Create migrate file."
+            description = "Create a migration file."
             conventionMapping(
                 "main",
                 { "com.improve_future.harmonica.task.JarmonicaCreateMain" })

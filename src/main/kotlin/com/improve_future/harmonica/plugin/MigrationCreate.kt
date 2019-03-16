@@ -30,8 +30,6 @@ open class MigrationCreate : AbstractTask() {
             return "Migration"
         }
 
-    private val versionService = VersionService("harmonica_migration")
-
     @TaskAction
     fun createMigration() {
         val migrationFile = Paths.get(

@@ -27,14 +27,6 @@ import java.nio.file.Paths
 import javax.script.ScriptEngineManager
 
 abstract class AbstractMigrationTask : AbstractTask() {
-    /** The table name to store executed migration version IDs. */
-    private val migrationTableName: String = "harmonica_migration"
-    protected val versionService: VersionService
-
-    init {
-        versionService = VersionService(migrationTableName)
-    }
-
     @Input
     var dbms: Dbms = Dbms.PostgreSQL
 

@@ -28,7 +28,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
 //            println(it)
 //        }
 
-        val maxStep = if (args[5] == "null") null else args[5].toLong()
+        val maxStep = JarmonicaArgument.parseStepString(args[5])
         var stepCounter = 1
 
         val connection = createConnection(argument.migrationPackage, argument.env)

@@ -55,9 +55,8 @@ class JarmonicaArgument() {
             }
         }
 
-        fun parseStringStep(stepString: String): Long? {
-            // ToDo: stepString is to be checked with "" or "null"
-            return if (stepString == "") null else stepString.toLong()
+        fun parseStepString(stepString: String): Long? {
+            return if (stepString == "null") null else stepString.toLong()
         }
     }
 }

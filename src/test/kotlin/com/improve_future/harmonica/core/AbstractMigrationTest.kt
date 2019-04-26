@@ -29,6 +29,18 @@ import kotlin.test.assertEquals
 
 class AbstractMigrationTest {
     @Test
+    fun testCreateTable() {
+        val migration = StubMigration()
+        migration.createTable("user") {
+            assertEquals(false, tableNameIsInPluralForm)
+        }
+        migration.tableNameIsInPluralForm = true
+        migration.createTable("user") {
+            assertEquals(true, tableNameIsInPluralForm)
+        }
+    }
+
+    @Test
     fun testAddTextColumn() {
         val migration = StubMigration()
         migration.addTextColumn(

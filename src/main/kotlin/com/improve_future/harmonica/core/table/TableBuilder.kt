@@ -18,6 +18,7 @@
 
 package com.improve_future.harmonica.core.table
 
+import com.cesarferreira.pluralize.singularize
 import com.improve_future.harmonica.core.MigrationDsl
 import com.improve_future.harmonica.core.RawSql
 import com.improve_future.harmonica.core.table.column.*
@@ -785,7 +786,7 @@ class TableBuilder {
         columnName: String = "id"
     ): ColumnBuilder {
         val modifiedTableName =
-            if (tableNameIsInPluralForm) tableName
+            if (tableNameIsInPluralForm) tableName.singularize()
             else tableName
 
         val builder =

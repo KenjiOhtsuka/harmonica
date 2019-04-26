@@ -24,6 +24,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.asserter
 
 class TableBuilderTest {
     @Test
@@ -234,5 +235,18 @@ class TableBuilderTest {
         assertEquals("name", blobColumn.name)
         assertEquals(false, blobColumn.nullable)
         assertEquals(defaultBlob, blobColumn.default)
+    }
+
+    @Test
+    fun testRefer() {
+        var tb = TableBuilder()
+        tb.refer("users")
+        var column = tb.columnList.first()
+        assertEquals("users_id", column.name)
+
+        tb = TableBuilder()
+        tb.refer("users")
+        column = tb.columnList.first()
+        assertEquals("user_id", column.name)
     }
 }

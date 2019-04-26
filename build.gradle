@@ -27,9 +27,7 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         // for release
@@ -70,9 +68,8 @@ apply plugin: 'org.jetbrains.dokka'
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://dl.bintray.com/kotlin/exposed"
-    }
+    maven { url "https://dl.bintray.com/kotlin/exposed" }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -97,6 +94,8 @@ dependencies {
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
 
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
+
+    implementation 'com.github.cesarferreira:kotlin-pluralizer:0.2.9'
 
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"

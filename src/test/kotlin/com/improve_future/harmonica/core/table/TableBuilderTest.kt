@@ -245,6 +245,7 @@ class TableBuilderTest {
         assertEquals("users_id", column.name)
 
         tb = TableBuilder()
+        tb.tableNameIsInPluralForm = true
         tb.refer("users")
         column = tb.columnList.first()
         assertEquals("user_id", column.name)

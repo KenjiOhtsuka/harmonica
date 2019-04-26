@@ -33,6 +33,8 @@ class TableBuilder {
     internal var comment: String? = null
     /** Specify add auto incremental id column or not */
     var id = true
+    /** Specify table name pluralization */
+    var tableNameIsInPluralForm = false
 
     private fun addColumn(column: AbstractColumn) {
         columnList.add(column)
@@ -782,9 +784,13 @@ class TableBuilder {
         default: Long? = null,
         columnName: String = "id"
     ): ColumnBuilder {
+        val modifiedTableName =
+            if (tableNameIsInPluralForm) tableName
+            else tableName
+
         val builder =
             integer(
-                tableName + "_" + columnName,
+                modifiedTableName + "_" + columnName,
                 nullable = nullable,
                 default = default,
                 unsigned = true

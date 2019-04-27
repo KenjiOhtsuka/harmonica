@@ -47,6 +47,12 @@ class JarmonicaArgumentTest {
 
     @Test
     fun testParse() {
-        TODO()
+        var argument = JarmonicaArgument.parse(
+            arrayOf("package", "pass", "directory", "env", "true")
+        )
+        assertEquals("package", argument.migrationPackage)
+        assertEquals("directory", argument.migrationDirectory)
+        assertEquals("env", argument.env)
+        assertEquals(true, argument.tableNamePluralization)
     }
 }

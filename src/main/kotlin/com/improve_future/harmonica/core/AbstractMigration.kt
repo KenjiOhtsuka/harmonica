@@ -53,7 +53,7 @@ abstract class AbstractMigration {
         adapter.createTable(name) {
             this.tableNameIsInPluralForm =
                 this@AbstractMigration.tableNameIsInPluralForm
-            block
+            block()
         }
     }
 

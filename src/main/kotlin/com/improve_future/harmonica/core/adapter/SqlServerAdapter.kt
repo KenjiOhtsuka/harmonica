@@ -30,9 +30,7 @@ internal class SqlServerAdapter(connection: ConnectionInterface) : DbAdapter(con
     }
 
     override fun createIndex(
-        tableName: String,
-        columnNameArray: Array<String>,
-        unique: Boolean,
+        tableName: String, columnNameArray: Array<String>, unique: Boolean,
         method: IndexMethod?
     ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

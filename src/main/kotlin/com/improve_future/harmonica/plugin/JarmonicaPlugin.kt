@@ -41,26 +41,6 @@ class JarmonicaPlugin : Plugin<Project> {
         val javaConvention = project.convention
             .getPlugin(JavaPluginConvention::class.java)
 
-//        fun <T : JavaExec> createTaskBase(
-//            name: String, task: Class<T>
-//        ): JavaExec {
-//            return project.tasks.create(name, task).apply {
-//                group = PluginConfig.groupName
-//                classpath(
-//                    javaConvention.sourceSets
-//                        .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath
-//                )
-//                conventionMapping.map(
-//                    "jvmArgs",
-//                    groovyClosure {
-//                        if (project.hasProperty("applicationDefaultJvmArgs"))
-//                            project.property("applicationDefaultJvmArgs")
-//                        else java.util.Collections.emptyList<Any>()
-//                    }
-//                )
-//            }
-//        }
-
         fun <T : JavaExec> addTask(
             kTask: KClass<T>, description: String
         ): JavaExec {
@@ -88,36 +68,6 @@ class JarmonicaPlugin : Plugin<Project> {
                 conventionMapping("main") { "com.improve_future.harmonica.task.$mainClassName" }
             }
         }
-
-/*
-        createTaskBase("jarmonicaUp", JarmonicaUpTask::class.java).run {
-            description = "Compile and migrate up."
-            conventionMapping(
-                "main",
-                { "com.improve_future.harmonica.task.JarmonicaUpMain" })
-        }
-        createTaskBase("jarmonicaDown", JarmonicaDownTask::class.java).run {
-            description = "Compile and migrate down."
-            conventionMapping(
-                "main",
-                { "com.improve_future.harmonica.task.JarmonicaDownMain" })
-        }
-        createTaskBase("jarmonicaCreate", JarmonicaCreateTask::class.java).run {
-            description = "Create a migration file."
-            conventionMapping(
-                "main",
-                { "com.improve_future.harmonica.task.JarmonicaCreateMain" })
-        }
-        createTaskBase(
-            "jarmonicaVersion", JarmonicaVersionTask::class.java
-        ).run {
-            description = "Show current migration version."
-            conventionMapping(
-                "main",
-                { "com.improve_future.harmonica.task.JarmonicaVersionMain" }
-            )
-        }
-*/
 
         addTask(
             JarmonicaUpTask::class, "Compile and migrate up."

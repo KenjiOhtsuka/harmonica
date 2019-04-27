@@ -30,8 +30,6 @@ open class Connection(
     private lateinit var coreConnection: java.sql.Connection
 
     private fun connect(config: DbConfig) {
-        println(buildConnectionUriFromDbConfig(config))
-
         if (config.dbms != Dbms.SQLite) {
             coreConnection =
                 object : java.sql.Connection by DriverManager.getConnection(

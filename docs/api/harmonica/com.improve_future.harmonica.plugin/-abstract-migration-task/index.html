@@ -1,21 +1,3 @@
-<!--
-  ~ Harmonica: Kotlin Database Migration Tool
-  ~ Copyright (C) 2019  Kenji Otsuka
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
 <HTML>
 <HEAD>
 <meta charset="UTF-8">
@@ -26,7 +8,7 @@
 <a href="../../index.html">harmonica</a>&nbsp;/&nbsp;<a href="../index.html">com.improve_future.harmonica.plugin</a>&nbsp;/&nbsp;<a href="./index.html">AbstractMigrationTask</a><br/>
 <br/>
 <h1>AbstractMigrationTask</h1>
-<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">AbstractMigrationTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-abstract-harmonica-task/index.html"><span class="identifier">AbstractHarmonicaTask</span></a></code>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">AbstractMigrationTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-abstract-task/index.html"><span class="identifier">AbstractTask</span></a></code>
 <h3>Constructors</h3>
 <table>
 <tbody>
@@ -49,9 +31,28 @@
 <td>
 <code><span class="keyword">var </span><span class="identifier">dbms</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core/-dbms/index.html"><span class="identifier">Dbms</span></a></code></td>
 </tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
 <tr>
 <td>
-<p><a href="version-service.html">versionService</a></p>
+<p><a href="../-abstract-task/directory-path.html">directoryPath</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">directoryPath</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../-abstract-task/env.html">env</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">env</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../-abstract-task/version-service.html">versionService</a></p>
 </td>
 <td>
 <code><span class="keyword">val </span><span class="identifier">versionService</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.service/-version-service/index.html"><span class="identifier">VersionService</span></a></code></td>
@@ -70,6 +71,13 @@
 </tr>
 <tr>
 <td>
+<p><a href="load-config-file.html">loadConfigFile</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">loadConfigFile</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core/-db-config/index.html"><span class="identifier">DbConfig</span></a></code></td>
+</tr>
+<tr>
+<td>
 <p><a href="read-migration.html">readMigration</a></p>
 </td>
 <td>
@@ -82,10 +90,22 @@
 <tbody>
 <tr>
 <td>
-<p><a href="../-abstract-harmonica-task/load-config-file.html">loadConfigFile</a></p>
+<p><a href="../-abstract-task/find-migration-dir.html">findMigrationDir</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">loadConfigFile</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.improve_future.harmonica.core/-db-config/index.html"><span class="identifier">DbConfig</span></a></code></td>
+<code><span class="keyword">fun </span><span class="identifier">findMigrationDir</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="engine.html">engine</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">engine</span><span class="symbol">: </span><span class="identifier">KotlinJsr223JvmLocalScriptEngine</span></code></td>
 </tr>
 </tbody>
 </table>

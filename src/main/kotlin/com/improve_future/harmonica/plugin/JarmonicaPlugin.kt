@@ -25,6 +25,7 @@ import groovy.lang.Closure
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.JavaExec
+import kotlin.reflect.KClass
 
 internal fun <T> T.groovyClosure(function: () -> Unit) =
     object : Closure<Unit>(this) {
@@ -40,11 +41,36 @@ class JarmonicaPlugin : Plugin<Project> {
         val javaConvention = project.convention
             .getPlugin(JavaPluginConvention::class.java)
 
-        fun <T : JavaExec> createTaskBase(
-            name: String,
-            task: Class<T>
+//        fun <T : JavaExec> createTaskBase(
+//            name: String, task: Class<T>
+//        ): JavaExec {
+//            return project.tasks.create(name, task).apply {
+//                group = PluginConfig.groupName
+//                classpath(
+//                    javaConvention.sourceSets
+//                        .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath
+//                )
+//                conventionMapping.map(
+//                    "jvmArgs",
+//                    groovyClosure {
+//                        if (project.hasProperty("applicationDefaultJvmArgs"))
+//                            project.property("applicationDefaultJvmArgs")
+//                        else java.util.Collections.emptyList<Any>()
+//                    }
+//                )
+//            }
+//        }
+
+        fun <T : JavaExec> addTask(
+            kTask: KClass<T>, description: String
         ): JavaExec {
-            return project.tasks.create(name, task).apply {
+            val task = kTask.java
+            val taskName = task.simpleName.removeSuffix("Task").run {
+                this[0].toLowerCase() + this.substring(1)
+            }
+            val mainClassName = task.simpleName.removeSuffix("Task") + "Main"
+
+            return project.tasks.create(taskName, task).apply {
                 group = PluginConfig.groupName
                 classpath(
                     javaConvention.sourceSets
@@ -58,8 +84,12 @@ class JarmonicaPlugin : Plugin<Project> {
                         else java.util.Collections.emptyList<Any>()
                     }
                 )
+                this.description = description
+                conventionMapping("main") { "com.improve_future.harmonica.task.$mainClassName" }
             }
         }
+
+/*
         createTaskBase("jarmonicaUp", JarmonicaUpTask::class.java).run {
             description = "Compile and migrate up."
             conventionMapping(
@@ -78,9 +108,32 @@ class JarmonicaPlugin : Plugin<Project> {
                 "main",
                 { "com.improve_future.harmonica.task.JarmonicaCreateMain" })
         }
+        createTaskBase(
+            "jarmonicaVersion", JarmonicaVersionTask::class.java
+        ).run {
+            description = "Show current migration version."
+            conventionMapping(
+                "main",
+                { "com.improve_future.harmonica.task.JarmonicaVersionMain" }
+            )
+        }
+*/
+
+        addTask(
+            JarmonicaUpTask::class, "Compile and migrate up."
+        )
+        addTask(
+            JarmonicaDownTask::class, "Compile and migrate down."
+        )
+        addTask(
+            JarmonicaCreateTask::class, "Create a migration file."
+        )
+        addTask(
+            JarmonicaVersionTask::class, "Show current migration version."
+        )
+
     }
 }
-
 
 open class JarmonicaUpTask : JarmonicaMigrationTask() {
     override val taskType = JarmonicaTaskType.Up
@@ -106,6 +159,16 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
         args = buildJarmonicaArgument(
             step.toString()
         ).toList()
+        super.exec()
+    }
+}
+
+open class JarmonicaVersionTask : JarmonicaMigrationTask() {
+    override val taskType = JarmonicaTaskType.Version
+
+    override fun exec() {
+        jvmArgs = listOf()
+        args = buildJarmonicaArgument().toList()
         super.exec()
     }
 }

@@ -18,6 +18,7 @@
 
 package com.improve_future.harmonica.plugin
 
+import com.improve_future.harmonica.service.VersionService
 import org.gradle.api.DefaultTask
 import java.io.File
 import java.nio.file.Paths
@@ -43,4 +44,11 @@ abstract class AbstractTask : DefaultTask() {
         return Paths.get(directoryPath, "migration").toFile()
     }
 
+    /** The table name to store executed migration version IDs. */
+    private val migrationTableName: String = "harmonica_migration"
+    protected val versionService: VersionService
+
+    init {
+        versionService = VersionService(migrationTableName)
+    }
 }

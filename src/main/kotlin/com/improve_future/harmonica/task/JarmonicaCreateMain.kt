@@ -18,19 +18,18 @@
 
 package com.improve_future.harmonica.task
 
+import com.improve_future.harmonica.plugin.JarmonicaArgument
 import java.nio.file.Paths
 
 object JarmonicaCreateMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
-        val migrationPackage = args[0]
-        val migrationDirectory = args[2]
-        val env = args[3]
-        val migrationName = args[4]
+        val argument = JarmonicaArgument.parse(args)
+        val migrationName = args[5]
         val migrationClassName = versionService.composeNewMigrationName(migrationName)
 
         val migrationFile = Paths.get(
-            Paths.get(migrationDirectory, "migration").toFile().absolutePath,
+            Paths.get(argument.migrationDirectory, "migration").toFile().absolutePath,
             "$migrationClassName.kt"
         ).toFile()
         migrationFile.parentFile.mkdirs()

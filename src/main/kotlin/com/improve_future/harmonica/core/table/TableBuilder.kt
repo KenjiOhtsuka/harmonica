@@ -18,6 +18,7 @@
 
 package com.improve_future.harmonica.core.table
 
+import com.cesarferreira.pluralize.singularize
 import com.improve_future.harmonica.core.MigrationDsl
 import com.improve_future.harmonica.core.RawSql
 import com.improve_future.harmonica.core.table.column.*
@@ -33,6 +34,8 @@ class TableBuilder {
     internal var comment: String? = null
     /** Specify add auto incremental id column or not */
     var id = true
+    /** Specify table name pluralization */
+    var tableNameIsInPluralForm = false
 
     private fun addColumn(column: AbstractColumn) {
         columnList.add(column)
@@ -782,9 +785,13 @@ class TableBuilder {
         default: Long? = null,
         columnName: String = "id"
     ): ColumnBuilder {
+        val modifiedTableName =
+            if (tableNameIsInPluralForm) tableName.singularize()
+            else tableName
+
         val builder =
             integer(
-                tableName + "_" + columnName,
+                modifiedTableName + "_" + columnName,
                 nullable = nullable,
                 default = default,
                 unsigned = true

@@ -23,20 +23,36 @@ import kotlin.test.assertEquals
 
 class JarmonicaArgumentTest {
     @Test
-    fun testToList() {
+    fun testToArray() {
         val arg = JarmonicaArgument()
         arg.migrationDirectory = "directory"
         arg.taskType = JarmonicaTaskType.Up
         arg.env = "env"
         arg.migrationPackage = "package"
 
-        var expectedList = mutableListOf(
-            "package", "Up", "directory", "env"
+        var expectedArray = arrayOf(
+            "package", "Up", "directory", "env", "false"
         )
-        assertEquals(expectedList, arg.toList())
+        var actualArray = arg.toArray()
+        assertEquals(expectedArray.size, actualArray.size)
+        for (i in 0 until expectedArray.size)
+            assertEquals(expectedArray[i], actualArray[i])
 
         arg.add("")
-        expectedList.add("")
-        assertEquals(expectedList, arg.toList())
+        expectedArray += arrayOf("")
+        actualArray = arg.toArray()
+        for (i in 0 until expectedArray.size)
+            assertEquals(expectedArray[i], actualArray[i])
+    }
+
+    @Test
+    fun testParse() {
+        var argument = JarmonicaArgument.parse(
+            arrayOf("package", "pass", "directory", "env", "true")
+        )
+        assertEquals("package", argument.migrationPackage)
+        assertEquals("directory", argument.migrationDirectory)
+        assertEquals("env", argument.env)
+        assertEquals(true, argument.tableNamePluralization)
     }
 }

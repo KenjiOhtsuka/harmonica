@@ -53,7 +53,7 @@ class VersionService(private val migrationTableName: String) {
             resultSet.next()
             result = (resultSet.getLong(1) > 0)
         } catch (e: Exception) {
-            println(e.message)
+            System.err.println(e.message)
             statement.close()
             throw e
         }

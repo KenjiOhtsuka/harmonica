@@ -18,20 +18,23 @@
 
 package com.improve_future.harmonica.task
 
+import com.improve_future.harmonica.plugin.JarmonicaArgument
+
 object JarmonicaDownMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
-        val migrationPackage = args[0]
-        val env = args[3]
-        val maxStep = if (args[4] == "") null else args[4].toLong()
+        val argument = JarmonicaArgument.parse(args)
+        val maxStep = JarmonicaArgument.parseStepString(args[5])
         var stepCounter = 1
 
-        val classList = findMigrationClassList(migrationPackage)
+        val classList = findMigrationClassList(argument.migrationPackage)
 
-        val connection = createConnection(migrationPackage, env)
+        val connection =
+            createConnection(argument.migrationPackage, argument.env)
         try {
             while (true) {
-                val migrationVersion = versionService.findCurrentMigrationVersion(connection)
+                val migrationVersion =
+                    versionService.findCurrentMigrationVersion(connection)
                 if (migrationVersion.isEmpty()) break
 
                 val classCandidateList =
@@ -46,13 +49,14 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
 
                 println("== [Start] Migrate down $migrationVersion ==")
                 connection.transaction {
-                    val migration = migrationClass.newInstance()
+                    val migration =
+                        migrationClass.getConstructor().newInstance()
                     migration.connection = connection
                     migration.down()
                     versionService.removeVersion(connection, migrationVersion!!)
                 }
                 println("== [End] Migrate down $migrationVersion ==")
-                if (maxStep != null && ++stepCounter > maxStep) break
+                if (maxStep == null || ++stepCounter > maxStep) break
             }
             connection.close()
         } catch (e: Exception) {

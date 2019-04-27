@@ -165,9 +165,7 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
     }
 
     override fun dropForeignKey(
-        tableName: String,
-        columnName: String,
-        keyName: String
+        tableName: String, columnName: String, keyName: String
     ) {
         val sql = "ALTER TABLE $tableName DROP CONSTRAINT $keyName;"
         connection.execute(sql)

@@ -54,10 +54,10 @@ abstract class JarmonicaTaskMain {
         classList.forEach {
             if (it.simpleName == env) {
                 return try {
-                    // for Class inherit DbConfig
+                    // for Class inherits DbConfig
                     it.getConstructor().newInstance()
                 } catch (e: Exception) {
-                    // for Object inherit DbConfig
+                    // for Object inherits DbConfig
                     it.getDeclaredField("INSTANCE").get(it) as DbConfig
                 }
             }

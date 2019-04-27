@@ -19,11 +19,8 @@
 package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.service.VersionService
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.nio.file.Paths
-import java.text.SimpleDateFormat
-import java.util.*
 
 open class MigrationCreate : AbstractTask() {
     private val migrationName: String
@@ -32,8 +29,6 @@ open class MigrationCreate : AbstractTask() {
                 return project.properties["migrationName"] as String
             return "Migration"
         }
-
-    private val versionService = VersionService("harmonica_migration")
 
     @TaskAction
     fun createMigration() {

@@ -120,6 +120,8 @@ open class Connection(
                         ""
                     Dbms.SQLServer ->
                         ""
+                    Dbms.H2 ->
+                        ""
                 }
             }
         }

@@ -18,30 +18,32 @@
 
 package com.improve_future.harmonica.task
 
+import com.improve_future.harmonica.plugin.JarmonicaArgument
+
 object JarmonicaUpMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
-        val migrationPackage = args[0]
+        val argument = JarmonicaArgument.parse(args)
 //        (classLoader as URLClassLoader).urLs.forEach {
 //            println(it)
 //        }
-        val env = args[3]
-        val maxStep = if (args[4] == "null") null else args[4].toLong()
+
+        val maxStep = JarmonicaArgument.parseStepString(args[5])
         var stepCounter = 1
 
-        val connection = createConnection(migrationPackage, env)
+        val connection = createConnection(argument.migrationPackage, argument.env)
         try {
             connection.transaction {
                 versionService.setupHarmonicaMigrationTable(connection)
             }
-            for (migrationClass in findMigrationClassList(migrationPackage)) {
+            for (migrationClass in findMigrationClassList(argument.migrationPackage)) {
                 val migrationVersion =
                     versionService.pickUpVersionFromClassName(migrationClass.name)
                 if (versionService.isVersionMigrated(connection, migrationVersion)) continue
 
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {
-                    val migration = migrationClass.newInstance()
+                    val migration = migrationClass.getConstructor().newInstance()
                     migration.connection = connection
                     migration.up()
                     versionService.saveVersion(connection, migrationVersion)

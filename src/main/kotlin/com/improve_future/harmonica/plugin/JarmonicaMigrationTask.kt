@@ -51,6 +51,15 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             return getProperty("env") ?: "Default"
         }
 
+    private val tableNamePluralization: Boolean
+        get() {
+            project.extensions.extraProperties.let {
+                if (it.has("tableNamePluralization"))
+                    return it["tableNamePluralization"] as Boolean
+            }
+            return false
+        }
+
     protected fun buildJarmonicaArgument(
         vararg args: String
     ): JarmonicaArgument {
@@ -68,6 +77,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             it.migrationPackage = migrationPackage
             it.env = env
             it.taskType = taskType
+            it.tableNamePluralization = tableNamePluralization
             args.forEach { arg -> it.add(arg) }
         }
     }

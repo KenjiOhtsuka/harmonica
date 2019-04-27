@@ -47,6 +47,7 @@ open class DbConfig() {
                 Dbms.SQLite -> 0
                 Dbms.Oracle -> 0
                 Dbms.SQLServer -> 0
+                Dbms.H2 -> 0
             }
         }
     }

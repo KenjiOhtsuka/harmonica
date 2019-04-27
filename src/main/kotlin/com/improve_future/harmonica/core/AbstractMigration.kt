@@ -33,6 +33,7 @@ import java.util.*
 @MigrationDsl
 abstract class AbstractMigration {
     internal lateinit var connection: ConnectionInterface
+    internal var tableNameIsInPluralForm = false
 
     val config
         get() = connection.config
@@ -48,7 +49,12 @@ abstract class AbstractMigration {
     @MigrationDsl
     fun createTable(name: String, block: TableBuilder.() -> Unit) {
         println("Create Table: $name")
-        adapter.createTable(name, block)
+
+        adapter.createTable(name) {
+            this.tableNameIsInPluralForm =
+                this@AbstractMigration.tableNameIsInPluralForm
+            block()
+        }
     }
 
     fun dropTable(name: String) {

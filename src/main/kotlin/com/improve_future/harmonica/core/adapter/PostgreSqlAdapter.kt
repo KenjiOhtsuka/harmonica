@@ -37,18 +37,18 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
             "  " + buildColumnDeclarationForCreateTableSql(it)
         }
         sql += "\n);"
-        connection.execute(sql)
+        execute(sql)
 
         // Add Comments
         if (tableBuilder.comment != null) {
             sql = "COMMENT ON TABLE $tableName IS '${tableBuilder.comment}';"
-            connection.execute(sql)
+            execute(sql)
         }
         tableBuilder.columnList.forEach {
             if (it.hasComment) {
                 sql = "COMMENT ON COLUMN $tableName.${it.name} IS" +
                         " '${it.comment}';"
-                connection.execute(sql)
+                execute(sql)
             }
         }
     }
@@ -117,11 +117,11 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
         sql += " INDEX ON $tableName"
         sqlIndexMethod(method)?.let { sql += " USING $it" }
         sql += " (${columnNameArray.joinToString(", ")});"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun dropIndex(tableName: String, indexName: String) {
-        connection.execute("DROP INDEX $indexName;")
+        execute("DROP INDEX $indexName;")
     }
 
     override fun addColumn(
@@ -132,25 +132,25 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
-        connection.execute(sql)
+        execute(sql)
 
         if (!column.hasComment) return
 
         sql = "COMMENT ON COLUMN $tableName.${column.name} IS" +
                 " '${column.comment}';"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun renameTable(oldTableName: String, newTableName: String) {
         var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName;"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun renameIndex(
         tableName: String, oldIndexName: String, newIndexName: String
     ) {
         val sql = "ALTER INDEX $oldIndexName RENAME TO $newIndexName;"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun addForeignKey(
@@ -161,13 +161,13 @@ internal class PostgreSqlAdapter(connection: ConnectionInterface) :
                 " ADD CONSTRAINT ${tableName}_${columnName}_fkey" +
                 " FOREIGN KEY ($columnName)" +
                 " REFERENCES $referencedTableName ($referencedColumnName);"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun dropForeignKey(
         tableName: String, columnName: String, keyName: String
     ) {
         val sql = "ALTER TABLE $tableName DROP CONSTRAINT $keyName;"
-        connection.execute(sql)
+        execute(sql)
     }
 }

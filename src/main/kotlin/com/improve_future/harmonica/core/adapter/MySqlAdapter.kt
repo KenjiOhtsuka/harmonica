@@ -39,7 +39,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
         if (tableBuilder.comment != null)
             sql += "\ncomment='${tableBuilder.comment}'"
         sql += ";"
-        connection.execute(sql)
+        execute(sql)
     }
 
     internal companion object : DbAdapter.CompanionInterface() {
@@ -102,11 +102,11 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
         sql += " INDEX ${tableName}_${columnNameArray.joinToString("_")}_idx"
         sqlIndexMethod(method)?.let { sql += " $it" }
         sql += " ON $tableName (${columnNameArray.joinToString(", ")});"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun dropIndex(tableName: String, indexName: String) {
-        connection.execute("DROP INDEX $indexName ON $tableName;")
+        execute("DROP INDEX $indexName ON $tableName;")
     }
 
 
@@ -118,12 +118,12 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun renameTable(oldTableName: String, newTableName: String) {
         val sql = "RENAME TABLE $oldTableName TO $newTableName;"
-        connection.execute(sql)
+        execute(sql)
     }
 
 
@@ -132,7 +132,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
     ) {
         val sql = "ALTER TABLE $tableName" +
                 " RENAME INDEX $oldIndexName TO $newIndexName"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun addForeignKey(
@@ -143,7 +143,7 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
                 " ADD CONSTRAINT ${tableName}_${columnName}_fkey" +
                 " FOREIGN KEY ($columnName) REFERENCES" +
                 " $referencedTableName ($referencedColumnName);"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun dropForeignKey(
@@ -153,6 +153,6 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
     ) {
         val sql = "ALTER TABLE $tableName" +
                 " DROP FOREIGN KEY $keyName;"
-        connection.execute(sql)
+        execute(sql)
     }
 }

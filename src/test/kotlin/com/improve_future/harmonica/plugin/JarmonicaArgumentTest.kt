@@ -31,7 +31,7 @@ class JarmonicaArgumentTest {
         arg.migrationPackage = "package"
 
         var expectedArray = arrayOf(
-            "package", "Up", "directory", "env", "false", "false"
+            "package", "Up", "directory", "env", "false", "false", "false"
         )
         var actualArray = arg.toArray()
         assertEquals(expectedArray.size, actualArray.size)
@@ -40,6 +40,13 @@ class JarmonicaArgumentTest {
 
         arg.dispSql = true
         expectedArray[5] = "true"
+        actualArray = arg.toArray()
+        assertEquals(expectedArray.size, actualArray.size)
+        for (i in 0 until expectedArray.size)
+            assertEquals(expectedArray[i], actualArray[i])
+
+        arg.isReview = true
+        expectedArray[6] = "true"
         actualArray = arg.toArray()
         assertEquals(expectedArray.size, actualArray.size)
         for (i in 0 until expectedArray.size)
@@ -56,12 +63,13 @@ class JarmonicaArgumentTest {
     @Test
     fun testParse() {
         var argument = JarmonicaArgument.parse(
-            arrayOf("package", "pass", "directory", "env", "true", "false")
+            arrayOf("package", "pass", "directory", "env", "true", "false", "true")
         )
         assertEquals("package", argument.migrationPackage)
         assertEquals("directory", argument.migrationDirectory)
         assertEquals("env", argument.env)
         assertEquals(true, argument.tableNamePluralization)
         assertEquals(false, argument.dispSql)
+        assertEquals(true, argument.isReview)
     }
 }

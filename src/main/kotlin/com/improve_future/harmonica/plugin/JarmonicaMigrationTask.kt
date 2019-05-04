@@ -60,13 +60,36 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             return false
         }
 
+    /**
+     * True when the migration should show SQL queries.
+     *
+     * True when sql option is "review", blank, "true" or null
+     */
     private val dispSql: Boolean
         get() {
             project.extensions.extraProperties.let {
                 if (it.has("sql")) {
                     val sqlOption = it["sql"] as? String?
                     if (sqlOption.isNullOrBlank()) return true
+                    if (sqlOption == "review") return true
                     return sqlOption.toBoolean()
+                }
+                return false
+            }
+        }
+
+    /**
+     * True when the migration is in review mode.
+     *
+     * True only when sql option is "review".
+     */
+    private val isReview: Boolean
+        get() {
+            project.extensions.extraProperties.let {
+                if (it.has("sql")) {
+                    val sqlOption = it["sql"] as? String?
+                    if (sqlOption.isNullOrBlank()) return false
+                    return sqlOption == "review"
                 }
                 return false
             }
@@ -90,6 +113,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             it.taskType = taskType
             it.tableNamePluralization = tableNamePluralization
             it.dispSql = dispSql
+            it.isReview = isReview
             args.forEach { arg -> it.add(arg) }
         }
     }

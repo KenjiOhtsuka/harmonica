@@ -25,6 +25,7 @@ class JarmonicaArgument() {
     lateinit var migrationDirectory: String
     internal var tableNamePluralization: Boolean = false
     internal var dispSql = false
+    internal var isReview = false
     private val additionalArgList = mutableListOf<String>()
 
     fun toArray(): Array<String> {
@@ -34,7 +35,8 @@ class JarmonicaArgument() {
             migrationDirectory,
             env,
             tableNamePluralization.toString(),
-            dispSql.toString()
+            dispSql.toString(),
+            isReview.toString()
         ) + additionalArgList.toTypedArray()
     }
 
@@ -55,6 +57,7 @@ class JarmonicaArgument() {
                 it.env = args[3]
                 it.tableNamePluralization = args[4] == "true"
                 it.dispSql = args[5] == "true"
+                it.isReview = args[6] == "true"
             }
         }
 

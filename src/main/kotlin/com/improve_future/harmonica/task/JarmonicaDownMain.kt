@@ -24,7 +24,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
         val argument = JarmonicaArgument.parse(args)
-        val maxStep = JarmonicaArgument.parseStepString(args[5])
+        val maxStep = JarmonicaArgument.parseStepString(args[6])
         var stepCounter = 1
 
         val classList = findMigrationClassList(argument.migrationPackage)

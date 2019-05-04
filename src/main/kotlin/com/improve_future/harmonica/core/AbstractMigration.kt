@@ -34,6 +34,8 @@ import java.util.*
 abstract class AbstractMigration {
     internal lateinit var connection: ConnectionInterface
     internal var tableNameIsInPluralForm = false
+    internal var dispSql = false
+    internal var isReview = false
 
     val config
         get() = connection.config
@@ -43,6 +45,9 @@ abstract class AbstractMigration {
             Dbms.SQLite -> SqliteAdapter(connection)
             Dbms.MySQL -> MySqlAdapter(connection)
             else -> PostgreSqlAdapter(connection)
+        }.also {
+            it.dispSql = dispSql
+            it.isReview = isReview
         }
     }
 

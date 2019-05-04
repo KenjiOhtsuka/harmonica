@@ -24,7 +24,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
         val argument = JarmonicaArgument.parse(args)
-        val maxStep = JarmonicaArgument.parseStepString(args[JarmonicaArgument.DERAULT_ARGUMENT_SIZE])
+        val maxStep = JarmonicaArgument.parseStepString(args[JarmonicaArgument.DEFAULT_ARGUMENT_SIZE])
         var stepCounter = 1
 
         val classList = findMigrationClassList(argument.migrationPackage)
@@ -51,6 +51,7 @@ object JarmonicaDownMain : JarmonicaTaskMain() {
                 connection.transaction {
                     val migration =
                         migrationClass.getConstructor().newInstance()
+                    argument.apply(migration)
                     migration.connection = connection
                     migration.down()
                     versionService.removeVersion(connection, migrationVersion)

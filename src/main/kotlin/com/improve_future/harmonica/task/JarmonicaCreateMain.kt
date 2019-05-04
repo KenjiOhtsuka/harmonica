@@ -25,7 +25,7 @@ object JarmonicaCreateMain : JarmonicaTaskMain() {
     @JvmStatic
     fun main(vararg args: String) {
         val argument = JarmonicaArgument.parse(args)
-        val migrationName = args[JarmonicaArgument.DERAULT_ARGUMENT_SIZE]
+        val migrationName = args[JarmonicaArgument.DEFAULT_ARGUMENT_SIZE]
         val migrationClassName = versionService.composeNewMigrationName(migrationName)
 
         val migrationFile = Paths.get(

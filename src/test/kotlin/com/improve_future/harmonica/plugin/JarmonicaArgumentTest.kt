@@ -84,7 +84,19 @@ class JarmonicaArgumentTest {
         )
         argument.taskType = JarmonicaTaskType.Up
         assertEquals(
-            JarmonicaArgument.DERAULT_ARGUMENT_SIZE, argument.toArray().size
+            JarmonicaArgument.DEFAULT_ARGUMENT_SIZE, argument.toArray().size
+        )
+    }
+
+    @Test
+    fun testParseStepString() {
+        assertEquals(
+            5,
+            JarmonicaArgument.parseStepString("5")
+        )
+        assertEquals(
+            null,
+            JarmonicaArgument.parseStepString("null")
         )
     }
 }

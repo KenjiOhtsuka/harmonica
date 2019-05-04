@@ -18,6 +18,8 @@
 
 package com.improve_future.harmonica.plugin
 
+import com.improve_future.harmonica.core.AbstractMigration
+
 class JarmonicaArgument() {
     lateinit var migrationPackage: String
     internal lateinit var taskType: JarmonicaTaskType
@@ -49,8 +51,14 @@ class JarmonicaArgument() {
         return this
     }
 
+    fun apply(migration: AbstractMigration): AbstractMigration {
+        migration.isReview = isReview
+        migration.dispSql = dispSql
+        return migration
+    }
+
     companion object {
-        const val DERAULT_ARGUMENT_SIZE = 7
+        const val DEFAULT_ARGUMENT_SIZE = 7
 
         fun parse(args: Array<out String>): JarmonicaArgument {
             return JarmonicaArgument().also {

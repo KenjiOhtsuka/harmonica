@@ -28,7 +28,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
 //            println(it)
 //        }
 
-        val maxStep = JarmonicaArgument.parseStepString(args[JarmonicaArgument.DERAULT_ARGUMENT_SIZE])
+        val maxStep = JarmonicaArgument.parseStepString(args[JarmonicaArgument.DEFAULT_ARGUMENT_SIZE])
         var stepCounter = 1
 
         val connection = createConnection(argument.migrationPackage, argument.env)
@@ -44,6 +44,7 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
                 println("== [Start] Migrate up $migrationVersion ==")
                 connection.transaction {
                     val migration = migrationClass.getConstructor().newInstance()
+                    argument.apply(migration)
                     migration.connection = connection
                     migration.up()
                     versionService.saveVersion(connection, migrationVersion)

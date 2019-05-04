@@ -47,7 +47,8 @@ object JarmonicaUpMain : JarmonicaTaskMain() {
                     argument.apply(migration)
                     migration.connection = connection
                     migration.up()
-                    versionService.saveVersion(connection, migrationVersion)
+                    if (!argument.isReview)
+                        versionService.saveVersion(connection, migrationVersion)
                 }
                 println("== [End] Migrate up $migrationVersion ==")
                 if (maxStep != null && ++stepCounter > maxStep) break

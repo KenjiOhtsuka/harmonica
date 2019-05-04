@@ -63,7 +63,9 @@ class JarmonicaArgumentTest {
     @Test
     fun testParse() {
         var argument = JarmonicaArgument.parse(
-            arrayOf("package", "pass", "directory", "env", "true", "false", "true")
+            arrayOf(
+                "package", "pass", "directory", "env", "true", "false", "true"
+            )
         )
         assertEquals("package", argument.migrationPackage)
         assertEquals("directory", argument.migrationDirectory)
@@ -71,5 +73,18 @@ class JarmonicaArgumentTest {
         assertEquals(true, argument.tableNamePluralization)
         assertEquals(false, argument.dispSql)
         assertEquals(true, argument.isReview)
+    }
+
+    @Test
+    fun testDefaultArgumentSize() {
+        var argument = JarmonicaArgument.parse(
+            arrayOf(
+                "package", "pass", "directory", "env", "true", "false", "true"
+            )
+        )
+        argument.taskType = JarmonicaTaskType.Up
+        assertEquals(
+            JarmonicaArgument.DERAULT_ARGUMENT_SIZE, argument.toArray().size
+        )
     }
 }

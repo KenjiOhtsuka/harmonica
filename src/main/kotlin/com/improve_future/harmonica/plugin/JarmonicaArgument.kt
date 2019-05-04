@@ -50,6 +50,8 @@ class JarmonicaArgument() {
     }
 
     companion object {
+        const val DERAULT_ARGUMENT_SIZE = 7
+
         fun parse(args: Array<out String>): JarmonicaArgument {
             return JarmonicaArgument().also {
                 it.migrationPackage = args[0]

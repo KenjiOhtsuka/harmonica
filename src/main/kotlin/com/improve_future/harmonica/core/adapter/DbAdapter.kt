@@ -26,15 +26,15 @@ import com.improve_future.harmonica.core.table.column.*
 internal abstract class DbAdapter(private val connection: ConnectionInterface) {
     /** To show sql before sql execution */
     var dispSql = false
-    var inDry = false
+    var isReview = false
 
     fun createTable(tableName: String, block: TableBuilder.() -> Any) {
         createTable(tableName, TableBuilder().apply { block() })
     }
 
     protected fun execute(sql: String) {
-        if (dispSql) println(sql)
-        connection.execute(sql)
+        if (dispSql || isReview) println(sql)
+        if (!isReview) connection.execute(sql)
     }
 
     abstract fun createTable(tableName: String, tableBuilder: TableBuilder)

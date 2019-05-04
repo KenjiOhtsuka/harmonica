@@ -83,13 +83,13 @@ abstract class JarmonicaMigrationTask : JavaExec() {
 //                .replace(Regex("^src/main/(kotlin|java)/"), "")
 //                .replace("/", ".")
 //        )
-
         return JarmonicaArgument().also {
             it.migrationDirectory = directoryPath
             it.migrationPackage = migrationPackage
             it.env = env
             it.taskType = taskType
             it.tableNamePluralization = tableNamePluralization
+            it.dispSql = dispSql
             args.forEach { arg -> it.add(arg) }
         }
     }

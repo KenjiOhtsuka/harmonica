@@ -53,26 +53,20 @@ internal class SqlServerAdapter(connection: ConnectionInterface) : DbAdapter(con
     }
 
     override fun renameIndex(
-        tableName: String,
-        oldIndexName: String,
-        newIndexName: String
+        tableName: String, oldIndexName: String, newIndexName: String
     ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun addForeignKey(
-        tableName: String,
-        columnName: String,
-        referencedTableName: String,
+        tableName: String, columnName: String, referencedTableName: String,
         referencedColumnName: String
     ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dropForeignKey(
-        tableName: String,
-        columnName: String,
-        keyName: String
+        tableName: String, columnName: String, keyName: String
     ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

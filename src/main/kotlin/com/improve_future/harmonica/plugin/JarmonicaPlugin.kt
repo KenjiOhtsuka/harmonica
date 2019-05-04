@@ -92,9 +92,7 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
         val step = getProperty("step")?.toLong()
 
         jvmArgs = listOf<String>()
-        args = buildJarmonicaArgument(
-            step.toString()
-        ).toList()
+        args = buildJarmonicaArgument(step.toString()).toList()
         super.exec()
     }
 }
@@ -106,9 +104,7 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
         val step = getProperty("step")?.toLong() ?: 1
 
         jvmArgs = listOf<String>()
-        args = buildJarmonicaArgument(
-            step.toString()
-        ).toList()
+        args = buildJarmonicaArgument(step.toString()).toList()
         super.exec()
     }
 }

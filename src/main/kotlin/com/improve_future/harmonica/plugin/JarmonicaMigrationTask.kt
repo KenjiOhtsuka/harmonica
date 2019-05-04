@@ -60,6 +60,18 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             return false
         }
 
+    private val dispSql: Boolean
+        get() {
+            project.extensions.extraProperties.let {
+                if (it.has("sql")) {
+                    val sqlOption = it["sql"] as? String?
+                    if (sqlOption.isNullOrBlank()) return true
+                    return sqlOption.toBoolean()
+                }
+                return false
+            }
+        }
+
     protected fun buildJarmonicaArgument(
         vararg args: String
     ): JarmonicaArgument {

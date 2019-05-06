@@ -23,15 +23,24 @@ import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
-internal abstract class DbAdapter(internal val connection: ConnectionInterface) {
+internal abstract class DbAdapter(private val connection: ConnectionInterface) {
+    /** To show sql before sql execution */
+    var dispSql = false
+    var isReview = false
+
     fun createTable(tableName: String, block: TableBuilder.() -> Any) {
         createTable(tableName, TableBuilder().apply { block() })
+    }
+
+    protected fun execute(sql: String) {
+        if (dispSql || isReview) println(sql)
+        if (!isReview) connection.execute(sql)
     }
 
     abstract fun createTable(tableName: String, tableBuilder: TableBuilder)
 
     fun dropTable(tableName: String) {
-        connection.execute("DROP TABLE $tableName;")
+        execute("DROP TABLE $tableName;")
     }
 
     abstract fun createIndex(
@@ -42,13 +51,11 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
     abstract fun dropIndex(tableName: String, indexName: String)
 
     abstract fun addColumn(
-        tableName: String,
-        column: AbstractColumn,
-        option: AddingColumnOption
+        tableName: String, column: AbstractColumn, option: AddingColumnOption
     )
 
     fun removeColumn(tableName: String, columnName: String) {
-        connection.execute("ALTER TABLE $tableName DROP COLUMN $columnName;")
+        execute("ALTER TABLE $tableName DROP COLUMN $columnName;")
     }
 
     abstract fun renameTable(oldTableName: String, newTableName: String)
@@ -56,7 +63,7 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
     fun renameColumn(
         tableName: String, oldColumnName: String, newColumnName: String
     ) {
-        connection.execute(
+        execute(
             "ALTER TABLE $tableName" +
                     " RENAME COLUMN $oldColumnName TO $newColumnName;"
         )

@@ -36,7 +36,7 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
             "  " + buildColumnDeclarationForCreateTableSql(it)
         }
         sql += "\n);"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun createIndex(
@@ -47,12 +47,12 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         if (unique) sql += "UNIQUE "
         sql += "INDEX ${tableName}_${columnNameArray.joinToString("_")}_idx"
         sql += " ON $tableName (${columnNameArray.joinToString(",")});"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun dropIndex(tableName: String, indexName: String) {
         val sql = "DROP INDEX $indexName;"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun addColumn(
@@ -63,12 +63,12 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         var sql = "ALTER TABLE $tableName ADD COLUMN "
         sql += buildColumnDeclarationForCreateTableSql(column)
         sql += ";"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun renameTable(oldTableName: String, newTableName: String) {
         var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName;"
-        connection.execute(sql)
+        execute(sql)
     }
 
     override fun renameIndex(

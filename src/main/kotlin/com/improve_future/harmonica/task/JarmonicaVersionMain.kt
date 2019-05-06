@@ -19,8 +19,6 @@
 package com.improve_future.harmonica.task
 
 import com.improve_future.harmonica.plugin.JarmonicaArgument
-import com.improve_future.harmonica.service.VersionService
-import org.jetbrains.kotlin.resolve.calls.inference.newTypeInferenceOrParameterConstraintError
 
 object JarmonicaVersionMain : JarmonicaTaskMain() {
     @JvmStatic

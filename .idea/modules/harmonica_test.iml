@@ -13,8 +13,6 @@
           <option name="noReflect" value="true" />
           <option name="moduleName" value="harmonica" />
           <option name="jvmTarget" value="1.8" />
-          <option name="addCompilerBuiltIns" value="true" />
-          <option name="loadBuiltInsFromDependencies" value="true" />
           <option name="friendPaths">
             <array>
               <option value="$MODULE_DIR$/../../build/classes/kotlin/main" />

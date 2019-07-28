@@ -1,5 +1,5 @@
 <component name="CopyrightManager">
-  <settings>
+  <settings default="GPLv3_Harmonica">
     <module2copyright>
       <element module="All" copyright="GPLv3_Harmonica" />
     </module2copyright>

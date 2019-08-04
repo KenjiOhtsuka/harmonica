@@ -57,7 +57,7 @@ task javadocJar(type: Jar) {
 }
 
 group 'com.improve_future'
-version '1.1.22'
+version '1.1.23'
 
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'kotlin'

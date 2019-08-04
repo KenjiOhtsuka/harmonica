@@ -45,7 +45,7 @@ open class DbConfig() {
                 Dbms.PostgreSQL -> 5432
                 Dbms.MySQL -> 3306
                 Dbms.SQLite -> 0
-                Dbms.Oracle -> 0
+                Dbms.Oracle -> 1521
                 Dbms.SQLServer -> 0
                 Dbms.H2 -> 0
             }

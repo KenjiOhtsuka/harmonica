@@ -48,7 +48,7 @@ class VersionService(private val migrationTableName: String) {
         val resultSet: ResultSet
         try {
             resultSet = statement.executeQuery(
-                "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version';"
+                "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version'"
             )
             resultSet.next()
             result = (resultSet.getLong(1) > 0)
@@ -66,7 +66,7 @@ class VersionService(private val migrationTableName: String) {
      */
     internal fun saveVersion(connection: Connection, version: String) {
         connection.execute(
-            "INSERT INTO $migrationTableName(version) VALUES('$version');"
+            "INSERT INTO $migrationTableName(version) VALUES('$version')"
         )
     }
 

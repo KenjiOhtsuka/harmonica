@@ -115,7 +115,15 @@ open class Connection(
                     Dbms.SQLite ->
                         "jdbc:sqlite:$dbName.db"
                     Dbms.Oracle ->
-                        ""
+                        // JDBC URL format for ORacle
+                        //   jdbc:oracle:<drivertype>:<username/password>@<database>
+                        //
+                        //   drivertype: thin, oci or kprb
+                        //   database format:
+                        //     //<host>:<port>/<service>
+                        //     <host>:<port>:<SID>
+                        //     <TNSName>
+                        "jdbc:oracle:thin:@//$host:$port/$dbName"
                     Dbms.SQLServer ->
                         ""
                     Dbms.H2 ->

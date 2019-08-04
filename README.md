@@ -10,7 +10,7 @@ Gradle Plugin Page: https://plugins.gradle.org/plugin/com.improve_future.harmoni
 This is Database Migration Tool, gradle plugin, made with Kotlin.
 It is made similar to Phinx, Rails.
 
-Now, this tool is for PostgreSQL, MySQL and SQLite.
+Now, this tool is for PostgreSQL, MySQL, SQLite and Oracle Database.
 
 ## Overview
 

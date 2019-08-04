@@ -202,9 +202,17 @@ open class Connection(
         }
     }
 
+    /**
+     * Check table existence
+     *
+     * @param tableName The name of the table to be checked.
+     */
     override fun doesTableExist(tableName: String): Boolean {
         val resultSet = javaConnection.metaData.getTables(
-            null, null, tableName, null
+            null, null,
+            if (config.dbms == Dbms.Oracle) tableName.toUpperCase()
+            else tableName,
+            null
         )
         val result = resultSet.next()
         resultSet.close()

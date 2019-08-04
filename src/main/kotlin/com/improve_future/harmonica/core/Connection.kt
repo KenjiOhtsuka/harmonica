@@ -94,7 +94,7 @@ open class Connection(
         connect(config)
         when (config.dbms) {
             Dbms.Oracle ->
-                execute("SELECT 1 FROM DUAL;")
+                execute("SELECT 1 FROM DUAL")
             else ->
                 execute("SELECT 1;")
         }

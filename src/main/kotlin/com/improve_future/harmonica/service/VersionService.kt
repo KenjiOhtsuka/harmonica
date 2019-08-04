@@ -66,7 +66,7 @@ class VersionService(private val migrationTableName: String) {
      */
     internal fun saveVersion(connection: Connection, version: String) {
         connection.execute(
-            "INSERT INTO $migrationTableName(version) VALUES('$version');"
+            "INSERT INTO $migrationTableName(version) VALUES('$version')"
         )
     }
 

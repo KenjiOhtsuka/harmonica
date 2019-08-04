@@ -34,18 +34,18 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
         sql += tableBuilder.columnList.joinToString(",\n") {
             "  " + buildColumnDeclarationForCreateTableSql(it)
         }
-        sql += "\n);"
+        sql += "\n)"
         execute(sql)
 
         // Add Comments
         if (tableBuilder.comment != null) {
-            sql = "COMMENT ON TABLE $tableName IS '${tableBuilder.comment}';"
+            sql = "COMMENT ON TABLE $tableName IS '${tableBuilder.comment}'"
             execute(sql)
         }
         tableBuilder.columnList.forEach {
             if (it.hasComment) {
                 sql = "COMMENT ON COLUMN $tableName.${it.name} IS" +
-                        " '${it.comment}';"
+                        " '${it.comment}'"
                 execute(sql)
             }
         }
@@ -88,6 +88,12 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
 
         override fun sqlType(column: AbstractColumn): String {
             return when (column) {
+                is IntegerColumn -> "NUMBER"
+                is DecimalColumn -> "NUMBER"
+                is DateTimeColumn -> "DATE"
+                is TimeColumn -> "TIMESTAMP"
+                is BooleanColumn -> "NUMBER(1)"
+                is TextColumn -> "LONG"
                 else -> super.sqlType(column)
             }
         }

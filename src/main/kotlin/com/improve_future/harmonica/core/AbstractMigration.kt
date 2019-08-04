@@ -18,8 +18,10 @@
 
 package com.improve_future.harmonica.core
 
+import com.improve_future.harmonica.core.adapter.*
 import com.improve_future.harmonica.core.adapter.DbAdapter
 import com.improve_future.harmonica.core.adapter.MySqlAdapter
+import com.improve_future.harmonica.core.adapter.OracleAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
 import com.improve_future.harmonica.core.adapter.SqliteAdapter
 import com.improve_future.harmonica.core.table.IndexMethod
@@ -44,6 +46,7 @@ abstract class AbstractMigration {
         when (connection.config.dbms) {
             Dbms.SQLite -> SqliteAdapter(connection)
             Dbms.MySQL -> MySqlAdapter(connection)
+            Dbms.Oracle -> OracleAdapter(connection)
             else -> PostgreSqlAdapter(connection)
         }.also {
             it.dispSql = dispSql

@@ -20,6 +20,7 @@ package com.improve_future.harmonica.service
 
 import com.improve_future.harmonica.core.AbstractMigration
 import com.improve_future.harmonica.core.Connection
+import com.improve_future.harmonica.core.Dbms
 import java.nio.file.Paths
 import java.sql.ResultSet
 import java.sql.Statement
@@ -86,13 +87,24 @@ class VersionService(private val migrationTableName: String) {
 
         val statement = connection.createStatement()
         try {
-            val resultSet = statement.executeQuery(
-                """
-                SELECT version
-                  FROM $migrationTableName
-                 ORDER BY version DESC
-                 LIMIT 1""".trimIndent()
-            )
+            val resultSet: ResultSet
+            when (connection.config.dbms) {
+                Dbms.Oracle -> {
+                    resultSet = statement.executeQuery("""
+                        SELECT version
+                          FROM $migrationTableName
+                         ORDER BY version DESC
+                         FETCH FIRST 1 ROWS ONLY""".trimIndent())
+                }
+                else -> {
+                    resultSet = statement.executeQuery("""
+                        SELECT version
+                          FROM $migrationTableName
+                         ORDER BY version DESC
+                         LIMIT 1""".trimIndent())
+                }
+            }
+
             if (resultSet.next()) result = resultSet.getString(1)
             resultSet.close()
             statement.close()

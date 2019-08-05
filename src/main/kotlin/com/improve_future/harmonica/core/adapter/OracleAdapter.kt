@@ -128,7 +128,7 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
     }
 
     override fun dropIndex(tableName: String, indexName: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        execute("DROP INDEX $indexName")
     }
 
     override fun addColumn(

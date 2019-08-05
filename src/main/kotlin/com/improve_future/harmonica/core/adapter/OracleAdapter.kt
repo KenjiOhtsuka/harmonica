@@ -132,15 +132,14 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
     }
 
     override fun addColumn(
-        tableName: String,
-        column: AbstractColumn,
-        option: AddingColumnOption
+        tableName: String, column: AbstractColumn, option: AddingColumnOption
     ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun renameTable(oldTableName: String, newTableName: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var sql = "ALTER TABLE $oldTableName RENAME TO $newTableName"
+        execute(sql)
     }
 
     override fun renameIndex(
@@ -151,10 +150,8 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
     }
 
     override fun addForeignKey(
-        tableName: String,
-        columnName: String,
-        referencedTableName: String,
-        referencedColumnName: String
+        tableName: String, columnName: String,
+        referencedTableName: String, referencedColumnName: String
     ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -144,11 +144,10 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
     }
 
     override fun renameIndex(
-        tableName: String,
-        oldIndexName: String,
-        newIndexName: String
+        tableName: String, oldIndexName: String, newIndexName: String
     ) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val sql = "ALTER INDEX $oldIndexName RENAME TO $newIndexName"
+        execute(sql)
     }
 
     override fun addForeignKey(

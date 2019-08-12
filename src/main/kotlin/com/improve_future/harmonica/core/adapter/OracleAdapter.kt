@@ -153,14 +153,16 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
         tableName: String, columnName: String,
         referencedTableName: String, referencedColumnName: String
     ) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var sql = "ALTER TABLE $tableName ADD CONSTRAINT ${tableName}_${columnName}_fkey";
+        sql += " FOREIGN KEY ($columnName)";
+        sql += " REFERENCES $referencedTableName ($referencedColumnName)";
+        execute(sql);
     }
 
     override fun dropForeignKey(
-        tableName: String,
-        columnName: String,
-        keyName: String
+        tableName: String, columnName: String, keyName: String
     ) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val sql = "ALTER TABLE $tableName DROP CONSTRAINT $keyName";
+        execute(sql);
     }
 }

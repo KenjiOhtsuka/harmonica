@@ -65,7 +65,7 @@ internal abstract class DbAdapter(private val connection: ConnectionInterface) {
     ) {
         execute(
             "ALTER TABLE $tableName" +
-                    " RENAME COLUMN $oldColumnName TO $newColumnName;"
+                    " RENAME COLUMN $oldColumnName TO $newColumnName"
         )
     }
 

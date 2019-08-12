@@ -40,7 +40,7 @@ internal abstract class DbAdapter(private val connection: ConnectionInterface) {
     abstract fun createTable(tableName: String, tableBuilder: TableBuilder)
 
     fun dropTable(tableName: String) {
-        execute("DROP TABLE $tableName;")
+        execute("DROP TABLE $tableName")
     }
 
     abstract fun createIndex(
@@ -65,7 +65,7 @@ internal abstract class DbAdapter(private val connection: ConnectionInterface) {
     ) {
         execute(
             "ALTER TABLE $tableName" +
-                    " RENAME COLUMN $oldColumnName TO $newColumnName;"
+                    " RENAME COLUMN $oldColumnName TO $newColumnName"
         )
     }
 

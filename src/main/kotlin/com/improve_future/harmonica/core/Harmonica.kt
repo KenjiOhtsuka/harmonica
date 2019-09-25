@@ -21,7 +21,7 @@ open class Harmonica(private val config: DbConfig, private val packageName: Stri
 
             var migrationCount = 0;
             for (clazz in allClasses.sortedBy { it.simpleName }) {
-                val migrationVersion: String = clazz.simpleName.split('_')[0]
+                val migrationVersion: String = versionService.pickUpVersionFromClassName(clazz.simpleName)
 
                 if (applyCount !== null && migrationCount >= applyCount) {
                     break;

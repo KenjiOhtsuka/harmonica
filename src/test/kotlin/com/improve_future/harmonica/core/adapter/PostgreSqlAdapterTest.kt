@@ -62,6 +62,35 @@ class PostgreSqlAdapterTest {
     }
 
     @Test
+    fun testBuildColumnDeclarationForBigInteger() {
+        val bigIntegerColumn = BigIntegerColumn("bigInt")
+
+        fun buildBigIntegerDeclaration() =
+            buildColumnDeclarationFunctionForTest.invoke(
+                PostgreSqlAdapter, bigIntegerColumn
+            ) as String
+        assertEquals(
+            "bigInt BIGINT",
+            buildBigIntegerDeclaration()
+        )
+        bigIntegerColumn.nullable = false
+        assertEquals(
+            "bigInt BIGINT NOT NULL",
+            buildBigIntegerDeclaration()
+        )
+        bigIntegerColumn.default = 1L
+        assertEquals(
+            "bigInt BIGINT NOT NULL DEFAULT 1",
+            buildBigIntegerDeclaration()
+        )
+        bigIntegerColumn.nullable = true
+        assertEquals(
+            "bigInt BIGINT DEFAULT 1",
+            buildBigIntegerDeclaration()
+        )
+    }
+
+    @Test
     fun testBuildColumnDeclarationForDecimal() {
         val decimalColumn = DecimalColumn("decimal")
 

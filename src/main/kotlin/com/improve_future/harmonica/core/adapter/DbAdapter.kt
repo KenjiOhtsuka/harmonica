@@ -100,6 +100,7 @@ internal abstract class DbAdapter(private val connection: ConnectionInterface) {
         protected open fun sqlType(column: AbstractColumn): String {
             return when (column) {
                 is IntegerColumn -> "INTEGER"
+                is BigIntegerColumn -> "BIGINT"
                 is VarcharColumn -> "VARCHAR"
                 is DecimalColumn -> "DECIMAL"
                 is BooleanColumn -> "BOOL"

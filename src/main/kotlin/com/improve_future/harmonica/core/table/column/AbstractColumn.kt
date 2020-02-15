@@ -21,7 +21,6 @@ package com.improve_future.harmonica.core.table.column
 import com.improve_future.harmonica.core.Index
 import com.improve_future.harmonica.core.RawSql
 
-
 internal typealias Type = Int
 
 internal abstract class AbstractColumn(
@@ -71,7 +70,6 @@ internal abstract class AbstractColumn(
 
     var nullable = true
 
-
     abstract var sqlDefault: String?
 
     val hasDefault: Boolean
@@ -83,9 +81,9 @@ internal abstract class AbstractColumn(
     val hasReference: Boolean
         get() {
             return !(
-                    referenceTable.isNullOrBlank() ||
-                            referenceColumn.isNullOrBlank()
-                    )
+                referenceTable.isNullOrBlank() ||
+                    referenceColumn.isNullOrBlank()
+                )
         }
 
     var comment: String? = null

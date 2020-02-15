@@ -45,6 +45,23 @@ class TableBuilderTest {
     }
 
     @Test
+    fun testBigInteger() {
+        var tb = TableBuilder()
+        tb.bigInteger("name")
+        var bigInteger = tb.columnList.first() as BigIntegerColumn
+        assertEquals("name", bigInteger.name)
+        assertEquals(true, bigInteger.nullable)
+        assertEquals(null, bigInteger.default)
+
+        tb = TableBuilder()
+        tb.bigInteger("name", false, 1L)
+        bigInteger = tb.columnList.first() as BigIntegerColumn
+        assertEquals("name", bigInteger.name)
+        assertEquals(false, bigInteger.nullable)
+        assertEquals(1L, bigInteger.default)
+    }
+
+    @Test
     fun testDecimal() {
         var tb = TableBuilder()
         tb.decimal("name")

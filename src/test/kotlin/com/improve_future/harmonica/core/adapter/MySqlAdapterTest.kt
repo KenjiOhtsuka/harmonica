@@ -71,6 +71,23 @@ class MySqlAdapterTest {
     }
 
     @Test
+    fun testAddColumnForBigInteger() {
+        val connection = StubConnection()
+        val adapter = MySqlAdapter(connection)
+
+        val bigIntegerColumn = BigIntegerColumn("bigInteger")
+
+        adapter.addColumn(
+            "table_name", bigIntegerColumn,
+            AddingColumnOption()
+        )
+        assertEquals(
+            "ALTER TABLE table_name ADD COLUMN bigInteger BIGINT;",
+            connection.executedSqlList.first()
+        )
+    }
+
+    @Test
     fun testAddColumnForBlob() {
         val connection = StubConnection()
         val adapter = MySqlAdapter(connection)

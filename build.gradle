@@ -57,7 +57,7 @@ task javadocJar(type: Jar) {
 }
 
 group 'com.improve_future'
-version '1.1.25'
+version '1.1.26'
 
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'kotlin'
@@ -100,8 +100,16 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
 
+    // Dependencies to be able to run tests within gradle
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+
     implementation localGroovy()  // Groovy SDK
     compileOnly gradleApi()
+}
+
+test {
+    useJUnitPlatform()
 }
 
 compileKotlin {

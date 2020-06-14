@@ -142,6 +142,52 @@ class TableBuilder {
     }
 
     /**
+     * Add big integer column.
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @param unsigned Valid only for MySQL.
+     * @return
+     */
+    fun bigInteger(
+        columnName: String,
+        nullable: Boolean = true,
+        default: Long? = null,
+        unsigned: Boolean = false
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(BigIntegerColumn(columnName).also {
+            it.nullable = nullable
+            it.default = default
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
+     * Add big integer column.
+     *
+     * @param columnName
+     * @param nullable `false` for `NOT NULL` constraint. The default value is `true`.
+     * @param default
+     * @param unsigned Valid only for MySQL.
+     * @return
+     */
+    fun bigInteger(
+        columnName: String,
+        nullable: Boolean = true,
+        default: RawSql,
+        unsigned: Boolean = false
+    ): ColumnBuilder {
+        val builder = ColumnBuilder(BigIntegerColumn(columnName).also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+        })
+        addColumn(builder.column)
+        return builder
+    }
+
+    /**
      * add varchar column
      *
      * variable with limit

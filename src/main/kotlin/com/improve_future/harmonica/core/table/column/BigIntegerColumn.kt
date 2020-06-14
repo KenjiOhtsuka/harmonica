@@ -1,6 +1,6 @@
 /*
  * Harmonica: Kotlin Database Migration Tool
- * Copyright (C) 2019  Kenji Otsuka
+ * Copyright (C) 2020  Kenji Otsuka
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@
 
 package com.improve_future.harmonica.core.table.column
 
-internal class IntegerColumn(name: String) : AbstractColumn(name) {
+// Exposed take a Long type as BigInteger in database, actually BigInteger can be bigger than Long
+// but for now we limit it to the size of a Long
+internal class BigIntegerColumn(name: String) : AbstractColumn(name) {
     override var sqlDefault: String? = null
 
     var default: Long?

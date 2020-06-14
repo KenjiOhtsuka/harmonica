@@ -18,7 +18,6 @@
 
 package com.improve_future.harmonica.core
 
-import com.improve_future.harmonica.core.adapter.*
 import com.improve_future.harmonica.core.adapter.DbAdapter
 import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.OracleAdapter
@@ -142,6 +141,62 @@ abstract class AbstractMigration {
         justBeforeColumnName: String? = null
     ) {
         val integerColumn = IntegerColumn(columnName)
+        integerColumn.also {
+            it.nullable = nullable
+            it.sqlDefault = default.sql
+            it.unsigned = unsigned
+        }
+        addColumn(tableName, integerColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new big integer column to existing table.
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param nullable
+     * @param default
+     * @param unsigned Valid only for MySQL.
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
+    fun addBigIntegerColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: Long? = null,
+        unsigned: Boolean = false,
+        first: Boolean = false,
+        justBeforeColumnName: String? = null
+    ) {
+        val bigIntegerColumn = BigIntegerColumn(columnName)
+        bigIntegerColumn.also {
+            it.nullable = nullable
+            it.default = default
+            it.unsigned = unsigned
+        }
+        addColumn(tableName, bigIntegerColumn, first, justBeforeColumnName)
+    }
+
+    /**
+     * Add new big integer column to existing table.
+     *
+     * @param tableName Table name.
+     * @param columnName Column name.
+     * @param nullable
+     * @param default
+     * @param unsigned Valid only for MySQL.
+     * @param first You add column at first of the column (valid only for MySQL)
+     * @param justBeforeColumnName Column name the new column to be added just after.
+     * (valid only for MySQL)
+     */
+    fun addBigIntegerColumn(
+        tableName: String, columnName: String,
+        nullable: Boolean = true, default: RawSql,
+        unsigned: Boolean = false,
+        first: Boolean = false,
+        justBeforeColumnName: String? = null
+    ) {
+        val integerColumn = BigIntegerColumn(columnName)
         integerColumn.also {
             it.nullable = nullable
             it.sqlDefault = default.sql

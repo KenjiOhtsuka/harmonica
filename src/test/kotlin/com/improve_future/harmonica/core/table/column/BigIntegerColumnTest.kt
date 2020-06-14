@@ -1,6 +1,6 @@
 /*
  * Harmonica: Kotlin Database Migration Tool
- * Copyright (C) 2019  Kenji Otsuka
+ * Copyright (C) 2020  Kenji Otsuka
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,17 @@
 
 package com.improve_future.harmonica.core.table.column
 
-internal class IntegerColumn(name: String) : AbstractColumn(name) {
-    override var sqlDefault: String? = null
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
-    var default: Long?
-        get() = sqlDefault?.toLongOrNull()
-        set(value) {
-            sqlDefault = value?.toString()
-        }
-
-    var unsigned = false
+class BigIntegerColumnTest {
+    @Test
+    fun testInstanceVariable() {
+        val bigIntegerColumn = BigIntegerColumn("name")
+        assertEquals("name", bigIntegerColumn.name)
+        assertEquals(false, bigIntegerColumn.hasDefault)
+        bigIntegerColumn.default = 1L
+        assertEquals(true, bigIntegerColumn.hasDefault)
+        assertEquals("1", bigIntegerColumn.sqlDefault)
+    }
 }

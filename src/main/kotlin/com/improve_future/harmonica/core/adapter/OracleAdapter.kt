@@ -89,6 +89,7 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
         override fun sqlType(column: AbstractColumn): String {
             return when (column) {
                 is IntegerColumn -> "NUMBER"
+                is BigIntegerColumn -> "NUMBER"
                 is DecimalColumn -> "NUMBER"
                 is DateTimeColumn -> "DATE"
                 is TimeColumn -> "TIMESTAMP"

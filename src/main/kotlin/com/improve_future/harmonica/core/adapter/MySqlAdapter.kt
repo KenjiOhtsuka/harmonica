@@ -67,6 +67,11 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
                         sql += " UNSIGNED"
                     }
                 }
+                is BigIntegerColumn -> {
+                    if (column.unsigned) {
+                        sql += " UNSIGNED"
+                    }
+                }
             }
             if (!column.nullable) sql += " NOT NULL"
             if (column.hasDefault) {

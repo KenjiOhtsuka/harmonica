@@ -22,6 +22,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
 
 abstract class JarmonicaMigrationTask : JavaExec() {
+    @get:Internal
     internal abstract val taskType: JarmonicaTaskType
 
     protected val migrationPackage: String

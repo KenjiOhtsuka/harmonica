@@ -20,11 +20,14 @@ package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.service.VersionService
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import java.io.File
 import java.nio.file.Paths
 
 abstract class AbstractTask : DefaultTask() {
     protected val directoryPath: String
+        @Internal
         get() {
             if (project.extensions.extraProperties.has("directoryPath"))
                 return project.extensions.extraProperties["directoryPath"] as String
@@ -32,6 +35,7 @@ abstract class AbstractTask : DefaultTask() {
         }
 
     protected val env: String
+        @Internal
         get() {
             if (project.extensions.extraProperties.has("env"))
                 return project.extensions.extraProperties["env"] as String
@@ -46,6 +50,8 @@ abstract class AbstractTask : DefaultTask() {
 
     /** The table name to store executed migration version IDs. */
     private val migrationTableName: String = "harmonica_migration"
+
+    @Internal
     protected val versionService: VersionService
 
     init {

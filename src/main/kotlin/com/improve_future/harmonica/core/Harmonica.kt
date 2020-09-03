@@ -1,17 +1,18 @@
 package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.service.VersionService
+import org.jetbrains.exposed.sql.Database
 import org.reflections.Reflections
 import kotlin.reflect.full.createInstance
 
-open class Harmonica(private val config: DbConfig, private val packageName: String, private val migrationTableName: String = "harmonica_migration") {
+open class Harmonica(private val packageName: String, private val migrationTableName: String = "harmonica_migration") {
     private val versionService: VersionService = VersionService(migrationTableName)
 
     /**
      * Up all migrations
      */
-    fun up(applyCount: Int? = null) {
-        val connection = Connection(config = config)
+    fun up(db: Database, applyCount: Int? = null) {
+        val connection = ExposedConnection(db = db)
         try {
             connection.transaction {
                 versionService.setupHarmonicaMigrationTable(connection)
@@ -49,8 +50,8 @@ open class Harmonica(private val config: DbConfig, private val packageName: Stri
     /**
      * Down latest migrations
      */
-    fun down() {
-        val connection = Connection(config = config)
+    fun down(db: Database) {
+        val connection = ExposedConnection(db = db)
         try {
             val migrationVersion = versionService.findCurrentMigrationVersion(connection)
 
@@ -61,7 +62,7 @@ open class Harmonica(private val config: DbConfig, private val packageName: Stri
                 return
 
             val fileCandidateList: List<Class<out AbstractMigration>> =
-                    allClasses.filter { it.simpleName.startsWith(migrationVersion) }
+                allClasses.filter { it.simpleName.startsWith(migrationVersion) }
 
             if (1 < allClasses.size)
                 throw Error("More then one files exist for migration $migrationVersion")

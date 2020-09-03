@@ -41,7 +41,7 @@ abstract class AbstractMigrationTask : AbstractTask() {
         return engine.eval(findConfigFile().readText()) as DbConfig
     }
 
-    protected fun createConnection(): Connection {
+    protected fun createConnection(): ConnectionInterface {
         return Connection(loadConfigFile())
     }
 

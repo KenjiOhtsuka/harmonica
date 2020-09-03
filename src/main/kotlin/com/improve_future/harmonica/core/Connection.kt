@@ -133,7 +133,7 @@ open class Connection(
         }
     }
 
-    override fun transaction(block: Connection.() -> Unit) {
+    override fun transaction(block: ConnectionInterface.() -> Unit) {
         javaConnection.autoCommit = false
         if (PluginConfig.hasExposed()) {
             TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)

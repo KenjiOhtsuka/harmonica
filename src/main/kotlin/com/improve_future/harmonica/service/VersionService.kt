@@ -19,16 +19,15 @@
 package com.improve_future.harmonica.service
 
 import com.improve_future.harmonica.core.AbstractMigration
-import com.improve_future.harmonica.core.Connection
+import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.Dbms
-import java.nio.file.Paths
 import java.sql.ResultSet
 import java.sql.Statement
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class VersionService(private val migrationTableName: String) {
-    internal fun setupHarmonicaMigrationTable(connection: Connection) {
+    internal fun setupHarmonicaMigrationTable(connection: ConnectionInterface) {
         if (!connection.doesTableExist(migrationTableName)) {
             connection.execute(
                 """
@@ -39,11 +38,11 @@ class VersionService(private val migrationTableName: String) {
         }
     }
 
-    private fun createStatement(connection: Connection): Statement {
+    private fun createStatement(connection: ConnectionInterface): Statement {
         return connection.createStatement()
     }
 
-    internal fun isVersionMigrated(connection: Connection, version: String): Boolean {
+    internal fun isVersionMigrated(connection: ConnectionInterface, version: String): Boolean {
         val statement = createStatement(connection)
         val result: Boolean
         val resultSet: ResultSet
@@ -65,7 +64,7 @@ class VersionService(private val migrationTableName: String) {
     /**
      * Insert record of the specified version into version control table
      */
-    internal fun saveVersion(connection: Connection, version: String) {
+    internal fun saveVersion(connection: ConnectionInterface, version: String) {
         connection.execute(
             "INSERT INTO $migrationTableName(version) VALUES('$version')"
         )
@@ -74,13 +73,13 @@ class VersionService(private val migrationTableName: String) {
     /**
      * Remove record of the specified version from version control table
      */
-    internal fun removeVersion(connection: Connection, version: String) {
+    internal fun removeVersion(connection: ConnectionInterface, version: String) {
         connection.execute(
             "DELETE FROM $migrationTableName WHERE version = '$version'"
         )
     }
 
-    internal fun findCurrentMigrationVersion(connection: Connection): String {
+    internal fun findCurrentMigrationVersion(connection: ConnectionInterface): String {
         var result = ""
         if (!connection.doesTableExist(migrationTableName))
             return result

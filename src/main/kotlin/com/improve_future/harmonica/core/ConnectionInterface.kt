@@ -18,11 +18,12 @@
 
 package com.improve_future.harmonica.core
 
+import java.io.Closeable
 import java.sql.Statement
 
-internal interface ConnectionInterface {
+interface ConnectionInterface : Closeable {
     val config: DbConfig
-    fun transaction(block: Connection.() -> Unit)
+    fun transaction(block: ConnectionInterface.() -> Unit)
     fun execute(sql: String): Boolean
     fun doesTableExist(tableName: String): Boolean
     fun createStatement(): Statement

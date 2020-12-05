@@ -19,44 +19,35 @@
 package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.config.PluginConfig
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.io.Closeable
 import java.sql.*
 
 open class Connection(
-    override val config: DbConfig
+        override val config: DbConfig
 ) : Closeable, ConnectionInterface {
     private lateinit var coreConnection: java.sql.Connection
 
     private fun connect(config: DbConfig) {
         if (config.dbms != Dbms.SQLite) {
             coreConnection =
-                object : java.sql.Connection by DriverManager.getConnection(
-                    buildConnectionUriFromDbConfig(config),
-                    config.user,
-                    config.password
-                ) {
-                    override fun setTransactionIsolation(level: Int) {}
-                }
+                    object : java.sql.Connection by DriverManager.getConnection(
+                            buildConnectionUriFromDbConfig(config),
+                            config.user,
+                            config.password
+                    ) {
+                        override fun setTransactionIsolation(level: Int) {}
+                    }
         } else {
             coreConnection = DriverManager.getConnection(
-                buildConnectionUriFromDbConfig(config)
+                    buildConnectionUriFromDbConfig(config)
             )
         }
-        database =
-            if (PluginConfig.hasExposed())
-                Database.connect({ coreConnection })
-            else null
-        if (config.dbms == Dbms.SQLite && PluginConfig.hasExposed()) {
-            TransactionManager.manager.defaultIsolationLevel =
-                java.sql.Connection.TRANSACTION_SERIALIZABLE
-        }
+        database = null
         coreConnection.autoCommit = false
     }
 
     private val javaConnection: java.sql.Connection
-        get () {
+        get() {
             if (isClosed) connect(config)
 
             return if (PluginConfig.hasExposed())
@@ -135,28 +126,13 @@ open class Connection(
 
     override fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
-        if (PluginConfig.hasExposed()) {
-            TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
-                .let {
-                    try {
-                        block()
-                        it.commit()
-                        it.close()
-                    } catch (e: Exception) {
-                        it.rollback()
-                        it.close()
-                        throw e
-                    }
-                }
-        } else {
-            try {
-                block()
-                javaConnection.commit()
-            } catch (e: Exception) {
-                javaConnection.rollback()
-                javaConnection.close()
-                throw e
-            }
+        try {
+            block()
+            javaConnection.commit()
+        } catch (e: Exception) {
+            javaConnection.rollback()
+            javaConnection.close()
+            throw e
         }
     }
 
@@ -180,26 +156,11 @@ open class Connection(
      * Execute SQL
      */
     override fun execute(sql: String): Boolean {
-        return if (PluginConfig.hasExposed()) {
-            val tr = TransactionManager.currentOrNull()
-            if (tr == null) {
-                val newTr = TransactionManager.currentOrNew(
-                    TransactionManager.manager.defaultIsolationLevel
-                )
-                newTr.exec(sql)
-                newTr.close()
-            } else {
-                tr.exec(sql)
-            }
-            // ToDo: return correct status
-            true
-        } else {
-            val statement = createStatement()
-            val result: Boolean
-            result = statement.execute(sql)
-            statement.close()
-            result
-        }
+        val statement = createStatement()
+        val result: Boolean
+        result = statement.execute(sql)
+        statement.close()
+        return result
     }
 
     /**
@@ -209,10 +170,10 @@ open class Connection(
      */
     override fun doesTableExist(tableName: String): Boolean {
         val resultSet = javaConnection.metaData.getTables(
-            null, null,
-            if (config.dbms == Dbms.Oracle) tableName.toUpperCase()
-            else tableName,
-            null
+                null, null,
+                if (config.dbms == Dbms.Oracle) tableName.toUpperCase()
+                else tableName,
+                null
         )
         val result = resultSet.next()
         resultSet.close()

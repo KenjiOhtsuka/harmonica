@@ -17,7 +17,6 @@ dependencies {
     def kotlinx_html_version = "0.6.11"
     // include for server side
     implementation "org.jetbrains.kotlinx:kotlinx-html-jvm:${kotlinx_html_version}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'org.codehaus.groovy:groovy-all:2.3.11'
 }
 

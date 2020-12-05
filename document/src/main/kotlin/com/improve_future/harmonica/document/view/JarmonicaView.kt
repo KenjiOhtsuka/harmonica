@@ -54,8 +54,8 @@ object JarmonicaView : AbstractView() {
                                     code {
                                         +"""
 buildscript {
-    ext.kotlin_version = '1.3.11'
-    ext.harmonica_version = '1.1.12'
+    ext.kotlin_version = '1.4.20'
+    ext.harmonica_version = '2.0.0'
 
     repositories {
         jcenter()
@@ -91,7 +91,6 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${'$'}kotlin_version"
     // required
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version

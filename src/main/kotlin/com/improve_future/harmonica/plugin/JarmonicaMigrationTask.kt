@@ -18,12 +18,15 @@
 
 package com.improve_future.harmonica.plugin
 
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
 
 abstract class JarmonicaMigrationTask : JavaExec() {
+    @get:Internal
     internal abstract val taskType: JarmonicaTaskType
 
     protected val migrationPackage: String
+        @Internal
         get() {
             if (project.extensions.extraProperties.has("migrationPackage"))
                 return project.extensions.extraProperties["migrationPackage"] as String

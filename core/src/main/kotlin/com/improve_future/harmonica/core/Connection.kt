@@ -125,7 +125,7 @@ open class Connection(
     override fun transaction(block: Connection.() -> Unit) {
         javaConnection.autoCommit = false
         try {
-            block()
+            block(this)
             javaConnection.commit()
         } catch (e: Exception) {
             javaConnection.rollback()
@@ -155,8 +155,7 @@ open class Connection(
      */
     override fun execute(sql: String): Boolean {
         val statement = createStatement()
-        val result: Boolean
-        result = statement.execute(sql)
+        val result: Boolean = statement.execute(sql)
         statement.close()
         return result
     }

@@ -100,15 +100,16 @@ internal class OracleAdapter(connection: ConnectionInterface) : DbAdapter(connec
         }
 
         override fun sqlIndexMethod(method: IndexMethod?): String? {
-            return when (method) {
+//            return when (method) {
 //                IndexMethod.BTree -> "btree"
 //                IndexMethod.Hash -> "hash"
 //                IndexMethod.Gist -> "gist"
 //                IndexMethod.SpGist -> "spgist"
 //                IndexMethod.Gin -> "gin"
 //                IndexMethod.BRin -> "brin"
-                else -> null
-            }
+//                else -> null
+//            }
+            return null
         }
     }
 

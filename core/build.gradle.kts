@@ -1,6 +1,6 @@
 /*
  * Harmonica: Kotlin Database Migration Tool
- * Copyright (C) 2019  Kenji Otsuka
+ * Copyright (C) 2020  Kenji Otsuka
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,5 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'harmonica'
-include "core", 'gradle-plugin', 'document'
+plugins {
+    id("org.jetbrains.kotlin.jvm")
+    id("maven-publish")
+    id("org.jetbrains.dokka")
+}
+
+repositories {
+    mavenCentral()
+    maven("https://jitpack.io")
+}
+
+dependencies {
+    implementation("com.github.cesarferreira:kotlin-pluralizer:0.2.9")
+
+    // Tests
+    testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
+    testImplementation("commons-codec:commons-codec:1.15")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+}

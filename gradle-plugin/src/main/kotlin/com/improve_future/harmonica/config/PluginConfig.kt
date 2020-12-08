@@ -16,5 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'harmonica'
-include "core", 'gradle-plugin', 'document'
+package com.improve_future.harmonica.config
+
+internal object PluginConfig {
+    const val groupName = "migration"
+
+    fun hasExposed(): Boolean {
+        return try {
+            null != Class.forName("org.jetbrains.exposed.sql.Database")
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+//    object Exposed {
+//        fun getTransactionManager(): Class<*> {
+//            return Class.forName("org.jetbrains.exposed.sql.transactions.TransactionManager")
+//        }
+//    }
+}

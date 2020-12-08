@@ -1,6 +1,6 @@
 /*
  * Harmonica: Kotlin Database Migration Tool
- * Copyright (C) 2019  Kenji Otsuka
+ * Copyright (C) 2020  Kenji Otsuka
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,5 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'harmonica'
-include "core", 'gradle-plugin', 'document'
+package com.improve_future.harmonica.core
+
+import java.sql.Statement
+
+interface ConnectionInterface {
+    val config: DbConfig
+    fun transaction(block: Connection.() -> Unit)
+    fun execute(sql: String): Boolean
+    fun doesTableExist(tableName: String): Boolean
+    fun createStatement(): Statement
+}

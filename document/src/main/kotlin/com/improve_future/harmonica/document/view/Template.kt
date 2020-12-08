@@ -8,11 +8,11 @@ import kotlinx.html.stream.appendHTML
 object Template {
     fun default(title: String = "Harmonica", block: DIV.() -> Unit): String {
         return buildString {
-            appendln("<!DOCTYPE html>")
+            appendLine("<!DOCTYPE html>")
             appendHTML().html {
                 head {
-                    meta(name="charset", content="UTF-8")
-                    meta(name="viewport", content="width=devise-width, initial-scale=1.0")
+                    meta(name = "charset", content = "UTF-8")
+                    meta(name = "viewport", content = "width=devise-width, initial-scale=1.0")
                     title(title)
                     link(
                         "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css",
@@ -20,7 +20,7 @@ object Template {
                     ) {
                         attributes["crossorigin"] = "anonymous"
                         attributes["integrity"] =
-                                "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+                            "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
                     }
 //                    link(
 //                            "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css",
@@ -57,7 +57,7 @@ object Template {
                     }
                 }
             }
-            appendln()
+            appendLine()
         }
     }
 }

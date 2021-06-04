@@ -21,6 +21,7 @@ package com.improve_future.harmonica.core.table.column
 import org.jetbrains.kotlin.daemon.common.toHexString
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class BlobColumnTest {
     @Test

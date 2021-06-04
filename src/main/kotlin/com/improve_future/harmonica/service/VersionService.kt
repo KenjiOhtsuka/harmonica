@@ -21,6 +21,8 @@ package com.improve_future.harmonica.service
 import com.improve_future.harmonica.core.AbstractMigration
 import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.Dbms
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.ResultSet
 import java.sql.Statement
 import java.text.SimpleDateFormat
@@ -79,40 +81,86 @@ class VersionService(private val migrationTableName: String) {
         )
     }
 
-    internal fun findCurrentMigrationVersion(connection: ConnectionInterface): String {
-        var result = ""
-        if (!connection.doesTableExist(migrationTableName))
-            return result
+    internal fun allListMigrationVersion(connection: ConnectionInterface): List<String> {
+        if (!connection.doesTableExist(migrationTableName)) return listOf()
 
+        val resultList = mutableListOf<String>()
         val statement = connection.createStatement()
         try {
-            val resultSet: ResultSet
-            when (connection.config.dbms) {
+            val resultSet = when (connection.config.dbms) {
                 Dbms.Oracle -> {
-                    resultSet = statement.executeQuery("""
+                    statement.executeQuery(
+                        """
                         SELECT version
                           FROM $migrationTableName
                          ORDER BY version DESC
-                         FETCH FIRST 1 ROWS ONLY""".trimIndent())
+                         """.trimIndent()
+                    )
                 }
                 else -> {
-                    resultSet = statement.executeQuery("""
+                    statement.executeQuery(
+                        """
                         SELECT version
                           FROM $migrationTableName
                          ORDER BY version DESC
-                         LIMIT 1""".trimIndent())
+                         """.trimIndent()
+                    )
                 }
             }
-
-            if (resultSet.next()) result = resultSet.getString(1)
+            while (resultSet.next()) {
+                resultList.add(resultSet.getString(1));
+            }
             resultSet.close()
-            statement.close()
         } catch (e: Exception) {
-            statement.close()
             throw e
+        } finally {
+            statement.close()
         }
-        statement.close()
-        return result
+        return resultList
+    }
+
+    internal fun findListMigrationVersion(connection: ConnectionInterface, count: Int): List<String> {
+        if (!connection.doesTableExist(migrationTableName)) return listOf()
+
+        val resultList = mutableListOf<String>()
+        val statement = connection.createStatement()
+        try {
+            val resultSet = when (connection.config.dbms) {
+                Dbms.Oracle -> {
+                    statement.executeQuery(
+                        """
+                        SELECT version
+                          FROM $migrationTableName
+                         ORDER BY version DESC
+                         FETCH FIRST $count ROWS ONLY
+                         """.trimIndent()
+                    )
+                }
+                else -> {
+                    statement.executeQuery(
+                        """
+                        SELECT version
+                          FROM $migrationTableName
+                         ORDER BY version DESC
+                         LIMIT $count
+                         """.trimIndent()
+                    )
+                }
+            }
+            while (resultSet.next()) {
+                resultList.add(resultSet.getString(1));
+            }
+            resultSet.close()
+        } catch (e: Exception) {
+            throw e
+        } finally {
+            statement.close()
+        }
+        return resultList
+    }
+
+    internal fun findCurrentMigrationVersion(connection: ConnectionInterface): String {
+        return findListMigrationVersion(connection, 1).firstOrNull() ?: ""
     }
 
     /**

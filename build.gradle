@@ -57,7 +57,7 @@ task javadocJar(type: Jar) {
 }
 
 group 'com.improve_future'
-version '1.1.25'
+version '1.1.26'
 
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'kotlin'
@@ -97,11 +97,33 @@ dependencies {
 
     implementation 'com.github.cesarferreira:kotlin-pluralizer:0.2.9'
 
+    testImplementation("io.zonky.test:embedded-postgres:1.2.6")
+    testImplementation(
+            enforcedPlatform(
+                    "io.zonky.test.postgres:embedded-postgres-binaries-bom:9.6.20-1"
+            )
+    )
+    testImplementation("org.jetbrains.exposed:exposed:0.17.9")
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.0.0")
+
 
     implementation localGroovy()  // Groovy SDK
     compileOnly gradleApi()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs = ["test"]  // Note @Peter's comment below
+        }
+    }
 }
 
 compileKotlin {

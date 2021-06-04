@@ -18,7 +18,6 @@
 
 package com.improve_future.harmonica.stub.core
 
-import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.ConnectionInterface
 import com.improve_future.harmonica.core.DbConfig
 import java.sql.Statement
@@ -28,7 +27,7 @@ class StubConnection : ConnectionInterface {
 
     val executedSqlList = mutableListOf<String>()
 
-    override fun transaction(block: Connection.() -> Unit) {
+    override fun transaction(block: ConnectionInterface.() -> Unit) {
 
     }
 
@@ -48,4 +47,9 @@ class StubConnection : ConnectionInterface {
     override fun createStatement(): Statement {
         return Statement::class.java.newInstance()
     }
+
+    override fun close() {
+
+    }
+
 }

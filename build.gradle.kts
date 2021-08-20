@@ -35,4 +35,5 @@ buildscript {
 
 plugins {
     id("com.jfrog.bintray") version "1.8.4" apply false
+    kotlin("jvm") version "1.4.20" apply false
 }

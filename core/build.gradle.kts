@@ -37,3 +37,7 @@ dependencies {
     testImplementation("commons-codec:commons-codec:1.15")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
 }
+
+tasks.test {
+    useJUnitPlatform()
+}

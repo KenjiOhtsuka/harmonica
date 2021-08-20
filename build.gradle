@@ -105,6 +105,11 @@ dependencies {
 
     implementation localGroovy()  // Groovy SDK
     compileOnly gradleApi()
+
+    /* Plugin */
+    // https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin
+    implementation group: 'org.apache.maven.plugins', name: 'maven-dependency-plugin', version: '3.1.2'
+    implementation group: 'org.apache.maven.plugin-tools', name: 'maven-plugin-annotations', version: '3.6.0'
 }
 
 test {

@@ -17,7 +17,7 @@
  */
 
 plugins {
-    id("org.jetbrains.kotlin.jvm")
+    kotlin("jvm")
     id("maven-publish")
     id("org.jetbrains.dokka")
 }
@@ -36,4 +36,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
     testImplementation("commons-codec:commons-codec:1.15")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

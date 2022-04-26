@@ -40,7 +40,6 @@ version = "2.0.0"
 
 repositories {
     mavenCentral()
-    maven("https://dl.bintray.com/kotlin/exposed")
     maven("https://jitpack.io")
 }
 

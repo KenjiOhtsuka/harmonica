@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.cesarferreira:kotlin-pluralizer:0.2.9")
+    implementation("com.github.cesarferreira:kotlin-pluralizer:1.0.0")
 
     // Tests
     testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")

@@ -18,7 +18,10 @@
 
 package com.improve_future.harmonica.plugin
 
+import org.gradle.api.tasks.Internal
+
 open class JarmonicaCreateTask : JarmonicaMigrationTask() {
+    @get:Internal
     override val taskType = JarmonicaTaskType.Create
 
     override fun exec() {

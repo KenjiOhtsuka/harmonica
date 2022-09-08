@@ -18,12 +18,14 @@
 
 package com.improve_future.harmonica.plugin
 
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
 
 abstract class JarmonicaMigrationTask : JavaExec() {
     internal abstract val taskType: JarmonicaTaskType
 
-    protected val migrationPackage: String
+    @get:Input protected val migrationPackage: String
         get() {
             if (project.extensions.extraProperties.has("migrationPackage"))
                 return project.extensions.extraProperties["migrationPackage"] as String
@@ -35,7 +37,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             //project.group.toString() + "." + project.name //+ ".db"
         }
 
-    private val directoryPath: String
+    @get:Internal private val directoryPath: String
         get() {
             if (project.extensions.extraProperties.has("directoryPath"))
                 return project.extensions.extraProperties["directoryPath"] as String
@@ -44,14 +46,14 @@ abstract class JarmonicaMigrationTask : JavaExec() {
             return "src/main/kotlin/db"
         }
 
-    private val env: String
+    @get:Internal private val env: String
         get() {
             if (project.extensions.extraProperties.has("env"))
                 return project.extensions.extraProperties["env"] as String
             return getProperty("env") ?: "Default"
         }
 
-    private val tableNamePluralization: Boolean
+    @get:Internal private val tableNamePluralization: Boolean
         get() {
             project.extensions.extraProperties.let {
                 if (it.has("tableNamePluralization"))
@@ -65,7 +67,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
      *
      * True when sql option is "review", blank, "true" or null
      */
-    private val dispSql: Boolean
+    @get:Internal private val dispSql: Boolean
         get() {
             project.extensions.extraProperties.let {
                 if (it.has("sql")) {
@@ -83,7 +85,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
      *
      * True only when sql option is "review".
      */
-    private val isReview: Boolean
+    @get:Internal private val isReview: Boolean
         get() {
             project.extensions.extraProperties.let {
                 if (it.has("sql")) {

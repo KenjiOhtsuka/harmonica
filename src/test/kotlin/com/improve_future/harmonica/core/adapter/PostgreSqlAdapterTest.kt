@@ -314,7 +314,7 @@ class PostgreSqlAdapterTest {
             "new_column_name"
         )
         assertEquals(
-            "ALTER TABLE table_name RENAME COLUMN old_column_name TO new_column_name;",
+            "ALTER TABLE table_name RENAME COLUMN old_column_name TO new_column_name",
             connection.executedSqlList.first()
         )
     }

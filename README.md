@@ -1,3 +1,5 @@
+**This Library is NOT developed actively now. Please feel free to fork and your library.**
+
 # Harmonica - Kotlin Database Migration Tool
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [ ![Download](https://api.bintray.com/packages/kenjiohtsuka/m/Harmonica/images/download.svg) ](https://bintray.com/kenjiohtsuka/m/Harmonica/_latestVersion)

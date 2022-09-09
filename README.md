@@ -1,4 +1,4 @@
-**This Library is NOT developed actively now. Please feel free to fork and your library.**
+**This Library is NOT developed actively now. Please feel free to fork, develop and publicize your library.**
 
 # Harmonica - Kotlin Database Migration Tool
 

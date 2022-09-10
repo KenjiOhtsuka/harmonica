@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <copyright>
+    <option name="allowReplaceRegexp" value="GNU General Public License" />
+    <option name="notice" value="Harmonica: Kotlin Database Migration Tool&#10;Copyright (c) &amp;#36;today.year Kenji Otsuka&#10;&#10;This software is released under the MIT License.&#10;http://opensource.org/licenses/mit-license.php" />
+    <option name="myName" value="MIT_Harmonica" />
+  </copyright>
+</component>

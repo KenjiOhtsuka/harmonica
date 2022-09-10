@@ -2,7 +2,7 @@
 
 # Harmonica - Kotlin Database Migration Tool
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [ ![Download](https://api.bintray.com/packages/kenjiohtsuka/m/Harmonica/images/download.svg) ](https://bintray.com/kenjiohtsuka/m/Harmonica/_latestVersion)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [ ![Download](https://api.bintray.com/packages/kenjiohtsuka/m/Harmonica/images/download.svg) ](https://bintray.com/kenjiohtsuka/m/Harmonica/_latestVersion)
 [![CircleCI](https://circleci.com/gh/KenjiOhtsuka/harmonica.svg?style=svg)](https://circleci.com/gh/KenjiOhtsuka/harmonica)
 [![Twitter Follow](https://img.shields.io/twitter/follow/_kjot.svg?style=social)](https://twitter.com/_kjot)
 

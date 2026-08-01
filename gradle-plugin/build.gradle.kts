@@ -24,24 +24,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
 
-    /* JDBC */
-    testImplementation("mysql:mysql-connector-java:5.1.44")
-    //testCompile ("mysql:mysql-connector-mxj:5.0.12")
-    testImplementation("org.postgresql:postgresql:9.4.1212.jre6")
-    //testCompile ("com.opentable.components:otj-pg-embedded:0.9.0")
-    testImplementation("org.xerial:sqlite-jdbc:3.21.0.1")
-    // testCompile("com.oracle:ojdbc6:12.1.0.1-atlassian-hosted")
-    testImplementation("com.microsoft.sqlserver:mssql-jdbc:6.2.1.jre7")
-
     /* Implementation */
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion")
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 
     implementation("org.reflections:reflections:0.9.11")
-
-    // Latest version of kotlinx-html
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")

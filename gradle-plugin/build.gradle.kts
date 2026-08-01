@@ -38,7 +38,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
 
     /* JDBC */
-    testImplementation("mysql:mysql-connector-java:5.1.44")
+    testImplementation("mysql:mysql-connector-java:8.0.33")
     //testCompile ("mysql:mysql-connector-mxj:5.0.12")
     testImplementation("org.postgresql:postgresql:9.4.1212.jre6")
     //testCompile ("com.opentable.components:otj-pg-embedded:0.9.0")

@@ -1,9 +1,1 @@
-#
-# Harmonica: Kotlin Database Migration Tool
-# Copyright (c) 2022 Kenji Otsuka
-#
-# This software is released under the MIT License.
-# http://opensource.org/licenses/mit-license.php
-#
-
 org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactory

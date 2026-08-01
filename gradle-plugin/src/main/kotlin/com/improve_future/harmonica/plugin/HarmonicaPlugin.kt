@@ -13,12 +13,12 @@ open class HarmonicaPlugin : Plugin<Project> {
 
         project.tasks.register("harmonicaCreate", MigrationCreate::class.java) { task ->
             task.group = PluginConfig.groupName
-            task.description = "Migrate down."
+            task.description = "Create migration file."
         }
 
         project.tasks.register("harmonicaDown", MigrationDownTask::class.java) { task ->
             task.group = PluginConfig.groupName
-            task.description = "Create migration file."
+            task.description = "Migrate down."
         }
     }
 }

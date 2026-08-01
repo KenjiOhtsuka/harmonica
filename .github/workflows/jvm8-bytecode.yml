@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Set up JDK 25
         uses: gradle/actions/setup-gradle@v4
@@ -39,24 +41,16 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
 
-      - name: Assert JVM 8 bytecode in core
+      - name: Assert JVM 8 bytecode
         run: |
           set -euo pipefail
-          major=$(javap -verbose -classpath core/build/classes/kotlin/main \
-            com.improve_future.harmonica.core.Connection \
-            | awk '/major version/ {print $3}')
-          if [ "$major" != "52" ]; then
-            echo "core produced class-file major version $major, expected 52 (JVM 8)"
-            exit 1
-          fi
-
-      - name: Assert JVM 8 bytecode in gradle-plugin
-        run: |
-          set -euo pipefail
-          major=$(javap -verbose -classpath gradle-plugin/build/classes/kotlin/main \
-            com.improve_future.harmonica.plugin.HarmonicaPlugin \
-            | awk '/major version/ {print $3}')
-          if [ "$major" != "52" ]; then
-            echo "gradle-plugin produced class-file major version $major, expected 52 (JVM 8)"
-            exit 1
-          fi
+          for dir in core/build/classes/kotlin/main gradle-plugin/build/classes/kotlin/main; do
+            [ -d "$dir" ] || { echo "missing Kotlin output directory: $dir"; exit 1; }
+            while IFS= read -r classfile; do
+              major=$(javap -verbose "$classfile" | awk '/major version/ {print $3}')
+              if [ "$major" != "52" ]; then
+                echo "$classfile: class-file major version $major, expected 52 (JVM 8)"
+                exit 1
+              fi
+            done < <(find "$dir" -name '*.class' | sort)
+          done

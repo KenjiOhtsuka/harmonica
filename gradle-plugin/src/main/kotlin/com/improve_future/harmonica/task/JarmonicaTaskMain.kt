@@ -107,7 +107,9 @@ abstract class JarmonicaTaskMain {
     private fun loadClass(className: String): Class<*>? {
         return try {
             Class.forName(className, false, classLoader)
-        } catch (e: Throwable) {
+        } catch (e: ClassNotFoundException) {
+            null
+        } catch (e: LinkageError) {
             null
         }
     }

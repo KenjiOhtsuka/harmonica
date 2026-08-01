@@ -62,6 +62,7 @@ java {
 kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_1_8)
+        freeCompilerArgs.add("-Xjsr305=strict")
     }
 }
 
@@ -86,6 +87,11 @@ gradlePlugin {
         register("harmonica") {
             id = "harmonica"
             implementationClass = "com.improve_future.harmonica.plugin.HarmonicaPlugin"
+            displayName = "DB Migration Plugin"
+            description = "Kotlin Database Migration Tool"
+            tags = listOf("kotlin", "database", "migration")
+            website = "https://github.com/KenjiOhtsuka/harmonica"
+            vcsUrl = "https://github.com/KenjiOhtsuka/harmonica"
         }
         register("jarmonica") {
             id = "jarmonica"
@@ -124,6 +130,16 @@ publishing {
                 scm {
                     url.set(githubUrl)
                 }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }

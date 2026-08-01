@@ -51,11 +51,13 @@ jobs:
           set -euo pipefail
           for dir in core/build/classes/kotlin/main gradle-plugin/build/classes/kotlin/main; do
             [ -d "$dir" ] || { echo "missing Kotlin output directory: $dir"; exit 1; }
+            classfiles=$(find "$dir" -name '*.class' | sort)
+            [ -n "$classfiles" ] || { echo "no class files found in $dir"; exit 1; }
             while IFS= read -r classfile; do
               major=$(javap -verbose "$classfile" | awk '/major version/ {print $3}')
               if [ "$major" != "52" ]; then
                 echo "$classfile: class-file major version $major, expected 52 (JVM 8)"
                 exit 1
               fi
-            done < <(find "$dir" -name '*.class' | sort)
+            done <<< "$classfiles"
           done

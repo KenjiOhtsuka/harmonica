@@ -83,6 +83,8 @@ tasks {
 }
 
 gradlePlugin {
+    website = "https://github.com/KenjiOhtsuka/harmonica"
+    vcsUrl = "https://github.com/KenjiOhtsuka/harmonica"
     plugins {
         register("harmonica") {
             id = "harmonica"
@@ -90,8 +92,6 @@ gradlePlugin {
             displayName = "DB Migration Plugin"
             description = "Kotlin Database Migration Tool"
             tags = listOf("kotlin", "database", "migration")
-            website = "https://github.com/KenjiOhtsuka/harmonica"
-            vcsUrl = "https://github.com/KenjiOhtsuka/harmonica"
         }
         register("jarmonica") {
             id = "jarmonica"

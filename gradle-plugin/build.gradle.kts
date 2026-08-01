@@ -27,7 +27,7 @@ dependencies {
     /* Implementation */
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion")
 
-    implementation("org.reflections:reflections:0.9.11")
+    implementation("org.reflections:reflections:0.10.2")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")

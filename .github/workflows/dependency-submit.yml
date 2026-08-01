@@ -15,14 +15,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-
-      - name: Set up JDK 25
+      - name: Submit dependency graph
         uses: gradle/actions/setup-gradle@v4
         with:
-          distribution: temurin
-          java-version: '25'
           dependency-graph: download-and-submit
-          dependency-graph-continue-on-failure: true
+          dependency-graph-continue-on-failure: false

@@ -8,12 +8,9 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
 }
 
 dependencies {
-    implementation("com.github.cesarferreira:kotlin-pluralizer:0.2.9")
-
     // Tests
     testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")

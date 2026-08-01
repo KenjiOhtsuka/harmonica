@@ -1,0 +1,63 @@
+name: JVM 8 Bytecode Check
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'spec/**'
+      - 'docs/**'
+      - 'document/**'
+  push:
+    branches:
+      - develop
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'spec/**'
+      - 'docs/**'
+      - 'document/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jvm8-bytecode-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          dependency-graph: disabled
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+
+      - name: Assert JVM 8 bytecode
+        run: |
+          set -euo pipefail
+          for dir in core/build/classes/kotlin/main gradle-plugin/build/classes/kotlin/main; do
+            [ -d "$dir" ] || { echo "missing Kotlin output directory: $dir"; exit 1; }
+            classfiles=$(find "$dir" -name '*.class' | sort)
+            [ -n "$classfiles" ] || { echo "no class files found in $dir"; exit 1; }
+            while IFS= read -r classfile; do
+              major=$(javap -verbose "$classfile" | awk '/major version/ {print $3}')
+              if [ "$major" != "52" ]; then
+                echo "$classfile: class-file major version $major, expected 52 (JVM 8)"
+                exit 1
+              fi
+            done <<< "$classfiles"
+          done

@@ -4,23 +4,21 @@ import com.improve_future.harmonica.config.PluginConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-open class HarmonicaPlugin: Plugin<Project> {
+open class HarmonicaPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        project.tasks.run {
-            create("harmonicaUp", MigrationUpTask::class.java) {
-                it.group = PluginConfig.groupName
-                it.description = "Migrate up."
-            }
+        project.tasks.register("harmonicaUp", MigrationUpTask::class.java) { task ->
+            task.group = PluginConfig.groupName
+            task.description = "Migrate up."
+        }
 
-            create("harmonicaCreate", MigrationCreate::class.java) {
-                it.group = PluginConfig.groupName
-                it.description = "Migrate down."
-            }
+        project.tasks.register("harmonicaCreate", MigrationCreate::class.java) { task ->
+            task.group = PluginConfig.groupName
+            task.description = "Create migration file."
+        }
 
-            create("harmonicaDown", MigrationDownTask::class.java) {
-                it.group = PluginConfig.groupName
-                it.description = "Create migration file."
-            }
+        project.tasks.register("harmonicaDown", MigrationDownTask::class.java) { task ->
+            task.group = PluginConfig.groupName
+            task.description = "Migrate down."
         }
     }
 }

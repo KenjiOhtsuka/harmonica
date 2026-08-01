@@ -2,8 +2,10 @@ package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.core.AbstractMigration
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
 open class MigrationDownTask : AbstractMigrationTask() {
     @TaskAction
     fun migrateDown() {

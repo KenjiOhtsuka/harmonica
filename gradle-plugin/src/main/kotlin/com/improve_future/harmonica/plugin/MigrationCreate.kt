@@ -1,13 +1,15 @@
 package com.improve_future.harmonica.plugin
 
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.nio.file.Paths
 
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
 open class MigrationCreate : AbstractTask() {
     private val migrationName: String
         get() {
             if (project.hasProperty("migrationName"))
-                return project.properties["migrationName"] as String
+                return project.findProperty("migrationName") as String
             return "Migration"
         }
 

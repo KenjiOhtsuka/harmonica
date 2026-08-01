@@ -3,51 +3,39 @@ package com.improve_future.harmonica.plugin
 import com.improve_future.harmonica.config.PluginConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import groovy.lang.Closure
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
-import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.JavaExec
+import org.gradle.work.DisableCachingByDefault
 import kotlin.reflect.KClass
-
-internal fun <T> T.groovyClosure(function: () -> Unit) =
-    object : Closure<Unit>(this) {
-        @Suppress("unused")
-        fun doCall() {
-            function()
-        }
-    }
 
 class JarmonicaPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        // register plugin action
-        val javaConvention = project.convention
-            .getPlugin(JavaPluginConvention::class.java)
-
         fun <T : JavaExec> addTask(
             kTask: KClass<T>, description: String
-        ): JavaExec {
-            val task = kTask.java
-            val taskName = task.simpleName.removeSuffix("Task").run {
-                this[0].toLowerCase() + this.substring(1)
+        ): TaskProvider<T> {
+            val taskName = kTask.java.simpleName.removeSuffix("Task").run {
+                this[0].lowercaseChar() + this.substring(1)
             }
-            val mainClassName = task.simpleName.removeSuffix("Task") + "Main"
+            val mainClassName = kTask.java.simpleName.removeSuffix("Task") + "Main"
 
-            return project.tasks.create(taskName, task).apply {
-                group = PluginConfig.groupName
-                classpath(
-                    javaConvention.sourceSets
-                        .findByName(SourceSet.MAIN_SOURCE_SET_NAME)!!.runtimeClasspath
+            return project.tasks.register(taskName, kTask.java) { task ->
+                task.group = PluginConfig.groupName
+                task.description = description
+                task.mainClass.set("com.improve_future.harmonica.task.$mainClassName")
+                task.classpath(
+                    project.extensions
+                        .getByType(JavaPluginExtension::class.java)
+                        .sourceSets
+                        .getByName(SourceSet.MAIN_SOURCE_SET_NAME)
+                        .runtimeClasspath
                 )
-                conventionMapping.map(
-                    "jvmArgs",
-                    groovyClosure {
-                        if (project.hasProperty("applicationDefaultJvmArgs"))
-                            project.property("applicationDefaultJvmArgs")
-                        else java.util.Collections.emptyList<Any>()
-                    }
-                )
-                this.description = description
-                conventionMapping("main") { "com.improve_future.harmonica.task.$mainClassName" }
+                val defaultJvmArgs = if (project.hasProperty("applicationDefaultJvmArgs"))
+                    project.property("applicationDefaultJvmArgs") as Collection<*>
+                else
+                    emptyList<Any>()
+                task.jvmArgs(defaultJvmArgs)
             }
         }
 
@@ -63,11 +51,11 @@ class JarmonicaPlugin : Plugin<Project> {
         addTask(
             JarmonicaVersionTask::class, "Show current migration version."
         )
-
     }
 }
 
-open class JarmonicaUpTask : JarmonicaMigrationTask() {
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
+abstract class JarmonicaUpTask : JarmonicaMigrationTask() {
     override val taskType = JarmonicaTaskType.Up
 
     override fun exec() {
@@ -79,7 +67,8 @@ open class JarmonicaUpTask : JarmonicaMigrationTask() {
     }
 }
 
-open class JarmonicaDownTask : JarmonicaMigrationTask() {
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
+abstract class JarmonicaDownTask : JarmonicaMigrationTask() {
     override val taskType: JarmonicaTaskType = JarmonicaTaskType.Down
 
     override fun exec() {
@@ -91,7 +80,8 @@ open class JarmonicaDownTask : JarmonicaMigrationTask() {
     }
 }
 
-open class JarmonicaVersionTask : JarmonicaMigrationTask() {
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
+abstract class JarmonicaVersionTask : JarmonicaMigrationTask() {
     override val taskType = JarmonicaTaskType.Version
 
     override fun exec() {

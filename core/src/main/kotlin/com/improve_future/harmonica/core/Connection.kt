@@ -150,7 +150,7 @@ open class Connection(
     override fun doesTableExist(tableName: String): Boolean {
         val resultSet = javaConnection.metaData.getTables(
             null, null,
-            if (config.dbms == Dbms.Oracle) tableName.toUpperCase()
+            if (config.dbms == Dbms.Oracle) tableName.uppercase()
             else tableName,
             null
         )

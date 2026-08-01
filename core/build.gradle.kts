@@ -37,6 +37,12 @@ tasks.test {
     useJUnitPlatform()
 }
 
+// JUnit 6 requires Java 17+, but published bytecode must stay JVM 8
+// (jvmTarget = JVM_1_8 above). The Gradle metadata of JUnit 6 artifacts
+// declares org.gradle.jvm.version = 17, while these configurations carry
+// 8 from targetCompatibility, which would reject the dependency. Override
+// the attribute on the test classpaths only so resolution succeeds and
+// tests run on the installed JDK (25), which satisfies the 17+ baseline.
 configurations {
     testCompileClasspath {
         attributes {

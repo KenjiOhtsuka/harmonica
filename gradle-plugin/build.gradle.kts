@@ -67,6 +67,12 @@ tasks {
     }
 }
 
+// JUnit 6 requires Java 17+, but the plugin's published bytecode must stay
+// JVM 8 (jvmTarget = 1.8). JUnit 6 artifacts declare org.gradle.jvm.version
+// = 17 in their metadata while these configurations carry 8 from
+// targetCompatibility, so resolution would reject them. Override the
+// attribute on the test classpaths only; tests run on the installed JDK
+// (25), which satisfies the 17+ baseline.
 configurations {
     testCompileClasspath {
         attributes {

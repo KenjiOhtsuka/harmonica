@@ -1,5 +1,25 @@
 package com.improve_future.harmonica.core.table
 
+// Ported and adapted from kotlin-pluralizer, MIT License,
+// Copyright (c) 2016 César Ferreira (https://github.com/cesarferreira/kotlin-pluralizer),
+// which is itself a port of pluralize, The MIT License (MIT),
+// Copyright (c) 2013 Blake Embrey (https://github.com/plurals/pluralize).
+//
+// MIT License:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
 internal fun String.singularize(): String {
     if (uncountableWords.contains(this.lowercase())) return this
 
@@ -29,7 +49,27 @@ private val uncountableWords = listOf(
     "contretemps", "jackanapes", "corps", "mackerel",
     "swine", "debris", "measles", "trout", "diabetes", "mews",
     "tuna", "djinn", "mumps", "whiting", "eland", "news",
-    "wildebeest", "elk", "pincers", "sugar"
+    "wildebeest", "elk", "pincers", "sugar",
+    "water", "oil", "air", "sand", "grass", "hair", "weather",
+    "furniture", "luggage", "baggage", "accommodation", "metadata",
+    "advice", "knowledge", "music", "milk", "bread", "butter", "cheese",
+    "coffee", "tea", "juice", "wine", "beer", "gold", "silver", "iron",
+    "steel", "wood", "glass", "paper", "cloth", "cotton", "wool", "dust",
+    "dirt", "mud", "snow", "ice", "smoke", "steam", "fog", "mist",
+    "lightning", "thunder", "darkness", "warmth", "cold", "silence",
+    "noise", "anger", "happiness", "sadness", "joy", "fear", "love",
+    "hate", "pride", "courage", "honesty", "patience", "kindness",
+    "education", "research", "evidence", "progress", "traffic",
+    "transportation", "electricity", "energy", "heat", "oxygen",
+    "hydrogen", "nitrogen",
+    "mathematics", "physics", "economics", "politics", "statistics",
+    "ethics", "gymnastics", "acoustics", "athletics", "optics",
+    "dynamics", "electronics", "linguistics", "genetics",
+    "thermodynamics", "hydraulics", "mechanics", "aerobics",
+    "japanese", "chinese", "portuguese", "vietnamese", "burmese",
+    "lebanese", "maltese", "taiwanese", "sudanese", "senegalese",
+    "congolese", "beninese", "gabonese", "faroese", "timorese",
+    "ceylonese"
 )
 
 private val irregularWords = listOf(
@@ -37,9 +77,9 @@ private val irregularWords = listOf(
     "man" to "men",
     "goose" to "geese",
     "child" to "children",
-    "sex" to "sexes",
     "move" to "moves",
     "stadium" to "stadiums",
+    "database" to "databases",
     "deer" to "deer",
     "codex" to "codices",
     "murex" to "murices",
@@ -64,7 +104,6 @@ private val irregularWords = listOf(
     "Bahaman" to "Bahamans",
     "Burman" to "Burmans",
     "German" to "Germans",
-    "Hiroshiman" to "Hiroshimans",
     "Liman" to "Limans",
     "Nakayaman" to "Nakayamans",
     "Oklahoman" to "Oklahomans",
@@ -84,7 +123,18 @@ private val irregularWords = listOf(
     "organon" to "organa",
     "asyndeton" to "asyndeta",
     "hyperbaton" to "hyperbata",
-    "foot" to "feet"
+    "foot" to "feet",
+    "index" to "indices",
+    "datum" to "data",
+    "appendix" to "appendices",
+    "tooth" to "teeth",
+    "focus" to "foci",
+    "nucleus" to "nuclei",
+    "curriculum" to "curricula",
+    "memorandum" to "memoranda",
+    "bacterium" to "bacteria",
+    "matrix" to "matrices",
+    "crisis" to "crises"
 )
 
 private val singularizeRules = listOf(

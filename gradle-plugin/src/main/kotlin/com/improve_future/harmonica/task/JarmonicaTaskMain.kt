@@ -15,7 +15,9 @@ abstract class JarmonicaTaskMain {
 
     init {
         versionService = VersionService(migrationTableName)
-        classLoader = ClassLoader.getSystemClassLoader()
+        classLoader = Thread.currentThread().contextClassLoader
+            ?: javaClass.classLoader
+            ?: ClassLoader.getSystemClassLoader()
     }
 
     protected fun createConnection(
@@ -26,10 +28,7 @@ abstract class JarmonicaTaskMain {
 
     protected fun findMigrationClassList(packageName: String): List<Class<out AbstractMigration>> {
         return findClassesInPackage(packageName)
-            .filter {
-                it != AbstractMigration::class.java &&
-                    AbstractMigration::class.java.isAssignableFrom(it)
-            }
+            .filter { isSubtypeOf(AbstractMigration::class.java, it) }
             .map { it as Class<out AbstractMigration> }
             .sortedBy { it.name }
     }
@@ -38,9 +37,7 @@ abstract class JarmonicaTaskMain {
         packageName: String, env: String = "Default"
     ): DbConfig {
         val classList = findClassesInPackage(packageName)
-            .filter {
-                it != DbConfig::class.java && DbConfig::class.java.isAssignableFrom(it)
-            }
+            .filter { isSubtypeOf(DbConfig::class.java, it) }
             .map { it as Class<out DbConfig> }
         classList.forEach {
             if (it.simpleName == env) {
@@ -69,7 +66,16 @@ abstract class JarmonicaTaskMain {
             }
             classes.addAll(classesInUrl)
         }
-        return classes
+        return classes.distinct()
+    }
+
+    private fun isSubtypeOf(base: Class<*>, cls: Class<*>): Boolean {
+        if (cls == base) return false
+        return try {
+            base.isAssignableFrom(cls)
+        } catch (e: Throwable) {
+            false
+        }
     }
 
     private fun findClassesInDirectory(dir: File, packageName: String): List<Class<*>> {

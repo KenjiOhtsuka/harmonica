@@ -2,7 +2,9 @@ package com.improve_future.harmonica.plugin
 
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
+import org.gradle.work.DisableCachingByDefault
 
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
 abstract class JarmonicaMigrationTask : JavaExec() {
     @get:Internal
     internal abstract val taskType: JarmonicaTaskType
@@ -105,7 +107,7 @@ abstract class JarmonicaMigrationTask : JavaExec() {
 
     protected fun getProperty(name: String): String? {
         return if (project.hasProperty(name))
-            project.properties[name] as String
+            project.findProperty(name) as String
         else
             null
     }

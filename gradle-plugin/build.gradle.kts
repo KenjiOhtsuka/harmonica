@@ -1,7 +1,4 @@
-import org.gradle.api.publish.maven.MavenPom
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.Date
-import java.nio.file.Paths
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("maven-publish")
@@ -10,7 +7,6 @@ plugins {
     kotlin("jvm")
     id("java-gradle-plugin")
     id("org.jetbrains.dokka")
-    //jacoco
 }
 
 group = "com.improve_future"
@@ -19,7 +15,6 @@ version = "2.0.0"
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
-    maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
 }
 
 dependencies {
@@ -39,10 +34,7 @@ dependencies {
     testImplementation("com.microsoft.sqlserver:mssql-jdbc:6.2.1.jre7")
 
     /* Implementation */
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
-    implementation("org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion")
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
-    implementation("org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion")
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 
@@ -51,8 +43,8 @@ dependencies {
     // Latest version of kotlinx-html
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
 
     // Dependencies to be able to run tests within gradle
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
@@ -62,16 +54,20 @@ dependencies {
     compileOnly(gradleApi())
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
+}
+
 tasks {
     test {
         useJUnitPlatform()
-    }
-
-    withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "1.8"
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-        }
     }
 
     task<Jar>("sourcesJar") {
@@ -82,11 +78,6 @@ tasks {
     task<Jar>("javadocJar") {
         from(javadoc)
         archiveClassifier.set("javadoc")
-    }
-
-    dokka {
-        outputFormat = "html"
-        outputDirectory = Paths.get("docs", "api").toString()
     }
 }
 
@@ -103,47 +94,7 @@ gradlePlugin {
     }
 }
 
-// for Gradle Plugin
-pluginBundle {
-    website = "https://github.com/KenjiOhtsuka/harmonica"
-    vcsUrl = "https://github.com/KenjiOhtsuka/harmonica"
-    description = "Kotlin Database Migration Tool"
-    tags = listOf("kotlin", "database", "migration")
-
-    plugins {
-        register("harmonica") {
-            id = "com.improve_future.harmonica"
-            displayName = "DB Migration Plugin"
-        }
-    }
-}
-
 val githubUrl = "https://github.com/KenjiOhtsuka/harmonica"
-
-val pomConfig: MavenPom.() -> Unit = {
-    description.set("Kotlin Database Migration Tool")
-    name.set("Harmonica")
-    url.set(githubUrl)
-
-    licenses {
-        license {
-            name.set("MIT License")
-            url.set("https://www.gnu.org/licenses/gpl-3.0")
-            distribution.set("repo")
-        }
-    }
-    developers {
-        developer {
-            id.set("kenjiohtsuka")
-            name.set("Kenji Otsuka")
-            email.set("kok.fdcm@gmail.com")
-        }
-    }
-
-    scm {
-        url.set(githubUrl)
-    }
-}
 
 // Create the publication with the pom configuration:
 publishing {
@@ -152,11 +103,11 @@ publishing {
             from(components["java"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
-            
+
             pom {
                 name.set("Harmonica")
                 description.set("Kotlin Database Migration Tool")
-                url.set("https://github.com/KenjiOhtsuka/harmonica")
+                url.set(githubUrl)
                 licenses {
                     license {
                         name.set("MIT License")
@@ -171,18 +122,8 @@ publishing {
                     }
                 }
                 scm {
-                    url.set("https://github.com/KenjiOhtsuka/harmonica")
+                    url.set(githubUrl)
                 }
-            }
-        }
-    }
-    repositories {
-        maven {
-            name = "OSSRH"
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }

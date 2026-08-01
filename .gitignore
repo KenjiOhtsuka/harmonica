@@ -3,6 +3,9 @@
 **/build/
 !src/**/build/
 
+# Kotlin build cache / compiler workspace
+.kotlin/
+
 # Ignore Gradle GUI config
 gradle-app.setting
 

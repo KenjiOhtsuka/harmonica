@@ -1,0 +1,62 @@
+name: JVM 8 Bytecode Check
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'spec/**'
+      - 'docs/**'
+      - 'document/**'
+  push:
+    branches:
+      - develop
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'spec/**'
+      - 'docs/**'
+      - 'document/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jvm8-bytecode-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+
+      - name: Assert JVM 8 bytecode in core
+        run: |
+          set -euo pipefail
+          major=$(javap -verbose -classpath core/build/classes/kotlin/main \
+            com.improve_future.harmonica.core.Connection \
+            | awk '/major version/ {print $3}')
+          if [ "$major" != "52" ]; then
+            echo "core produced class-file major version $major, expected 52 (JVM 8)"
+            exit 1
+          fi
+
+      - name: Assert JVM 8 bytecode in gradle-plugin
+        run: |
+          set -euo pipefail
+          major=$(javap -verbose -classpath gradle-plugin/build/classes/kotlin/main \
+            com.improve_future.harmonica.plugin.HarmonicaPlugin \
+            | awk '/major version/ {print $3}')
+          if [ "$major" != "52" ]; then
+            echo "gradle-plugin produced class-file major version $major, expected 52 (JVM 8)"
+            exit 1
+          fi

@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'spec/**'
+      - 'docs/**'
+      - 'document/**'
+  push:
+    branches:
+      - develop
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'spec/**'
+      - 'docs/**'
+      - 'document/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          dependency-graph: generate-and-submit
+          dependency-graph-continue-on-failure: true
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon

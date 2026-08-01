@@ -3,11 +3,13 @@ package com.improve_future.harmonica.plugin
 import com.improve_future.harmonica.config.PluginConfig
 import com.improve_future.harmonica.core.*
 import org.gradle.api.tasks.Input
-import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 import java.nio.file.Paths
+import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
 abstract class AbstractMigrationTask : AbstractTask() {
     @Input
     var dbms: Dbms = Dbms.PostgreSQL
@@ -29,9 +31,9 @@ abstract class AbstractMigrationTask : AbstractTask() {
     }
 
     protected companion object {
-        val engine: KotlinJsr223JvmLocalScriptEngine by lazy {
-            ScriptEngineManager().getEngineByName("kotlin") as
-                KotlinJsr223JvmLocalScriptEngine
+        val engine: ScriptEngine by lazy {
+            ScriptEngineManager().getEngineByName("kotlin")
+                ?: error("Kotlin script engine not found on the classpath")
         }
 
         protected fun removePackageStatement(script: String) =

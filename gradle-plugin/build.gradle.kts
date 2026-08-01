@@ -1,3 +1,4 @@
+import org.gradle.api.attributes.java.TargetJvmVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -23,31 +24,15 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
 
-    /* JDBC */
-    testImplementation("mysql:mysql-connector-java:5.1.44")
-    //testCompile ("mysql:mysql-connector-mxj:5.0.12")
-    testImplementation("org.postgresql:postgresql:9.4.1212.jre6")
-    //testCompile ("com.opentable.components:otj-pg-embedded:0.9.0")
-    testImplementation("org.xerial:sqlite-jdbc:3.21.0.1")
-    // testCompile("com.oracle:ojdbc6:12.1.0.1-atlassian-hosted")
-    testImplementation("com.microsoft.sqlserver:mssql-jdbc:6.2.1.jre7")
-
     /* Implementation */
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion")
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-
-    implementation("org.reflections:reflections:0.9.11")
-
-    // Latest version of kotlinx-html
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
 
     // Dependencies to be able to run tests within gradle
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.2")
 
     //implementation localGroovy()  // Groovy SDK
     compileOnly(gradleApi())
@@ -78,6 +63,25 @@ tasks {
     task<Jar>("javadocJar") {
         from(javadoc)
         archiveClassifier.set("javadoc")
+    }
+}
+
+// JUnit 6 requires Java 17+, but the plugin's published bytecode must stay
+// JVM 8 (jvmTarget = 1.8). JUnit 6 artifacts declare org.gradle.jvm.version
+// = 17 in their metadata while these configurations carry 8 from
+// targetCompatibility, so resolution would reject them. Override the
+// attribute on the test classpaths only; tests run on the installed JDK
+// (25), which satisfies the 17+ baseline.
+configurations {
+    testCompileClasspath {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
+    testRuntimeClasspath {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
     }
 }
 

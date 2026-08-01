@@ -15,7 +15,7 @@ buildscript {
     dependencies {
         classpath("com.gradle.publish:plugin-publish-plugin:0.9.10")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${property("kotlin_version")}")
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:0.9.17")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:2.2.0")
     }
 }
 

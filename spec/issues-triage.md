@@ -15,11 +15,11 @@ PR #183), #165 (LICENSE already MIT; README badge URLs fixed, PR #181), #140
 (kotlin-pluralizer removed, internal `singularize()`, PR #187).
 
 **Closed / superseded (were listed as URGENT, now resolved on `develop`):**
-#159 (build failure Win10 openjdk 15), #158 (build failure Win/Linux
-openjdk 16), and #162 (Build on Java 17) are all **closed** — same root cause
-(old Kotlin 1.4.20 toolchain on new JDKs), fixed by the Phase 0 toolchain
-upgrade; drop them from active tracking. PR #163 ("update to JDK 17") is now
-**closed** — superseded by Phase 0.
+the build-failure issues #159 (Win10 openjdk 15), #158 (Win/Linux openjdk 16),
+and #162 (Build on Java 17) are all **closed** — same root cause (old Kotlin
+1.4.20 toolchain on new JDKs), fixed by the Phase 0 toolchain upgrade; drop
+them from active tracking. PR #163 ("update to JDK 17") is now **closed** —
+superseded by Phase 0.
 
 ## SMALL — quick wins (Phase 5)
 

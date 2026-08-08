@@ -28,11 +28,13 @@ migrations. Consequences:
   `Class.forName("org.jetbrains.exposed.sql.Database")` — this is the right
   *technique* (no compile-time reference), but the flag is not actually used
   anywhere meaningful.
-- **Bridge contract**: the bridge targets a **single supported Exposed major**
-  — the current `exposed-jdbc` line (package `org.jetbrains.exposed.sql`,
-  `Database.connect(DataSource)` + `transaction()` APIs). If a future Exposed
-  major changes these APIs, the detection class name in `PluginConfig.kt` and
-  the bridge must move together; never support two majors in one bridge.
+- **Bridge contract**: the bridge targets a **single supported Exposed major**:
+  **Exposed 0.x** — the major whose JDBC API lives in package
+  `org.jetbrains.exposed.sql` (`Database.connect(DataSource)` +
+  `transaction()`), matching the runtime detection string in `PluginConfig.kt`.
+  Exposed 1.x moved these classes to `org.jetbrains.exposed.v1.jdbc.*`, so
+  adopting 1.x requires updating the detection class name and bridge APIs
+  together; never support two majors in one bridge.
 - GitHub issues that this resolves: #91 (Exposed must be loadable by
   `Class.forName`), #160 ("how to use with Exposed — AbstractMigration has no
   `create` method"), #80 (Exposed version update — out of harmonica's control
@@ -185,7 +187,7 @@ class M20260801_Migrate : AbstractMigration() {
 
 - Publish `harmonica-exposed` as a separate artifact, or start with a
   documented snippet and promote to an artifact later?
-- Exact Exposed version to use in the bridge (match user expectations; keep it
-  a normal version range).
+- Exact Exposed **0.x** version to use in the bridge (match user expectations;
+  keep it a normal version range within the 0.x line).
 - Whether `exposedTransaction` should manage commit/rollback or delegate to
   `Connection.transaction`.

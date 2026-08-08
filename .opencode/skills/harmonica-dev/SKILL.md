@@ -32,7 +32,8 @@ change.
 - `core` must never import Exposed.
 - `document/` is a stale nested build — excluded from the root build since
   Phase 0; do not expect it to compile in `./gradlew build`.
-- When editing opencode config, load the `customize-opencode` skill.
+- When editing any file under `.opencode/**`, load the `customize-opencode`
+  skill and consult the OpenCode configuration schema.
 
 ## Workflow
 

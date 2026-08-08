@@ -230,6 +230,9 @@ Outcome: real-DB integration tests live in this repo; runnable locally and in CI
 - Tests that need a DB are gated (skip when DB unavailable) so `./gradlew build`
   never fails locally without Docker.
 - CI runs DB-backed tests using Docker services.
+- The DB test matrix must run in **both configurations** — pure JDBC (no Exposed
+  on the classpath) and the `harmonica-exposed` bridge (issue #196), since Phase 3
+  makes Exposed an opt-in user choice.
 - Decide test framework/tooling (**JUnit 6.x** — used in `core`/`gradle-plugin`
   since Phase 2, PR #186 — plus Testcontainers for PostgreSQL/MySQL).
 

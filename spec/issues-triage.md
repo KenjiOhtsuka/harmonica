@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-08 (**28 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-08 (**29 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -47,6 +47,7 @@ superseded by Phase 0.
 | 80 | Update exposed version | Out of harmonica's control once Exposed is optional (see exposed-integration.md); document supported version. |
 | 71 | consider to add or not seeding function | Decide scope; if yes, design a `seed` task. |
 | 97 | Add Test to Sub Classes of JavaExec | Gradle TestKit tests for `JarmonicaMigrationTask` and friends. |
+| 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 4 test matrix per DB must run pure-JDBC (no exposed on classpath) and `exposedTransaction` bridge; same gating/skip in both. |
 | 155 | [feature] Programmatic migrations and/or documentation for it | Document programmatic API + add convenience entry points. |
 
 ## LARGE / STRATEGIC (separate designs & PRs)

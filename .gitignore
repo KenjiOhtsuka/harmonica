@@ -88,3 +88,6 @@ fabric.properties
 
 ### Custom
 .DS_Store
+
+# opencode local dependencies
+.opencode/node_modules/

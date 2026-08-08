@@ -26,7 +26,7 @@ spec docs. Specifically:
 4. **Open decisions**: anything gated on `spec/plan.md` §6 "Open decisions"
    must be labeled as such, not asserted as decided.
 5. **Small-PR rule**: any proposed work that would be a large PR must be
-   justified (only the Phase 0 toolchain PR is exempt).
+   justified — split it into smaller PRs unless there is a reason not to.
 
 Report findings as a numbered list grouped by severity (BLOCKER / WARNING /
 NOTE), each with the file:line reference and the correction needed. Do not

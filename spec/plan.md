@@ -204,7 +204,9 @@ gradle-plugin; Phase 0 baseline was 66).
 Outcome: `core` has zero Exposed references; users decide whether to use
 Exposed, and integration is documented. Full design: [exposed-integration.md].
 
-Status: **not started — next phase.**
+Status: **in progress (decisions resolved 2026-08-08).** Plan: ship
+`harmonica-exposed` as a separate module pinned to Exposed 0.61.0; Option A
+transaction ownership (harmonica owns).
 
 - Remove dead `hasExposed` flag plumbing from `Connection.kt` (currently a
   no-op ternary).
@@ -313,5 +315,14 @@ Resolved (2026-08-01):
 
 Still open:
 
-- Exposed bridge: separate artifact vs code snippets/docs only.
 - Maven Central vs JitPack-only for the first release.
+
+Resolved for Phase 3 (2026-08-08):
+
+- Exposed bridge artifact: **ship as a separate Gradle module** (`exposed/`,
+  artifact `harmonica-exposed`), not snippet-first.
+- Bridge targets **Exposed 0.61.0** (latest 0.x; JDBC API in
+  `org.jetbrains.exposed.sql`).
+- Transaction ownership: **Option A — harmonica owns the transaction** (bridge
+  binds harmonica's connection into Exposed's manager; no Exposed-managed
+  commit).

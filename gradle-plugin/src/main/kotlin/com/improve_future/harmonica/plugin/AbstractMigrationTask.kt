@@ -1,6 +1,5 @@
 package com.improve_future.harmonica.plugin
 
-import com.improve_future.harmonica.config.PluginConfig
 import com.improve_future.harmonica.core.*
 import org.gradle.api.tasks.Input
 import org.gradle.work.DisableCachingByDefault
@@ -27,7 +26,7 @@ abstract class AbstractMigrationTask : AbstractTask() {
     }
 
     protected fun createConnection(): Connection {
-        return Connection(loadConfigFile(), PluginConfig.hasExposed())
+        return Connection(loadConfigFile())
     }
 
     protected companion object {

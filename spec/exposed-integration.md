@@ -1,7 +1,7 @@
 # Exposed Optionality — Design
 
-> **Status: design only (Phase 3, not started).** `harmonica-exposed` does not
-> exist yet and `exposedTransaction` is a proposed **future** API. Nothing in
+> **Status: design agreed; development started 2026-08-08.** `harmonica-exposed`
+> does not exist yet and `exposedTransaction` is a proposed **future** API. Nothing in
 > this document is shipped or supported until the artifact, the script-classpath
 > handling, transaction tests, and real-DB verification land in Phase 3. Issue
 > #91 stays open until then.
@@ -20,18 +20,19 @@ migrations. Consequences:
 
 ## Current state (from the code)
 
-- `core` has **no Exposed dependency** — good.
-- `core/.../Connection.kt` still carries a `hasExposed: Boolean` constructor
-  flag whose ternary returns the same value in both branches (dead code), plus
-  a commented-out `TransactionManager.current().connection`.
-- `gradle-plugin/.../PluginConfig.kt` detects Exposed at runtime via
-  `Class.forName("org.jetbrains.exposed.sql.Database")` — this is the right
-  *technique* (no compile-time reference), but the flag is not actually used
-  anywhere meaningful.
+- `core` has **no Exposed dependency** — good. The dead `hasExposed` flag on
+  `Connection` was removed (Phase 3, PR A): `Connection` no longer carries it
+  and `Connection.create` no longer takes it.
+- `ConnectionInterface` exposes **`jdbcConnection`** (raw
+  `java.sql.Connection`, no silent reconnect) — added in PR A so the bridge can
+  reach the underlying connection.
+- `gradle-plugin` no longer special-cases Exposed: `PluginConfig.hasExposed()`
+  (the `Class.forName` runtime detection) was **deleted** in PR A. Plugin
+  behavior is identical with or without Exposed on the classpath.
 - **Bridge contract**: the bridge targets a **single supported Exposed major**:
-  **Exposed 0.x** — the major whose JDBC API lives in package
+  **Exposed 0.x — pinned 0.61.0** — the major whose JDBC API lives in package
   `org.jetbrains.exposed.sql` (`Database.connect(DataSource)` +
-  `transaction()`), matching the runtime detection string in `PluginConfig.kt`.
+  `transaction()`).
   Exposed 1.x moved these classes to `org.jetbrains.exposed.v1.jdbc.*`, so
   adopting 1.x requires updating the detection class name and bridge APIs
   together; never support two majors in one bridge.
@@ -95,15 +96,16 @@ which commits, and on failure rolls back **and closes** the connection
 on success; on failure a double-rollback plus a stale Exposed `Database`
 pointing at the closed connection).
 
-Decide **one owner** (open question #3):
+Decide **one owner** — **resolved (2026-08-08): Option A, harmonica owns the
+transaction.**
 
-- **Option A (recommended): harmonica owns the transaction.** The bridge binds
+- **Option A (chosen): harmonica owns the transaction.** The bridge binds
   harmonica's connection into Exposed's manager and runs the Exposed DSL
   *without* an Exposed-managed commit (i.e. `TransactionManager`/stack-based
   registration, or `transaction(db){}` where the commit is a no-op because the
   outer `Connection.transaction` commits). Users write the Exposed DSL; harmonica
   does commit/rollback/close.
-- **Option B: Exposed owns the transaction.** Then the harmonica runner must
+- **Option B (rejected): Exposed owns the transaction.** Then the harmonica runner must
   NOT wrap migrations in `Connection.transaction` when the bridge is used
   (require an explicit opt-in), and harmonica's `Connection.transaction` is
   bypassed.
@@ -185,9 +187,16 @@ class M20260801_Migrate : AbstractMigration() {
 
 ## Open questions
 
-- Publish `harmonica-exposed` as a separate artifact, or start with a
-  documented snippet and promote to an artifact later?
-- Exact Exposed **0.x** version to use in the bridge (match user expectations;
-  keep it a normal version range within the 0.x line).
-- Whether `exposedTransaction` should manage commit/rollback or delegate to
-  `Connection.transaction`.
+Resolved (2026-08-08):
+
+- **Separate artifact** — ship `harmonica-exposed` as a Gradle module, not a
+  snippet first.
+- **Exposed 0.61.0** — latest 0.x, JDBC API in `org.jetbrains.exposed.sql`.
+- **Option A** — harmonica owns the transaction (no Exposed-managed commit).
+
+Remaining:
+
+- `exposedTransaction` commit/rollback detail under Option A: whether it needs
+  a no-op-commit wrapper or plain `transaction(db){}` is safe because the outer
+  `Connection.transaction` commits (verify empirically in Phase 3).
+- Script classpath wiring for `.kts` migrations (Pitfall F).

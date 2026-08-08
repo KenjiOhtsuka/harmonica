@@ -43,10 +43,10 @@ Policy going forward (Git Flow, simplified):
 1. `develop` is the integration branch; feature/phase branches are cut from it.
 2. A release branch/tag is created from `develop` only when CI is fully green
    and manual DB tests pass.
-3. The very first milestone of this restart is: make `develop` build green →
-   then fast-forward `master` to `develop` → tag the first new release there.
-   (Because `master` is an ancestor, this is a clean fast-forward, no merge
-   conflict risk.)
+3. The first milestone of this restart is: make `develop` build green and
+   DB-backed tests (Phase 4) pass → then fast-forward `master` to `develop` →
+   tag the first new release there. (Because `master` is an ancestor, this is a
+   clean fast-forward, no merge conflict risk.)
 4. `master` becomes the source of released tags (JitPack builds from tags).
 5. Old branches on the remote (`feature/core_split`, `feature/maven-plugin`,
    `feature/version_up`, `feature/exposed`, `feature/show_sql`, `feature/mit-license`,
@@ -134,7 +134,8 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
   JDK 25, `./gradlew build`, dependency-graph submission) + `jvm8-bytecode.yml`
   (javap major-version 52 check) replace `gradle.yml` and `.circleci/config.yml`
   (both deleted). `.github/dependabot.yml` already landed (#169).
-- After green: fast-forward `master` to `develop` (first milestone).
+- After green: fast-forward `master` to `develop` **deferred** — policy is to
+  wait until Phase 4 DB tests pass (see §3.5 and Phase 4).
 
 ### Phase 1 — License header removal
 
@@ -143,9 +144,9 @@ the MIT notice.
 
 Status: **landed 2026-08-01.** License headers stripped from all 87 files
 (86 source files + 1 extensionless `META-INF/services/...` registration file;
-PR #180, which also added `scripts/strip-license-headers.sh`); README badges
-fixed (PR #181 — MIT URL → opensource.org, bintray badge → JitPack). Remaining
-jcenter reference: `document/.../JarmonicaView.kt:61` (doc-string only).
+PR #180; a strip script was drafted but removed before merge (commit
+`5e191b9`); README badges fixed (PR #181 — MIT URL → opensource.org, bintray
+badge → JitPack). Remaining jcenter reference: `document/.../JarmonicaView.kt:61` (doc-string only).
 
 Original plan (kept for reference):
 
@@ -307,6 +308,8 @@ Resolved (2026-08-01):
 - Reflections: **replaced with an internal classpath scanner**; `loadClass`
   catches only `ClassNotFoundException` + `LinkageError`. `isSubtypeOf` still
   catches `Throwable` — issue #189 (Phase 2, PRs #185/#188).
+- Kotlin `jvm` plugin bump 2.3.20 → 2.4.10 (PR #193): **declined** — no
+  functional need; stay on 2.3.20, revisit before the next phase.
 
 Still open:
 

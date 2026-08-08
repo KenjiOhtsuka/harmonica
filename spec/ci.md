@@ -39,9 +39,10 @@ PR), Phase 4 (DB integration tests) and Phase 6 (release publishing).
 As landed:
 
 - **Triggers**: `pull_request` (any) and `push` to `develop`/`master`.
-  `paths-ignore` for `README.md`, `spec/`, `docs/`, `document/` — changes
-  under those paths skip CI. Other doc-ish paths (e.g. `.opencode/**`,
-  `AGENTS.md`) are **not** ignored, so they still trigger CI.
+  `paths-ignore` for `README.md`, `spec/`, `docs/`, `document/`, `AGENTS.md`,
+  and `.opencode/**` — doc/config-only changes under those paths skip CI.
+  Workflow-file edits always trigger CI (GitHub ignores path filters for the
+  workflow's own files).
 - **Permissions**: `contents: read` (least privilege) on every job — the build
   job **no longer escalates to `contents: write`**. The dependency graph is
   *generated and uploaded* here (`dependency-graph: generate-and-upload`) and

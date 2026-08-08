@@ -7,6 +7,8 @@ on:
       - 'spec/**'
       - 'docs/**'
       - 'document/**'
+      - 'AGENTS.md'
+      - '.opencode/**'
   push:
     branches:
       - develop
@@ -16,6 +18,8 @@ on:
       - 'spec/**'
       - 'docs/**'
       - 'document/**'
+      - 'AGENTS.md'
+      - '.opencode/**'
 
 permissions:
   contents: read

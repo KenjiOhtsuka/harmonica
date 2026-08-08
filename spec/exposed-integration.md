@@ -1,5 +1,11 @@
 # Exposed Optionality — Design
 
+> **Status: design only (Phase 3, not started).** `harmonica-exposed` does not
+> exist yet and `exposedTransaction` is a proposed **future** API. Nothing in
+> this document is shipped or supported until the artifact, the script-classpath
+> handling, transaction tests, and real-DB verification land in Phase 3. Issue
+> #91 stays open until then.
+
 ## Problem
 
 Users should be able to decide whether to use the Exposed ORM in their
@@ -22,6 +28,11 @@ migrations. Consequences:
   `Class.forName("org.jetbrains.exposed.sql.Database")` — this is the right
   *technique* (no compile-time reference), but the flag is not actually used
   anywhere meaningful.
+- **Bridge contract**: the bridge targets a **single supported Exposed major**
+  — the current `exposed-jdbc` line (package `org.jetbrains.exposed.sql`,
+  `Database.connect(DataSource)` + `transaction()` APIs). If a future Exposed
+  major changes these APIs, the detection class name in `PluginConfig.kt` and
+  the bridge must move together; never support two majors in one bridge.
 - GitHub issues that this resolves: #91 (Exposed must be loadable by
   `Class.forName`), #160 ("how to use with Exposed — AbstractMigration has no
   `create` method"), #80 (Exposed version update — out of harmonica's control
@@ -44,7 +55,7 @@ migrations. Consequences:
 A tiny **separate artifact** (Gradle submodule, e.g. `exposed/`) that:
 
 - `api`-depends on `:core` and on `org.jetbrains.exposed:exposed-jdbc` (plus
-  `exposed-core`) at a pinned current version. `Database.connect(jdbcConnection)`
+  `exposed-core`) at a pinned current version. `Database.connect(DataSource)`
   and `transaction()` live in `exposed-jdbc`, so it must be the JDBC module,
   not just `exposed-core`.
 - Provides a bridge, e.g.:
@@ -59,6 +70,13 @@ fun AbstractMigration.exposedTransaction(block: () -> Unit) {
     transaction(db) { block() }
 }
 ```
+
+  `exposedDatabase()` adapts the underlying `jdbcConnection` (exposed on
+  `ConnectionInterface`, §1) into a **single-connection `DataSource`** and calls
+  `Database.connect(dataSource)` **once** per connection lifecycle. The
+  `DataSource` overload is used because it is the supported connect form across
+  the pinned Exposed major; the same DataSource is reused for the whole
+  migration so the transaction owner is stable.
 
 - The bridge is an extension on **`AbstractMigration`** (or the receiver is the
   migration itself), because inside `up()` the receiver is `AbstractMigration`
@@ -102,9 +120,10 @@ as written.
   (`Connection.kt:29-38`). A cached Exposed `Database` bound to an old connection
   is stale. The bridge must re-register after reconnect (key the cache by
   connection instance) or, per Option A, register fresh within each migration.
-- **Single-threaded assumption**: `Database.connect(java.sql.Connection)`
-  reuses one shared connection for every transaction and is not thread-safe.
-  The migration runner is single-threaded, so this holds — document it.
+- **Single-threaded assumption**: `Database.connect(DataSource)` wrapping one
+  connection reuses that connection for every transaction and is not
+  thread-safe. The migration runner is single-threaded, so this holds —
+  document it.
 - **`autoCommit`**: harmonica forces `autoCommit = false` (connect + at the top
   of `transaction`). Exposed transactions assume `autoCommit = false` too;
   verify the pinned Exposed version doesn't restore `autoCommit = true` after a
@@ -114,7 +133,7 @@ as written.
   collide with `org.jetbrains.exposed.sql.Database`.
 - **Script classpath (Pitfall F)**: migration `.kts` files are evaluated by the
   Gradle plugin's JSR-223 engine on the **plugin's classpath**
-  (`AbstractMigrationTask.kt:33-38`). Adding `harmonica-exposed` via the user's
+  (`AbstractMigrationTask.kt:33-37`). Adding `harmonica-exposed` via the user's
   `implementation(...)` is not enough — the bridge/Exposed must be reachable by
   the script engine. Options: a plugin-managed configuration appended to the
   script classpath, or `buildscript { dependencies { classpath(...) } }`.

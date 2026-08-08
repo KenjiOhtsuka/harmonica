@@ -37,14 +37,14 @@
 ```yaml
 services:
   postgres:
-    image: postgres:16
+    image: postgres:16.14
     environment:
       POSTGRES_USER: developer
       POSTGRES_PASSWORD: developer
       POSTGRES_DB: harmonica_test
     ports: ["5432:5432"]
   mysql:
-    image: mysql:8
+    image: mysql:8.4.11
     environment:
       MYSQL_USER: developer
       MYSQL_PASSWORD: developer
@@ -70,6 +70,9 @@ services:
   (`HARMONICA_TEST_DB_URL` etc.) or known local defaults.
 - JUnit (6.x): use `@EnabledIfEnvironmentVariable` / an assumption helper so tests
   **skip** (not fail) when the DB is unreachable.
+- Add a short-timeout **connectivity probe** (e.g. open the JDBC connection
+  with a 1–2 s connect timeout in a `@BeforeAll`; on failure, `Assumptions.abort`)
+  so a down/absent DB **skips** the suite instead of failing it.
 - The default `./gradlew build` includes unit tests only; DB tests run via a
   separate task (e.g. `integrationTest`) or a `-PwithDb` flag.
 

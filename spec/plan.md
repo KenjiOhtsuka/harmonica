@@ -34,9 +34,9 @@ State:
 
 - `master` (origin/master @ `3b423c6`) has not been touched in years and is the
   direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is 54 commits ahead (module split into `core`/`gradle-plugin`,
-  jcenter removal work, MIT license change, etc.) but **never fully tested or
-  released** — this is why master was left behind.
+- `develop` is **56 commits ahead** (module split into `core`/`gradle-plugin`,
+  jcenter removal work, MIT license change, CI-action bumps, etc.) but **never
+  fully tested or released** — this is why master was left behind.
 
 Policy going forward (Git Flow, simplified):
 
@@ -74,6 +74,11 @@ Consequences for the restart:
   fix packaging, plugin application, and publication.
 - These unverified changes are the reason `master` was left behind — do not
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
+- **Status (post-Phase 0/2):** the split build is verified — `core` and
+  `gradle-plugin` build, test (72 tests green), and package correctly on Java 25
+  and in CI; `document/` is excluded from the build. Phase 0 also proved the
+  POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
+  remaining unverified risk is real-DB behavior, which Phase 4 covers.
 
 ## 4. Phases
 
@@ -138,9 +143,9 @@ the MIT notice.
 
 Status: **landed 2026-08-01.** License headers stripped from all 87 files
 (86 source files + 1 extensionless `META-INF/services/...` registration file;
-PR #180); README badges fixed (PR #181 — MIT URL → opensource.org, bintray
-badge → JitPack). Remaining jcenter reference:
-`document/.../JarmonicaView.kt:61` (doc-string only).
+PR #180, which also added `scripts/strip-license-headers.sh`); README badges
+fixed (PR #181 — MIT URL → opensource.org, bintray badge → JitPack). Remaining
+jcenter reference: `document/.../JarmonicaView.kt:61` (doc-string only).
 
 Original plan (kept for reference):
 
@@ -219,24 +224,25 @@ Outcome: real-DB integration tests live in this repo; runnable locally and in CI
   `integration-test` module or a dedicated source set.
 - Local DBs: install Docker (or use system Postgres/MySQL) and document setup;
   provide `docker-compose.yml` for PostgreSQL/MySQL; SQLite and H2 need no
-  server and are covered by Docker-free embedded-DB tests (see
+  server and **will be covered** by Docker-free embedded-DB tests (see
   [`testing.md`](testing.md)).
 - Tests that need a DB are gated (skip when DB unavailable) so `./gradlew build`
   never fails locally without Docker.
 - CI runs DB-backed tests using Docker services.
-- Decide test framework/tooling (JUnit 5 + Testcontainers preferred).
+- Decide test framework/tooling (**JUnit 6.x** — used in `core`/`gradle-plugin`
+  since Phase 2, PR #186 — plus Testcontainers for PostgreSQL/MySQL).
 
 ### Phase 5 — Issue backlog (quick wins first)
 
 Full triage: [issues-triage.md]. Order:
 
-1. Urgent blockers: #153 (ties into #97). #167 and #162 are resolved — the
-   toolchain/CI fixes landed in Phase 0 (#183); #158, #159 are already closed
-   (verified; not tracked here).
-2. Small: #165 (README/license URLs), #140 (pluralizer), #26 (migration file
-   naming), #47 (prepared statements), #91 (Exposed), #138 (custom columns),
-   #141 (more column types), #145 (alter column), #139 (FK options), #69
-   (query execution API), #4 (created_at/updated_at).
+1. Urgent blockers: #153 (ties into #97). #167, #165, #140, #162 are resolved
+   and closed (toolchain/CI fixes in Phase 0 PR #183; README/license PR #181;
+   pluralizer PR #187); #158, #159 already closed (verified; not tracked here).
+2. Small: #26 (migration file naming), #47 (prepared statements), #91
+   (Exposed), #138 (custom columns), #141 (more column types), #145 (alter
+   column), #139 (FK options), #69 (query execution API), #4
+   (created_at/updated_at), #182 (JitPack badge).
 3. Medium: #7 (closed connection), #85 (SQLite defaults), #67 (timestamp
    default), #80 (Exposed version), #71 (seeding), #97 (JavaExec task tests),
    #155 (programmatic migration docs).

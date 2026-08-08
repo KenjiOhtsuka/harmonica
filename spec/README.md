@@ -16,28 +16,33 @@ plan to restart and modernize the project.
 
 ## Current state (baseline, branch `develop`)
 
-> Baseline snapshot taken before Phase 0. Toolchain work implemented 2026-08-01
-> on `feature/toolchain` (Gradle 9.6.1, Kotlin 2.3.20, CI rewrite) and **merged
-> via PR #183** — update this list when the baseline advances.
+> Snapshot taken 2026-08-08, after Phase 0 (toolchain) and Phase 2 (dead-dep
+> removal). Update this list when the baseline advances.
 
-- Kotlin 1.4.20, Gradle wrapper 6.5, `jvmTarget = 1.8`
-- Gradle plugin-publish 0.9.10, Dokka 0.9.17
-- Publish target: jcenter/bintray (both dead) and OSSRH staging config
-- CI: CircleCI (`circleci/openjdk:8-jdk`) + GitHub Actions (bare `gradle test`)
-- Three modules: `core`, `gradle-plugin`, `document` (nested standalone build)
-- License header block at the top of **86** source files (79 `.kt`, 4 `.kts`, 3
-  `.properties`) + 1 extensionless `META-INF/services/...` registration file —
-  since stripped (PR #180)
-- `jcenter()`/bintray already removed from all build files (2024 work); README
-  badges fixed (#181); dead reference remains only in a `document` doc-string
-- No Exposed dependency in `core` anymore (reflection-based detection remains)
-- Tests for real DBMS live in a separate repository `harmonica_test`
-- **`develop` is 30 commits ahead of `master` but never fully tested** — it
-  contains an untested module split (`feature/split`) and jcenter-removal
-  build work. See the risk register in [`plan.md`](plan.md).
+- Kotlin **2.3.20**, Gradle wrapper **9.6.1**, `jvmTarget = 1.8` (class-file
+  major 52 asserted in CI)
+- Gradle plugin-publish **2.1.1**, Dokka **2.2.0** (Dokka bundles Jackson
+  2.15.3 at build time only — not shipped; see the Dependabot alerts)
+- Publish target: plugin-publish + OSSRH staging (jcenter/bintray removed)
+- CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
+  `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
+  `actions/setup-java@5.6.0`), `jvm8-bytecode.yml` (major-52 assertion),
+  `dependency-submit.yml` (Dependabot). CircleCI removed.
+- Two active modules: `core`, `gradle-plugin` — **72 tests green** (68 core +
+  4 plugin); `document` (nested standalone build) is excluded from the build
+- License headers stripped from all source files (PR #180); README badges fixed
+  (PR #181)
+- No Exposed dependency in `core` (runtime reflection detection remains in
+  `gradle-plugin`; a real Exposed bridge is a **future Phase 3** design, see
+  [`exposed-integration.md`](exposed-integration.md))
+- Tests for real DBMS still live in the separate `harmonica_test` repository —
+  to be merged in Phase 4
+- **`develop` is 56 commits ahead of `master`** — Phase 4 (real-DB tests) must
+  pass before `master` advances. See the risk register in [`plan.md`](plan.md).
 
 ## Machine environment (current)
 
 - OpenJDK 25.0.3 (only JDK installed)
 - No standalone `gradle`, no `docker`
-- Gradle wrapper 6.5 cannot run on Java 25 → toolchain upgrade is step 1
+- Toolchain upgrade done (Phase 0, PR #183): the Gradle 9.6.1 wrapper runs on
+  Java 25, so `./gradlew build` works locally.

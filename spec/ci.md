@@ -25,9 +25,12 @@ PR), Phase 4 (DB integration tests) and Phase 6 (release publishing).
   Gradle 9 on a JDK 8 runtime to "prove" this — verification is done via the
   javap class-version check (§3.2).
 - Small changes per PR → CI is PR-driven, fast, and cancels stale runs.
-- User is on the GitHub **Student Developer Pack** (free tier). Public repos
-  get unlimited Actions minutes; the student plan covers private repos too.
-  Dependabot is free on all plans. Conservation is still good practice.
+- User is on the GitHub **Student Developer Pack**. This repo is **public**:
+  GitHub Actions minutes are free for public repos. (Private repos get a
+  monthly quota — 2,000 min on Free/Pro — and usage above it is billed; the
+  Student Developer Pack adds Pro benefits but does not waive usage-based
+  billing.) Dependabot is free on all plans. Conservation is still good
+  practice.
 
 ## 3. Workflows
 
@@ -36,8 +39,9 @@ PR), Phase 4 (DB integration tests) and Phase 6 (release publishing).
 As landed:
 
 - **Triggers**: `pull_request` (any) and `push` to `develop`/`master`.
-  `paths-ignore` for `README.md`, `spec/`, `docs/`, `document/` so docs-only
-  changes don't burn minutes.
+  `paths-ignore` for `README.md`, `spec/`, `docs/`, `document/` — changes
+  under those paths skip CI. Other doc-ish paths (e.g. `.opencode/**`,
+  `AGENTS.md`) are **not** ignored, so they still trigger CI.
 - **Permissions**: `contents: read` (least privilege) on every job — the build
   job **no longer escalates to `contents: write`**. The dependency graph is
   *generated and uploaded* here (`dependency-graph: generate-and-upload`) and
@@ -49,10 +53,10 @@ As landed:
 - **Steps**:
   - `actions/checkout@v7` with `persist-credentials: false` (no step needs Git
     authentication after checkout; Gradle doesn't use the persisted credential).
-  - `actions/setup-java@v4` with Temurin **JDK 25** — `setup-gradle` does **not**
-    install a JDK and ignores `distribution`/`java-version` inputs (only
-    `actions/setup-java` selects the JDK).
-  - `gradle/actions/setup-gradle@v4` with wrapper validation, build cache, and
+  - `actions/setup-java@v5.6.0` with Temurin **JDK 25** — `setup-gradle` does
+    **not** install a JDK and ignores `distribution`/`java-version` inputs
+    (only `actions/setup-java` selects the JDK).
+  - `gradle/actions/setup-gradle@v6` with wrapper validation, build cache, and
     `dependency-graph: generate-and-upload` (+
     `dependency-graph-continue-on-failure: true`) so Dependabot PRs resolve
     against an up-to-date dependency graph.
@@ -121,26 +125,32 @@ updates:
   workflow rule.
 - Security updates are enabled by default and stay on (free).
 - Dependabot PRs run `ci.yml`; public-repo minutes are free, so this is fine.
-- Note: since Phase 0 removed most dead deps' resolution paths, Dependabot's
-  PRs against `kotlinx-html`, `kotlin-reflect`, JDBC drivers, etc. still open —
-  close (not merge) those;   the Phase 2 dead-dep PR removes them. Specifically,
-  the Phase 0 toolchain PR applied the same bumps as dependabot PRs **#171**
-  (dokka 2.2.0), **#172** (plugin-publish 2.1.1) and **#178** (wrapper 9.6.1) —
-  all three are now closed (Phase 0 merged).
+- Note: Phase 2 (PR #184) removed the dead deps (`kotlinx-html-jvm` from
+  `gradle-plugin`, `kotlin-reflect`, JDBC drivers), so Dependabot no longer
+  opens PRs against them. Dependabot PRs **#171** (dokka 2.2.0), **#172**
+  (plugin-publish 2.1.1), and **#178** (wrapper 9.6.1) were superseded by the
+  Phase 0 toolchain PR and are closed. Later CI-action bumps merged: #170
+  (checkout v7), #191 (setup-gradle v6), #192 (setup-java v5.6.0). A Kotlin
+  `jvm` plugin bump (PR #193) is open with a **decline recommendation** — see
+  `spec/plan.md` §6.
 
 ## 4. Action version policy
 
-- Pin by **major tag** (`@v4`) and let Dependabot keep them current. Full
-  SHA-pinning is optional hardening for stricter projects.
-- Recommended actions: `actions/checkout@v7` (in use since PR #170, Dependabot
-  bump v4 → v7), `gradle/actions/setup-gradle@v4`
-  (official Gradle action; replaces manual `setup-java` + cache for Gradle
-  projects), `actions/upload-artifact@v4` (if artifacts needed later).
+- Pin by **major tag** (e.g. `@v7`) and let Dependabot keep them current;
+  Dependabot may propose full-version pins (e.g. `setup-java@v5.6.0`) — accept
+  those. Full SHA-pinning is optional hardening for stricter projects.
+- Recommended actions: `actions/checkout@v7` (PR #170), `gradle/actions/setup-gradle@v6`
+  (PR #191; official Gradle action — replaces manual `setup-java` + cache for
+  Gradle projects), `actions/setup-java@v5.6.0` (PR #192; Temurin JDK 25),
+  `actions/upload-artifact@v4` (if artifacts needed later). Dependabot keeps
+  them current.
 
-## 5. Student-plan notes
+## 5. Actions minutes & billing
 
-- Public repo → unlimited Actions minutes; student pack covers private repos
-  (2,000 min/month). Treat minutes as plentiful but not free-for-all.
+- Public repo → Actions minutes are **free**. If the repo ever goes private:
+  minutes are metered against the plan quota (2,000 min/month on Free/Pro) and
+  **usage above the quota is billed** — the Student Developer Pack adds Pro
+  benefits but does not waive usage-based billing.
 - Conservation tactics used: PR-driven triggers, `paths-ignore` for docs,
   `cancel-in-progress`, Gradle build cache via `setup-gradle`.
 - Dependabot has no per-run cost beyond the CI runs it triggers.

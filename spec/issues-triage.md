@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-01 (**30 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-08 (**28 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -10,22 +10,23 @@ upgrade in Phase 0/2.
 | --- | --- | --- |
 | 153 | Tasks in jarmonica gradle plugin don't work anymore | Investigate during Phase 5; add tests (ties into #97). |
 
-**Resolved by Phase 0/2 (ready to close):** #167 (jcenter removed, CI rewritten,
+**Resolved and closed by Phase 0/2:** #167 (jcenter removed, CI rewritten,
 PR #183), #165 (LICENSE already MIT; README badge URLs fixed, PR #181), #140
 (kotlin-pluralizer removed, internal `singularize()`, PR #187).
 
 **Closed / superseded (were listed as URGENT, now resolved on `develop`):**
 #159 (build failure Win10 openjdk 15), #158 (build failure Win/Linux
-openjdk 16), #162 (Build on Java 17), and #182 (README JitPack badge) are all
-**closed**; drop them from active tracking — same root cause (Kotlin 1.4.20 on
-new JDK) / same fix (Phase 6 first release). PR #163 ("update to JDK 17",
-open WIP) is now **closed** — superseded by Phase 0.
+openjdk 16), and #162 (Build on Java 17) are all **closed** — same root cause
+(old Kotlin 1.4.20 toolchain on new JDKs), fixed by the Phase 0 toolchain
+upgrade; drop them from active tracking. PR #163 ("update to JDK 17") is now
+**closed** — superseded by Phase 0.
 
 ## SMALL — quick wins (Phase 5)
 
 | # | Title | Plan |
 | --- | --- | --- |
 | 189 | `isSubtypeOf` in scanner swallows all `Throwable` | Narrow to recoverable exceptions to match `loadClass` (PR #188); small fix in `JarmonicaTaskMain`. |
+| 182 | README JitPack badge shows nothing | Fix JitPack badge so it renders (README badge URLs fixed in PR #181, but this badge still broken). |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |
 | 91 | Exposed Library must be loaded by Class.forName | Resolved by [exposed-integration.md](exposed-integration.md): core has no Exposed reference. |
@@ -34,7 +35,7 @@ open WIP) is now **closed** — superseded by Phase 0.
 | 145 | Add alter column function | Add `alterColumn` to change type/options. |
 | 67 | Default value for timestamp | Medium-ish small: default `DEFAULT CURRENT_TIMESTAMP` (or constant) for `createTimestamp` etc.; ties into #85 SQLite-defaults research. |
 | 139 | Update addForeignKey | Support ON DELETE / ON UPDATE / constraint options. |
-| 69 | Add sophisticated query executing method | Provide richer `executeQuery`/query-returning API. |
+| 69 | Add sophisticated query executing method | Provide a richer `executeQuery`/query-returning API. |
 | 4 | add timestamp syntax to add created_at and updated_at | Convenience columns/timestamps helper. |
 
 ## MEDIUM

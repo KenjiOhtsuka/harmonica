@@ -23,11 +23,12 @@ Verify against `spec/tech-notes.md` (dependency upgrade table) and
    dev machine (Java 25) and support JVM 8 bytecode. Kotlin must stay in the
    2.3.x line unless the constraint has changed.
 5. **CI**: any workflow change must match `spec/ci.md` (§3 shapes: PR-driven,
-   checkout@v4 + gradle/actions/setup-gradle@v4, JDK 25, jvm8-bytecode
-   major-version 52 assertion, concurrency, least-privilege permissions,
-   Dependabot weekly/ungrouped).
-6. **Module split reality**: do not assume `core`, `gradle-plugin`, `document`
-   build correctly — Phase 0 is the first real verification. Flag packaging /
+   checkout@v7 + gradle/actions/setup-gradle@v6 + setup-java (JDK 25),
+   jvm8-bytecode major-version 52 assertion, concurrency, least-privilege
+   permissions, Dependabot weekly/ungrouped).
+6. **Module split reality**: on pre-Phase 0 branches the split build was
+   unverified; since Phase 0 (PR #183) `core` and `gradle-plugin` build and are
+   covered by CI (`document/` is excluded from the build). Flag packaging /
    coordinates / plugin-ID inconsistencies (see `spec/plan.md` Phase 0).
 
 Report findings numbered and grouped by severity (BLOCKER / WARNING / NOTE),

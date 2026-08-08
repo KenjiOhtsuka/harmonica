@@ -12,8 +12,10 @@ spec docs. Specifically:
 
 1. **Plan adherence**: the work must map to a named phase or an explicit
    pre-toolchain PR. Any drift must be flagged.
-2. **Factual accuracy**: verify claims against the actual repo. Confirm issue
-   numbers are open (not closed), dependency versions match `build.gradle.kts`
+2. **Factual accuracy**: verify claims against the actual repo. Validate each
+   referenced issue's GitHub state against the document's claim: **active**
+   issues must be open, while **resolved** issues may be closed or still
+   awaiting user closure. Confirm dependency versions match `build.gradle.kts`
    files, file paths and line references exist, and counts (e.g. license
    headers, open issues) are right. Do NOT trust prior claims — re-check with
    `git log`, `gh issue`, Grep/Glob, and file reads.

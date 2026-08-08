@@ -1,6 +1,6 @@
 ---
 name: harmonica-dev
-description: Use when working on the Harmonica Kotlin DB migration tool — planning, phase work, PRs, or anything touching this repo. Encodes the restart workflow: read spec/ before proposing work, small PRs per issue, toolchain constraints (JVM 8 target, Gradle 6.5 wrapper unusable on the Java 25 dev machine, Phase 0 prerequisite), and conventions (no comments, no unused deps, core stays Exposed-free).
+description: Use when working on the Harmonica Kotlin DB migration tool — planning, phase work, PRs, or anything touching this repo. Encodes the restart workflow: read spec/ before proposing work, small PRs per issue, toolchain constraints (JVM 8 target, Gradle 9.6.1 + Kotlin 2.3.20 on the Java 25 dev machine), and conventions (no comments, no unused deps, core stays Exposed-free).
 ---
 
 # Harmonica Development
@@ -20,12 +20,9 @@ change.
 ## Hard constraints
 
 - JVM 8 bytecode target (`jvmTarget = 1.8`) — never bump.
-- `./gradlew build` currently does NOT work on the dev machine (Gradle 6.5
-  wrapper + Kotlin 1.4.20 vs OpenJDK 25). Build verification is impossible
-  until Phase 0. Do not treat red builds as bugs to fix piecemeal.
-- One change per PR against `develop`, except the Phase 0 toolchain PR which
-  must move together (Gradle 9 + Kotlin 2.3 + buildscript rewrite + source
-  modernization + CI rewrite).
+- `./gradlew build` works on this machine (Gradle 9.6.1 + Kotlin 2.3.20 on
+  OpenJDK 25). A red build is a real bug — fix it, don't defer.
+- One change per PR against `develop`.
 - Never commit unless explicitly asked.
 
 ## Conventions
@@ -33,8 +30,8 @@ change.
 - No comments in code unless asked.
 - No new dependencies unless actually used (repo has a history of unused deps).
 - `core` must never import Exposed.
-- `document/` is a stale nested build — assume it is not part of any green
-  build until Phase 0 decides its fate.
+- `document/` is a stale nested build — excluded from the root build since
+  Phase 0; do not expect it to compile in `./gradlew build`.
 - When editing opencode config, load the `customize-opencode` skill.
 
 ## Workflow

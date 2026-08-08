@@ -59,7 +59,8 @@ Cross-check the three docs against each other — no contradictions.
 - One logical change per edit; preserve the existing style and table format.
 - Mark resolved issues as resolved **in the docs** with the PR reference, but
   do not close the GitHub issues — that is a separate user decision.
-- Update the "Snapshot ... 2026-08-01" date and count in issues-triage.md.
+- Update the "Snapshot ... <date>" header in issues-triage.md to the **actual
+  review date** and the current open-issue count.
 
 ### 4. Verify
 

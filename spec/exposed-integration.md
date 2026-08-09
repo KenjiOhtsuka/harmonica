@@ -5,7 +5,7 @@
 > SQLite transaction tests (commit + rollback + reconnect + SQLException
 > propagation) exist and pass (`./gradlew :exposed:test`, 4 tests). Still open
 > in Phase 3: script-classpath wiring for `.kts` migrations (Pitfall F) and a
-> demo project. Issue #91 stays open until the whole flow ships.
+> demo project. Issue #91 was closed at the Phase 3 merge (2026-08-09).
 
 ## Problem
 

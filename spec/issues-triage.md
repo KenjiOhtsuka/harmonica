@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-08 (**28 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-09 (**29 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -26,10 +26,11 @@ superseded by Phase 0.
 | # | Title | Plan |
 | --- | --- | --- |
 | 189 | `isSubtypeOf` in scanner swallows all `Throwable` | Narrow to recoverable exceptions to match `loadClass` (PR #188); small fix in `JarmonicaTaskMain`. |
+| 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 3/4 verification: run the migration flow against a real DB with and without `harmonica-exposed` on the classpath (SQLite embedded now, PostgreSQL/MySQL in Phase 4). |
 | 182 | README JitPack badge shows nothing | Fix JitPack badge so it renders (README badge URLs fixed in PR #181, but this badge still broken). |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |
-| 91 | Exposed Library must be loaded by Class.forName | Resolved by [exposed-integration.md](exposed-integration.md): core has no Exposed reference. |
+| 91 | Exposed Library must be loaded by Class.forName | Core has no Exposed reference (PR A); `harmonica-exposed` bridge shipped (Phase 3, PR B). Issue stays open until the whole flow ships (script classpath + demo project) — see [exposed-integration.md](exposed-integration.md). |
 | 138 | Is there a need to make AbstractColumn internal? | Open up custom-column extension points (make `AbstractColumn`/`ColumnBuilder` public, document custom column pattern). |
 | 141 | Add support to more column types | Long is done; add Enumeration and other missing types (see Exposed type list). |
 | 145 | Add alter column function | Add `alterColumn` to change type/options. |

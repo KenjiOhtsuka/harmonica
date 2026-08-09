@@ -6,4 +6,4 @@ pluginManagement {
 }
 
 rootProject.name = "harmonica"
-include("core", "gradle-plugin")
+include("core", "exposed", "gradle-plugin")

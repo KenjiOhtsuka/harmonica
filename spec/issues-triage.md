@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-09 (**29 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-09 (**28 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -30,7 +30,6 @@ superseded by Phase 0.
 | 182 | README JitPack badge shows nothing | Fix JitPack badge so it renders (README badge URLs fixed in PR #181, but this badge still broken). |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |
-| 91 | Exposed Library must be loaded by Class.forName | Core has no Exposed reference (PR A); `harmonica-exposed` bridge shipped (Phase 3, PR B). Issue stays open until the whole flow ships (script classpath + demo project) — see [exposed-integration.md](exposed-integration.md). |
 | 138 | Is there a need to make AbstractColumn internal? | Open up custom-column extension points (make `AbstractColumn`/`ColumnBuilder` public, document custom column pattern). |
 | 141 | Add support to more column types | Long is done; add Enumeration and other missing types (see Exposed type list). |
 | 145 | Add alter column function | Add `alterColumn` to change type/options. |
@@ -66,6 +65,11 @@ superseded by Phase 0.
 
 ## Closed-but-related (context)
 
+- #91 (closed 2026-08-09 at the Phase 3 merge, PRs #197-#199): "Exposed Library
+  must be loaded by Class.forName" — `core` has no Exposed reference and the
+  `harmonica-exposed` bridge shipped. Script-classpath wiring (Pitfall F) and
+  the demo project remain as Phase 3 work, tracked by [plan.md](plan.md), not by
+  this issue.
 - #168 (PR, merged): bug-build-issue — build fixes already on `develop`.
 - #160 (closed): "How it should be used with Exposed" — reopened conceptually in
   exposed-integration.md.

@@ -34,9 +34,10 @@ State:
 
 - `master` (origin/master @ `3b423c6`) has not been touched in years and is the
   direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is **56 commits ahead** (module split into `core`/`gradle-plugin`,
-  jcenter removal work, MIT license change, CI-action bumps, etc.) but **never
-  fully tested or released** — this is why master was left behind.
+- `develop` is **75 commits ahead** (module split into `core`/`gradle-plugin`,
+  jcenter removal work, MIT license change, CI-action bumps, Phase 3 Exposed
+  bridge, etc.) but **never fully tested or released** — this is why master was
+  left behind.
 
 Policy going forward (Git Flow, simplified):
 
@@ -49,8 +50,9 @@ Policy going forward (Git Flow, simplified):
    clean fast-forward, no merge conflict risk.)
 4. `master` becomes the source of released tags (JitPack builds from tags).
 5. Old branches on the remote (`feature/core_split`, `feature/maven-plugin`,
-   `feature/version_up`, `feature/exposed`, `feature/show_sql`, `feature/mit-license`,
+   `feature/version_up`, `feature/exposed`, `feature/show_sql`,
    `feature/split`) are either resurrected as issues or deleted after review.
+   (`feature/mit-license` was merged via PR #166 and is gone.)
 
 ## 3.5. Risk register — unverified changes already on `develop`
 
@@ -76,7 +78,7 @@ Consequences for the restart:
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
   `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
-  `exposed` module — see README for the current 76), and package correctly on
+  `exposed` module — see spec/README for the current 76), and package correctly on
   Java 25 and in CI; `document/` is excluded from the build. Phase 0 also proved
   the POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
   remaining unverified risk is real-DB behavior, which Phase 4 covers.
@@ -167,7 +169,7 @@ Outcome: no dead repositories or unmaintained libraries in the build.
 Status: **merged 2026-08-01 (PRs #184-#188).** All build files now use only
 Maven Central (`document/` excluded from build). 72 tests green (68 core + 4
 gradle-plugin; Phase 0 baseline was 66; snapshot before the Phase 3 `exposed`
-module — see README for the current 76).
+module — see spec/README for the current 76).
 
 - `gradle.properties`: `kotlin_version` → 2.3.x. — **done in Phase 0** (2.3.20).
 - Dead repositories: **gone** — jcenter/bintray/space removed; jitpack removed
@@ -206,21 +208,25 @@ module — see README for the current 76).
 Outcome: `core` has zero Exposed references; users decide whether to use
 Exposed, and integration is documented. Full design: [exposed-integration.md].
 
-Status: **in progress.** PR A (2026-08-08) removed the dead `hasExposed` flag,
-exposed `jdbcConnection` on `ConnectionInterface`, and deleted
-`PluginConfig.hasExposed()`. **PR B (2026-08-09)** adds the `exposed/` module
-(`harmonica-exposed`, pinned to Exposed 0.61.0), the `exposedTransaction` bridge
-(Option A transaction ownership via a no-op commit/rollback/close proxy), and
-SQLite transaction tests covering commit, rollback, reconnect, and SQLException
-propagation through the proxy. Remaining in Phase 3: script-classpath wiring
-for `.kts` migrations (Pitfall F) and a demo project. Plan:
+Status: **merged 2026-08-09 (PRs #197, #198, #199).** `core` has zero Exposed
+references (PR A removed the dead `hasExposed` flag and exposed `jdbcConnection`
+on `ConnectionInterface`). The `exposed/` module (`harmonica-exposed`, pinned to
+Exposed 0.61.0) ships the `exposedTransaction` bridge (Option A transaction
+ownership via a no-op commit/rollback/close proxy; `WeakHashMap`-cached
+`Database` per `Connection`; `defaultMaxAttempts = 1`) with 4 SQLite tests:
+commit, rollback, reconnect, and SQLException propagation through the proxy
+(exceptions unwrapped from `InvocationTargetException` so they keep their
+`SQLException` type). **76 tests green** (68 core + 4 plugin + 4 exposed).
+Remaining in Phase 3: script-classpath wiring for `.kts` migrations (Pitfall F)
+and a demo project against a real DB (SQLite here; PostgreSQL/MySQL deferred to
+Phase 4). Plan:
 
 - Wire the script classpath so `.kts` migrations can reach `harmonica-exposed`
   and Exposed (Pitfall F: the JSR-223 engine runs on the plugin's classpath).
 - Demo project compiling a migration using the Exposed DSL and running it
   against a real DB (SQLite here; PostgreSQL/MySQL deferred to Phase 4).
-- Close issues #91, #80, and the concern behind #160 once the flow ships
-  (document, upgrade, reflect).
+- Issue #91 was closed at the merge (2026-08-09); close #80 and the concern
+  behind #160 once the flow ships (document, upgrade, reflect).
 
 ### Phase 4 — Tests & DB environment
 
@@ -245,10 +251,10 @@ Full triage: [issues-triage.md]. Order:
 1. Urgent blockers: #153 (ties into #97). #167, #165, #140, #162 are resolved
    and closed (toolchain/CI fixes in Phase 0 PR #183; README/license PR #181;
    pluralizer PR #187); #158, #159 already closed (verified; not tracked here).
-2. Small: #26 (migration file naming), #47 (prepared statements), #91
-   (Exposed), #138 (custom columns), #141 (more column types), #145 (alter
-   column), #139 (FK options), #69 (query execution API), #4
-   (created_at/updated_at), #182 (JitPack badge).
+2. Small: #26 (migration file naming), #47 (prepared statements), #138 (custom
+   columns), #141 (more column types), #145 (alter column), #139 (FK options),
+   #69 (query execution API), #4 (created_at/updated_at), #182 (JitPack badge).
+   #91 (Exposed) is **closed** — the bridge shipped in Phase 3 (PRs #197-#199).
 3. Medium: #7 (closed connection), #85 (SQLite defaults), #67 (timestamp
    default), #80 (Exposed version), #71 (seeding), #97 (JavaExec task tests),
    #155 (programmatic migration docs).

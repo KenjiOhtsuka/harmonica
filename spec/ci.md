@@ -54,7 +54,7 @@ As landed:
 - **Steps**:
   - `actions/checkout@v7` with `persist-credentials: false` (no step needs Git
     authentication after checkout; Gradle doesn't use the persisted credential).
-  - `actions/setup-java@v5.6.0` with Temurin **JDK 25** — `setup-gradle` does
+  - `actions/setup-java@v5.7.0` with Temurin **JDK 25** — `setup-gradle` does
     **not** install a JDK and ignores `distribution`/`java-version` inputs
     (only `actions/setup-java` selects the JDK).
   - `gradle/actions/setup-gradle@v6` with wrapper validation, build cache, and
@@ -131,18 +131,18 @@ updates:
   opens PRs against them. Dependabot PRs **#171** (dokka 2.2.0), **#172**
   (plugin-publish 2.1.1), and **#178** (wrapper 9.6.1) were superseded by the
   Phase 0 toolchain PR and are closed. Later CI-action bumps merged: #170
-  (checkout v7), #191 (setup-gradle v6), #192 (setup-java v5.6.0). A Kotlin
-  `jvm` plugin bump (PR #193) is open with a **decline recommendation** — see
-  `spec/plan.md` §6.
+  (checkout v7), #191 (setup-gradle v6), #192 (setup-java v5.6.0), #195
+  (setup-java v5.7.0). A Kotlin `jvm` plugin bump (PR #193) is open with a
+  **decline recommendation** — see `spec/plan.md` §6.
 
 ## 4. Action version policy
 
 - Pin by **major tag** (e.g. `@v7`) and let Dependabot keep them current;
-  Dependabot may propose full-version pins (e.g. `setup-java@v5.6.0`) — accept
+  Dependabot may propose full-version pins (e.g. `setup-java@v5.7.0`) — accept
   those. Full SHA-pinning is optional hardening for stricter projects.
 - Recommended actions: `actions/checkout@v7` (PR #170), `gradle/actions/setup-gradle@v6`
   (PR #191; official Gradle action — replaces manual `setup-java` + cache for
-  Gradle projects), `actions/setup-java@v5.6.0` (PR #192; Temurin JDK 25),
+  Gradle projects), `actions/setup-java@v5.7.0` (PRs #192/#195; Temurin JDK 25),
   `actions/upload-artifact@v4` (if artifacts needed later). Dependabot keeps
   them current.
 

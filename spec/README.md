@@ -16,8 +16,8 @@ plan to restart and modernize the project.
 
 ## Current state (baseline, branch `develop`)
 
-> Snapshot taken 2026-08-08, after Phase 0 (toolchain) and Phase 2 (dead-dep
-> removal). Update this list when the baseline advances.
+> Snapshot taken 2026-08-09, after Phase 3 (Exposed bridge, PRs #197-#199).
+> Update this list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.6.1**, `jvmTarget = 1.8` (class-file
   major 52 asserted in CI)
@@ -26,7 +26,7 @@ plan to restart and modernize the project.
 - Publish target: plugin-publish + OSSRH staging (jcenter/bintray removed)
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
-  `actions/setup-java@5.6.0`), `jvm8-bytecode.yml` (major-52 assertion),
+  `actions/setup-java@5.7.0`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (Dependabot). CircleCI removed.
 - Three active modules: `core`, `exposed`, `gradle-plugin` — **76 tests green**
   (68 core + 4 plugin + 4 exposed); `document` (nested standalone build) is
@@ -40,7 +40,7 @@ plan to restart and modernize the project.
   [`exposed-integration.md`](exposed-integration.md)
 - Tests for real DBMS still live in the separate `harmonica_test` repository —
   to be merged in Phase 4
-- **`develop` is 56 commits ahead of `master`** — Phase 4 (real-DB tests) must
+- **`develop` is 75 commits ahead of `master`** — Phase 4 (real-DB tests) must
   pass before `master` advances. See the risk register in [`plan.md`](plan.md).
 
 ## Machine environment (current)

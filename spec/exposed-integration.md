@@ -2,10 +2,10 @@
 
 > **Status: shipped in part (2026-08-09, PR B).** The `exposed/` module
 > (artifact `harmonica-exposed`), the `exposedTransaction` bridge, and embedded
-> SQLite transaction tests (commit + rollback paths) exist and pass
-> (`./gradlew :exposed:test`, 3 tests). Still open in Phase 3: script-classpath
-> wiring for `.kts` migrations (Pitfall F) and a demo project. Issue #91 stays
-> open until the whole flow ships.
+> SQLite transaction tests (commit + rollback + reconnect + SQLException
+> propagation) exist and pass (`./gradlew :exposed:test`, 4 tests). Still open
+> in Phase 3: script-classpath wiring for `.kts` migrations (Pitfall F) and a
+> demo project. Issue #91 stays open until the whole flow ships.
 
 ## Problem
 
@@ -76,9 +76,8 @@ fun AbstractMigration.exposedTransaction(block: Transaction.() -> Unit) {
 }
 ```
 
-  `exposedDatabase()` (private, in `ExposedMigration.kt`) registers Exposed
+- `exposedDatabase()` (private, in `ExposedMigration.kt`) registers Exposed
   **once per `Connection` lifecycle** and reuses it:
-
   - Cache: `WeakHashMap<Connection, Database>` keyed by the `Connection`
     instance. `Database.connect` is called only when a new key appears, so
     repeated `exposedTransaction` calls inside one migration reuse the same
@@ -93,7 +92,11 @@ fun AbstractMigration.exposedTransaction(block: Transaction.() -> Unit) {
     are **no-ops** — harmonica's outer `Connection.transaction` owns the real
     commit/rollback/close (Option A, §2.1). `JdbcConnectionImpl` (exposed-jdbc)
     delegates through the proxy, so no Exposed path reaches the physical
-    connection's commit/rollback/close.
+    connection's commit/rollback/close. Exceptions the driver throws while a
+    delegated method runs are unwrapped from the reflection
+    `InvocationTargetException` and rethrown unchanged, so `SQLException`s keep
+    their type instead of surfacing as `UndeclaredThrowableException` (see
+    §2.2).
   - The `Database` holds only a `WeakReference` to the `Connection` (the proxy
     resolves `jdbcConnection` on every call), avoiding the classic
     weak-key/strong-value leak.
@@ -173,6 +176,13 @@ transaction.**
   **and** `setReadOnly(false)` on the wrapped connection. `setReadOnly` is *not*
   overridden anywhere, so for PostgreSQL/MySQL it executes driver-side state
   changes on the open transaction. Deferred to the Phase 4 real-DB work.
+- **Exception typing preserved**: `method.invoke` wraps any exception the driver
+  throws in `InvocationTargetException`, which the JDK proxy would otherwise
+  surface as `UndeclaredThrowableException` (a `RuntimeException`, not a
+  `SQLException`), breaking Exposed's `SQLException` handling. The proxy's
+  invocation handler unwraps `InvocationTargetException` and rethrows the
+  original `targetException`, so `SQLException`s propagate unchanged and the
+  retry/rollback behavior described above still applies.
 - **Exposed's global registry grows in long-lived JVMs (known limitation)**: 
   `Database.connect` registers every `Database` in Exposed's global
   `TransactionManager` (`ConcurrentHashMap` + `ConcurrentLinkedDeque`) for the
@@ -182,10 +192,18 @@ transaction.**
   daemon) leaves one permanently-registered `Database` whose connector holds a
   dead `WeakReference`. Bounded per run, unbounded over a long-lived JVM.
   Acceptable for a migration tool (short-lived task JVMs); revisit if harmonica
-  gains a long-lived server mode. Note also that a new `Database.connect`
-  overwrites Exposed's *global default* manager, so a bare `transaction {}` in
-  user code afterwards routes to the bridge's proxy-backed `Database` —
-  harmless for harmonica's flow.
+  gains a long-lived server mode.
+- **Global default manager side effect (restriction, not harmless)**: a new
+  `Database.connect` overwrites Exposed's *global default* manager, so afterward
+  a bare `transaction {}` in user code routes to the bridge's proxy-backed
+  `Database` instead of the caller's. That is **not** harmless: the proxy is
+  bound to one specific `Connection` under the single-threaded assumption
+  (§2.2), so concurrent or subsequent bare `transaction {}` calls in a shared
+  JVM would target the wrong connection. Consequently `harmonica-exposed` is
+  supported only for short-lived, single-run JVMs (the migration task): do not
+  use it alongside other Exposed code (bare `transaction {}`, a second
+  `Database.connect`) in the same JVM. The previous manager is not restored and
+  `closeAndUnregister` is not called (core purity, above).
 - **Script classpath (Pitfall F)**: migration `.kts` files are evaluated by the
   Gradle plugin's JSR-223 engine on the **plugin's classpath**
   (`AbstractMigrationTask.kt:33-37`). Adding `harmonica-exposed` via the user's
@@ -238,13 +256,15 @@ class M20260801_Migrate : AbstractMigration() {
 
 **Shipped in PR B (2026-08-09):** the `exposed/` module builds with
 `exposed-jdbc:0.61.0`; `exposedTransaction` runs the Exposed DSL inside
-harmonica's `Connection.transaction` (Option A) proven by three SQLite tests
+harmonica's `Connection.transaction` (Option A) proven by four SQLite tests
 (`:exposed:test`): commit (DDL+insert persist; Exposed did not close the
 connection or restore autoCommit), rollback (harmonica DSL + Exposed DSL in one
-migration both rolled back — one shared transaction), and reconnect (a second
-`exposedTransaction` succeeds through harmonica's reconnected connection). Full
-`./gradlew build` is green with and without Exposed on the classpath; `:core`
-still has zero Exposed references.
+migration both rolled back — one shared transaction), reconnect (a second
+`exposedTransaction` succeeds through harmonica's reconnected connection), and
+SQLException propagation (a driver-level error thrown through the proxy keeps
+its `SQLException` type instead of surfacing as
+`UndeclaredThrowableException`). Full `./gradlew build` is green with and
+without Exposed on the classpath; `:core` still has zero Exposed references.
 
 **Remaining for Phase 3:** script-classpath wiring for `.kts` migrations
 (Pitfall F) and the demo project against a real DB (SQLite here; PostgreSQL/MySQL

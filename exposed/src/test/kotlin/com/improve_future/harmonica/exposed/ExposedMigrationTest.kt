@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.insert
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.sql.SQLException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
@@ -32,6 +33,14 @@ private class FailingMigration : AbstractMigration() {
         exposedTransaction {
             SchemaUtils.create(Users)
             error("boom")
+        }
+    }
+}
+
+private class InvalidSqlMigration : AbstractMigration() {
+    override fun up() {
+        exposedTransaction {
+            exec("THIS IS NOT SQL")
         }
     }
 }
@@ -107,6 +116,19 @@ class ExposedMigrationTest {
         }
         assertTrue(connection.doesTableExist("users_exposed"))
         assertEquals(1, connection.rowCount("users_exposed"))
+        connection.close()
+    }
+
+    @Test
+    fun testSqlExceptionPropagatesThroughProxyAsSqlException() {
+        val connection = createConnection("sqlerror")
+        val migration = InvalidSqlMigration()
+        migration.connection = connection
+        assertFailsWith<SQLException> {
+            connection.transaction {
+                migration.up()
+            }
+        }
         connection.close()
     }
 }

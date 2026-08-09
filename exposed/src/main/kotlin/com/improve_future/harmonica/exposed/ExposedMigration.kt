@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.ref.WeakReference
+import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Proxy
 import java.util.WeakHashMap
 
@@ -36,7 +37,11 @@ private fun WeakReference<Connection>.exposedConnection(): java.sql.Connection {
     ) { _, method, args ->
         when (method.name) {
             "commit", "rollback", "close" -> null
-            else -> method.invoke(connection.jdbcConnection, *(args ?: emptyArray()))
+            else -> try {
+                method.invoke(connection.jdbcConnection, *(args ?: emptyArray()))
+            } catch (e: InvocationTargetException) {
+                throw e.targetException
+            }
         }
     } as java.sql.Connection
 }

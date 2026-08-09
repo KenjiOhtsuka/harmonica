@@ -75,9 +75,10 @@ Consequences for the restart:
 - These unverified changes are the reason `master` was left behind — do not
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
-  `gradle-plugin` build, test (72 tests green), and package correctly on Java 25
-  and in CI; `document/` is excluded from the build. Phase 0 also proved the
-  POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
+  `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
+  `exposed` module — see README for the current 76), and package correctly on
+  Java 25 and in CI; `document/` is excluded from the build. Phase 0 also proved
+  the POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
   remaining unverified risk is real-DB behavior, which Phase 4 covers.
 
 ## 4. Phases
@@ -165,7 +166,8 @@ Outcome: no dead repositories or unmaintained libraries in the build.
 
 Status: **merged 2026-08-01 (PRs #184-#188).** All build files now use only
 Maven Central (`document/` excluded from build). 72 tests green (68 core + 4
-gradle-plugin; Phase 0 baseline was 66).
+gradle-plugin; Phase 0 baseline was 66; snapshot before the Phase 3 `exposed`
+module — see README for the current 76).
 
 - `gradle.properties`: `kotlin_version` → 2.3.x. — **done in Phase 0** (2.3.20).
 - Dead repositories: **gone** — jcenter/bintray/space removed; jitpack removed
@@ -209,8 +211,9 @@ exposed `jdbcConnection` on `ConnectionInterface`, and deleted
 `PluginConfig.hasExposed()`. **PR B (2026-08-09)** adds the `exposed/` module
 (`harmonica-exposed`, pinned to Exposed 0.61.0), the `exposedTransaction` bridge
 (Option A transaction ownership via a no-op commit/rollback/close proxy), and
-SQLite commit+rollback transaction tests. Remaining in Phase 3: script-classpath
-wiring for `.kts` migrations (Pitfall F) and a demo project. Plan:
+SQLite transaction tests covering commit, rollback, reconnect, and SQLException
+propagation through the proxy. Remaining in Phase 3: script-classpath wiring
+for `.kts` migrations (Pitfall F) and a demo project. Plan:
 
 - Wire the script classpath so `.kts` migrations can reach `harmonica-exposed`
   and Exposed (Pitfall F: the JSR-223 engine runs on the plugin's classpath).
@@ -326,3 +329,9 @@ Resolved for Phase 3 (2026-08-08):
 - Transaction ownership: **Option A — harmonica owns the transaction** (bridge
   binds harmonica's connection into Exposed's manager; no Exposed-managed
   commit).
+- Usage restriction (resolved during PR #198): `harmonica-exposed` is supported
+  only in **short-lived, single-run JVMs** — its `Database.connect` overwrites
+  Exposed's global default manager and is never unregistered (core purity
+  forbids a close hook), so it must not be combined with other Exposed code
+  (bare `transaction {}`, another `Database.connect`) in a shared JVM. See
+  exposed-integration.md §2.2.

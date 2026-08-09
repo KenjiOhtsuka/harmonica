@@ -28,8 +28,8 @@ plan to restart and modernize the project.
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
   `actions/setup-java@5.6.0`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (Dependabot). CircleCI removed.
-- Three active modules: `core`, `exposed`, `gradle-plugin` — **74 tests green**
-  (68 core + 4 plugin + 2 exposed); `document` (nested standalone build) is
+- Three active modules: `core`, `exposed`, `gradle-plugin` — **75 tests green**
+  (68 core + 4 plugin + 3 exposed); `document` (nested standalone build) is
   excluded from the build
 - License headers stripped from all source files (PR #180); README badges fixed
   (PR #181)

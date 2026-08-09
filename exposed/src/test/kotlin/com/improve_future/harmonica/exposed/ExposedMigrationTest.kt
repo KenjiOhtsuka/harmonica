@@ -28,6 +28,7 @@ private class CreateAndInsertMigration : AbstractMigration() {
 
 private class FailingMigration : AbstractMigration() {
     override fun up() {
+        createTable("harmonica_rollback_probe") { integer("probe") }
         exposedTransaction {
             SchemaUtils.create(Users)
             error("boom")
@@ -69,6 +70,8 @@ class ExposedMigrationTest {
         }
         assertTrue(connection.doesTableExist("users_exposed"))
         assertEquals(1, connection.rowCount("users_exposed"))
+        assertTrue(!connection.jdbcConnection.isClosed)
+        assertTrue(!connection.jdbcConnection.autoCommit)
         connection.close()
     }
 
@@ -83,6 +86,27 @@ class ExposedMigrationTest {
             }
         }
         assertTrue(!connection.doesTableExist("users_exposed"))
+        assertTrue(!connection.doesTableExist("harmonica_rollback_probe"))
+        connection.close()
+    }
+
+    @Test
+    fun testExposedDslSurvivesHarmonicaReconnect() {
+        val connection = createConnection("reconnect")
+        val failing = FailingMigration()
+        failing.connection = connection
+        assertFailsWith<IllegalStateException> {
+            connection.transaction {
+                failing.up()
+            }
+        }
+        val ok = CreateAndInsertMigration()
+        ok.connection = connection
+        connection.transaction {
+            ok.up()
+        }
+        assertTrue(connection.doesTableExist("users_exposed"))
+        assertEquals(1, connection.rowCount("users_exposed"))
         connection.close()
     }
 }

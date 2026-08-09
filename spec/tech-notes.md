@@ -5,9 +5,9 @@ Facts gathered on 2026-08-01. Update this file as versions change.
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
 - Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
-  `./gradlew clean build` is green on Java 25; **74 unit tests pass (68 core,
-  4 gradle-plugin, 2 exposed), 0 failures/errors** (Phase 0 baseline was 66;
-  Phase 2 added 6 InflectionsTest cases; Phase 3, PR B added 2 ExposedMigrationTest
+  `./gradlew clean build` is green on Java 25; **75 unit tests pass (68 core,
+  4 gradle-plugin, 3 exposed), 0 failures/errors** (Phase 0 baseline was 66;
+  Phase 2 added 6 InflectionsTest cases; Phase 3, PR B added 3 ExposedMigrationTest
   cases).
 - `jvmTarget = 1.8` is set via `kotlin.compilerOptions { jvmTarget.set(JvmTarget.JVM_1_8) }`
   + `java.sourceCompatibility/targetCompatibility = 1.8` in all three modules

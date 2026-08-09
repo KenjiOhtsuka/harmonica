@@ -3,7 +3,7 @@
 > **Status: shipped in part (2026-08-09, PR B).** The `exposed/` module
 > (artifact `harmonica-exposed`), the `exposedTransaction` bridge, and embedded
 > SQLite transaction tests (commit + rollback paths) exist and pass
-> (`./gradlew :exposed:test`, 2 tests). Still open in Phase 3: script-classpath
+> (`./gradlew :exposed:test`, 3 tests). Still open in Phase 3: script-classpath
 > wiring for `.kts` migrations (Pitfall F) and a demo project. Issue #91 stays
 > open until the whole flow ships.
 
@@ -111,7 +111,7 @@ fun AbstractMigration.exposedTransaction(block: Transaction.() -> Unit) {
 The migration runner already wraps `up()`/`down()` in
 `Connection.transaction` (`MigrationUpTask.kt:21-27`, `JarmonicaUpMain.kt:27-34`),
 which commits, and on failure rolls back **and closes** the connection
-(`Connection.kt:107-117`). Running Exposed's own `transaction(db){}` on the
+(`Connection.kt:106-117`). Running Exposed's own `transaction(db){}` on the
 **same physical connection** produces a nested commit/rollback pair (harmless
 on success; on failure a double-rollback plus a stale Exposed `Database`
 pointing at the closed connection).
@@ -144,12 +144,14 @@ transaction.**
   override is still needed at all.
 - **Reconnect invalidation (resolved in PR B)**: harmonica reconnects a closed
   connection lazily (`Connection.kt:29-38`). The bridge proxy resolves
-  `jdbcConnection` **on every method call**, so after a reconnect it
-  automatically targets the fresh connection. The cache is keyed by the
-  `Connection` instance, so a *new* `Connection` (e.g. a new migration run)
-  gets its own `Database`. The rollback test exercises this: after the failed
-  transaction closes the connection, `doesTableExist` reconnects and the Exposed
-  registration still resolves.
+  `jdbcConnection` **on every method call**, so once a reconnect has been
+  triggered by any core call, Exposed automatically targets the fresh
+  connection. The cache is keyed by the `Connection` instance, so a *new*
+  `Connection` (e.g. a new migration run) gets its own `Database`.
+  `testExposedDslSurvivesHarmonicaReconnect` proves this end-to-end: a failed
+  migration closes the connection, then a second `exposedTransaction` on the
+  same `Connection` creates + inserts successfully through the reconnected
+  connection.
 - **Single-threaded assumption**: the cached `Database` wraps one connection and
   is reused for every Exposed transaction; it is not thread-safe. The migration
   runner is single-threaded, so this holds. The `WeakHashMap` cache is likewise
@@ -166,6 +168,24 @@ transaction.**
 - **Name collision**: `core` has an (empty) `com.improve_future.harmonica.core.Database`
   class (`Database.kt`). Avoid wildcard imports in the bridge so it doesn't
   collide with `org.jetbrains.exposed.sql.Database`.
+- **`setReadOnly` is delegated**: Exposed 0.61's transaction setup calls
+  `setTransactionIsolation(...)` (already no-op'd for non-SQLite by core's proxy)
+  **and** `setReadOnly(false)` on the wrapped connection. `setReadOnly` is *not*
+  overridden anywhere, so for PostgreSQL/MySQL it executes driver-side state
+  changes on the open transaction. Deferred to the Phase 4 real-DB work.
+- **Exposed's global registry grows in long-lived JVMs (known limitation)**: 
+  `Database.connect` registers every `Database` in Exposed's global
+  `TransactionManager` (`ConcurrentHashMap` + `ConcurrentLinkedDeque`) for the
+  JVM lifetime, and the bridge never calls `closeAndUnregister` (core purity
+  forbids a close hook). The bridge's own `WeakHashMap` cache evicts correctly,
+  but each distinct `Connection` (e.g. each migration run inside a Gradle
+  daemon) leaves one permanently-registered `Database` whose connector holds a
+  dead `WeakReference`. Bounded per run, unbounded over a long-lived JVM.
+  Acceptable for a migration tool (short-lived task JVMs); revisit if harmonica
+  gains a long-lived server mode. Note also that a new `Database.connect`
+  overwrites Exposed's *global default* manager, so a bare `transaction {}` in
+  user code afterwards routes to the bridge's proxy-backed `Database` —
+  harmless for harmonica's flow.
 - **Script classpath (Pitfall F)**: migration `.kts` files are evaluated by the
   Gradle plugin's JSR-223 engine on the **plugin's classpath**
   (`AbstractMigrationTask.kt:33-37`). Adding `harmonica-exposed` via the user's
@@ -218,9 +238,13 @@ class M20260801_Migrate : AbstractMigration() {
 
 **Shipped in PR B (2026-08-09):** the `exposed/` module builds with
 `exposed-jdbc:0.61.0`; `exposedTransaction` runs the Exposed DSL inside
-harmonica's `Connection.transaction` (Option A) with commit + rollback proven by
-SQLite tests (`:exposed:test`); full `./gradlew build` is green with and without
-Exposed on the classpath; `:core` still has zero Exposed references.
+harmonica's `Connection.transaction` (Option A) proven by three SQLite tests
+(`:exposed:test`): commit (DDL+insert persist; Exposed did not close the
+connection or restore autoCommit), rollback (harmonica DSL + Exposed DSL in one
+migration both rolled back — one shared transaction), and reconnect (a second
+`exposedTransaction` succeeds through harmonica's reconnected connection). Full
+`./gradlew build` is green with and without Exposed on the classpath; `:core`
+still has zero Exposed references.
 
 **Remaining for Phase 3:** script-classpath wiring for `.kts` migrations
 (Pitfall F) and the demo project against a real DB (SQLite here; PostgreSQL/MySQL

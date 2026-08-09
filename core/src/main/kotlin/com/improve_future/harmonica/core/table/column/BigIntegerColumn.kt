@@ -1,7 +1,7 @@
 package com.improve_future.harmonica.core.table.column
 
-// Exposed take a Long type as BigInteger in database, actually BigInteger can be bigger than Long
-// but for now we limit it to the size of a Long
+// A database BigInteger can be bigger than Long, but for now we limit it to the
+// size of a Long
 internal class BigIntegerColumn(name: String) : AbstractColumn(name) {
     override var sqlDefault: String? = null
 

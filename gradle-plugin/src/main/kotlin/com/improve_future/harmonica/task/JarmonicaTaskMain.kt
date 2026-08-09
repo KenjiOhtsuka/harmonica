@@ -1,6 +1,5 @@
 package com.improve_future.harmonica.task
 
-import com.improve_future.harmonica.config.PluginConfig
 import com.improve_future.harmonica.core.AbstractMigration
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.DbConfig
@@ -23,7 +22,7 @@ abstract class JarmonicaTaskMain {
     protected fun createConnection(
         packageName: String, env: String
     ): Connection {
-        return Connection(loadDbConfig(packageName, env), PluginConfig.hasExposed())
+        return Connection(loadDbConfig(packageName, env))
     }
 
     protected fun findMigrationClassList(packageName: String): List<Class<out AbstractMigration>> {

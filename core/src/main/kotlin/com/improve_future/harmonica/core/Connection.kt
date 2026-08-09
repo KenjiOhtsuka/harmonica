@@ -4,7 +4,7 @@ import java.io.Closeable
 import java.sql.*
 
 open class Connection(
-    override val config: DbConfig, protected val hasExposed: Boolean
+    override val config: DbConfig
 ) : Closeable, ConnectionInterface {
     private lateinit var coreConnection: java.sql.Connection
 
@@ -30,12 +30,11 @@ open class Connection(
         get() {
             if (isClosed) connect(config)
 
-            return if (hasExposed)
-                coreConnection
-//            TransactionManager.current().connection
-            else
-                coreConnection
+            return coreConnection
         }
+
+    override val jdbcConnection: java.sql.Connection
+        get() = coreConnection
 
     private var database: Database? = null
 
@@ -72,8 +71,8 @@ open class Connection(
     }
 
     companion object {
-        fun create(hasExposed: Boolean, block: DbConfig.() -> Unit): Connection {
-            return Connection(DbConfig.create(block), hasExposed)
+        fun create(block: DbConfig.() -> Unit): Connection {
+            return Connection(DbConfig.create(block))
         }
 
         private fun buildConnectionUriFromDbConfig(dbConfig: DbConfig): String {

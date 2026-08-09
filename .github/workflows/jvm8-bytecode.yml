@@ -53,7 +53,7 @@ jobs:
       - name: Assert JVM 8 bytecode
         run: |
           set -euo pipefail
-          for dir in core/build/classes/kotlin/main gradle-plugin/build/classes/kotlin/main; do
+          for dir in core/build/classes/kotlin/main exposed/build/classes/kotlin/main gradle-plugin/build/classes/kotlin/main; do
             [ -d "$dir" ] || { echo "missing Kotlin output directory: $dir"; exit 1; }
             classfiles=$(find "$dir" -name '*.class' | sort)
             [ -n "$classfiles" ] || { echo "no class files found in $dir"; exit 1; }

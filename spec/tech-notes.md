@@ -5,14 +5,16 @@ Facts gathered on 2026-08-01. Update this file as versions change.
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
 - Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
-  `./gradlew clean build` is green on Java 25; **72 unit tests pass (68 core,
-  4 gradle-plugin), 0 failures/errors** (Phase 0 baseline was 66; Phase 2 added
-  6 InflectionsTest cases).
+  `./gradlew clean build` is green on Java 25; **74 unit tests pass (68 core,
+  4 gradle-plugin, 2 exposed), 0 failures/errors** (Phase 0 baseline was 66;
+  Phase 2 added 6 InflectionsTest cases; Phase 3, PR B added 2 ExposedMigrationTest
+  cases).
 - `jvmTarget = 1.8` is set via `kotlin.compilerOptions { jvmTarget.set(JvmTarget.JVM_1_8) }`
-  + `java.sourceCompatibility/targetCompatibility = 1.8` in both modules.
-  Verified by `javap`: all main classes are class-file major **52** (JVM 8).
+  + `java.sourceCompatibility/targetCompatibility = 1.8` in all three modules
+  (`core`, `exposed`, `gradle-plugin`). Verified by `javap`: all main classes are
+  class-file major **52** (JVM 8).
 - `document/` is **dropped from the root build** (`settings.gradle.kts` includes
-  only `core`, `gradle-plugin`). The nested Gradle 4.9 build is untouched.
+  only `core`, `exposed`, `gradle-plugin`). The nested Gradle 4.9 build is untouched.
 - CI replaced: `gradle.yml` + `.circleci/config.yml` → `ci.yml` +
   `jvm8-bytecode.yml` (see [ci.md](ci.md)).
 
@@ -44,6 +46,13 @@ Key references:
 | `commons-codec` | **DONE** | 1.15 dropped — unused (PR #184). |
 | `com.github.cesarferreira:kotlin-pluralizer` | **DONE** | removed (PR #187); internal `singularize()` port, see the note below (issue #140 resolved). |
 
+### exposed
+
+| Dependency | Status | Notes |
+| --- | --- | --- |
+| `org.jetbrains.exposed:exposed-jdbc` | **DONE** | 0.61.0 pinned (api; Phase 3, PR B). `exposed-core` arrives transitively; never declare it directly. |
+| `org.xerial:sqlite-jdbc` | **DONE** | testImplementation-only (Phase 3, PR B) for embedded-DB bridge tests; see the gradle-plugin row note on driver placement. |
+
 ### gradle-plugin
 
 | Dependency | Status | Notes |
@@ -54,7 +63,7 @@ Key references:
 | `org.reflections:reflections` | **DONE** | replaced with a classpath scanner in `JarmonicaTaskMain` (Phase 2, PRs #185/#188). |
 | `kotlinx-html-jvm` | **DONE** | dropped here (PR #184); real consumer is `document` (Phase 7). |
 | `kotlin-test` / `kotlin-test-junit5` | **DONE** | pinned to 2.3.20 (were unversioned). |
-| JDBC test drivers (mysql, postgresql, sqlite, mssql) | **DONE** | removed (PR #184); DB drivers move to the Phase 4 integration module. |
+| JDBC test drivers (mysql, postgresql, mssql) | **DONE** | removed (PR #184); server DB drivers move to the Phase 4 integration module. Exception: `org.xerial:sqlite-jdbc` is re-added as `testImplementation`-only in the `exposed` module (Phase 3, PR B) for embedded-DB Option-A transaction tests — nothing leaks into published artifacts. |
 | `com.gradle.plugin-publish` | **DONE** | 0.9.10 → **2.1.1**; legacy `pluginBundle` block removed (2.x moved config into `gradlePlugin`). |
 | `org.jetbrains.dokka` | **DONE** | 0.9.17 → **2.2.0**; removed the removed `outputFormat` DSL. Docs refresh is Phase 7. |
 
@@ -73,7 +82,7 @@ Key references:
 - Gradle 9 task validation: `JavaExec` is abstract in Gradle 9, so the
   Jarmonica task subclasses are `abstract`; every task class carries
   `@DisableCachingByDefault` (validatePlugins requirement).
-- `Connection.kt:153` — `toUpperCase()` → `uppercase()` (deprecation was an
+- `Connection.kt:152` — `toUpperCase()` → `uppercase()` (deprecation was an
   error under Kotlin 2.3).
 
 Still open (not Phase 0):

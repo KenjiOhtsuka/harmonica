@@ -28,13 +28,16 @@ plan to restart and modernize the project.
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
   `actions/setup-java@5.6.0`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (Dependabot). CircleCI removed.
-- Two active modules: `core`, `gradle-plugin` — **72 tests green** (68 core +
-  4 plugin); `document` (nested standalone build) is excluded from the build
+- Three active modules: `core`, `exposed`, `gradle-plugin` — **74 tests green**
+  (68 core + 4 plugin + 2 exposed); `document` (nested standalone build) is
+  excluded from the build
 - License headers stripped from all source files (PR #180); README badges fixed
   (PR #181)
-- No Exposed dependency in `core` (runtime reflection detection remains in
-  `gradle-plugin`; a real Exposed bridge is a **future Phase 3** design, see
-  [`exposed-integration.md`](exposed-integration.md))
+- No Exposed dependency in `core`. The optional `harmonica-exposed` module
+  (`exposed/`, pinned to Exposed 0.61.0) ships the `exposedTransaction` bridge
+  (Phase 3, PR B); runtime reflection detection was removed from
+  `gradle-plugin` (PR A) — see
+  [`exposed-integration.md`](exposed-integration.md)
 - Tests for real DBMS still live in the separate `harmonica_test` repository —
   to be merged in Phase 4
 - **`develop` is 56 commits ahead of `master`** — Phase 4 (real-DB tests) must

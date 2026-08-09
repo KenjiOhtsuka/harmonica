@@ -72,9 +72,9 @@ Since Gradle 9 cannot run on JDK 8:
 
 - After `./gradlew build`, runs `javap -verbose` on **every `.class` file** in
   each module's Kotlin main output directory (`core/.../kotlin/main`,
-  `gradle-plugin/.../kotlin/main`) and asserts **class-file major version 52**
-  (JDK 8) for all of them. Major version → Java mapping: 52=Java 8, 61=17,
-  69=25.
+  `exposed/.../kotlin/main`, `gradle-plugin/.../kotlin/main`) and asserts
+  **class-file major version 52** (JDK 8) for all of them. Major version →
+  Java mapping: 52=Java 8, 61=17, 69=25.
 - **Phase 0 sub-decision (resolved)**: keep the lightweight javap check. The
   alternative — running the test suite on a JDK 8 runtime via Gradle toolchains
   (foojay-resolver-convention + `JavaLanguageVersion.of(8)`) — adds a toolchain
@@ -119,7 +119,7 @@ updates:
     open-pull-requests-limit: 5
 ```
 
-- `directory: "/"` scans the whole multi-module build (`core`,
+- `directory: "/"` scans the whole multi-module build (`core`, `exposed`,
   `gradle-plugin`; `document` is excluded from the build) including the Gradle
   wrapper and `gradle.properties`.
 - **No grouping** — keeps each dependency bump its own small PR, matching the

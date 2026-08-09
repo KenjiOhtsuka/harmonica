@@ -204,20 +204,20 @@ gradle-plugin; Phase 0 baseline was 66).
 Outcome: `core` has zero Exposed references; users decide whether to use
 Exposed, and integration is documented. Full design: [exposed-integration.md].
 
-Status: **in progress (decisions resolved 2026-08-08).** Plan: ship
-`harmonica-exposed` as a separate module pinned to Exposed 0.61.0; Option A
-transaction ownership (harmonica owns).
+Status: **in progress.** PR A (2026-08-08) removed the dead `hasExposed` flag,
+exposed `jdbcConnection` on `ConnectionInterface`, and deleted
+`PluginConfig.hasExposed()`. **PR B (2026-08-09)** adds the `exposed/` module
+(`harmonica-exposed`, pinned to Exposed 0.61.0), the `exposedTransaction` bridge
+(Option A transaction ownership via a no-op commit/rollback/close proxy), and
+SQLite commit+rollback transaction tests. Remaining in Phase 3: script-classpath
+wiring for `.kts` migrations (Pitfall F) and a demo project. Plan:
 
-- Remove dead `hasExposed` flag plumbing from `Connection.kt` (currently a
-  no-op ternary).
-- Expose the underlying `java.sql.Connection` from `Connection`.
-- Provide an **optional** artifact/module `harmonica-exposed` that bridges
-  Exposed transactions onto harmonica's connection lifecycle (users who add it
-  get Exposed; everyone else is unaffected — compilation cannot fail).
-- Keep runtime detection (`Class.forName`) only where it adds value; otherwise
-  delete `PluginConfig.hasExposed()`.
-- Resolve issues #91, #80 and the concern behind #160 (document, upgrade,
-  reflect).
+- Wire the script classpath so `.kts` migrations can reach `harmonica-exposed`
+  and Exposed (Pitfall F: the JSR-223 engine runs on the plugin's classpath).
+- Demo project compiling a migration using the Exposed DSL and running it
+  against a real DB (SQLite here; PostgreSQL/MySQL deferred to Phase 4).
+- Close issues #91, #80, and the concern behind #160 once the flow ships
+  (document, upgrade, reflect).
 
 ### Phase 4 — Tests & DB environment
 

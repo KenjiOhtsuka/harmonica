@@ -9,16 +9,23 @@
 
 ## Current state
 
-- Unit tests exist in `core` and `gradle-plugin` (JUnit 6.1.2, `useJUnitPlatform`).
-  They use **stubs, not real JDBC drivers**: core's DB tests go through
+- Unit tests exist in `core`, `exposed`, and `gradle-plugin` (JUnit 6.1.2,
+  `useJUnitPlatform`). `core`/`gradle-plugin` use **stubs, not real JDBC
+  drivers**: core's DB tests go through
   `StubConnection`/`StubDbAdapter`/`StubMigration` (package-private), adapter
   tests inspect `buildColumnDeclarationForCreateTableSql` by reflection, and
-  `ConnectionTest` only asserts the connection-URI string — **no DBMS is
-  actually exercised by unit tests**.
+  `ConnectionTest` only asserts the connection-URI string — no server DBMS is
+  exercised there.
+- The `exposed` module runs **real embedded-SQLite transaction tests** (Phase 3,
+  PR B): `ExposedMigrationTest` drives the Exposed DSL inside harmonica's
+  `Connection.transaction` against a temp-file SQLite DB, covering both the
+  commit path (DDL + insert persist) and the rollback path (exception inside
+  `exposedTransaction` rolls back and reconnects). This is the first real-DB
+  test in the repo, and it is green without Docker.
 - Real-DB tests (`harmonica_test`) require a live PostgreSQL/MySQL with a
   `developer/developer` user and a `harmonica_test` database; they are a
   separate Gradle project and only run manually.
-- This machine: no Docker, no local DBMS yet.
+- This machine: no Docker, no local DBMS yet (SQLite embedded tests run fine).
 
 ## Plan
 
@@ -53,11 +60,11 @@ services:
     ports: ["3306:3306"]
 ```
 
-- SQLite needs no server. It is **not** covered by unit tests today (only a URI
-  string is asserted); add a **Docker-free SQLite integration path** that runs
-  in plain CI: `org.xerial:sqlite-jdbc` + a temp-file/`:memory:` DB, gated by
-  the same env-var helper. This gives an always-green real-DB smoke test
-  without Docker.
+- SQLite needs no server. It **is** covered by the embedded tests in the
+  `exposed` module today (Phase 3, PR B); keep an always-green SQLite path in
+  CI (`org.xerial:sqlite-jdbc` + a temp-file/`:memory:` DB) and extend the
+  pattern to a **Docker-free SQLite integration path** for `core` gated by the
+  same env-var helper.
 - **H2 as the Docker-free alternative**: `Connection.buildConnectionUriFromDbConfig`
   returns `""` for `Dbms.H2` and `SqlServerAdapter` is 100% TODO. Add H2
   support as an embedded (no-server) DBMS alongside SQLite; defer SQL Server /

@@ -10,12 +10,9 @@ class StubConnection : ConnectionInterface {
 
     val executedSqlList = mutableListOf<String>()
 
-    @Deprecated(
-        "Cause Error",
-        ReplaceWith("Can't be replaced. It's created only to meet interface.")
-    )
+    @Deprecated("StubConnection does not provide a JDBC connection")
     override val jdbcConnection: java.sql.Connection
-        get() = throw UnsupportedOperationException()
+        get() = throw UnsupportedOperationException("StubConnection does not provide a JDBC connection")
 
     override fun transaction(block: Connection.() -> Unit) {
 

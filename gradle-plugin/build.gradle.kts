@@ -25,7 +25,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
 
     /* Implementation */
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-common:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlinVersion")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")

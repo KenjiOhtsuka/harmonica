@@ -1,6 +1,19 @@
 package com.improve_future.harmonica.plugin
 
 import com.improve_future.harmonica.core.*
+import kotlin.script.experimental.api.ResultValue
+import kotlin.script.experimental.api.ScriptCompilationConfiguration
+import kotlin.script.experimental.api.ScriptDiagnostic
+import kotlin.script.experimental.api.valueOrNull
+import kotlin.script.experimental.host.ScriptingHostConfiguration
+import kotlin.script.experimental.host.getScriptingClass
+import kotlin.script.experimental.host.toScriptSource
+import kotlin.script.experimental.jvm.JvmGetScriptingClass
+import kotlin.script.experimental.jvm.baseClassLoader
+import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
+import kotlin.script.experimental.jvm.jvm
+import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
+import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
@@ -8,8 +21,6 @@ import org.gradle.work.DisableCachingByDefault
 import java.io.File
 import java.net.URLClassLoader
 import java.nio.file.Paths
-import javax.script.ScriptEngine
-import javax.script.ScriptEngineManager
 
 @DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
 abstract class AbstractMigrationTask : AbstractTask() {
@@ -36,7 +47,35 @@ abstract class AbstractMigrationTask : AbstractTask() {
     }
 
     private fun evaluate(script: String): Any = withScriptClasspath {
-        scriptEngine().eval(script)
+        val result = BasicJvmScriptingHost().eval(
+            script.toScriptSource(),
+            scriptCompilationConfiguration(),
+            null
+        )
+        result.reports.firstOrNull { it.severity >= ScriptDiagnostic.Severity.ERROR }
+            ?.let { report -> throw IllegalStateException(report.message) }
+        when (val returnValue = result.valueOrNull()?.returnValue) {
+            is ResultValue.Value -> returnValue.value ?: error("Script produced no result")
+            else -> error("Script produced no result")
+        }
+    }
+
+    private var compilationConfiguration: ScriptCompilationConfiguration? = null
+
+    private fun scriptCompilationConfiguration(): ScriptCompilationConfiguration {
+        compilationConfiguration?.let { return it }
+        return createJvmCompilationConfigurationFromTemplate<MigrationScript>(
+            baseHostConfiguration = ScriptingHostConfiguration {
+                getScriptingClass(JvmGetScriptingClass())
+                jvm {
+                    baseClassLoader(MigrationScript::class.java.classLoader)
+                }
+            }
+        ) {
+            jvm {
+                dependenciesFromCurrentContext(wholeClasspath = true)
+            }
+        }.also { compilationConfiguration = it }
     }
 
     private fun <T> withScriptClasspath(block: () -> T): T {
@@ -56,16 +95,6 @@ abstract class AbstractMigrationTask : AbstractTask() {
         val parent = AbstractMigrationTask::class.java.classLoader
         val urls = scriptClasspath.files.map { it.toURI().toURL() }.toTypedArray()
         return URLClassLoader(urls, parent).also { scriptClassLoader = it }
-    }
-
-    private var scriptEngine: ScriptEngine? = null
-
-    private fun scriptEngine(): ScriptEngine {
-        scriptEngine?.let { return it }
-        val engine = ScriptEngineManager().getEngineByName("kotlin")
-            ?: error("Kotlin script engine not found on the classpath")
-        scriptEngine = engine
-        return engine
     }
 
     protected companion object {

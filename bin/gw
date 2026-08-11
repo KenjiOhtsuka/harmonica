@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# gw: run a Gradle task with plain console and trimmed output (token saver)
+set -euo pipefail
+cd "$(dirname "$0")/.."
+./gradlew --console=plain "$@" 2>&1 | tail -n "${GW_TAIL_LINES:-60}"

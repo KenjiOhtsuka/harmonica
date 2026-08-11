@@ -29,6 +29,9 @@ and is being restarted. See `spec/plan.md` for the master plan.
 
 ## Conventions
 
+- Use `bin/gw` to run Gradle (plain console, output trimmed to ~60 lines) instead
+  of `./gradlew`; it saves output tokens. Use `./gradlew` directly when full
+  output is needed.
 - Follow existing code style; do not add comments unless asked.
 - Do not add dependencies that are not actually used (there is a history of
   unused deps: `commons-codec`, `kotlin-reflect`, `kotlinx-html-jvm` in the

@@ -18,6 +18,7 @@ class ScriptClasspathTest {
         }
         val markerFile = File(workDir, "touched")
         val classesDir = compileScriptProbe(workDir)
+        val markerPath = markerFile.invariantSeparatorsPath
 
         val migration = createMigrationTask(classesDir).evalScript(
             """
@@ -26,7 +27,7 @@ class ScriptClasspathTest {
 
             object : AbstractMigration() {
                 override fun up() {
-                    ScriptProbe.touch("${markerFile.absolutePath}")
+                    ScriptProbe.touch("$markerPath")
                 }
             }
             """.trimIndent()

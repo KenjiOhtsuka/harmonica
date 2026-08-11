@@ -206,11 +206,29 @@ transaction.**
   `closeAndUnregister` is not called (core purity, above).
 - **Script classpath (Pitfall F)**: migration `.kts` files are evaluated by the
   Gradle plugin's JSR-223 engine on the **plugin's classpath**
-  (`AbstractMigrationTask.kt:33-37`). Adding `harmonica-exposed` via the user's
+  (`AbstractMigrationTask.kt`). Adding `harmonica-exposed` via the user's
   `implementation(...)` is not enough — the bridge/Exposed must be reachable by
-  the script engine. Options: a plugin-managed configuration appended to the
-  script classpath, or `buildscript { dependencies { classpath(...) } }`.
-  Design this explicitly in Phase 3.
+  the script engine. **Resolved design (Phase 3)**: the `harmonica` plugin
+  creates a resolvable, non-consumable `harmonica` configuration and wires it
+  into the up/down tasks' `scriptClasspath` (`@Classpath` `ConfigurableFileCollection`
+  on `AbstractMigrationTask`). At evaluation time the task builds a
+  `URLClassLoader` over the configuration's resolved files (parent = plugin
+  classloader) and sets it as the thread context classloader before first use of
+  the JSR-223 engine — the Kotlin engine derives script dependencies from that
+  context classloader (`KotlinJsr223DefaultScriptEngineFactory`
+  `dependenciesFromCurrentContext`). Because the classpath is captured at engine
+  creation, the engine is created per task instance (not the previous
+  classloader-wide singleton). Usage:
+
+  ```kotlin
+  plugins { id("harmonica") }
+  dependencies {
+      harmonica("com.improve_future.harmonica:harmonica-exposed:2.0.0")
+  }
+  ```
+
+  The `jarmonica` plugin needs no equivalent: its forked JVM already runs on the
+  project's `runtimeClasspath`, so `implementation(...)` suffices there.
 
 ### 3. No `Class.forName` special-casing in core
 
@@ -266,9 +284,13 @@ its `SQLException` type instead of surfacing as
 `UndeclaredThrowableException`). Full `./gradlew build` is green with and
 without Exposed on the classpath; `:core` still has zero Exposed references.
 
-**Remaining for Phase 3:** script-classpath wiring for `.kts` migrations
-(Pitfall F) and the demo project against a real DB (SQLite here; PostgreSQL/MySQL
-deferred to Phase 4 integration tests).
+**Shipped in Phase 3:** script-classpath wiring for `.kts` migrations
+(Pitfall F) — the `harmonica` plugin-managed configuration above
+(`ScriptClasspathTest` proves a migration `.kts` can resolve a class that lives
+only on that configuration and fails without it).
+
+**Remaining for Phase 3:** the demo project against a real DB (SQLite here;
+PostgreSQL/MySQL deferred to Phase 4 integration tests).
 
 ## Open questions
 

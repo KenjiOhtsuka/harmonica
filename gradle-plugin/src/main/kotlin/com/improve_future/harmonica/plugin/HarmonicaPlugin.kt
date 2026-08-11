@@ -6,19 +6,31 @@ import org.gradle.api.Project
 
 open class HarmonicaPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        project.tasks.register("harmonicaUp", MigrationUpTask::class.java) { task ->
-            task.group = PluginConfig.groupName
-            task.description = "Migrate up."
+        val scriptClasspath = project.configurations.create("harmonica") {
+            it.isCanBeConsumed = false
+            it.isCanBeResolved = true
         }
+
+        fun registerMigrationTask(
+            name: String, description: String, type: Class<out AbstractMigrationTask>
+        ) {
+            project.tasks.register(name, type) { task ->
+                task.group = PluginConfig.groupName
+                task.description = description
+                task.scriptClasspath.from(scriptClasspath)
+            }
+        }
+
+        registerMigrationTask(
+            "harmonicaUp", "Migrate up.", MigrationUpTask::class.java
+        )
+        registerMigrationTask(
+            "harmonicaDown", "Migrate down.", MigrationDownTask::class.java
+        )
 
         project.tasks.register("harmonicaCreate", MigrationCreate::class.java) { task ->
             task.group = PluginConfig.groupName
             task.description = "Create migration file."
-        }
-
-        project.tasks.register("harmonicaDown", MigrationDownTask::class.java) { task ->
-            task.group = PluginConfig.groupName
-            task.description = "Migrate down."
         }
     }
 }

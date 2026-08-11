@@ -6,7 +6,7 @@ import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
 @DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
-open class MigrationDownTask : AbstractMigrationTask() {
+abstract class MigrationDownTask : AbstractMigrationTask() {
     @TaskAction
     fun migrateDown() {
         val connection = createConnection()

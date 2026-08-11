@@ -29,8 +29,10 @@ and is being restarted. See `spec/plan.md` for the master plan.
 
 ## Conventions
 
-- Use `bin/gw` to run Gradle (plain console, output trimmed to ~60 lines) instead
-  of `./gradlew`; it saves output tokens. Use `./gradlew` directly when full
+- Use `bin/gw` to run Gradle for the root build (plain console, output trimmed
+  to ~60 lines) instead of `./gradlew`; it saves output tokens. `bin/gw` changes
+  to the repository root, so it cannot run tasks of the nested `document/`
+  build — use `document/gradlew` there. Use `./gradlew` directly when full
   output is needed.
 - Follow existing code style; do not add comments unless asked.
 - Do not add dependencies that are not actually used (there is a history of

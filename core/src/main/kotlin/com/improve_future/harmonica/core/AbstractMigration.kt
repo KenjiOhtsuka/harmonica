@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.core.adapter.DbAdapter
+import com.improve_future.harmonica.core.adapter.H2Adapter
 import com.improve_future.harmonica.core.adapter.MySqlAdapter
 import com.improve_future.harmonica.core.adapter.OracleAdapter
 import com.improve_future.harmonica.core.adapter.PostgreSqlAdapter
@@ -28,6 +29,7 @@ abstract class AbstractMigration {
             Dbms.SQLite -> SqliteAdapter(connection)
             Dbms.MySQL -> MySqlAdapter(connection)
             Dbms.Oracle -> OracleAdapter(connection)
+            Dbms.H2 -> H2Adapter(connection)
             else -> PostgreSqlAdapter(connection)
         }.also {
             it.dispSql = dispSql

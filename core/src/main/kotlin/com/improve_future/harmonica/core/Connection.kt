@@ -97,7 +97,8 @@ open class Connection(
                     Dbms.SQLServer ->
                         ""
                     Dbms.H2 ->
-                        ""
+                        // Embedded mode; "mem:" prefix gives an in-memory DB.
+                        "jdbc:h2:$dbName"
                 }
             }
         }
@@ -149,7 +150,7 @@ open class Connection(
     override fun doesTableExist(tableName: String): Boolean {
         val resultSet = javaConnection.metaData.getTables(
             null, null,
-            if (config.dbms == Dbms.Oracle) tableName.uppercase()
+            if (config.dbms == Dbms.Oracle || config.dbms == Dbms.H2) tableName.uppercase()
             else tableName,
             null
         )

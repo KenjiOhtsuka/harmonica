@@ -1,15 +1,15 @@
 # Toolchain & Dependency Research
 
-Facts gathered on 2026-08-01 (test counts updated 2026-08-09). Update this
+Facts gathered on 2026-08-01 (test counts updated 2026-08-12). Update this
 file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
 - Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
-  `./gradlew clean build` is green on Java 25; **76 unit tests pass (68 core,
-  4 gradle-plugin, 4 exposed), 0 failures/errors** (Phase 0 baseline was 66;
-  Phase 2 added 6 InflectionsTest cases; Phase 3, PR B added 4 ExposedMigrationTest
-  cases).
+  `./gradlew clean build` is green on Java 25; **78 unit tests pass (68 core,
+  6 gradle-plugin, 4 exposed), 0 failures/errors** (Phase 0 baseline was 66;
+  Phase 2 added 6 InflectionsTest cases; Phase 3, PR B added 4
+  ExposedMigrationTest cases; PR #201 added 2 ScriptClasspathTest cases).
 - `jvmTarget = 1.8` is set via `kotlin.compilerOptions { jvmTarget.set(JvmTarget.JVM_1_8) }`
   + `java.sourceCompatibility/targetCompatibility = 1.8` in all three modules
   (`core`, `exposed`, `gradle-plugin`). Verified by `javap`: all main classes are
@@ -59,7 +59,7 @@ Key references:
 | Dependency | Status | Notes |
 | --- | --- | --- |
 | `kotlin-compiler-embeddable` | **DONE** | 2.3.20. |
-| `kotlin-script-runtime` / `kotlin-script-util` → `kotlin-scripting-jsr223` | **DONE** | `kotlin-script-util` does not exist for 2.3.20 (404; Maven Central metadata frozen at 1.8.22). The JSR-223 engine moved to `kotlin.script.experimental.jsr223`; the plugin's committed `META-INF/services/javax.script.ScriptEngineFactory` was **deleted** (pointed at the removed `org.jetbrains.kotlin.script.jsr223.*` class; the dependency registers its own factory). `AbstractMigrationTask` now uses `javax.script.ScriptEngine` + `getEngineByName("kotlin")`. |
+| `kotlin-script-runtime` / `kotlin-script-util` → `kotlin-scripting-jvm-host` | **DONE** | `kotlin-script-util` does not exist for 2.3.20 (404; Maven Central metadata frozen at 1.8.22), so Phase 0 adopted `kotlin-scripting-jsr223`. **Replaced 2026-08-11 (PR #202)** by `kotlin-scripting-common` + `kotlin-scripting-jvm` + `kotlin-scripting-jvm-host`: `AbstractMigrationTask` evaluates `.kts` directly with `BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template (`createJvmCompilationConfigurationFromTemplate`, `dependenciesFromCurrentContext(wholeClasspath = true)`, base class loaded from the plugin classloader); no `javax.script.ScriptEngine` / registered `ScriptEngineFactory` anymore. |
 | `kotlin-reflect` | **DONE** | dropped — only stdlib `KClass` usage (PR #184). |
 | `org.reflections:reflections` | **DONE** | replaced with a classpath scanner in `JarmonicaTaskMain` (Phase 2, PRs #185/#188). |
 | `kotlinx-html-jvm` | **DONE** | dropped here (PR #184); real consumer is `document` (Phase 7). |

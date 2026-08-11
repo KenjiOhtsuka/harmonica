@@ -34,7 +34,7 @@ State:
 
 - `master` (origin/master @ `3b423c6`) has not been touched in years and is the
   direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is **75 commits ahead** (module split into `core`/`gradle-plugin`,
+- `develop` is **83 commits ahead** (module split into `core`/`gradle-plugin`,
   jcenter removal work, MIT license change, CI-action bumps, Phase 3 Exposed
   bridge, etc.) but **never fully tested or released** — this is why master was
   left behind.
@@ -78,7 +78,7 @@ Consequences for the restart:
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
   `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
-  `exposed` module — see spec/README for the current 76), and package correctly on
+  `exposed` module — see spec/README for the current 78), and package correctly on
   Java 25 and in CI; `document/` is excluded from the build. Phase 0 also proved
   the POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
   remaining unverified risk is real-DB behavior, which Phase 4 covers.
@@ -123,7 +123,9 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
   `javax.script.ScriptEngine` + `getEngineByName("kotlin")`, and the plugin's
   committed `META-INF/services/javax.script.ScriptEngineFactory` was **deleted**
   (it pointed at the removed `org.jetbrains.kotlin.script.jsr223.*` factory; the
-  dependency registers its own).
+  dependency registers its own). **Superseded 2026-08-11 (PR #202):** the
+  JSR-223 engine was replaced by a direct `BasicJvmScriptingHost` — see the
+  decision in §6 and Phase 3 status.
 - **Coordinates/IDs**: still open. The legacy `pluginBundle` block (published
   id `com.improve_future.harmonica`) was removed by the plugin-publish 2.x
   migration; applied/published ids are now `harmonica`/`jarmonica`. The stale
@@ -168,8 +170,8 @@ Outcome: no dead repositories or unmaintained libraries in the build.
 
 Status: **merged 2026-08-01 (PRs #184-#188).** All build files now use only
 Maven Central (`document/` excluded from build). 72 tests green (68 core + 4
-gradle-plugin; Phase 0 baseline was 66; snapshot before the Phase 3 `exposed`
-module — see spec/README for the current 76).
+gradle-plugin; Phase 0 baseline was 66; `ScriptClasspathTest` later added 2
+plugin tests (PR #201) — see spec/README for the current 78).
 
 - `gradle.properties`: `kotlin_version` → 2.3.x. — **done in Phase 0** (2.3.20).
 - Dead repositories: **gone** — jcenter/bintray/space removed; jitpack removed
@@ -183,7 +185,8 @@ module — see spec/README for the current 76).
     `kotlin-test` → current (**done in Phase 0**, pinned to 2.3.20).
 - `gradle-plugin`:
   - `kotlin-script-runtime`/`kotlin-script-util` → `kotlin-scripting-jsr223` —
-    **done in Phase 0** (JSR-223 migration).
+    **done in Phase 0** (JSR-223 migration); **superseded 2026-08-11 (PR #202)**
+    by the direct `BasicJvmScriptingHost` — see Phase 3 status and §6.
   - `org.reflections` 0.9.11 → **replaced** with a lightweight classpath
     scanner in `JarmonicaTaskMain` (PR #185; `loadClass` narrowed to
     recoverable exceptions in PR #188 — remaining `isSubtypeOf` `catch
@@ -216,13 +219,20 @@ ownership via a no-op commit/rollback/close proxy; `WeakHashMap`-cached
 `Database` per `Connection`; `defaultMaxAttempts = 1`) with 4 SQLite tests:
 commit, rollback, reconnect, and SQLException propagation through the proxy
 (exceptions unwrapped from `InvocationTargetException` so they keep their
-`SQLException` type). **76 tests green** (68 core + 4 plugin + 4 exposed).
-Remaining in Phase 3: script-classpath wiring for `.kts` migrations (Pitfall F)
-and a demo project against a real DB (SQLite here; PostgreSQL/MySQL deferred to
-Phase 4). Plan:
+`SQLException` type). **78 tests green** (68 core + 6 plugin + 4 exposed).
+Script-classpath wiring for `.kts` migrations (Pitfall F) shipped **2026-08-11
+(PRs #201, #202)**: the plugin evaluates `.kts` scripts directly with
+`BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template (no
+JSR-223 engine), and `ScriptClasspathTest` (2 tests) covers the classpath.
+Remaining in Phase 3: a demo project against a real DB (SQLite here;
+PostgreSQL/MySQL deferred to Phase 4) — built locally but not yet merged.
+Plan:
 
 - Wire the script classpath so `.kts` migrations can reach `harmonica-exposed`
-  and Exposed (Pitfall F: the JSR-223 engine runs on the plugin's classpath).
+  and Exposed (Pitfall F) — **DONE** (PRs #201/#202; the direct scripting host
+  loads the base class from the plugin classloader and derives script
+  dependencies from the thread context classloader over the `harmonica`
+  configuration).
 - Demo project compiling a migration using the Exposed DSL and running it
   against a real DB (SQLite here; PostgreSQL/MySQL deferred to Phase 4).
 - Issue #91 was closed at the merge (2026-08-09); close #80 and the concern
@@ -341,3 +351,12 @@ Resolved for Phase 3 (2026-08-08):
   forbids a close hook), so it must not be combined with other Exposed code
   (bare `transaction {}`, another `Database.connect`) in a shared JVM. See
   exposed-integration.md §2.2.
+
+Resolved (2026-08-11):
+
+- Script engine: **direct `BasicJvmScriptingHost`**, not the JSR-223 engine
+  (PR #202). `.kts` migrations compile/evaluate via a `MigrationScript`
+  `@KotlinScript` template using `createJvmCompilationConfigurationFromTemplate`
+  + `dependenciesFromCurrentContext(wholeClasspath = true)`; `kotlin-scripting-common`
+  / `kotlin-scripting-jvm` / `kotlin-scripting-jvm-host` replace
+  `kotlin-scripting-jsr223`. See tech-notes.md.

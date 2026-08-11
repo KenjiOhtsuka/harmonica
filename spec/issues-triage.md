@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-09 (**28 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-12 (**28 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -67,9 +67,9 @@ superseded by Phase 0.
 
 - #91 (closed 2026-08-09 at the Phase 3 merge, PRs #197-#199): "Exposed Library
   must be loaded by Class.forName" — `core` has no Exposed reference and the
-  `harmonica-exposed` bridge shipped. Script-classpath wiring (Pitfall F) and
-  the demo project remain as Phase 3 work, tracked by [plan.md](plan.md), not by
-  this issue.
+  `harmonica-exposed` bridge shipped. Script-classpath wiring (Pitfall F)
+  shipped 2026-08-11 (PRs #201/#202); the demo project remains as Phase 3 work,
+  tracked by [plan.md](plan.md), not by this issue.
 - #168 (PR, merged): bug-build-issue — build fixes already on `develop`.
 - #160 (closed): "How it should be used with Exposed" — reopened conceptually in
   exposed-integration.md.

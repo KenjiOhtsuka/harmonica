@@ -20,8 +20,7 @@ and is being restarted. See `spec/plan.md` for the master plan.
 ## Layout
 
 - `core/` — the migration library (JDBC, no Exposed dependency).
-- `gradle-plugin/` — Gradle plugin + JSR-223 script engine for `.kts`
-  migrations.
+- `gradle-plugin/` — Gradle plugin + scripting host for `.kts` migrations.
 - `document/` — nested standalone Gradle build (site generator), stale.
 - `spec/` — planning docs; the source of truth for the restart. Read them
   before proposing work; update them when decisions change.

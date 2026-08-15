@@ -36,6 +36,43 @@ class H2AdapterTest {
     }
 
     @Test
+    fun testBuildColumnDeclarationForVarchar() {
+        val varcharColumn = VarcharColumn("name")
+        assertEquals(
+                "name VARCHAR",
+                buildColumnDeclarationFunctionForTest.invoke(
+                        H2Adapter, varcharColumn
+                )
+        )
+        varcharColumn.size = 10
+        assertEquals(
+                "name VARCHAR(10)",
+                buildColumnDeclarationFunctionForTest.invoke(
+                        H2Adapter, varcharColumn
+                )
+        )
+    }
+
+    @Test
+    fun testBuildColumnDeclarationForDecimal() {
+        val decimalColumn = DecimalColumn("price")
+        decimalColumn.precision = 10
+        assertEquals(
+                "price DECIMAL(10)",
+                buildColumnDeclarationFunctionForTest.invoke(
+                        H2Adapter, decimalColumn
+                )
+        )
+        decimalColumn.scale = 2
+        assertEquals(
+                "price DECIMAL(10, 2)",
+                buildColumnDeclarationFunctionForTest.invoke(
+                        H2Adapter, decimalColumn
+                )
+        )
+    }
+
+    @Test
     fun testAddColumnForInteger() {
         val connection = StubConnection()
         val adapter = H2Adapter(connection)

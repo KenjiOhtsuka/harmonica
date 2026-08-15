@@ -1,11 +1,13 @@
 # Exposed Optionality — Design
 
-> **Status: shipped in part (2026-08-09, PR B).** The `exposed/` module
-> (artifact `harmonica-exposed`), the `exposedTransaction` bridge, and embedded
-> SQLite transaction tests (commit + rollback + reconnect + SQLException
-> propagation) exist and pass (`./gradlew :exposed:test`, 4 tests). Still open
-> in Phase 3: script-classpath wiring for `.kts` migrations (Pitfall F) and a
-> demo project. Issue #91 was closed at the Phase 3 merge (2026-08-09).
+> **Status: shipped (2026-08-09 PR B, wiring 2026-08-11 PRs #201/#202).** The
+> `exposed/` module (artifact `harmonica-exposed`), the `exposedTransaction`
+> bridge, and embedded SQLite transaction tests (commit + rollback + reconnect +
+> SQLException propagation) exist and pass (`./gradlew :exposed:test`, 4
+> tests). Script-classpath wiring for `.kts` migrations (Pitfall F) is **done**
+> — the plugin evaluates scripts via a direct `BasicJvmScriptingHost` over the
+> `harmonica` configuration. Still open in Phase 3: the demo project. Issue #91
+> was closed at the Phase 3 merge (2026-08-09).
 
 ## Problem
 
@@ -205,20 +207,21 @@ transaction.**
   `Database.connect`) in the same JVM. The previous manager is not restored and
   `closeAndUnregister` is not called (core purity, above).
 - **Script classpath (Pitfall F)**: migration `.kts` files are evaluated by the
-  Gradle plugin's JSR-223 engine on the **plugin's classpath**
+  Gradle plugin's script host on the **plugin's classpath**
   (`AbstractMigrationTask.kt`). Adding `harmonica-exposed` via the user's
   `implementation(...)` is not enough — the bridge/Exposed must be reachable by
-  the script engine. **Resolved design (Phase 3)**: the `harmonica` plugin
-  creates a resolvable, non-consumable `harmonica` configuration and wires it
-  into the up/down tasks' `scriptClasspath` (`@Classpath` `ConfigurableFileCollection`
-  on `AbstractMigrationTask`). At evaluation time the task builds a
-  `URLClassLoader` over the configuration's resolved files (parent = plugin
-  classloader) and sets it as the thread context classloader before first use of
-  the JSR-223 engine — the Kotlin engine derives script dependencies from that
-  context classloader (`KotlinJsr223DefaultScriptEngineFactory`
-  `dependenciesFromCurrentContext`). Because the classpath is captured at engine
-  creation, the engine is created per task instance (not the previous
-  classloader-wide singleton). Usage:
+  the script compiler/runtime. **Resolved design (Phase 3)**: the `harmonica`
+  plugin creates a resolvable, non-consumable `harmonica` configuration and
+  wires it into the up/down tasks' `scriptClasspath` (`@Classpath`
+  `ConfigurableFileCollection` on `AbstractMigrationTask`). At evaluation time
+  the task builds a `URLClassLoader` over the configuration's resolved files
+  (parent = plugin classloader) and sets it as the thread context classloader,
+  then evaluates the script **directly** with `BasicJvmScriptingHost`
+  (`kotlin.script.experimental.jvmhost`) — the `MigrationScript` `@KotlinScript`
+  template is compiled via `createJvmCompilationConfigurationFromTemplate` with
+  `dependenciesFromCurrentContext(wholeClasspath = true)`, so script
+  dependencies are derived from that context classloader. This replaced the
+  JSR-223 engine (PR #202; the config is cached per task instance). Usage:
 
   ```kotlin
   plugins { id("harmonica") }
@@ -313,4 +316,5 @@ Resolved (2026-08-09, PR B):
 
 Remaining:
 
-- Script classpath wiring for `.kts` migrations (Pitfall F).
+- Demo project against a real DB (SQLite here; PostgreSQL/MySQL deferred to
+  Phase 4) — built locally, not yet merged.

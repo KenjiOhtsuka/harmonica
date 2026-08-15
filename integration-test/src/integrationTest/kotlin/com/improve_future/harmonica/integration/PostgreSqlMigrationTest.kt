@@ -5,6 +5,7 @@ import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.Dbms
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import java.util.UUID
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -20,41 +21,42 @@ class PostgreSqlMigrationTest {
 
     @Test
     fun createTableAndDropTable() {
-        Connection.create {
+        val tableName = "postgres_table_${UUID.randomUUID().toString().replace("-", "")}"
+        val connection = Connection.create {
             dbms = Dbms.PostgreSQL
             host = TestDb.postgresHost
             port = TestDb.postgresPort
             dbName = TestDb.postgresDb
             user = TestDb.postgresUser
             password = TestDb.postgresPassword
-        }.use { connection ->
+        }
+        try {
             connection.transaction {
                 object : AbstractMigration() {
                     override fun up() {
-                        createTable("postgres_table") {
+                        createTable(tableName) {
                             varchar("name")
                         }
                     }
-
-                    override fun down() {}
                 }.apply {
                     this.connection = connection
                 }.up()
             }
-            assertTrue(connection.doesTableExist("postgres_table"))
-
-            connection.transaction {
-                object : AbstractMigration() {
-                    override fun up() {}
-
-                    override fun down() {
-                        dropTable("postgres_table")
-                    }
-                }.apply {
-                    this.connection = connection
-                }.down()
+            assertTrue(connection.doesTableExist(tableName))
+        } finally {
+            if (connection.doesTableExist(tableName)) {
+                connection.transaction {
+                    object : AbstractMigration() {
+                        override fun down() {
+                            dropTable(tableName)
+                        }
+                    }.apply {
+                        this.connection = connection
+                    }.down()
+                }
             }
-            assertFalse(connection.doesTableExist("postgres_table"))
+            connection.close()
         }
+        assertFalse(connection.doesTableExist(tableName))
     }
 }

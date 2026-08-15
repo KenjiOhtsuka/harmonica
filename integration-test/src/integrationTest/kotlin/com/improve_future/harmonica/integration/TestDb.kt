@@ -21,11 +21,14 @@ object TestDb {
         System.getenv(name) ?: default
 
     fun requireDb(url: String, user: String, password: String) {
+        val previousTimeout = DriverManager.getLoginTimeout()
         try {
             DriverManager.setLoginTimeout(2)
             DriverManager.getConnection(url, user, password).close()
         } catch (e: SQLException) {
             Assumptions.abort("Database unavailable at $url: ${e.message}")
+        } finally {
+            DriverManager.setLoginTimeout(previousTimeout)
         }
     }
 }

@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     api(project(":core"))
-    api("org.jetbrains.exposed:exposed-jdbc:0.61.0")
+    api("org.jetbrains.exposed:exposed-jdbc:1.4.0")
 
     // Tests
     testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")

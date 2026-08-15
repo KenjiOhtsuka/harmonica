@@ -33,8 +33,8 @@ plan to restart and modernize the project.
   `actions/setup-java@v5.7.0`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (dependency-graph submission). CircleCI removed.
 - Four active modules: `core`, `exposed`, `gradle-plugin`, `integration-test` —
-  **85 tests green** (73 core + 6 plugin + 4 exposed + 2 integration-test, of
-  which the gated PostgreSQL test skips without a DB); `document` (nested
+  **85 tests total: 84 passed, 1 skipped (gated PostgreSQL), 0 failures**
+  (73 core + 6 plugin + 4 exposed + 2 integration-test); `document` (nested
   standalone build) is excluded from the build
 - H2 embedded DBMS support in `core` (PR #206): `Dbms.H2` → `jdbc:h2:<dbName>`,
   `H2Adapter` complete, H2 2.2.224 test-only; in-memory DB state survives a

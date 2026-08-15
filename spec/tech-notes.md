@@ -6,10 +6,9 @@ file as versions change.
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
 - Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
-  `./gradlew clean build` is green on Java 25; **85 tests pass, 0 failures**
-  (73 core, 6 gradle-plugin, 4 exposed, 2 integration-test of which 1 is the
-  gated PostgreSQL suite that **skips** without a DB — Docker-less runs are
-  84/84). Phase 0 baseline was 66; Phase 2 added 6 InflectionsTest cases;
+  `./gradlew clean build` is green on Java 25; **85 tests total: 84 passed,
+  1 skipped (gated PostgreSQL), 0 failures** (73 core, 6 gradle-plugin,
+  4 exposed, 2 integration-test — Docker-less runs are 84/84). Phase 0 baseline was 66; Phase 2 added 6 InflectionsTest cases;
   Phase 3, PR B added 4 ExposedMigrationTest cases; PR #201 added 2
   ScriptClasspathTest cases; Phase 4 added 5 H2 cases in `core` (PR #206) and
   the 2 integration-test cases (PR #207).

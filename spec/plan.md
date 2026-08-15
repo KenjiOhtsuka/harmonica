@@ -244,8 +244,8 @@ Plan:
 
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
-**Status: in progress (2026-08-15).** Items 1 (integration-test module, PR
-#207) and 3 (H2 embedded path, PR #206) have landed; item 2 is partially landed
+**Status: in progress (2026-08-15).** Items 1 (integration-test module, PR `#207`)
+and 3 (H2 embedded path, PR `#206`) have landed; item 2 is partially landed
 (SQLite always-green smoke test + gated PostgreSQL smoke test in PR #207; the
 full `harmonica_test` port is still pending). Items 4-5 remain. Docker/Compose
 is a reproducible dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a

@@ -1,21 +1,24 @@
 # Toolchain & Dependency Research
 
-Facts gathered on 2026-08-01 (test counts updated 2026-08-11). Update this
+Facts gathered on 2026-08-01 (test counts updated 2026-08-15). Update this
 file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
 - Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
-  `./gradlew clean build` is green on Java 25; **78 unit tests pass (68 core,
-  6 gradle-plugin, 4 exposed), 0 failures/errors** (Phase 0 baseline was 66;
-  Phase 2 added 6 InflectionsTest cases; Phase 3, PR B added 4
-  ExposedMigrationTest cases; PR #201 added 2 ScriptClasspathTest cases).
+  `./gradlew clean build` is green on Java 25; **85 tests total: 84 passed,
+  1 skipped (gated PostgreSQL), 0 failures** (73 core, 6 gradle-plugin,
+  4 exposed, 2 integration-test — Docker-less runs are 84/84). Phase 0 baseline was 66; Phase 2 added 6 InflectionsTest cases;
+  Phase 3, PR B added 4 ExposedMigrationTest cases; PR #201 added 2
+  ScriptClasspathTest cases; Phase 4 added 5 H2 cases in `core` (PR #206) and
+  the 2 integration-test cases (PR #207).
 - `jvmTarget = 1.8` is set via `kotlin.compilerOptions { jvmTarget.set(JvmTarget.JVM_1_8) }`
-  + `java.sourceCompatibility/targetCompatibility = 1.8` in all three modules
-  (`core`, `exposed`, `gradle-plugin`). Verified by `javap`: all main classes are
-  class-file major **52** (JVM 8).
+  + `java.sourceCompatibility/targetCompatibility = 1.8` in all four modules
+  (`core`, `exposed`, `gradle-plugin`, `integration-test`). Verified by
+  `javap`: all main classes are class-file major **52** (JVM 8).
 - `document/` is **dropped from the root build** (`settings.gradle.kts` includes
-  only `core`, `exposed`, `gradle-plugin`). The nested Gradle 4.9 build is untouched.
+  only `core`, `exposed`, `gradle-plugin`, `integration-test`). The nested
+  Gradle 4.9 build is untouched.
 - CI replaced: `gradle.yml` + `.circleci/config.yml` → `ci.yml` +
   `jvm8-bytecode.yml` (see [ci.md](ci.md)).
 
@@ -46,6 +49,7 @@ Key references:
 | JUnit Jupiter | **DONE** | 5.4.2 → **6.1.2** (Phase 2, PR #186); see the note below on the `TargetJvmVersion` attribute override. |
 | `commons-codec` | **DONE** | 1.15 dropped — unused (PR #184). |
 | `com.github.cesarferreira:kotlin-pluralizer` | **DONE** | removed (PR #187); internal `singularize()` port, see the note below (issue #140 resolved). |
+| `com.h2database:h2` | **DONE** | **2.2.224**, `testImplementation`-only (Phase 4, PR #206) for the embedded-H2 migration/adapter tests; never published from `core`. |
 
 ### exposed
 
@@ -68,6 +72,20 @@ Key references:
 | `com.gradle.plugin-publish` | **DONE** | 0.9.10 → **2.1.1**; legacy `pluginBundle` block removed (2.x moved config into `gradlePlugin`). |
 | `org.jetbrains.dokka` | **DONE** | 0.9.17 → **2.2.0**; removed the removed `outputFormat` DSL. Docs refresh is Phase 7. |
 
+### integration-test (Phase 4, PR #207)
+
+| Dependency | Status | Notes |
+| --- | --- | --- |
+| `org.junit.jupiter:junit-jupiter` | **DONE** | 6.1.2; same `TargetJvmVersion` attribute override as `core`/`gradle-plugin` (test classpaths only, JVM 8 published). |
+| `org.xerial:sqlite-jdbc` | **DONE** | 3.45.3.0, `testImplementation`-only; embedded always-green SQLite suite in `test`. |
+| `org.postgresql:postgresql` | **DONE** | 42.7.4, `integrationTestImplementation`-only; gated suite. |
+| `com.mysql:mysql-connector-j` | **DONE** | 8.4.0, `integrationTestImplementation`-only; gated suite. |
+
+Two source sets: `test` (SQLite, runs in every `build`) and `integrationTest`
+(gated `Test` task — PostgreSQL smoke test landed in PR #207; MySQL driver is
+declared but the suite is pending; connectivity probe in `@BeforeAll` aborts
+the suite when the DB is down — no Docker required for a green build).
+
 ### document (separate subproject, excluded from the root build)
 
 | Dependency | Status | Notes |
@@ -88,8 +106,9 @@ Key references:
 
 Still open (not Phase 0):
 
-- `buildConnectionUriFromDbConfig` returns `""` for `Dbms.SQLServer` / `Dbms.H2`;
-  `SqlServerAdapter` is 100% `TODO` (Phase 5).
+- `buildConnectionUriFromDbConfig` returns `""` for `Dbms.SQLServer`;
+  `SqlServerAdapter` is 100% `TODO` (Phase 5). (`Dbms.H2` was added 2026-08-15,
+  PR #206 — `jdbc:h2:<dbName>`.)
 - Coordinates/IDs reconciliation (plugin id `harmonica`/`jarmonica` applied vs
   published; stale `META-INF/gradle-plugins/com.improve_future.harmonica.properties`
   still bundled) — Phase 6.

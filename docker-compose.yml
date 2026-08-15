@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16.14
+    environment:
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: developer
+      POSTGRES_DB: harmonica_test
+    ports: ["5432:5432"]
+
+  mysql:
+    image: mysql:8.4.11
+    environment:
+      MYSQL_USER: developer
+      MYSQL_PASSWORD: developer
+      MYSQL_DATABASE: harmonica_test
+      MYSQL_ROOT_PASSWORD: root
+    ports: ["3306:3306"]

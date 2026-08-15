@@ -1,6 +1,8 @@
 package com.improve_future.harmonica.core
 
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -20,8 +22,6 @@ class H2MigrationTest {
                             varchar("name")
                         }
                     }
-
-                    override fun down() {}
                 }.apply {
                     this.connection = connection
                 }.up()
@@ -33,8 +33,6 @@ class H2MigrationTest {
                     override fun up() {
                         addVarcharColumn("h2_table", "note")
                     }
-
-                    override fun down() {}
                 }.apply {
                     this.connection = connection
                 }.up()
@@ -43,8 +41,6 @@ class H2MigrationTest {
 
             connection.transaction {
                 object : AbstractMigration() {
-                    override fun up() {}
-
                     override fun down() {
                         dropTable("h2_table")
                     }
@@ -53,6 +49,67 @@ class H2MigrationTest {
                 }.down()
             }
             assertFalse(connection.doesTableExist("h2_table"))
+        }
+    }
+
+    @Test
+    fun committedDataSurvivesFailedTransaction() {
+        Connection.create {
+            dbms = Dbms.H2
+            dbName = "mem:harmonica_failed_transaction"
+            user = "sa"
+            password = ""
+        }.use { connection ->
+            connection.transaction {
+                object : AbstractMigration() {
+                    override fun up() {
+                        createTable("committed_table") {
+                            varchar("name")
+                        }
+                    }
+                }.apply {
+                    this.connection = connection
+                }.up()
+                execute("INSERT INTO committed_table (name) VALUES ('before')")
+            }
+
+            assertFailsWith<RuntimeException> {
+                connection.transaction {
+                    execute("INSERT INTO committed_table (name) VALUES ('rolled back')")
+                    throw RuntimeException("boom")
+                }
+            }
+
+            val count = connection.createStatement().use {
+                it.executeQuery("SELECT COUNT(*) FROM committed_table").use { resultSet ->
+                    resultSet.next()
+                    resultSet.getInt(1)
+                }
+            }
+            assertEquals(1, count)
+        }
+    }
+
+    @Test
+    fun doesTableExistWithLowercaseIdentifiers() {
+        Connection.create {
+            dbms = Dbms.H2
+            dbName = "mem:harmonica_lower;DATABASE_TO_LOWER=TRUE"
+            user = "sa"
+            password = ""
+        }.use { connection ->
+            connection.transaction {
+                object : AbstractMigration() {
+                    override fun up() {
+                        createTable("lower_table") {
+                            varchar("name")
+                        }
+                    }
+                }.apply {
+                    this.connection = connection
+                }.up()
+            }
+            assertTrue(connection.doesTableExist("lower_table"))
         }
     }
 }

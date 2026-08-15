@@ -1,6 +1,6 @@
 # Toolchain & Dependency Research
 
-Facts gathered on 2026-08-01 (test counts updated 2026-08-12). Update this
+Facts gathered on 2026-08-01 (test counts updated 2026-08-11). Update this
 file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)

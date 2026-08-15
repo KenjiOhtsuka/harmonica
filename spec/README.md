@@ -16,7 +16,7 @@ plan to restart and modernize the project.
 
 ## Current state (baseline, branch `develop`)
 
-> Snapshot taken 2026-08-12, after Phase 3 (Exposed bridge, PRs #197-#199;
+> Snapshot taken 2026-08-11, after Phase 3 (Exposed bridge, PRs #197-#199;
 > script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203).
 > Update this list when the baseline advances.
 

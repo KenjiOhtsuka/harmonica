@@ -35,10 +35,10 @@ State:
 
 - `master` (origin/master @ `3b423c6`) has not been touched in years and is the
   direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is **83 commits ahead** (module split into `core`/`gradle-plugin`,
+- `develop` is **96 commits ahead** (module split into `core`/`gradle-plugin`,
   jcenter removal work, MIT license change, CI-action bumps, Phase 3 Exposed
-  bridge, etc.) but **never fully tested or released** — this is why master was
-  left behind.
+  bridge, Phase 4 start, etc.) but **never fully tested or released** — this is
+  why master was left behind.
 
 Policy going forward (Git Flow, simplified):
 
@@ -79,7 +79,7 @@ Consequences for the restart:
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
   `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
-  `exposed` module — see spec/README for the current 78), and package correctly on
+  `exposed` module — see spec/README for the current 85), and package correctly on
   Java 25 and in CI; `document/` is excluded from the build. Phase 0 also proved
   the POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
   remaining unverified risk is real-DB behavior, which Phase 4 covers.
@@ -172,7 +172,7 @@ Outcome: no dead repositories or unmaintained libraries in the build.
 Status: **merged 2026-08-01 (PRs #184-#188).** All build files now use only
 Maven Central (`document/` excluded from build). 72 tests green (68 core + 4
 gradle-plugin; Phase 0 baseline was 66; `ScriptClasspathTest` later added 2
-plugin tests (PR #201) — see spec/README for the current 78).
+plugin tests (PR #201) — see spec/README for the current 85).
 
 - `gradle.properties`: `kotlin_version` → 2.3.x. — **done in Phase 0** (2.3.20).
 - Dead repositories: **gone** — jcenter/bintray/space removed; jitpack removed
@@ -220,7 +220,8 @@ ownership via a no-op commit/rollback/close proxy; `WeakHashMap`-cached
 `Database` per `Connection`; `defaultMaxAttempts = 1`) with 4 SQLite tests:
 commit, rollback, reconnect, and SQLException propagation through the proxy
 (exceptions unwrapped from `InvocationTargetException` so they keep their
-`SQLException` type). **78 tests green** (68 core + 6 plugin + 4 exposed).
+`SQLException` type). **78 tests green** (68 core + 6 plugin + 4 exposed) by the
+end of Phase 3 — see spec/README for the current 85.
 Script-classpath wiring for `.kts` migrations (Pitfall F) shipped **2026-08-11
 (PRs #201, #202)**: the plugin evaluates `.kts` scripts directly with
 `BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template (no
@@ -243,12 +244,17 @@ Plan:
 
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
-**Status: in progress (2026-08-11).** Docker/Compose is a reproducible dev+CI
-dependency (item 5, [`ci.md`](ci.md) §3.1), not a machine-local detail.
-Breakdown (each item is its own small PR against `develop`):
+**Status: in progress (2026-08-15).** Items 1 (integration-test module, PR
+#207) and 3 (H2 embedded path, PR #206) have landed; item 2 is partially landed
+(SQLite always-green smoke test + gated PostgreSQL smoke test in PR #207; the
+full `harmonica_test` port is still pending). Items 4-5 remain. Docker/Compose
+is a reproducible dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a
+machine-local detail. Breakdown (each item is its own small PR against
+`develop`):
 
 1. **Integration module scaffold** (`integration-test` subproject, per
-   [`testing.md`](testing.md)). JUnit 6.1.2, `useJUnitPlatform`.
+   [`testing.md`](testing.md)). JUnit 6.1.2, `useJUnitPlatform`. **DONE
+   (2026-08-15, PR #207).**
    - Connection info from env vars with known local defaults; precedence is
      env-var > default:
      - PostgreSQL — `HARMONICA_TEST_POSTGRES_HOST`/`_PORT`/`_DB`/`_USER`/
@@ -266,8 +272,11 @@ Breakdown (each item is its own small PR against `develop`):
    and Postgres/MySql/Sqlite configs move in as JVM-level JDBC assertions
    (table/columns/index/data) after `Connection.transaction { up() }` / `down()`.
    SQLite is always-green (embedded); PostgreSQL/MySQL run when available.
+   **Partial (PR #207):** SQLite embedded test runs in `./gradlew build`; a
+   gated PostgreSQL create/drop smoke test runs via `integrationTest`. The full
+   4-migration port (columns/indexes/data assertions, MySQL config) is pending.
 3. **H2 embedded path** — add `Dbms.H2` connection-URI support to `core`
-   (currently returns `""`; `SqlServerAdapter` stays TODO, Phase 5) + H2 test
+   (previously returned `""`; `SqlServerAdapter` stays TODO, Phase 5) + H2 test
    driver. Second Docker-free DBMS alongside SQLite. URI and lifecycle contract:
    - In-process tests: `jdbc:h2:mem:<dbName>;DB_CLOSE_DELAY=-1`, with a unique
      `<dbName>` per test (or explicit schema cleanup) so tests do not collide.
@@ -275,8 +284,15 @@ Breakdown (each item is its own small PR against `develop`):
      delete the H2 DB files after all TestKit processes have closed.
    - The H2 driver is test/integration runtime-only — never published from
      `core`.
-   - The expected H2 URI will be asserted in `ConnectionTest`; `testing.md`
+   - The expected H2 URI is asserted in `ConnectionTest`; `testing.md`
      keeps the same contract.
+   **DONE (2026-08-15, PR #206).** `Dbms.H2` builds `jdbc:h2:<dbName>`;
+   `H2Adapter` is complete; H2 2.2.224 is `testImplementation`-only. In-memory
+   state across rollback/reconnect is preserved by keeping the connection open
+   after a failed `transaction` for H2 (no `DB_CLOSE_DELAY` needed); identifier
+   case is normalized from `DatabaseMetaData` (`DATABASE_TO_LOWER` supported).
+   The `DB_CLOSE_DELAY=-1` bullet above is **superseded** by this
+   connection-keeping choice; `testing.md` was updated to match (2026-08-15).
 4. **Plugin-flow tests (issue #196)** — Gradle TestKit runs the `harmonica`
    up/down tasks against a real DB **with and without** `harmonica-exposed` on
    the script classpath. Seeds from the local `demo/` scratch project (rewritten
@@ -287,7 +303,7 @@ Breakdown (each item is its own small PR against `develop`):
    **required** mode: `HARMONICA_TEST_DB_REQUIRED` set only in CI makes the
    probe bounded-retry and **fails** on invalid config, missing credentials,
    unavailable service, or any skipped DB test — never skips (see
-   [`ci.md`](ci.md) §3.1); SQLite (and later H2) stay in the fast path.
+    [`ci.md`](ci.md) §3.1); SQLite and H2 stay in the fast path.
 
 Test framework/tooling decision: **JUnit 6.x** (in `core`/`gradle-plugin` since
 Phase 2, PR #186). Testcontainers optional later; env-var config + compose
@@ -296,9 +312,10 @@ services are the baseline so the suite runs without container APIs.
 Definition of done:
 
 - `integration-test` module exists in this repo, ported from `harmonica_test`.
-- `./gradlew build` runs the SQLite (and later H2) embedded tests via the
-  module's `test` task and passes without Docker; the gated PostgreSQL/MySQL
-  suite runs via the `integrationTest` task and passes with Docker.
+- `./gradlew build` runs the SQLite (integration-test `test` task) and H2
+  (`core` `test` task) embedded tests and passes without Docker; the gated
+  PostgreSQL/MySQL suite runs via the `integrationTest` task and passes with
+  Docker.
 - Postgres + MySQL suites green locally (Docker) and in CI (the `db-integration`
   service-container job, required mode).
 - Issue #196 satisfied — the migration flow is verified with and without
@@ -313,7 +330,8 @@ Full triage: [issues-triage.md]. Order:
    pluralizer PR #187); #158, #159 already closed (verified; not tracked here).
 2. Small: #26 (migration file naming), #47 (prepared statements), #138 (custom
    columns), #141 (more column types), #145 (alter column), #139 (FK options),
-   #69 (query execution API), #4 (created_at/updated_at), #182 (JitPack badge).
+   #69 (query execution API), #4 (created_at/updated_at), #182 (JitPack badge),
+   #189 (scanner `isSubtypeOf` swallows all `Throwable`).
    #91 (Exposed) is **closed** — the bridge shipped in Phase 3 (PRs #197-#199).
 3. Medium: #7 (closed connection), #85 (SQLite defaults), #67 (timestamp
    default), #80 (Exposed version), #71 (seeding), #97 (JavaExec task tests),
@@ -380,7 +398,8 @@ Resolved (2026-08-01):
   catches only `ClassNotFoundException` + `LinkageError`. `isSubtypeOf` still
   catches `Throwable` — issue #189 (Phase 2, PRs #185/#188).
 - Kotlin `jvm` plugin bump 2.3.20 → 2.4.10 (PR #193): **declined** — no
-  functional need; stay on 2.3.20, revisit before the next phase.
+  functional need; stay on 2.3.20. PR #193 is still open (dependabot) as of
+  2026-08-15; revisit before the next phase.
 
 Still open:
 

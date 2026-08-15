@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-11 (**28 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-15 (**28 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -26,14 +26,13 @@ superseded by Phase 0.
 | # | Title | Plan |
 | --- | --- | --- |
 | 189 | `isSubtypeOf` in scanner swallows all `Throwable` | Narrow to recoverable exceptions to match `loadClass` (PR #188); small fix in `JarmonicaTaskMain`. |
-| 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 3/4 verification: run the migration flow against a real DB with and without `harmonica-exposed` on the classpath (SQLite embedded now, PostgreSQL/MySQL in Phase 4). |
+| 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 4 item 4 (plugin-flow TestKit tests). The `integration-test` module landed (PR #207) with SQLite + gated PostgreSQL smoke tests, but the with/without-`harmonica-exposed` migration-flow verification is still pending. |
 | 182 | README JitPack badge shows nothing | Fix JitPack badge so it renders (README badge URLs fixed in PR #181, but this badge still broken). |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |
 | 138 | Is there a need to make AbstractColumn internal? | Open up custom-column extension points (make `AbstractColumn`/`ColumnBuilder` public, document custom column pattern). |
 | 141 | Add support to more column types | Long is done; add Enumeration and other missing types (see Exposed type list). |
 | 145 | Add alter column function | Add `alterColumn` to change type/options. |
-| 67 | Default value for timestamp | Medium-ish small: default `DEFAULT CURRENT_TIMESTAMP` (or constant) for `createTimestamp` etc.; ties into #85 SQLite-defaults research. |
 | 139 | Update addForeignKey | Support ON DELETE / ON UPDATE / constraint options. |
 | 69 | Add sophisticated query executing method | Provide a richer `executeQuery`/query-returning API. |
 | 4 | add timestamp syntax to add created_at and updated_at | Convenience columns/timestamps helper. |
@@ -44,6 +43,7 @@ superseded by Phase 0.
 | --- | --- | --- |
 | 7 | Sometimes migration stops because of closed connection | Reproduce & fix connection lifecycle (README "Caution" section documents a workaround). |
 | 85 | Research SQLite default value in other migration tools | Research rails/phinx behavior; align `createTime`/`createDateTime`/`createTimestamp` defaults for SQLite. |
+| 67 | Default value for timestamp | `DEFAULT CURRENT_TIMESTAMP` (or constant) for `createTimestamp` etc.; ties into #85 SQLite-defaults research. |
 | 80 | Update exposed version | Out of harmonica's control once Exposed is optional (see exposed-integration.md); document supported version. |
 | 71 | consider to add or not seeding function | Decide scope; if yes, design a `seed` task. |
 | 97 | Add Test to Sub Classes of JavaExec | Gradle TestKit tests for `JarmonicaMigrationTask` and friends. |

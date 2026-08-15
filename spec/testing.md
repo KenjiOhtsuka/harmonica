@@ -22,10 +22,9 @@
   commit path (DDL + insert persist) and the rollback path (exception inside
   `exposedTransaction` rolls back and reconnects). This is the first real-DB
   test in the repo, and it is green without Docker.
-- Real-DB tests (`harmonica_test`) require a live PostgreSQL/MySQL with a
-  `developer/developer` user and a `harmonica_test` database; they are a
-  separate Gradle project and only run manually.
-- This machine: no Docker, no local DBMS yet (SQLite embedded tests run fine).
+- Real-DB tests read env vars with local defaults and run in a gated suite
+  (Phase 4, §3) — SQLite embedded tests run fine; PostgreSQL/MySQL skip when
+  their services are absent.
 
 ## Plan
 
@@ -63,25 +62,38 @@ services:
 - SQLite needs no server. It **is** covered by the embedded tests in the
   `exposed` module today (Phase 3, PR B); keep an always-green SQLite path in
   CI (`org.xerial:sqlite-jdbc` + a temp-file/`:memory:` DB) and extend the
-  pattern to a **Docker-free SQLite integration path** for `core` gated by the
-  same env-var helper.
+  pattern to an always-green **Docker-free SQLite integration path** for `core`
+  running in `build`'s `test` task, reusing the same env-var/config helper.
 - **H2 as the Docker-free alternative**: `Connection.buildConnectionUriFromDbConfig`
   returns `""` for `Dbms.H2` and `SqlServerAdapter` is 100% TODO. Add H2
   support as an embedded (no-server) DBMS alongside SQLite; defer SQL Server /
-  Oracle to a later phase (they still require services).
+  Oracle to a later phase (they still require services). URI and lifecycle
+  contract (mirrored in `spec/plan.md` Phase 4): in-process tests use
+  `jdbc:h2:mem:<dbName>;DB_CLOSE_DELAY=-1` with a unique `<dbName>` per test (or
+  explicit schema cleanup); TestKit tests use a file-backed URL at a unique
+  absolute path and delete the H2 DB files after all TestKit processes close;
+  the H2 driver is test/integration runtime-only, never published from `core`.
 - Document start/stop and how to run the integration suite against them.
 
 ### 3. Gating (DB may be absent)
 
-- Integration tests read connection info from env vars
-  (`HARMONICA_TEST_DB_URL` etc.) or known local defaults.
-- JUnit (6.x): use `@EnabledIfEnvironmentVariable` / an assumption helper so tests
-  **skip** (not fail) when the DB is unreachable.
-- Add a short-timeout **connectivity probe** (e.g. open the JDBC connection
-  with a 1–2 s connect timeout in a `@BeforeAll`; on failure, `Assumptions.abort`)
-  so a down/absent DB **skips** the suite instead of failing it.
-- The default `./gradlew build` includes unit tests only; DB tests run via a
-  separate task (e.g. `integrationTest`) or a `-PwithDb` flag.
+- Integration tests read connection info from env vars with known local
+  defaults; precedence is env-var > default:
+  - PostgreSQL — `HARMONICA_TEST_POSTGRES_HOST`/`_PORT`/`_DB`/`_USER`/`_PASSWORD`
+    → `127.0.0.1`/`5432`/`harmonica_test`/`developer`/`developer`.
+  - MySQL — `HARMONICA_TEST_MYSQL_HOST`/`_PORT`/`_DB`/`_USER`/`_PASSWORD`
+    → `127.0.0.1`/`3306`/`harmonica_test`/`developer`/`developer`.
+- Gating (default/local — optional profile): a short-timeout **connectivity
+  probe** (e.g. open the JDBC connection with a 1–2 s connect timeout in a
+  `@BeforeAll`; on failure, `Assumptions.abort`) so a down/absent DB **skips**
+  the suite instead of failing it.
+- The CI `db-integration` job (Phase 4, item 5) runs in **required** mode:
+  `HARMONICA_TEST_DB_REQUIRED` set only in CI turns the probe into a
+  bounded-retry check that **fails** on invalid configuration, missing
+  credentials, unavailable services, or skipped DB tests — never skips.
+- The always-green SQLite (and later H2) embedded tests run in `./gradlew build`
+  via the `integration-test` module's `test` task; the gated PostgreSQL/MySQL
+  suite runs via the `integrationTest` task — never in `build`.
 
 ### 4. CI
 
@@ -89,7 +101,7 @@ services:
   containers (Postgres/MySQL) so every merge is verified against real DBs.
 - Keep a plain unit-test job as the fast path and as the JDK 8-bytecode check
   (javap major-version assertion — see [`ci.md`](ci.md)).
-- SQLite/H2 tests run in the fast path (no services needed).
+- SQLite (and later H2) tests run in the fast path (no services needed).
 - Remove/replace the legacy CircleCI config once Actions is authoritative. —
   **done** (Phase 0).
 
@@ -104,6 +116,8 @@ services:
 
 - `integration-test` module exists in this repo, ported from `harmonica_test`.
 - `docker-compose.yml` + docs committed; local run verified on this machine.
-- `./gradlew build` passes without Docker; `integrationTest` passes with Docker.
-- SQLite + H2 real-DB smoke tests are part of the always-on fast path.
-- CI job runs DB-backed tests on every push.
+- `./gradlew build` runs the SQLite (and later H2) embedded tests via the
+  module's `test` task and passes without Docker; `integrationTest` passes with
+  Docker.
+- SQLite (and later H2) real-DB smoke tests are part of the always-on fast path.
+- CI `db-integration` job runs DB-backed tests on every push (required mode).

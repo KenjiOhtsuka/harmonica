@@ -25,7 +25,8 @@ several years. This plan is the single source of truth for the restart.
   1.8` bytecode remains supported — verified in Phase 0 with no deprecation
   warning under 2.3.20 (only the old `kotlinOptions` DSL is deprecated, which
   this build doesn't use).
-- No Docker installed locally (yet). DB-backed tests must not break local builds.
+- Docker/Compose is a dev+CI dependency (Phase 4, item 5) — DB-backed tests
+  must not break local builds when the daemon is absent.
 - Do not force Exposed onto users; their migration classpath decides.
 
 ## 3. Branch & release strategy (master is stale)
@@ -242,17 +243,66 @@ Plan:
 
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
-- Merge relevant tests from `KenjiOhtsuka/harmonica_test` into a new
-  `integration-test` module or a dedicated source set.
-- Local DBs: install Docker (or use system Postgres/MySQL) and document setup;
-  provide `docker-compose.yml` for PostgreSQL/MySQL; SQLite and H2 need no
-  server and **will be covered** by Docker-free embedded-DB tests (see
-  [`testing.md`](testing.md)).
-- Tests that need a DB are gated (skip when DB unavailable) so `./gradlew build`
-  never fails locally without Docker.
-- CI runs DB-backed tests using Docker services.
-- Decide test framework/tooling (**JUnit 6.x** — used in `core`/`gradle-plugin`
-  since Phase 2, PR #186 — plus Testcontainers for PostgreSQL/MySQL).
+**Status: in progress (2026-08-11).** Docker/Compose is a reproducible dev+CI
+dependency (item 5, [`ci.md`](ci.md) §3.1), not a machine-local detail.
+Breakdown (each item is its own small PR against `develop`):
+
+1. **Integration module scaffold** (`integration-test` subproject, per
+   [`testing.md`](testing.md)). JUnit 6.1.2, `useJUnitPlatform`.
+   - Connection info from env vars with known local defaults; precedence is
+     env-var > default:
+     - PostgreSQL — `HARMONICA_TEST_POSTGRES_HOST`/`_PORT`/`_DB`/`_USER`/
+       `_PASSWORD` → `127.0.0.1`/`5432`/`harmonica_test`/`developer`/`developer`
+     - MySQL — `HARMONICA_TEST_MYSQL_HOST`/`_PORT`/`_DB`/`_USER`/`_PASSWORD`
+       → `127.0.0.1`/`3306`/`harmonica_test`/`developer`/`developer`
+   - Gating (optional profile, default/local): short-timeout connectivity
+     probe in `@BeforeAll` (≤2 s connect timeout) → `Assumptions.abort`; a
+     down/absent DB **skips** the suite, so `./gradlew build` stays green
+     without Docker.
+   - Wiring: SQLite runs in `./gradlew build` (always-green fast path, `test`
+     source set); PostgreSQL/MySQL run via `:integration-test:integrationTest`
+     (separate `integrationTest` source set) — never in `build`.
+2. **Port `harmonica_test`** — the 4 migrations (normal/not-null/default/other)
+   and Postgres/MySql/Sqlite configs move in as JVM-level JDBC assertions
+   (table/columns/index/data) after `Connection.transaction { up() }` / `down()`.
+   SQLite is always-green (embedded); PostgreSQL/MySQL run when available.
+3. **H2 embedded path** — add `Dbms.H2` connection-URI support to `core`
+   (currently returns `""`; `SqlServerAdapter` stays TODO, Phase 5) + H2 test
+   driver. Second Docker-free DBMS alongside SQLite. URI and lifecycle contract:
+   - In-process tests: `jdbc:h2:mem:<dbName>;DB_CLOSE_DELAY=-1`, with a unique
+     `<dbName>` per test (or explicit schema cleanup) so tests do not collide.
+   - TestKit tests (item 4): file-backed URL with a unique absolute path;
+     delete the H2 DB files after all TestKit processes have closed.
+   - The H2 driver is test/integration runtime-only — never published from
+     `core`.
+   - The expected H2 URI will be asserted in `ConnectionTest`; `testing.md`
+     keeps the same contract.
+4. **Plugin-flow tests (issue #196)** — Gradle TestKit runs the `harmonica`
+   up/down tasks against a real DB **with and without** `harmonica-exposed` on
+   the script classpath. Seeds from the local `demo/` scratch project (rewritten
+   for the direct scripting host), which gets committed here.
+5. **Docker + CI** — `docker-compose.yml` at the repo root (postgres:16,
+   mysql:8, `developer`/`developer`, DB `harmonica_test`); a `db-integration`
+   CI job runs the gated suite against Postgres/MySQL service containers in
+   **required** mode: `HARMONICA_TEST_DB_REQUIRED` set only in CI makes the
+   probe bounded-retry and **fails** on invalid config, missing credentials,
+   unavailable service, or any skipped DB test — never skips (see
+   [`ci.md`](ci.md) §3.1); SQLite (and later H2) stay in the fast path.
+
+Test framework/tooling decision: **JUnit 6.x** (in `core`/`gradle-plugin` since
+Phase 2, PR #186). Testcontainers optional later; env-var config + compose
+services are the baseline so the suite runs without container APIs.
+
+Definition of done:
+
+- `integration-test` module exists in this repo, ported from `harmonica_test`.
+- `./gradlew build` runs the SQLite (and later H2) embedded tests via the
+  module's `test` task and passes without Docker; the gated PostgreSQL/MySQL
+  suite runs via the `integrationTest` task and passes with Docker.
+- Postgres + MySQL suites green locally (Docker) and in CI (the `db-integration`
+  service-container job, required mode).
+- Issue #196 satisfied — the migration flow is verified with and without
+  `harmonica-exposed` on the classpath.
 
 ### Phase 5 — Issue backlog (quick wins first)
 

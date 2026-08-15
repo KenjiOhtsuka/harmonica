@@ -61,10 +61,14 @@ As landed:
     `dependency-graph: generate-and-upload` (+
     `dependency-graph-continue-on-failure: true`) so Dependabot PRs resolve
     against an up-to-date dependency graph.
-  - `./gradlew build --no-daemon` (unit tests only by default; DB-gated tests
-    excluded — see `spec/testing.md`).
+  - `./gradlew build --no-daemon` (unit tests plus always-green embedded SQLite
+    tests; DB-gated PostgreSQL/MySQL tests excluded — see `spec/testing.md`).
 - **Matrix (later, Phase 4)**: a `db-integration` job with `postgres:16` /
-  `mysql:8` service containers running the gated integration suite.
+  `mysql:8` service containers running the gated integration suite in
+  **required** mode: `HARMONICA_TEST_DB_REQUIRED` set only in CI makes the
+  connectivity probe bounded-retry and **fails** on invalid configuration,
+  missing credentials, unavailable services, or skipped DB tests — never skips
+  (see `spec/testing.md`).
 
 ### 3.2 `jvm8-bytecode.yml` — prove JVM 8 target without JDK 8
 

@@ -29,5 +29,14 @@ class ConnectionTest {
             "jdbc:sqlite:test.db",
             method.invoke(Connection.Companion, sqliteConfig) as String
         )
+        // H2
+        val h2Config = object : DbConfig({
+            dbms = Dbms.H2
+            dbName = "test"
+        }) {}
+        assertEquals(
+            "jdbc:h2:test",
+            method.invoke(Connection.Companion, h2Config) as String
+        )
     }
 }

@@ -97,7 +97,8 @@ open class Connection(
                     Dbms.SQLServer ->
                         ""
                     Dbms.H2 ->
-                        ""
+                        // Embedded mode; "mem:" prefix gives an in-memory DB.
+                        "jdbc:h2:$dbName"
                 }
             }
         }
@@ -110,7 +111,7 @@ open class Connection(
             javaConnection.commit()
         } catch (e: Exception) {
             javaConnection.rollback()
-            javaConnection.close()
+            if (config.dbms != Dbms.H2) javaConnection.close()
             throw e
         }
     }
@@ -147,10 +148,14 @@ open class Connection(
      * @param tableName The name of the table to be checked.
      */
     override fun doesTableExist(tableName: String): Boolean {
-        val resultSet = javaConnection.metaData.getTables(
+        val metaData = javaConnection.metaData
+        val resultSet = metaData.getTables(
             null, null,
-            if (config.dbms == Dbms.Oracle) tableName.uppercase()
-            else tableName,
+            when {
+                metaData.storesLowerCaseIdentifiers() -> tableName.lowercase()
+                metaData.storesUpperCaseIdentifiers() -> tableName.uppercase()
+                else -> tableName
+            },
             null
         )
         val result = resultSet.next()

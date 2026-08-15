@@ -40,12 +40,18 @@ internal class H2Adapter(connection: ConnectionInterface) : DbAdapter(connection
             var sql = "${column.name} ${sqlType(column)}"
 
             when (column) {
-                is VarcharColumn -> sql += (column.size?.let { return "($it)" } ?: "")
-                is DecimalColumn -> sql += column.precision?.let {
-                    "(" + column.precision + (column.scale?.let {
-                        return ", ${column.scale}"
-                    } ?: "") + ")"
-                } ?: ""
+                is VarcharColumn -> {
+                    if (column.size != null)
+                        sql += "(" + column.size.toString() + ")"
+                }
+                is DecimalColumn -> {
+                    if (column.precision != null) {
+                        sql += "(" + column.precision.toString()
+                        if (column.scale != null)
+                            sql += ", " + column.scale.toString()
+                        sql += ")"
+                    }
+                }
             }
 
             if (!column.nullable)

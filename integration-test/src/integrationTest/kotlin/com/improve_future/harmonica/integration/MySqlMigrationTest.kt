@@ -43,20 +43,18 @@ class MySqlMigrationTest {
                 }.up()
             }
             assertTrue(connection.doesTableExist(tableName))
-        } finally {
-            if (connection.doesTableExist(tableName)) {
-                connection.transaction {
-                    object : AbstractMigration() {
-                        override fun down() {
-                            dropTable(tableName)
-                        }
-                    }.apply {
-                        this.connection = connection
-                    }.down()
-                }
+            connection.transaction {
+                object : AbstractMigration() {
+                    override fun down() {
+                        dropTable(tableName)
+                    }
+                }.apply {
+                    this.connection = connection
+                }.down()
             }
+            assertFalse(connection.doesTableExist(tableName))
+        } finally {
             connection.close()
         }
-        assertFalse(connection.doesTableExist(tableName))
     }
 }

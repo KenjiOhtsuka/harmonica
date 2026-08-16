@@ -47,7 +47,7 @@ class PluginFlowTest {
         withExposed: Boolean
     ): File {
         val projectDir = File(File("build", "testkit"), name).apply { mkdirs() }
-        val dbPath = File(projectDir, "build/harmonica").absolutePath
+        val dbPath = dbPath(projectDir)
         File(dbPath).parentFile!!.mkdirs()
         for (suffix in listOf(".db", ".db-wal", ".db-shm")) {
             File("$dbPath$suffix").delete()
@@ -132,7 +132,7 @@ class PluginFlowTest {
     private fun assertMigrated(
         projectDir: File, tableName: String, version: String, migrated: Boolean
     ) {
-        val dbPath = File(projectDir, "build/harmonica").absolutePath
+        val dbPath = dbPath(projectDir)
         Connection.create {
             dbms = Dbms.SQLite
             dbName = dbPath
@@ -153,6 +153,9 @@ class PluginFlowTest {
             }
         }
     }
+
+    private fun dbPath(projectDir: File) =
+        File(projectDir, "build/harmonica").absolutePath.replace("\\", "/")
 
     private fun String.quoted() = "\"$this\""
 

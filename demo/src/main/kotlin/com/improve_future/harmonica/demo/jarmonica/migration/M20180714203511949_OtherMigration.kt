@@ -24,6 +24,7 @@ class M20180714203511949_OtherMigration : AbstractMigration() {
             tableName, "decimal_column", precision = 5, scale = 2
         )
         addBooleanColumn(tableName, "boolean_column")
+        addBlobColumn(tableName, "blob_column")
         addDateColumn(tableName, "date_column")
         addTimeColumn(tableName, "time_column", withTimeZone = true)
         addDateTimeColumn(tableName, "date_time_column")

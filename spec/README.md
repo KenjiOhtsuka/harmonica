@@ -19,7 +19,7 @@ plan to restart and modernize the project.
 > Snapshot taken 2026-08-16, after Phase 3 (Exposed bridge, PRs #197-#199;
 > script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203) and Phase 4
 > so far (H2 embedded DBMS, PR #206; integration-test module, PR #207; Docker +
-> CI db-integration, PR #209; plugin-flow TestKit tests, PR #219). Update this
+> CI db-integration, PR #209). Update this
 > list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.7.0**, `jvmTarget = 1.8` (class-file

@@ -245,9 +245,9 @@ Plan:
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
 **Status: in progress (2026-08-17).** Items 1 (integration-test module, PR `#207`),
-3 (H2 embedded path, PR `#206`), 5 (Docker + CI, PR `#209`) and 4 (plugin-flow
-TestKit tests, PR `#219`) have landed; item 2 is partially landed (SQLite
-always-green smoke test + gated PostgreSQL
+3 (H2 embedded path, PR `#206`) and 5 (Docker + CI, PR `#209`) have landed;
+item 4 (plugin-flow TestKit tests) lands in PR `#219` (open); item 2 is
+partially landed (SQLite always-green smoke test + gated PostgreSQL
 smoke test in PR #207, gated MySQL smoke test in PR #209; the full
 `harmonica_test` port is still pending). Docker/Compose is a reproducible
 dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a machine-local detail.
@@ -299,7 +299,7 @@ Breakdown (each item is its own small PR against `develop`):
    up/down tasks against a real DB **with and without** `harmonica-exposed` on
    the script classpath. Seeds from the local `demo/` scratch project (rewritten
    for the direct scripting host), which gets committed here.
-   **DONE (2026-08-17, PR #219):** `PluginFlowTest` (gradle-plugin, `test`
+   **PR #219 (2026-08-17, open):** `PluginFlowTest` (gradle-plugin, `test`
    source set, always-green) spawns real Gradle builds via TestKit that apply
    the `harmonica` plugin from a composite `includeBuild` of the repo root and
    run `harmonicaUp`/`harmonicaDown` against an embedded SQLite DB (absolute
@@ -343,7 +343,7 @@ Definition of done:
 - Postgres + MySQL suites green locally (Docker) and in CI (the `db-integration`
   service-container job, required mode).
 - Issue #196 satisfied — the migration flow is verified with and without
-  `harmonica-exposed` on the classpath (plugin-flow TestKit tests, PR #219).
+  `harmonica-exposed` on the classpath.
 
 ### Phase 5 — Issue backlog (quick wins first)
 

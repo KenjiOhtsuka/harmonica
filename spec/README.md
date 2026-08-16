@@ -17,9 +17,9 @@ plan to restart and modernize the project.
 ## Current state (baseline, branch `develop`)
 
 > Snapshot taken 2026-08-15, after Phase 3 (Exposed bridge, PRs #197-#199;
-> script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203) and the
-> start of Phase 4 (H2 embedded DBMS, PR #206; integration-test module, PR
-> #207). Update this list when the baseline advances.
+> script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203) and Phase 4
+> so far (H2 embedded DBMS, PR #206; integration-test module, PR #207; Docker +
+> CI db-integration, PR #209). Update this list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.6.1**, `jvmTarget = 1.8` (class-file
   major 52 asserted in CI)
@@ -33,8 +33,8 @@ plan to restart and modernize the project.
   `actions/setup-java@v5.7.0`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (dependency-graph submission). CircleCI removed.
 - Four active modules: `core`, `exposed`, `gradle-plugin`, `integration-test` —
-  **85 tests total: 84 passed, 1 skipped (gated PostgreSQL), 0 failures**
-  (73 core + 6 plugin + 4 exposed + 2 integration-test); `document` (nested
+  **86 tests total: 84 passed, 2 skipped (gated PostgreSQL + MySQL), 0 failures**
+  (73 core + 6 plugin + 4 exposed + 3 integration-test); `document` (nested
   standalone build) is excluded from the build
 - H2 embedded DBMS support in `core` (PR #206): `Dbms.H2` → `jdbc:h2:<dbName>`,
   `H2Adapter` complete, H2 2.2.224 test-only; in-memory DB state survives a
@@ -42,8 +42,9 @@ plan to restart and modernize the project.
   from `DatabaseMetaData`
 - The `integration-test` module (PR #207) replaces the separate `harmonica_test`
   repository: SQLite embedded suite runs in `./gradlew build`; the PostgreSQL
-  suite runs via `:integration-test:integrationTest` and skips when the DB is
-  unreachable (MySQL + full `harmonica_test` port + Docker/CI still Phase 4)
+  and MySQL suites run via `:integration-test:integrationTest` and skip when
+  the DB is unreachable (Docker/CI landed in PR #209; the full `harmonica_test`
+  port is still Phase 4)
 - Migration `.kts` scripts are compiled/evaluated with a direct
   `BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template
   (PR #202) — no JSR-223 engine — over the plugin's `harmonica` configuration
@@ -56,10 +57,10 @@ plan to restart and modernize the project.
   `gradle-plugin` (PR A) — see
   [`exposed-integration.md`](exposed-integration.md)
 - Tests for real DBMS are being merged in Phase 4: the `integration-test`
-  module is in the root build (SQLite always-green, PostgreSQL gated); the
-  full `harmonica_test` port, MySQL, Docker/CI wiring, and the issue #196
-  with/without-Exposed flow remain
-- **`develop` is 96 commits ahead of `master`** — Phase 4 (real-DB tests) must
+  module is in the root build (SQLite always-green; PostgreSQL and MySQL gated
+  and run against Docker/CI, PR #209); the full `harmonica_test` port and the
+  issue #196 with/without-Exposed flow remain
+- **`develop` is 102 commits ahead of `master`** — Phase 4 (real-DB tests) must
   pass before `master` advances. See the risk register in [`plan.md`](plan.md).
 
 ## Machine environment (current)

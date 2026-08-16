@@ -63,12 +63,16 @@ As landed:
     against an up-to-date dependency graph.
   - `./gradlew build --no-daemon` (unit tests plus always-green embedded SQLite
     tests; DB-gated PostgreSQL/MySQL tests excluded — see `spec/testing.md`).
-- **Matrix (later, Phase 4)**: a `db-integration` job with `postgres:16` /
-  `mysql:8` service containers running the gated integration suite in
-  **required** mode: `HARMONICA_TEST_DB_REQUIRED` set only in CI makes the
-  connectivity probe bounded-retry and **fails** on invalid configuration,
-  missing credentials, unavailable services, or skipped DB tests — never skips
-  (see `spec/testing.md`).
+- **`db-integration` job (as landed, Phase 4 PR #209)**: runs
+  `./gradlew :integration-test:integrationTest --no-daemon` against
+  `postgres:16.14` / `mysql:8.4.11` service containers (health-gated via
+  `--health-cmd`, ports 5432/3306) in **required** mode:
+  `HARMONICA_TEST_DB_REQUIRED` set only in CI makes the connectivity probe
+  bounded-retry (10 × 2 s) and **fails** on invalid configuration, missing
+  credentials, unavailable services, or skipped DB tests — never skips (see
+  `spec/testing.md`). Uses the same action pins as the `build` job
+  (checkout@v7, setup-java@v5.7.0, setup-gradle@v6); `dependency-graph` stays
+  on the `build` job only.
 
 ### 3.2 `jvm8-bytecode.yml` — prove JVM 8 target without JDK 8
 
@@ -165,7 +169,7 @@ updates:
 - **`dependabot.yml`**: **done** (#169, merged).
 - **`ci.yml` + `jvm8-bytecode.yml` + `dependency-submit.yml` + CircleCI
   removal**: **done**, part of the Phase 0 toolchain PR.
-- **DB matrix job**: Phase 4 (with the `integration-test` module).
+- **DB matrix job**: **done** (Phase 4, PR #209).
 - **`release.yml` + secrets**: Phase 6.
 
 ## Definition of done
@@ -182,3 +186,5 @@ updates:
 - Dependabot configured for `gradle` + `github-actions`, weekly, ungrouped. —
   **done**
 - CircleCI config removed. — **done**
+- `db-integration` job runs the gated suite against Postgres/MySQL service
+  containers in required mode (fails, never skips). — **done** (#209)

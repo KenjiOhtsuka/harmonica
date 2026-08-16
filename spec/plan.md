@@ -35,7 +35,7 @@ State:
 
 - `master` (origin/master @ `3b423c6`) has not been touched in years and is the
   direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is **96 commits ahead** (module split into `core`/`gradle-plugin`,
+- `develop` is **102 commits ahead** (module split into `core`/`gradle-plugin`,
   jcenter removal work, MIT license change, CI-action bumps, Phase 3 Exposed
   bridge, Phase 4 start, etc.) but **never fully tested or released** — this is
   why master was left behind.
@@ -79,7 +79,7 @@ Consequences for the restart:
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
   `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
-  `exposed` module — see spec/README for the current 85), and package correctly on
+  `exposed` module — see spec/README for the current 86), and package correctly on
   Java 25 and in CI; `document/` is excluded from the build. Phase 0 also proved
   the POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
   remaining unverified risk is real-DB behavior, which Phase 4 covers.
@@ -172,7 +172,7 @@ Outcome: no dead repositories or unmaintained libraries in the build.
 Status: **merged 2026-08-01 (PRs #184-#188).** All build files now use only
 Maven Central (`document/` excluded from build). 72 tests green (68 core + 4
 gradle-plugin; Phase 0 baseline was 66; `ScriptClasspathTest` later added 2
-plugin tests (PR #201) — see spec/README for the current 85).
+  plugin tests (PR #201) — see spec/README for the current 86).
 
 - `gradle.properties`: `kotlin_version` → 2.3.x. — **done in Phase 0** (2.3.20).
 - Dead repositories: **gone** — jcenter/bintray/space removed; jitpack removed
@@ -221,7 +221,7 @@ ownership via a no-op commit/rollback/close proxy; `WeakHashMap`-cached
 commit, rollback, reconnect, and SQLException propagation through the proxy
 (exceptions unwrapped from `InvocationTargetException` so they keep their
 `SQLException` type). **78 tests green** (68 core + 6 plugin + 4 exposed) by the
-end of Phase 3 — see spec/README for the current 85.
+  end of Phase 3 — see spec/README for the current 86.
 Script-classpath wiring for `.kts` migrations (Pitfall F) shipped **2026-08-11
 (PRs #201, #202)**: the plugin evaluates `.kts` scripts directly with
 `BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template (no
@@ -244,13 +244,14 @@ Plan:
 
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
-**Status: in progress (2026-08-15).** Items 1 (integration-test module, PR `#207`)
-and 3 (H2 embedded path, PR `#206`) have landed; item 2 is partially landed
-(SQLite always-green smoke test + gated PostgreSQL smoke test in PR #207; the
-full `harmonica_test` port is still pending). Items 4-5 remain. Docker/Compose
-is a reproducible dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a
-machine-local detail. Breakdown (each item is its own small PR against
-`develop`):
+**Status: in progress (2026-08-15).** Items 1 (integration-test module, PR `#207`),
+3 (H2 embedded path, PR `#206`) and 5 (Docker + CI, PR `#209`) have landed;
+item 2 is partially landed (SQLite always-green smoke test + gated PostgreSQL
+smoke test in PR #207, gated MySQL smoke test in PR #209; the full
+`harmonica_test` port is still pending). Item 4 (plugin-flow TestKit tests)
+remains. Docker/Compose is a reproducible dev+CI dependency (item 5,
+[`ci.md`](ci.md) §3.1), not a machine-local detail. Breakdown (each item is its
+own small PR against `develop`):
 
 1. **Integration module scaffold** (`integration-test` subproject, per
    [`testing.md`](testing.md)). JUnit 6.1.2, `useJUnitPlatform`. **DONE
@@ -272,9 +273,10 @@ machine-local detail. Breakdown (each item is its own small PR against
    and Postgres/MySql/Sqlite configs move in as JVM-level JDBC assertions
    (table/columns/index/data) after `Connection.transaction { up() }` / `down()`.
    SQLite is always-green (embedded); PostgreSQL/MySQL run when available.
-   **Partial (PR #207):** SQLite embedded test runs in `./gradlew build`; a
-   gated PostgreSQL create/drop smoke test runs via `integrationTest`. The full
-   4-migration port (columns/indexes/data assertions, MySQL config) is pending.
+   **Partial (PRs #207/#209):** SQLite embedded test runs in `./gradlew build`;
+   gated PostgreSQL and MySQL create/drop smoke tests run via `integrationTest`.
+   The full 4-migration port (columns/indexes/data assertions, MySQL config) is
+   pending.
 3. **H2 embedded path** — add `Dbms.H2` connection-URI support to `core`
    (previously returned `""`; `SqlServerAdapter` stays TODO, Phase 5) + H2 test
    driver. Second Docker-free DBMS alongside SQLite. URI and lifecycle contract:
@@ -304,6 +306,14 @@ machine-local detail. Breakdown (each item is its own small PR against
    probe bounded-retry and **fails** on invalid config, missing credentials,
    unavailable service, or any skipped DB test — never skips (see
     [`ci.md`](ci.md) §3.1); SQLite and H2 stay in the fast path.
+   **DONE (2026-08-15, PR #209):** `docker-compose.yml` (postgres:16.14,
+   mysql:8.4.11, `developer`/`developer`, DB `harmonica_test`) is committed;
+   the `db-integration` CI job runs `:integration-test:integrationTest` against
+   health-gated Postgres/MySQL service containers in required mode
+   (`HARMONICA_TEST_DB_REQUIRED=true`); `TestDb.requireDb` bounded-retries
+   (10 × 2 s) and then fails with a clear message when a required DB is
+   unreachable — verified locally: down DB in required mode fails the build,
+   default mode skips.
 
 Test framework/tooling decision: **JUnit 6.x** (in `core`/`gradle-plugin` since
 Phase 2, PR #186). Testcontainers optional later; env-var config + compose
@@ -400,6 +410,11 @@ Resolved (2026-08-01):
 - Kotlin `jvm` plugin bump 2.3.20 → 2.4.10 (PR #193): **declined** — no
   functional need; stay on 2.3.20. PR #193 is still open (dependabot) as of
   2026-08-15; revisit before the next phase.
+- Dependabot batch 2026-08-15 (PRs #210-#216, all open): wrapper 9.7.0 (#211),
+  JUnit 6.1.3 (#210/#214), postgresql 42.7.13 (#213), H2 2.4.240 (#212),
+  exposed 1.4.0 (#215), mysql-connector-j 26.7.0 (#216) — bumps to every pinned
+  version in tech-notes.md. Not merged; accept/decline each (own small PRs)
+  before the next phase.
 
 Still open:
 

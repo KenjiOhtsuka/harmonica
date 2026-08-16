@@ -79,7 +79,7 @@ Consequences for the restart:
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
   `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
-  `exposed` module — see spec/README for the current 86), and package correctly on
+  `exposed` module — see spec/README for current test counts), and package correctly on
   Java 25 and in CI; `document/` is excluded from the build. Phase 0 also proved
   the POM/publication config (PR #183) and the Groovy→Kotlin DSL migration. The
   remaining unverified risk is real-DB behavior, which Phase 4 covers.
@@ -172,7 +172,7 @@ Outcome: no dead repositories or unmaintained libraries in the build.
 Status: **merged 2026-08-01 (PRs #184-#188).** All build files now use only
 Maven Central (`document/` excluded from build). 72 tests green (68 core + 4
 gradle-plugin; Phase 0 baseline was 66; `ScriptClasspathTest` later added 2
-  plugin tests (PR #201) — see spec/README for the current 86).
+  plugin tests (PR #201) — see spec/README for current test counts).
 
 - `gradle.properties`: `kotlin_version` → 2.3.x. — **done in Phase 0** (2.3.20).
 - Dead repositories: **gone** — jcenter/bintray/space removed; jitpack removed
@@ -221,7 +221,7 @@ ownership via a no-op commit/rollback/close proxy; `WeakHashMap`-cached
 commit, rollback, reconnect, and SQLException propagation through the proxy
 (exceptions unwrapped from `InvocationTargetException` so they keep their
 `SQLException` type). **78 tests green** (68 core + 6 plugin + 4 exposed) by the
-  end of Phase 3 — see spec/README for the current 86.
+  end of Phase 3 — see spec/README for current test counts.
 Script-classpath wiring for `.kts` migrations (Pitfall F) shipped **2026-08-11
 (PRs #201, #202)**: the plugin evaluates `.kts` scripts directly with
 `BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template (no

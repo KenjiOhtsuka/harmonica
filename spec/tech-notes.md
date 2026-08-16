@@ -1,21 +1,22 @@
 # Toolchain & Dependency Research
 
-Facts gathered on 2026-08-01 (test counts updated 2026-08-15). Update this
+Facts gathered on 2026-08-01 (test counts updated 2026-08-17). Update this
 file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
 - Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
-  `./gradlew clean build` is green on Java 25; **84 tests passed, 0 skipped**
-  (73 core, 6 gradle-plugin, 4 exposed, 1 SQLite integration-test).
+  `./gradlew clean build` is green on Java 25; **86 tests passed, 0 skipped**
+  (73 core, 8 gradle-plugin, 4 exposed, 1 SQLite integration-test).
   `./gradlew :integration-test:integrationTest` reports **2 gated tests**
   (PostgreSQL + MySQL) skipped when the databases are unavailable; required CI
   mode fails instead.
   Phase 0 baseline was 66; Phase 2 added 6 InflectionsTest cases;
   Phase 3, PR B added 4 ExposedMigrationTest cases; PR #201 added 2
   ScriptClasspathTest cases; Phase 4 added 5 H2 cases in `core` (PR #206), the
-  SQLite + gated PostgreSQL integration-test cases (PR #207), and the gated
-  MySQL integration-test case (PR #209).
+  SQLite + gated PostgreSQL integration-test cases (PR #207), the gated
+  MySQL integration-test case (PR #209), and 2 plugin-flow TestKit cases in
+  `gradle-plugin` (PR #219).
 - `jvmTarget = 1.8` is set via `kotlin.compilerOptions { jvmTarget.set(JvmTarget.JVM_1_8) }`
   + `java.sourceCompatibility/targetCompatibility = 1.8` in all four modules
   (`core`, `exposed`, `gradle-plugin`, `integration-test`). Verified by
@@ -75,6 +76,8 @@ Key references:
 | JDBC test drivers (mysql, postgresql, mssql) | **DONE** | removed (PR #184); server DB drivers move to the Phase 4 integration module. Exception: `org.xerial:sqlite-jdbc` is re-added as `testImplementation`-only in the `exposed` module (Phase 3, PR B) for embedded-DB Option-A transaction tests — nothing leaks into published artifacts. |
 | `com.gradle.plugin-publish` | **DONE** | 0.9.10 → **2.1.1**; legacy `pluginBundle` block removed (2.x moved config into `gradlePlugin`). |
 | `org.jetbrains.dokka` | **DONE** | 0.9.17 → **2.2.0**; removed the removed `outputFormat` DSL. Docs refresh is Phase 7. |
+| `gradleTestKit()` | **DONE** | `testImplementation`-only (Phase 4 item 4, PR #219); runs `harmonicaUp`/`harmonicaDown` in nested real Gradle builds. |
+| `org.xerial:sqlite-jdbc` | **DONE** | 3.45.3.0, `testImplementation`-only (Phase 4 item 4, PR #219); lets the plugin-flow tests assert SQLite state after the TestKit runs. |
 
 ### integration-test (Phase 4, PR #207)
 

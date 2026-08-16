@@ -244,14 +244,14 @@ Plan:
 
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
-**Status: in progress (2026-08-15).** Items 1 (integration-test module, PR `#207`),
-3 (H2 embedded path, PR `#206`) and 5 (Docker + CI, PR `#209`) have landed;
-item 2 is partially landed (SQLite always-green smoke test + gated PostgreSQL
+**Status: in progress (2026-08-17).** Items 1 (integration-test module, PR `#207`),
+3 (H2 embedded path, PR `#206`), 5 (Docker + CI, PR `#209`) and 4 (plugin-flow
+TestKit tests, PR `#219`) have landed; item 2 is partially landed (SQLite
+always-green smoke test + gated PostgreSQL
 smoke test in PR #207, gated MySQL smoke test in PR #209; the full
-`harmonica_test` port is still pending). Item 4 (plugin-flow TestKit tests)
-remains. Docker/Compose is a reproducible dev+CI dependency (item 5,
-[`ci.md`](ci.md) §3.1), not a machine-local detail. Breakdown (each item is its
-own small PR against `develop`):
+`harmonica_test` port is still pending). Docker/Compose is a reproducible
+dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a machine-local detail.
+Breakdown (each item is its own small PR against `develop`):
 
 1. **Integration module scaffold** (`integration-test` subproject, per
    [`testing.md`](testing.md)). JUnit 6.1.2, `useJUnitPlatform`. **DONE
@@ -299,6 +299,20 @@ own small PR against `develop`):
    up/down tasks against a real DB **with and without** `harmonica-exposed` on
    the script classpath. Seeds from the local `demo/` scratch project (rewritten
    for the direct scripting host), which gets committed here.
+   **DONE (2026-08-17, PR #219):** `PluginFlowTest` (gradle-plugin, `test`
+   source set, always-green) spawns real Gradle builds via TestKit that apply
+   the `harmonica` plugin from a composite `includeBuild` of the repo root and
+   run `harmonicaUp`/`harmonicaDown` against an embedded SQLite DB (absolute
+   path in `<projectDir>/build/`); one case has `harmonica("com.improve_future:exposed:2.0.0")`
+   on the script classpath (Exposed migration), one does not (plain JDBC
+   migration). Assertions check `harmonica_migration` version rows + table
+   existence. The `demo/` project is committed as the seed (script/ + jarmonica/
+   trees, no wrapper, drivers on the buildscript classpath). This PR also set
+   `group`/`version` (com.improve_future:2.0.0) on `core`/`exposed` so the
+   composite substitutes the `com.improve_future:*` coordinates, and fixed a
+   real bug: migration/config paths are now resolved relative to the project
+   directory (were relative to the daemon JVM cwd → `FileNotFoundException`
+   from TestKit).
 5. **Docker + CI** — `docker-compose.yml` at the repo root (postgres:16,
    mysql:8, `developer`/`developer`, DB `harmonica_test`); a `db-integration`
    CI job runs the gated suite against Postgres/MySQL service containers in
@@ -329,7 +343,7 @@ Definition of done:
 - Postgres + MySQL suites green locally (Docker) and in CI (the `db-integration`
   service-container job, required mode).
 - Issue #196 satisfied — the migration flow is verified with and without
-  `harmonica-exposed` on the classpath.
+  `harmonica-exposed` on the classpath (plugin-flow TestKit tests, PR #219).
 
 ### Phase 5 — Issue backlog (quick wins first)
 

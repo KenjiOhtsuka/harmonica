@@ -28,7 +28,12 @@ abstract class AbstractTask : DefaultTask() {
         }
 
     fun findMigrationDir(): File {
-        return Paths.get(directoryPath, "migration").toFile()
+        return resolvePath(directoryPath).resolve("migration")
+    }
+
+    protected fun resolvePath(path: String): File {
+        val asPath = Paths.get(path)
+        return if (asPath.isAbsolute) asPath.toFile() else project.file(path)
     }
 
     /** The table name to store executed migration version IDs. */

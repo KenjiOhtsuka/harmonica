@@ -26,7 +26,7 @@ superseded by Phase 0.
 | # | Title | Plan |
 | --- | --- | --- |
 | 189 | `isSubtypeOf` in scanner swallows all `Throwable` | Narrow to recoverable exceptions to match `loadClass` (PR #188); small fix in `JarmonicaTaskMain`. |
-| 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 4 item 4 (plugin-flow TestKit tests). The `integration-test` module landed (PR #207) with SQLite + gated PostgreSQL smoke tests, plus a gated MySQL smoke test (PR #209), but the with/without-`harmonica-exposed` migration-flow verification is still pending. |
+| 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 4 item 4 (plugin-flow TestKit tests). The `integration-test` module landed (PR #207) with SQLite + gated PostgreSQL smoke tests, plus a gated MySQL smoke test (PR #209); the with/without-`harmonica-exposed` migration-flow verification shipped as the plugin-flow TestKit tests (PR #219) — flow verified, GitHub issue still open pending closure. |
 | 182 | README JitPack badge shows nothing | Fix JitPack badge so it renders (README badge URLs fixed in PR #181, but this badge still broken). |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |

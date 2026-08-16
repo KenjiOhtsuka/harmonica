@@ -19,7 +19,8 @@ plan to restart and modernize the project.
 > Snapshot taken 2026-08-16, after Phase 3 (Exposed bridge, PRs #197-#199;
 > script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203) and Phase 4
 > so far (H2 embedded DBMS, PR #206; integration-test module, PR #207; Docker +
-> CI db-integration, PR #209). Update this list when the baseline advances.
+> CI db-integration, PR #209). Update this
+> list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.7.0**, `jvmTarget = 1.8` (class-file
   major 52 asserted in CI)
@@ -33,7 +34,7 @@ plan to restart and modernize the project.
   `actions/setup-java@v5.7.0`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (dependency-graph submission). CircleCI removed.
 - Four active modules: `core`, `exposed`, `gradle-plugin`, `integration-test` —
-  `./gradlew build` runs **84 tests, 0 skipped** (73 core + 6 plugin + 4 exposed
+  `./gradlew build` runs **86 tests, 0 skipped** (73 core + 8 plugin + 4 exposed
   + 1 SQLite integration-test); the **2 gated** PostgreSQL + MySQL
   integration-test cases run via `:integration-test:integrationTest` (pass with
   Docker, skip without; required CI mode fails instead); `document` (nested
@@ -60,8 +61,9 @@ plan to restart and modernize the project.
   [`exposed-integration.md`](exposed-integration.md)
 - Tests for real DBMS are being merged in Phase 4: the `integration-test`
   module is in the root build (SQLite always-green; PostgreSQL and MySQL gated
-  and run against Docker/CI, PR #209); the full `harmonica_test` port and the
-  issue #196 with/without-Exposed flow remain
+  and run against Docker/CI, PR #209); the plugin-flow TestKit tests (PR #219)
+  verify the issue #196 with/without-Exposed migration flow; the full
+  `harmonica_test` port remains
 - **`develop` is 117 commits ahead of `master`** — Phase 4 (real-DB tests) must
   pass before `master` advances. See the risk register in [`plan.md`](plan.md).
 

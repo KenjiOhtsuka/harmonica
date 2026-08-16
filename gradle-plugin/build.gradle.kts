@@ -1,4 +1,5 @@
 import org.gradle.api.attributes.java.TargetJvmVersion
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -35,6 +36,8 @@ dependencies {
     // Dependencies to be able to run tests within gradle
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
+    testImplementation(gradleTestKit())
+    testImplementation("org.xerial:sqlite-jdbc:3.45.3.0")
 
     //implementation localGroovy()  // Groovy SDK
     compileOnly(gradleApi())
@@ -55,6 +58,9 @@ kotlin {
 tasks {
     test {
         useJUnitPlatform()
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+        }
     }
 
     task<Jar>("sourcesJar") {

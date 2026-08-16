@@ -7,6 +7,9 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
+group = "com.improve_future"
+version = "2.0.0"
+
 repositories {
     mavenCentral()
 }

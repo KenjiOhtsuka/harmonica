@@ -20,7 +20,6 @@ import org.gradle.api.tasks.Input
 import org.gradle.work.DisableCachingByDefault
 import java.io.File
 import java.net.URLClassLoader
-import java.nio.file.Paths
 
 @DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
 abstract class AbstractMigrationTask : AbstractTask() {
@@ -35,7 +34,7 @@ abstract class AbstractMigrationTask : AbstractTask() {
     }
 
     private fun findConfigFile(): File {
-        return Paths.get(directoryPath, "config", "$env.kts").toFile()
+        return resolvePath(directoryPath).resolve("config").resolve("$env.kts")
     }
 
     fun loadConfigFile(): DbConfig {

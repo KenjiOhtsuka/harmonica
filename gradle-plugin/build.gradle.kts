@@ -34,7 +34,7 @@ dependencies {
 
     // Dependencies to be able to run tests within gradle
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
 
     //implementation localGroovy()  // Groovy SDK
     compileOnly(gradleApi())

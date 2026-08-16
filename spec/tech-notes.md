@@ -6,12 +6,16 @@ file as versions change.
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
 - Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
-  `./gradlew clean build` is green on Java 25; **85 tests total: 84 passed,
-  1 skipped (gated PostgreSQL), 0 failures** (73 core, 6 gradle-plugin,
-  4 exposed, 2 integration-test — Docker-less runs are 84/84). Phase 0 baseline was 66; Phase 2 added 6 InflectionsTest cases;
+  `./gradlew clean build` is green on Java 25; **84 tests passed, 0 skipped**
+  (73 core, 6 gradle-plugin, 4 exposed, 1 SQLite integration-test).
+  `./gradlew :integration-test:integrationTest` reports **2 gated tests**
+  (PostgreSQL + MySQL) skipped when the databases are unavailable; required CI
+  mode fails instead.
+  Phase 0 baseline was 66; Phase 2 added 6 InflectionsTest cases;
   Phase 3, PR B added 4 ExposedMigrationTest cases; PR #201 added 2
-  ScriptClasspathTest cases; Phase 4 added 5 H2 cases in `core` (PR #206) and
-  the 2 integration-test cases (PR #207).
+  ScriptClasspathTest cases; Phase 4 added 5 H2 cases in `core` (PR #206), the
+  SQLite + gated PostgreSQL integration-test cases (PR #207), and the gated
+  MySQL integration-test case (PR #209).
 - `jvmTarget = 1.8` is set via `kotlin.compilerOptions { jvmTarget.set(JvmTarget.JVM_1_8) }`
   + `java.sourceCompatibility/targetCompatibility = 1.8` in all four modules
   (`core`, `exposed`, `gradle-plugin`, `integration-test`). Verified by
@@ -82,9 +86,11 @@ Key references:
 | `com.mysql:mysql-connector-j` | **DONE** | 8.4.0, `integrationTestImplementation`-only; gated suite. |
 
 Two source sets: `test` (SQLite, runs in every `build`) and `integrationTest`
-(gated `Test` task — PostgreSQL smoke test landed in PR #207; MySQL driver is
-declared but the suite is pending; connectivity probe in `@BeforeAll` aborts
-the suite when the DB is down — no Docker required for a green build).
+(gated `Test` task — PostgreSQL smoke test landed in PR #207, MySQL smoke test
+in PR #209; connectivity probe in `@BeforeAll` aborts the suite when the DB is
+down — no Docker required for a green build; in CI,
+`HARMONICA_TEST_DB_REQUIRED=true` flips the probe to bounded-retry so an
+unavailable DB fails the job instead of skipping).
 
 ### document (separate subproject, excluded from the root build)
 

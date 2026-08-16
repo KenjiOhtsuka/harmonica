@@ -4,6 +4,7 @@ import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.Dbms
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -114,10 +115,14 @@ class PluginFlowTest {
     private fun harmonicaDown(projectDir: File) = runGradle(projectDir, "harmonicaDown")
 
     private fun runGradle(projectDir: File, vararg tasks: String) {
-        val result = GradleRunner.create()
-            .withProjectDir(projectDir)
-            .withArguments(*tasks)
-            .build()
+        val result = try {
+            GradleRunner.create()
+                .withProjectDir(projectDir)
+                .withArguments(*tasks)
+                .build()
+        } catch (e: UnexpectedBuildFailure) {
+            throw AssertionError("Nested build ${tasks.joinToString(" ")} failed:\n${e.message}", e)
+        }
         for (task in tasks) {
             assertEquals(TaskOutcome.SUCCESS, result.task(":$task")?.outcome, "Task :$task")
         }

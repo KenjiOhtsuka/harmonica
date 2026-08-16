@@ -1,4 +1,5 @@
 import org.gradle.api.attributes.java.TargetJvmVersion
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -57,6 +58,9 @@ kotlin {
 tasks {
     test {
         useJUnitPlatform()
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+        }
     }
 
     task<Jar>("sourcesJar") {

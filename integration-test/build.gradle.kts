@@ -20,7 +20,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
     testImplementation("org.xerial:sqlite-jdbc:3.45.3.0")
 
     add("integrationTestImplementation", project(":core"))
@@ -28,7 +28,7 @@ dependencies {
     add("integrationTestImplementation", "org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
     add("integrationTestImplementation", "org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
     add("integrationTestImplementation", "org.junit.jupiter:junit-jupiter:6.1.3")
-    add("integrationTestRuntimeOnly", "org.junit.platform:junit-platform-launcher:6.1.2")
+    add("integrationTestRuntimeOnly", "org.junit.platform:junit-platform-launcher:6.1.3")
     add("integrationTestImplementation", "org.postgresql:postgresql:42.7.4")
     add("integrationTestImplementation", "com.mysql:mysql-connector-j:8.4.0")
 }

@@ -16,7 +16,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
     testImplementation("com.h2database:h2:2.2.224")
 }
 

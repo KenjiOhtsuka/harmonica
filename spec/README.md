@@ -16,12 +16,12 @@ plan to restart and modernize the project.
 
 ## Current state (baseline, branch `develop`)
 
-> Snapshot taken 2026-08-15, after Phase 3 (Exposed bridge, PRs #197-#199;
+> Snapshot taken 2026-08-16, after Phase 3 (Exposed bridge, PRs #197-#199;
 > script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203) and Phase 4
 > so far (H2 embedded DBMS, PR #206; integration-test module, PR #207; Docker +
 > CI db-integration, PR #209). Update this list when the baseline advances.
 
-- Kotlin **2.3.20**, Gradle wrapper **9.6.1**, `jvmTarget = 1.8` (class-file
+- Kotlin **2.3.20**, Gradle wrapper **9.7.0**, `jvmTarget = 1.8` (class-file
   major 52 asserted in CI)
 - Gradle plugin-publish **2.1.1**, Dokka **2.2.0** (Dokka bundles Jackson
   2.15.3 at build time only — not shipped; see the Dependabot alerts)
@@ -39,7 +39,7 @@ plan to restart and modernize the project.
   Docker, skip without; required CI mode fails instead); `document` (nested
   standalone build) is excluded from the build
 - H2 embedded DBMS support in `core` (PR #206): `Dbms.H2` → `jdbc:h2:<dbName>`,
-  `H2Adapter` complete, H2 2.2.224 test-only; in-memory DB state survives a
+  `H2Adapter` complete, H2 2.4.240 test-only; in-memory DB state survives a
   failed `transaction` (connection kept open for H2), identifier case derived
   from `DatabaseMetaData`
 - The `integration-test` module (PR #207) replaces the separate `harmonica_test`
@@ -62,7 +62,7 @@ plan to restart and modernize the project.
   module is in the root build (SQLite always-green; PostgreSQL and MySQL gated
   and run against Docker/CI, PR #209); the full `harmonica_test` port and the
   issue #196 with/without-Exposed flow remain
-- **`develop` is 102 commits ahead of `master`** — Phase 4 (real-DB tests) must
+- **`develop` is 117 commits ahead of `master`** — Phase 4 (real-DB tests) must
   pass before `master` advances. See the risk register in [`plan.md`](plan.md).
 
 ## Machine environment (current)
@@ -70,5 +70,5 @@ plan to restart and modernize the project.
 - OpenJDK 25.0.3 (only JDK installed)
 - No standalone `gradle`; **Docker installed 2026-08-15** (user added to the
   `docker` group) for the Phase 4 DB-backed tests
-- Toolchain upgrade done (Phase 0, PR #183): the Gradle 9.6.1 wrapper runs on
+- Toolchain upgrade done (Phase 0, PR #183): the Gradle 9.7.0 wrapper runs on
   Java 25, so `./gradlew build` works locally.

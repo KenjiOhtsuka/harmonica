@@ -1,6 +1,6 @@
 ---
 name: harmonica-dev
-description: Use when working on the Harmonica Kotlin DB migration tool — planning, phase work, PRs, or anything touching this repo. Encodes the restart workflow: read spec/ before proposing work, small PRs per issue, toolchain constraints (JVM 8 target, Gradle 9.6.1 + Kotlin 2.3.20 on the Java 25 dev machine), and conventions (no comments, no unused deps, core stays Exposed-free).
+description: Use when working on the Harmonica Kotlin DB migration tool — planning, phase work, PRs, or anything touching this repo. Encodes the restart workflow: read spec/ before proposing work, small PRs per issue, toolchain constraints (JVM 8 target, Gradle 9.7.0 + Kotlin 2.3.20 on the Java 25 dev machine), and conventions (no comments, no unused deps, core stays Exposed-free).
 ---
 
 # Harmonica Development
@@ -20,7 +20,7 @@ change.
 ## Hard constraints
 
 - JVM 8 bytecode target (`jvmTarget = 1.8`) — never bump.
-- `./gradlew build` works on this machine (Gradle 9.6.1 + Kotlin 2.3.20 on
+- `./gradlew build` works on this machine (Gradle 9.7.0 + Kotlin 2.3.20 on
   OpenJDK 25). A red build is a real bug — fix it, don't defer.
 - One change per PR against `develop`.
 - Never commit unless explicitly asked.

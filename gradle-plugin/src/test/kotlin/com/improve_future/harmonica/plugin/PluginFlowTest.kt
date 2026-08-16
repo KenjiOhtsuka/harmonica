@@ -48,6 +48,7 @@ class PluginFlowTest {
     ): File {
         val projectDir = File(File("build", "testkit"), name).apply { mkdirs() }
         val dbPath = File(projectDir, "build/harmonica").absolutePath
+        File(dbPath).parentFile!!.mkdirs()
         for (suffix in listOf(".db", ".db-wal", ".db-shm")) {
             File("$dbPath$suffix").delete()
         }

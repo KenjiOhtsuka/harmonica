@@ -1,11 +1,11 @@
 # Toolchain & Dependency Research
 
-Facts gathered on 2026-08-01 (test counts updated 2026-08-17). Update this
+Facts gathered on 2026-08-01 (test counts and versions updated 2026-08-17). Update this
 file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 
-- Gradle wrapper **6.5 → 9.6.1**, Kotlin **1.4.20 → 2.3.20**.
+- Gradle wrapper **6.5 → 9.7.0**, Kotlin **1.4.20 → 2.3.20**.
   `./gradlew clean build` is green on Java 25; **86 tests passed, 0 skipped**
   (73 core, 8 gradle-plugin, 4 exposed, 1 SQLite integration-test).
   `./gradlew :integration-test:integrationTest` reports **2 gated tests**
@@ -31,8 +31,8 @@ file as versions change.
 
 | Component | In repo now | Notes |
 | --- | --- | --- |
-| JDK to run Gradle | OpenJDK 25 | Gradle 9.1.0+ required (Java 25); 9.6.1 in use. |
-| Gradle wrapper | 9.6.1 | `gradle-9.6.1-bin.zip`; wrapper jar/scripts regenerated via `./gradlew wrapper`. |
+| JDK to run Gradle | OpenJDK 25 | Gradle 9.1.0+ required (Java 25); 9.7.0 in use. |
+| Gradle wrapper | 9.7.0 | `gradle-9.7.0-bin.zip`; wrapper jar/scripts regenerated via `./gradlew wrapper`. |
 | Kotlin | 2.3.20 | `jvmTarget = 1.8` (bytecode) still supported — verified in 2.3.20 with **no** deprecation warning (only the old `kotlinOptions` DSL is deprecated; this build uses `compilerOptions`). |
 | Java language level | 1.8 | `java.sourceCompatibility/targetCompatibility` = 1.8 (no Java sources today). |
 | Test runtime JDK | Java 25 | JVM-8 target proven by the `jvm8-bytecode.yml` javap check (decision, ci.md §3.2), not a JDK-8 run. |
@@ -51,10 +51,10 @@ Key references:
 | Dependency | Status | Notes |
 | --- | --- | --- |
 | `org.jetbrains.kotlin:kotlin-test*` | **DONE** | 2.3.20 via `gradle.properties`. |
-| JUnit Jupiter | **DONE** | 5.4.2 → **6.1.2** (Phase 2, PR #186); see the note below on the `TargetJvmVersion` attribute override. |
+| JUnit Jupiter | **DONE** | 5.4.2 → **6.1.3** (Phase 2, PR #186; patch bumps PRs #210/#214); see the note below on the `TargetJvmVersion` attribute override. |
 | `commons-codec` | **DONE** | 1.15 dropped — unused (PR #184). |
 | `com.github.cesarferreira:kotlin-pluralizer` | **DONE** | removed (PR #187); internal `singularize()` port, see the note below (issue #140 resolved). |
-| `com.h2database:h2` | **DONE** | **2.2.224**, `testImplementation`-only (Phase 4, PR #206) for the embedded-H2 migration/adapter tests; never published from `core`. |
+| `com.h2database:h2` | **DONE** | **2.4.240**, `testImplementation`-only (Phase 4, PR #206; bump PR #212) for the embedded-H2 migration/adapter tests; never published from `core`. |
 
 ### exposed
 
@@ -83,10 +83,10 @@ Key references:
 
 | Dependency | Status | Notes |
 | --- | --- | --- |
-| `org.junit.jupiter:junit-jupiter` | **DONE** | 6.1.2; same `TargetJvmVersion` attribute override as `core`/`gradle-plugin` (test classpaths only, JVM 8 published). |
+| `org.junit.jupiter:junit-jupiter` | **DONE** | 6.1.3; same `TargetJvmVersion` attribute override as `core`/`gradle-plugin` (test classpaths only, JVM 8 published). |
 | `org.xerial:sqlite-jdbc` | **DONE** | 3.45.3.0, `testImplementation`-only; embedded always-green SQLite suite in `test`. |
-| `org.postgresql:postgresql` | **DONE** | 42.7.4, `integrationTestImplementation`-only; gated suite. |
-| `com.mysql:mysql-connector-j` | **DONE** | 8.4.0, `integrationTestImplementation`-only; gated suite. |
+| `org.postgresql:postgresql` | **DONE** | 42.7.13, `integrationTestImplementation`-only; gated suite. |
+| `com.mysql:mysql-connector-j` | **DONE** | 26.7.0 (Oracle's current GA line), `integrationTestImplementation`-only; gated suite. |
 
 Two source sets: `test` (SQLite, runs in every `build`) and `integrationTest`
 (gated `Test` task — PostgreSQL smoke test landed in PR #207, MySQL smoke test
@@ -140,14 +140,14 @@ Still open (not Phase 0):
   Replaced with an internal `singularize()` port
   (`core/.../table/Inflections.kt`), behavior-identical (quirks included,
   e.g. `leaves → leafe`).
-- **JUnit 6.1.2** (Phase 2, PR #186): JUnit 6 has a **Java 17 baseline** and
+- **JUnit 6.1.3** (Phase 2, PR #186; patch bumps PRs #210/#214): JUnit 6 has a **Java 17 baseline** and
   declares `org.gradle.jvm.version = 17` in its Gradle metadata. Our test
   configurations carry jvm.version 8 (from `targetCompatibility = 1.8`), so
   resolution initially rejected the artifacts. Fix: override
   `TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE` to 17 on
   `testCompileClasspath`/`testRuntimeClasspath` only. **Published (main)
   bytecode stays JVM 8.** `kotlin-test-junit5:2.3.20` pins junit 5.10.1 /
-  platform 1.10.1; Gradle conflict resolution bumps them to 6.1.2.
+  platform 1.10.1; Gradle conflict resolution bumps them to 6.1.3.
 - `org.reflections:0.9.11` — **removed** (Phase 2, PR #185); replaced with a
   small classpath scanner in `JarmonicaTaskMain` (file + jar protocols).
   `loadClass` catches only `ClassNotFoundException` + `LinkageError` (PR #188);

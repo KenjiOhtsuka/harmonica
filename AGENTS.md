@@ -12,8 +12,8 @@ and is being restarted. See `spec/plan.md` for the master plan.
 
 - **Target bytecode is JVM 8** (`jvmTarget = 1.8`). Never bump this.
 - The only JDK installed on the dev machine is **OpenJDK 25**.
-- The repo is on **Gradle wrapper 9.6.1** and **Kotlin 2.3.20** (Phase 0, merged
-  via PR #183). `./gradlew build` works on this machine.
+- The repo is on **Gradle wrapper 9.7.0** and **Kotlin 2.3.20** (Phase 0, merged
+  via PR #183; wrapper bumped via PR #211). `./gradlew build` works on this machine.
 - **Small changes per PR** against `develop`.
 - **Never commit** unless explicitly asked. Stage only intended files.
 

@@ -35,7 +35,7 @@ State:
 
 - `master` (origin/master @ `3b423c6`) has not been touched in years and is the
   direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is **102 commits ahead** (module split into `core`/`gradle-plugin`,
+- `develop` is **117 commits ahead** (module split into `core`/`gradle-plugin`,
   jcenter removal work, MIT license change, CI-action bumps, Phase 3 Exposed
   bridge, Phase 4 start, etc.) but **never fully tested or released** — this is
   why master was left behind.
@@ -97,7 +97,7 @@ Outcome: project compiles and tests on Java 25; CI works.
 Status: **implemented and merged (2026-08-01, PR #183, merge commit
 `69344da`).** `./gradlew clean build` is green locally on Java 25 and in CI.
 
-- Upgrade Gradle wrapper to **9.1.x or newer** — done: **9.6.1** (wrapper jar/
+- Upgrade Gradle wrapper to **9.1.x or newer** — done: **9.7.0** (wrapper jar/
   scripts regenerated via `./gradlew wrapper`). Bootstrap trick used: the old
   6.5 wrapper jar can still download a new distribution, so
   `gradle/wrapper/gradle-wrapper.properties` was hand-edited first.
@@ -182,7 +182,7 @@ gradle-plugin; Phase 0 baseline was 66; `ScriptClasspathTest` later added 2
     internal `singularize()` ported into `core/.../table/Inflections.kt`
     (PR #187, decision in §6).
   - `commons-codec` 1.15 → **dropped** (no usage; PR #184).
-  - JUnit Jupiter 5.4.2 → **6.1.2** (PR #186; decision in §6);
+  - JUnit Jupiter 5.4.2 → **6.1.3** (PR #186; decision in §6);
     `kotlin-test` → current (**done in Phase 0**, pinned to 2.3.20).
 - `gradle-plugin`:
   - `kotlin-script-runtime`/`kotlin-script-util` → `kotlin-scripting-jsr223` —
@@ -254,7 +254,7 @@ remains. Docker/Compose is a reproducible dev+CI dependency (item 5,
 own small PR against `develop`):
 
 1. **Integration module scaffold** (`integration-test` subproject, per
-   [`testing.md`](testing.md)). JUnit 6.1.2, `useJUnitPlatform`. **DONE
+   [`testing.md`](testing.md)). JUnit 6.1.3, `useJUnitPlatform`. **DONE
    (2026-08-15, PR #207).**
    - Connection info from env vars with known local defaults; precedence is
      env-var > default:
@@ -289,7 +289,7 @@ own small PR against `develop`):
    - The expected H2 URI is asserted in `ConnectionTest`; `testing.md`
      keeps the same contract.
    **DONE (2026-08-15, PR #206).** `Dbms.H2` builds `jdbc:h2:<dbName>`;
-   `H2Adapter` is complete; H2 2.2.224 is `testImplementation`-only. In-memory
+   `H2Adapter` is complete; H2 2.4.240 is `testImplementation`-only. In-memory
    state across rollback/reconnect is preserved by keeping the connection open
    after a failed `transaction` for H2 (no `DB_CLOSE_DELAY` needed); identifier
    case is normalized from `DatabaseMetaData` (`DATABASE_TO_LOWER` supported).
@@ -393,7 +393,7 @@ Full triage: [issues-triage.md]. Order:
 Resolved (2026-08-01):
 
 - Kotlin patch pinned: **2.3.20**.
-- Gradle pinned: **9.6.1**.
+- Gradle pinned: **9.7.0** (bumped from 9.6.1 via dependabot PR #211, 2026-08-16).
 - `document` module: **dropped from the root build** (folder kept, excluded from
   settings).
 - JVM-8 verification: **javap class-version check** (`jvm8-bytecode.yml`), not a
@@ -401,7 +401,8 @@ Resolved (2026-08-01):
 - Pluralization: **implement internally** — `singularize()` ported into
   `core/.../table/Inflections.kt`, kotlin-pluralizer + jitpack removed
   (Phase 2, PR #187).
-- JUnit: **6.1.2** (Java 17 baseline). Test configurations carry
+- JUnit: **6.1.3** (Java 17 baseline; bumped from 6.1.2 via dependabot PRs
+  #210/#214). Test configurations carry
   `org.gradle.jvm.version = 17` via `TargetJvmVersion` attribute override;
   published bytecode stays JVM 8 (Phase 2, PR #186).
 - Reflections: **replaced with an internal classpath scanner**; `loadClass`
@@ -410,11 +411,14 @@ Resolved (2026-08-01):
 - Kotlin `jvm` plugin bump 2.3.20 → 2.4.10 (PR #193): **declined** — no
   functional need; stay on 2.3.20. PR #193 is still open (dependabot) as of
   2026-08-15; revisit before the next phase.
-- Dependabot batch 2026-08-15 (PRs #210-#216, all open): wrapper 9.7.0 (#211),
-  JUnit 6.1.3 (#210/#214), postgresql 42.7.13 (#213), H2 2.4.240 (#212),
-  exposed 1.4.0 (#215), mysql-connector-j 26.7.0 (#216) — bumps to every pinned
-  version in tech-notes.md. Not merged; accept/decline each (own small PRs)
-  before the next phase.
+- Dependabot batch 2026-08-15 (PRs #210-#216): wrapper 9.7.0 (#211), JUnit
+  6.1.3 (#210/#214), postgresql 42.7.13 (#213), H2 2.4.240 (#212),
+  mysql-connector-j 26.7.0 (#216) — **merged 2026-08-16**; spec pins in
+  tech-notes.md updated. **Not merged:** exposed 1.4.0 (#215) — Exposed 1.x
+  moved the JDBC API out of `org.jetbrains.exposed.sql`, breaking the
+  `harmonica-exposed` bridge (`:exposed:compileKotlin` fails: unresolved
+  `sql`/`Database`/`Transaction`). Deferred — a bridge rewrite is its own piece
+  of work; #215 stays open (see Phase 5).
 
 Still open:
 

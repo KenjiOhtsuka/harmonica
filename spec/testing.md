@@ -9,7 +9,7 @@
 
 ## Current state
 
-- Unit tests exist in `core`, `exposed`, and `gradle-plugin` (JUnit 6.1.2,
+- Unit tests exist in `core`, `exposed`, and `gradle-plugin` (JUnit 6.1.3,
   `useJUnitPlatform`). `core`/`gradle-plugin` use **stubs, not real JDBC
   drivers**: core's DB tests go through
   `StubConnection`/`StubDbAdapter`/`StubMigration` (package-private), adapter
@@ -66,7 +66,7 @@ services:
   running in `build`'s `test` task, reusing the same env-var/config helper.
 - **H2 as the Docker-free alternative** (**DONE 2026-08-15, PR #206**):
   `Dbms.H2` builds `jdbc:h2:<dbName>` (`mem:` prefix gives an in-memory DB);
-  `H2Adapter` is complete; the H2 driver (2.2.224) is test/integration
+  `H2Adapter` is complete; the H2 driver (2.4.240) is test/integration
   runtime-only, never published from `core`. In-memory state across rollback/
   reconnect is preserved by keeping the connection open after a failed
   `transaction` for H2 (no `DB_CLOSE_DELAY` needed — the original

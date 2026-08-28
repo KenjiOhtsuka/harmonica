@@ -247,7 +247,7 @@ Outcome: real-DB integration tests live in this repo; runnable locally and in CI
 **Status: in progress (2026-08-17); item 2 completed 2026-08-28.** Items 1
 (integration-test module, PR `#207`), 3 (H2 embedded path, PR `#206`), and 5
 (Docker + CI, PR `#209`) have landed; item 4 (plugin-flow TestKit tests) landed
-in PR `#219` (merged); item 2 (full `harmonica_test` port) landed in PR `#2xx`.
+in PR `#219` (merged); item 2 (full `harmonica_test` port) landed in PR `#221`.
 Docker/Compose is a reproducible
 dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a machine-local detail.
 Breakdown (each item is its own small PR against `develop`):
@@ -275,7 +275,7 @@ Breakdown (each item is its own small PR against `develop`):
    **Partial (PRs #207/#209):** SQLite embedded test runs in `./gradlew build`;
    gated PostgreSQL and MySQL create/drop smoke tests run via `integrationTest`.
    The full 4-migration port (columns/indexes/data assertions, MySQL config) is
-   pending. **DONE (2026-08-28, PR #2xx):** full 4-migration port. The four
+   pending. **DONE (2026-08-28, PR #221):** full 4-migration port. The four
    `jarmonica` migrations are exercised end-to-end (up then down) via shared
    `AbstractMigrationSuite` helpers (`DemoMigrations`, `MigrationAssertions`)
    on all three DBMSes: SQLite (always-green `test` task), and PostgreSQL/MySQL

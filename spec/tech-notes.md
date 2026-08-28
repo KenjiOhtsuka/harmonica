@@ -17,7 +17,7 @@ file as versions change.
   SQLite + gated PostgreSQL integration-test cases (PR #207), the gated
   MySQL integration-test case (PR #209), 2 plugin-flow TestKit cases in
   `gradle-plugin` (PR #219), and the full `harmonica_test` port (Plan item 2,
-  PR #2xx): the SQLite suite now runs the 4 `jarmonica` migrations up→down
+  PR #221): the SQLite suite now runs the 4 `jarmonica` migrations up→down
   (`SqliteMigrationSuite`), the gated PG/MySQL suites reuse the same shared
   `AbstractMigrationSuite` helpers, and `demo/` is wired into the root build as
   a composite `includeBuild` so the portable migrations are reused rather than

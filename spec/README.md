@@ -47,7 +47,7 @@ plan to restart and modernize the project.
   repository: SQLite embedded suite runs in `./gradlew build`; the PostgreSQL
   and MySQL suites run via `:integration-test:integrationTest` and skip when
   the DB is unreachable (Docker/CI landed in PR #209; the full `harmonica_test`
-  port is DONE as of PR #2xx)
+  port is DONE as of PR #221)
 - Migration `.kts` scripts are compiled/evaluated with a direct
   `BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template
   (PR #202) — no JSR-223 engine — over the plugin's `harmonica` configuration
@@ -63,7 +63,7 @@ plan to restart and modernize the project.
   module is in the root build (SQLite always-green; PostgreSQL and MySQL gated
   and run against Docker/CI, PR #209); the plugin-flow TestKit tests (PR #219)
   verify the issue #196 with/without-Exposed migration flow; the full
-  `harmonica_test` port is DONE (PR #2xx). The `demo/` module (seed for the
+  `harmonica_test` port is DONE (PR #221). The `demo/` module (seed for the
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
   migration classes via `com.improve_future:harmonica-demo:2.0.0`.

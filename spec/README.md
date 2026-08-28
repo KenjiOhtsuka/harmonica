@@ -16,10 +16,11 @@ plan to restart and modernize the project.
 
 ## Current state (baseline, branch `develop`)
 
-> Snapshot taken 2026-08-16, after Phase 3 (Exposed bridge, PRs #197-#199;
+> Snapshot taken 2026-08-28, after Phase 3 (Exposed bridge, PRs #197-#199;
 > script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203) and Phase 4
-> so far (H2 embedded DBMS, PR #206; integration-test module, PR #207; Docker +
-> CI db-integration, PR #209). Update this
+> (H2 embedded DBMS, PR #206; integration-test module, PR #207; Docker + CI
+> db-integration, PR #209; plugin-flow TestKit, PR #219; full `harmonica_test`
+> port, PR #221). Phase 4 is complete. Update this
 > list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.7.0**, `jvmTarget = 1.8` (class-file
@@ -59,7 +60,7 @@ plan to restart and modernize the project.
   (Phase 3, PR B); runtime reflection detection was removed from
   `gradle-plugin` (PR A) — see
   [`exposed-integration.md`](exposed-integration.md)
-- Tests for real DBMS are being merged in Phase 4: the `integration-test`
+- Real-DB tests merged in Phase 4: the `integration-test`
   module is in the root build (SQLite always-green; PostgreSQL and MySQL gated
   and run against Docker/CI, PR #209); the plugin-flow TestKit tests (PR #219)
   verify the issue #196 with/without-Exposed migration flow; the full

@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.core.adapter
 
 import com.improve_future.harmonica.core.ConnectionInterface
+import com.improve_future.harmonica.core.toHexString
 import com.improve_future.harmonica.core.table.IndexMethod
 import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
@@ -87,8 +88,11 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         ): String {
             var sql = column.name + " " + sqlType(column)
             if (!column.nullable) sql += " NOT NULL"
-            if (column.hasDefault && column !is BlobColumn) {
-                sql += " DEFAULT " + column.sqlDefault
+            if (column.hasDefault) {
+                sql += when (column) {
+                    is BlobColumn -> " DEFAULT X'" + column.default!!.toHexString() + "'"
+                    else -> " DEFAULT " + column.sqlDefault
+                }
             }
             if (column.hasReference)
                 sql += " REFERENCES ${column.referenceTable} (${column.referenceColumn})"

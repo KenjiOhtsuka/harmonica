@@ -244,10 +244,10 @@ Plan:
 
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
-**Status: in progress (2026-08-17); item 2 completed 2026-08-28.** Items 1
-(integration-test module, PR `#207`), 3 (H2 embedded path, PR `#206`), and 5
-(Docker + CI, PR `#209`) have landed; item 4 (plugin-flow TestKit tests) landed
-in PR `#219` (merged); item 2 (full `harmonica_test` port) landed in PR `#221`.
+**Status: complete (2026-08-28).** All five items have landed: item 1
+(integration-test module, PR `#207`), item 2 (full `harmonica_test` port, PR
+`#221`), item 3 (H2 embedded path, PR `#206`), item 4 (plugin-flow TestKit
+tests, PR `#219`, merged), and item 5 (Docker + CI, PR `#209`).
 Docker/Compose is a reproducible
 dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a machine-local detail.
 Breakdown (each item is its own small PR against `develop`):
@@ -284,9 +284,10 @@ Breakdown (each item is its own small PR against `develop`):
    `includeBuild` so tests reuse the same migration classes. Cross-DBMS
    correctness fixes surfaced by the port: `NotNullMigration` skips
    `addForeignKey` on SQLite (unsupported) and uses an unsigned referencing
-   column for MySQL (FK type match); `SqliteAdapter` omits `DEFAULT` for
-   BLOB columns (the `E'\x…'` hex default is PostgreSQL-only syntax; SQLite
-   rejects it, whereas TEXT defaults remain supported).
+   column for MySQL (FK type match); `SqliteAdapter` renders BLOB column
+   defaults as SQLite `X'hex'` literals (the `E'\x…'` form defaults to is
+   PostgreSQL-only syntax, rejected by SQLite, whereas TEXT defaults remain
+   supported).
 3. **H2 embedded path** — add `Dbms.H2` connection-URI support to `core`
    (previously returned `""`; `SqlServerAdapter` stays TODO, Phase 5) + H2 test
    driver. Second Docker-free DBMS alongside SQLite. URI and lifecycle contract:

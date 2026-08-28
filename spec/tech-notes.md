@@ -1,6 +1,7 @@
 # Toolchain & Dependency Research
 
-Facts gathered on 2026-08-01 (test counts and versions updated 2026-08-17). Update this
+Facts gathered on 2026-08-01 (test counts and versions updated through
+2026-08-28, incl. the Phase 4 `harmonica_test` port, PR #221). Update this
 file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)

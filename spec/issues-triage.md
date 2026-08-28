@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-15 (**28 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-28 (**29 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -12,7 +12,9 @@ upgrade in Phase 0/2.
 
 **Resolved and closed by Phase 0/2:** #167 (jcenter removed, CI rewritten,
 PR #183), #165 (LICENSE already MIT; README badge URLs fixed, PR #181), #140
-(kotlin-pluralizer removed, internal `singularize()`, PR #187).
+(kotlin-pluralizer removed, internal `singularize()`, PR #187). **Closed
+2026-08-28:** #182 (JitPack badge renders correctly, closed as completed —
+removed from the SMALL table).
 
 **Closed / superseded (were listed as URGENT, now resolved on `develop`):**
 the build-failure issues #159 (Win10 openjdk 15), #158 (Win/Linux openjdk 16),
@@ -27,7 +29,8 @@ superseded by Phase 0.
 | --- | --- | --- |
 | 189 | `isSubtypeOf` in scanner swallows all `Throwable` | Narrow to recoverable exceptions to match `loadClass` (PR #188); small fix in `JarmonicaTaskMain`. |
 | 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 4 item 4 (plugin-flow TestKit tests). The `integration-test` module landed (PR #207) with SQLite + gated PostgreSQL smoke tests, plus a gated MySQL smoke test (PR #209); the with/without-`harmonica-exposed` migration-flow verification shipped as the plugin-flow TestKit tests (PR #219) — flow verified, GitHub issue still open pending closure. |
-| 182 | README JitPack badge shows nothing | Fix JitPack badge so it renders (README badge URLs fixed in PR #181, but this badge still broken). |
+| 220 | `harmonicaUp` fails when the SQLite DB parent directory does not exist | **Still open.** Reported in PR #219; the fix there only creates the parent dir in the TestKit project to make the test deterministic — the plugin itself still does not create the SQLite DB parent directory, so a real project pointing SQLite at e.g. `build/db/harmonica.db` hits the error today (fresh-checkout CI exposed it). Quick win for Phase 5: create the parent dir (and/or the DB file) in `harmonicaUp`/`harmonicaDown` before connecting (option 1 in the issue), then add a regression test. |
+| 222 | integration test outputs some warnings | **New (2026-08-28).** CI logs several compile/test warnings: deprecated `Project.task(name, ...)` in `gradle-plugin/build.gradle.kts:66,71`, a `MigrationDsl` DSL-marker-on-function no-op warning (`AbstractMigration.kt:40`, KT-81567), unchecked casts in `JarmonicaTaskMain`, and the `kotlin-compiler-embeddable` artifact-on-build-classpath warning. Low priority cleanup during Phase 5; the `kotlin-compiler-embeddable` warning is the one the maintainer has seen most (matches the local `integrationTest` output). |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |
 | 138 | Is there a need to make AbstractColumn internal? | Open up custom-column extension points (make `AbstractColumn`/`ColumnBuilder` public, document custom column pattern). |

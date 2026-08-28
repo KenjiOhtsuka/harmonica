@@ -244,12 +244,11 @@ Plan:
 
 Outcome: real-DB integration tests live in this repo; runnable locally and in CI.
 
-**Status: in progress (2026-08-17).** Items 1 (integration-test module, PR `#207`),
-3 (H2 embedded path, PR `#206`) and 5 (Docker + CI, PR `#209`) have landed;
-item 4 (plugin-flow TestKit tests) lands in PR `#219` (open); item 2 is
-partially landed (SQLite always-green smoke test + gated PostgreSQL
-smoke test in PR #207, gated MySQL smoke test in PR #209; the full
-`harmonica_test` port is still pending). Docker/Compose is a reproducible
+**Status: complete (2026-08-28).** All five items have landed: item 1
+(integration-test module, PR `#207`), item 2 (full `harmonica_test` port, PR
+`#221`), item 3 (H2 embedded path, PR `#206`), item 4 (plugin-flow TestKit
+tests, PR `#219`, merged), and item 5 (Docker + CI, PR `#209`).
+Docker/Compose is a reproducible
 dev+CI dependency (item 5, [`ci.md`](ci.md) §3.1), not a machine-local detail.
 Breakdown (each item is its own small PR against `develop`):
 
@@ -276,7 +275,19 @@ Breakdown (each item is its own small PR against `develop`):
    **Partial (PRs #207/#209):** SQLite embedded test runs in `./gradlew build`;
    gated PostgreSQL and MySQL create/drop smoke tests run via `integrationTest`.
    The full 4-migration port (columns/indexes/data assertions, MySQL config) is
-   pending.
+   pending. **DONE (2026-08-28, PR #221):** full 4-migration port. The four
+   `jarmonica` migrations are exercised end-to-end (up then down) via shared
+   `AbstractMigrationSuite` helpers (`DemoMigrations`, `MigrationAssertions`)
+   on all three DBMSes: SQLite (always-green `test` task), and PostgreSQL/MySQL
+   (gated `integrationTest`). Assertions cover tables, columns, nullability,
+   index and data (row counts). The `demo/` module is wired in as an
+   `includeBuild` so tests reuse the same migration classes. Cross-DBMS
+   correctness fixes surfaced by the port: `NotNullMigration` skips
+   `addForeignKey` on SQLite (unsupported) and uses an unsigned referencing
+   column for MySQL (FK type match); `SqliteAdapter` renders BLOB column
+   defaults as SQLite `X'hex'` literals (the `E'\x…'` form defaults to is
+   PostgreSQL-only syntax, rejected by SQLite, whereas TEXT defaults remain
+   supported).
 3. **H2 embedded path** — add `Dbms.H2` connection-URI support to `core`
    (previously returned `""`; `SqlServerAdapter` stays TODO, Phase 5) + H2 test
    driver. Second Docker-free DBMS alongside SQLite. URI and lifecycle contract:
@@ -299,7 +310,7 @@ Breakdown (each item is its own small PR against `develop`):
    up/down tasks against a real DB **with and without** `harmonica-exposed` on
    the script classpath. Seeds from the local `demo/` scratch project (rewritten
    for the direct scripting host), which gets committed here.
-   **PR #219 (2026-08-17, open):** `PluginFlowTest` (gradle-plugin, `test`
+   **PR #219 (merged 2026-08-16):** `PluginFlowTest` (gradle-plugin, `test`
    source set, always-green) spawns real Gradle builds via TestKit that apply
    the `harmonica` plugin from a composite `includeBuild` of the repo root and
    run `harmonicaUp`/`harmonicaDown` against an embedded SQLite DB (absolute

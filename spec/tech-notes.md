@@ -1,6 +1,7 @@
 # Toolchain & Dependency Research
 
-Facts gathered on 2026-08-01 (test counts and versions updated 2026-08-17). Update this
+Facts gathered on 2026-08-01 (test counts and versions updated through
+2026-08-28, incl. the Phase 4 `harmonica_test` port, PR #221). Update this
 file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
@@ -15,14 +16,20 @@ file as versions change.
   Phase 3, PR B added 4 ExposedMigrationTest cases; PR #201 added 2
   ScriptClasspathTest cases; Phase 4 added 5 H2 cases in `core` (PR #206), the
   SQLite + gated PostgreSQL integration-test cases (PR #207), the gated
-  MySQL integration-test case (PR #209), and 2 plugin-flow TestKit cases in
-  `gradle-plugin` (PR #219).
+  MySQL integration-test case (PR #209), 2 plugin-flow TestKit cases in
+  `gradle-plugin` (PR #219), and the full `harmonica_test` port (Plan item 2,
+  PR #221): the SQLite suite now runs the 4 `jarmonica` migrations up→down
+  (`SqliteMigrationSuite`), the gated PG/MySQL suites reuse the same shared
+  `AbstractMigrationSuite` helpers, and `demo/` is wired into the root build as
+  a composite `includeBuild` so the portable migrations are reused rather than
+  duplicated.
 - `jvmTarget = 1.8` is set via `kotlin.compilerOptions { jvmTarget.set(JvmTarget.JVM_1_8) }`
   + `java.sourceCompatibility/targetCompatibility = 1.8` in all four modules
   (`core`, `exposed`, `gradle-plugin`, `integration-test`). Verified by
   `javap`: all main classes are class-file major **52** (JVM 8).
 - `document/` is **dropped from the root build** (`settings.gradle.kts` includes
-  only `core`, `exposed`, `gradle-plugin`, `integration-test`). The nested
+  only `core`, `exposed`, `gradle-plugin`, `integration-test`; `demo` is a
+  composite `includeBuild`, not a subproject). The nested
   Gradle 4.9 build is untouched.
 - CI replaced: `gradle.yml` + `.circleci/config.yml` → `ci.yml` +
   `jvm8-bytecode.yml` (see [ci.md](ci.md)).

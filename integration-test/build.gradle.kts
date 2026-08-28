@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":exposed"))
 
+    testImplementation("com.improve_future:harmonica-demo:2.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
@@ -25,6 +26,8 @@ dependencies {
 
     add("integrationTestImplementation", project(":core"))
     add("integrationTestImplementation", project(":exposed"))
+    add("integrationTestImplementation", "com.improve_future:harmonica-demo:2.0.0")
+    add("integrationTestImplementation", sourceSets["test"].output)
     add("integrationTestImplementation", "org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
     add("integrationTestImplementation", "org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
     add("integrationTestImplementation", "org.junit.jupiter:junit-jupiter:6.1.3")

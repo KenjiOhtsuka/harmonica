@@ -48,10 +48,7 @@ class PluginFlowTest {
     ): File {
         val projectDir = File(File("build", "testkit"), name).apply { mkdirs() }
         val dbPath = dbPath(projectDir)
-        File(dbPath).parentFile!!.mkdirs()
-        for (suffix in listOf(".db", ".db-wal", ".db-shm")) {
-            File("$dbPath$suffix").delete()
-        }
+        File(dbPath).parentFile!!.deleteRecursively()
 
         File(projectDir, "settings.gradle.kts").writeText(
             """
@@ -155,7 +152,7 @@ class PluginFlowTest {
     }
 
     private fun dbPath(projectDir: File) =
-        File(projectDir, "build/harmonica").absolutePath.replace("\\", "/")
+        File(projectDir, "build/db/harmonica").absolutePath.replace("\\", "/")
 
     private fun String.quoted() = "\"$this\""
 

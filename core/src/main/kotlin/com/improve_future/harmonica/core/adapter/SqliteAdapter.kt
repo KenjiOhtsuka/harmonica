@@ -87,7 +87,7 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
         ): String {
             var sql = column.name + " " + sqlType(column)
             if (!column.nullable) sql += " NOT NULL"
-            if (column.hasDefault) {
+            if (column.hasDefault && column !is BlobColumn) {
                 sql += " DEFAULT " + column.sqlDefault
             }
             if (column.hasReference)

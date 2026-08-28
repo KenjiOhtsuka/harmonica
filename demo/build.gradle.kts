@@ -9,6 +9,9 @@ buildscript {
     }
 }
 
+group = "com.improve_future"
+version = "2.0.0"
+
 plugins {
     kotlin("jvm") version "2.3.20"
     id("harmonica") version "2.0.0"
@@ -17,6 +20,17 @@ plugins {
 
 extra["directoryPath"] = "src/main/kotlin/com/improve_future/harmonica/demo/script"
 extra["migrationPackage"] = "com.improve_future.harmonica.demo.jarmonica"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+    }
+}
 
 repositories {
     mavenCentral()

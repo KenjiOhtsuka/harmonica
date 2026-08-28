@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.demo.jarmonica.migration
 
 import com.improve_future.harmonica.core.AbstractMigration
+import com.improve_future.harmonica.core.Dbms
 
 class M20180714194338790_NotNullMigration : AbstractMigration() {
     override fun up() {
@@ -19,7 +20,7 @@ class M20180714194338790_NotNullMigration : AbstractMigration() {
         }
         val tableName = "not_null_table_for_add"
         createTable(tableName) {}
-        addIntegerColumn(tableName, "integer_column", nullable = false)
+        addIntegerColumn(tableName, "integer_column", nullable = false, unsigned = true)
         addVarcharColumn(tableName, "varchar_column", nullable = false)
         addDecimalColumn(tableName, "decimal_column", nullable = false)
         addBooleanColumn(tableName, "boolean_column", nullable = false)
@@ -29,10 +30,12 @@ class M20180714194338790_NotNullMigration : AbstractMigration() {
         addDateTimeColumn(tableName, "date_time_column", nullable = false)
         addTimestampColumn(tableName, "timestamp_column", nullable = false)
         addTextColumn(tableName, "text_column", nullable = false)
-        addForeignKey(
-            "not_null_table_for_add", "integer_column",
-            "normal_table_for_add"
-        )
+        if (config.dbms != Dbms.SQLite) {
+            addForeignKey(
+                "not_null_table_for_add", "integer_column",
+                "normal_table_for_add"
+            )
+        }
     }
 
     override fun down() {

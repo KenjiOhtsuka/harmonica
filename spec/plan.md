@@ -365,12 +365,17 @@ Full triage: [issues-triage.md]. Order:
    pluralizer PR #187); #158, #159 already closed (verified; not tracked here).
 2. Small: #26 (migration file naming), #47 (prepared statements), #138 (custom
    columns), #141 (more column types), #145 (alter column), #139 (FK options),
-   #69 (query execution API), #4 (created_at/updated_at), #182 (JitPack badge),
-   #189 (scanner `isSubtypeOf` swallows all `Throwable`).
+   #69 (query execution API), #4 (created_at/updated_at), #189 (scanner
+   `isSubtypeOf` swallows all `Throwable`).
    #91 (Exposed) is **closed** — the bridge shipped in Phase 3 (PRs #197-#199).
+   Also added in Phase 4/5: #220 (SQLite DB parent directory not created),
+   #222 (integration-test warnings) — both quick wins.
 3. Medium: #7 (closed connection), #85 (SQLite defaults), #67 (timestamp
    default), #80 (Exposed version), #71 (seeding), #97 (JavaExec task tests),
-   #155 (programmatic migration docs).
+   #155 (programmatic migration docs). Also #215 (Exposed 0.61.0 → 1.x bridge
+   rewrite): Exposed 1.x moved the JDBC API out of `org.jetbrains.exposed.sql`,
+   which breaks `harmonica-exposed` (`:exposed:compileKotlin` fails); plan the
+   bridge update when scheduling this — see §6.
 4. Large/strategic (separate designs/PRs): #1 (Maven Central), #125 (multiple
    DBs), #121 (dry run), #148 (Maven support — see `feature/maven-plugin`
    branch), #147 (Java support), #105 (adapter plugin API), #107 (SQL Server
@@ -435,7 +440,7 @@ Resolved (2026-08-01):
   catches `Throwable` — issue #189 (Phase 2, PRs #185/#188).
 - Kotlin `jvm` plugin bump 2.3.20 → 2.4.10 (PR #193): **declined** — no
   functional need; stay on 2.3.20. PR #193 is still open (dependabot) as of
-  2026-08-15; revisit before the next phase.
+  2026-08-28 — revisit/close before starting Phase 5.
 - Dependabot batch 2026-08-15 (PRs #210-#216): wrapper 9.7.0 (#211), JUnit
   6.1.3 (#210/#214), postgresql 42.7.13 (#213), H2 2.4.240 (#212),
   mysql-connector-j 26.7.0 (#216) — **merged 2026-08-16**; spec pins in
@@ -443,7 +448,7 @@ Resolved (2026-08-01):
   moved the JDBC API out of `org.jetbrains.exposed.sql`, breaking the
   `harmonica-exposed` bridge (`:exposed:compileKotlin` fails: unresolved
   `sql`/`Database`/`Transaction`). Deferred — a bridge rewrite is its own piece
-  of work; #215 stays open (see Phase 5).
+  of work; #215 stays open (tracked in Phase 5, Medium).
 
 Still open:
 

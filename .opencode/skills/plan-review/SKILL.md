@@ -70,6 +70,8 @@ Cross-check the three docs against each other — no contradictions.
 
 ### 5. Open a PR
 
+- Commit, push, and open the PR only when the user has explicitly asked for
+  the reconcile to land as a PR; otherwise present the edits and ask first.
 - Commit the spec changes on a `docs/...` branch cut from the current
   `origin/develop` (fetch first; never cut from a sibling unmerged branch).
 - Push it and open a small PR against `develop` titled around what the

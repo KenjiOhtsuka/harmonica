@@ -74,7 +74,7 @@ abstract class JarmonicaTaskMain {
             base.isAssignableFrom(cls)
         } catch (e: LinkageError) {
             System.err.println(
-                "WARN: cannot resolve the supertype chain of ${cls.name} against ${base.name}"
+                "WARN: cannot resolve the supertype chain of ${cls.name} against ${base.name}: $e"
             )
             false
         }

@@ -2,18 +2,17 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build: CI](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml/badge.svg)](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml)
-[![Build: DB integration](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml/badge.svg?job=db-integration)](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml)
 [![Release](https://jitpack.io/v/KenjiOhtsuka/harmonica.svg)](https://jitpack.io/#KenjiOhtsuka/harmonica)
 
 Harmonica is a database migration tool for the JVM, written in Kotlin — a Gradle
 plugin backed by a JDBC core library. It is similar in spirit to Phinx and
 Rails migrations.
 
-Version **3.0.0** is the maintenance-restart release: the project was dormant
-for years and has been rebuilt on a modern toolchain (Kotlin 2.3, Gradle 9.7,
-published bytecode targets JVM 8). The biggest change is that Exposed support is
-now an **optional, separate module** — the core library no longer depends on
-Exposed.
+Version **3.0.0** is the up-coming maintenance-restart release: the project was
+dormant for years and has been rebuilt on a modern toolchain (Kotlin 2.3,
+Gradle 9.7, published bytecode targets JVM 8). The biggest change is that Exposed
+support is now an **optional, separate module** — the core library no longer
+depends on Exposed.
 
 ## Supported databases
 
@@ -46,10 +45,10 @@ The plugin registers the tasks `harmonicaUp`, `harmonicaDown`, and
 ### 2. Point the plugin at your migration scripts
 
 Migrations are `.kts` scripts. Set the root directory via the `directoryPath`
-project property, then put scripts in `migration/` and DB config in `config/`:
+extra property, then put scripts in `migration/` and DB config in `config/`:
 
 ```kotlin
-extra["directoryPath"] = "src/main/kotlin/com/example/myapp/migration"
+extra["directoryPath"] = "src/main/kotlin/com/example/myapp"
 ```
 
 ### 3. Write a migration
@@ -105,7 +104,7 @@ plugin's script classpath:
 
 ```kotlin
 dependencies {
-    harmonica("com.improve_future:exposed:2.0.0")
+    harmonica("com.improve_future:exposed:3.0.0")
 }
 ```
 
@@ -117,7 +116,7 @@ without the Exposed module on the script classpath.
 
 KDoc is generated with Dokka per module and published in the `docs/api`
 directory of this repository (served on GitHub Pages at
-<https://kenjiohtsuka.github.io/harmonica/>).
+<https://kenjiohtsuka.github.io/harmonica/api/>).
 
 ## Demo
 

@@ -48,9 +48,10 @@ class PluginFlowTest {
     ): File {
         val projectDir = File(File("build", "testkit"), name).apply { mkdirs() }
         val dbPath = dbPath(projectDir)
-        File(dbPath).parentFile!!.mkdirs()
-        for (suffix in listOf(".db", ".db-wal", ".db-shm")) {
-            File("$dbPath$suffix").delete()
+        val dbParent = File(dbPath).parentFile!!
+        dbParent.deleteRecursively()
+        check(!dbParent.exists()) {
+            "Test database parent still exists: $dbParent"
         }
 
         File(projectDir, "settings.gradle.kts").writeText(
@@ -155,7 +156,7 @@ class PluginFlowTest {
     }
 
     private fun dbPath(projectDir: File) =
-        File(projectDir, "build/harmonica").absolutePath.replace("\\", "/")
+        File(projectDir, "build/db/harmonica").absolutePath.replace("\\", "/")
 
     private fun String.quoted() = "\"$this\""
 

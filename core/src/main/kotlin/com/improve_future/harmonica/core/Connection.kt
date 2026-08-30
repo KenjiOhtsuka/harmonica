@@ -9,6 +9,10 @@ open class Connection(
     private lateinit var coreConnection: java.sql.Connection
 
     private fun connect(config: DbConfig) {
+        if (config.dbms == Dbms.SQLite) {
+            val dbFile = java.io.File("${config.dbName}.db")
+            dbFile.parentFile?.mkdirs()
+        }
         coreConnection = if (config.dbms != Dbms.SQLite) {
             object : java.sql.Connection by DriverManager.getConnection(
                 buildConnectionUriFromDbConfig(config),

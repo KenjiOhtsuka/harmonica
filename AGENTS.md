@@ -15,6 +15,8 @@ and is being restarted. See `spec/plan.md` for the master plan.
 - The repo is on **Gradle wrapper 9.7.0** and **Kotlin 2.3.20** (Phase 0, merged
   via PR #183; wrapper bumped via PR #211). `./gradlew build` works on this machine.
 - **Small changes per PR** against `develop`.
+- **Never push directly to `develop`.** Every change — code *and* docs/spec —
+  goes through a small PR against `develop`.
 - **Never commit** unless explicitly asked. Stage only intended files.
 
 ## Layout
@@ -40,3 +42,15 @@ and is being restarted. See `spec/plan.md` for the master plan.
 - Keep `core` free of any Exposed import. See `spec/exposed-integration.md`.
 - When editing opencode config (`opencode.json`, `.opencode/**`), consult the
   `customize-opencode` skill and the schema at https://opencode.ai/config.json.
+
+## Git workflow
+
+- Cut feature branches from the current `origin/develop` (fetch first). Never
+  cut from a sibling unmerged feature branch — it contaminates the PR diff.
+- When integrating `develop` into a PR branch, prefer `git merge` over rebase.
+  Never `git pull --rebase` a branch that already contains merge commits, and
+  never amend or force-push commits that exist on the remote.
+- Before opening a PR, run the applicable review subagents against the branch
+  diff (spec-review for `spec/`, build-review for build/dependency/CI changes,
+  exposed-review for core connection / Exposed work) and fix any BLOCKERs. The
+  `/pr` command encodes this flow.

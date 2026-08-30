@@ -7,7 +7,8 @@ description: Use when reviewing the Harmonica restart plan against reality — a
 
 The `spec/` planning docs are the source of truth and go stale every time a
 phase PR merges. This workflow reconciles them with reality: gather ground
-truth, diff the docs, apply updates, verify. **Edit spec/ only. Never commit.**
+truth, diff the docs, apply updates, verify. **Edit spec/ only; every change
+goes through a small PR against `develop`, never a direct push.**
 
 ## When to run
 
@@ -67,8 +68,19 @@ Cross-check the three docs against each other — no contradictions.
 - Delegate a final pass to the `spec-review` agent (read-only) against the
   updated docs. Fix any BLOCKER/WARNING findings it reports.
 
-### 5. Report
+### 5. Open a PR
 
-Summarize: what changed in each doc, the authoritative test count, and a list
-of GitHub issues the user should close (with the PR that resolves each). Leave
-the changes uncommitted for the user to review.
+- Commit, push, and open the PR only when the user has explicitly asked for
+  the reconcile to land as a PR; otherwise present the edits and ask first.
+- Commit the spec changes on a `docs/...` branch cut from the current
+  `origin/develop` (fetch first; never cut from a sibling unmerged branch).
+- Push it and open a small PR against `develop` titled around what the
+  reconcile covers.
+- Do not close GitHub issues yourself — that remains a user decision; list in
+  the PR body the issues this reconcile marks as resolved, with the PR that
+  resolves each.
+
+### 6. Report
+
+Summarize: what changed in each doc, the PR URL, the authoritative test count,
+and a list of GitHub issues the user should close.

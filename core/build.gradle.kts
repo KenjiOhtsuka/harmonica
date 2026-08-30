@@ -34,6 +34,12 @@ kotlin {
     }
 }
 
+dokka {
+    dokkaPublications.html {
+        outputDirectory.set(rootProject.layout.projectDirectory.dir("docs/api/core"))
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }

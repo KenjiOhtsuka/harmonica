@@ -1,14 +1,8 @@
-<!--
-  ~ Harmonica: Kotlin Database Migration Tool
-  ~ Copyright (c) 2022 Kenji Otsuka
-  ~
-  ~ This software is released under the MIT License.
-  ~ http://opensource.org/licenses/mit-license.php
-  -->
-
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="charset" content="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jarmonica introduction</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4">
   </head>
@@ -16,7 +10,7 @@
     <header></header>
     <div class="container">
       <div class="row">
-        <div class="col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down">
+        <div class="col-xl-1 col-lg-2 col-md-3 col-sm-3 hidden-xs-down">
           <section>
             <ul>
               <li><a href="index.html">Home</a></li>
@@ -26,7 +20,7 @@
             </ul>
           </section>
         </div>
-        <div class="col-xl-11 col-lg-10 col-md-10 col-sm-9 col-xs-12">
+        <div class="col-xl-11 col-lg-10 col-md-9 col-sm-9 col-xs-12">
           <div class="row">
             <div class="col">
               <h1>Jarmonica introduction</h1>
@@ -34,7 +28,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <p>Jarmonica, migration with compiled Kotlin classes.Here, I will explain how to introduce Jarmonica into your project.</p>
+              <p>Jarmonica is the legacy migration flow, in which migrations are <code>compiled Kotlin classes</code> rather than scripts. The <code>harmonica</code> plugin described on the <a href="harmonica.html">Harmonica introduction</a> page is recommended for new projects.</p>
             </div>
           </div>
           <section>
@@ -42,84 +36,100 @@
               <div class="col">
                 <h2>How to use</h2>
               </div>
-              <div class="col">
-                <p>I will explain how to use Jarmonica step by step.</p>
-              </div>
             </div>
             <section>
               <div class="row">
                 <div class="col">
-                  <h3>Preparation</h3>
+                  <h3>1. Apply the plugin</h3>
                 </div>
               </div>
-              <section>
-                <div class="row">
-                  <div class="col">
-                    <h4>build.gradle</h4>
-                  </div>
+              <div class="row">
+                <div class="col">
+                  <p>Add the plugin to your build script:</p>
+                  <pre><code>plugins {
+    id(&quot;jarmonica&quot;) version &quot;3.0.0&quot;
+    kotlin(&quot;jvm&quot;) version &quot;2.3.20&quot;
+}</code></pre>
+                  <p>Jarmonica relies on the Kotlin compiler to produce the migration classes, so it also needs a runtime classpath that carries the JDBC driver and the Harmonica library.</p>
+                  <p>The plugin registers the tasks <code>jarmonicaCreate</code>, <code>jarmonicaUp</code>, <code>jarmonicaDown</code>, and <code>jarmonicaVersion</code>.</p>
                 </div>
-                <div class="row">
-                  <div class="col">
-                    <pre><code></code></pre>
-                  </div>
-                </div>
-              </section>
-              <section>
-                <div class="row">
-                  <div class="col">
-                    <h4>Directory and file structure</h4>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <pre><code>`- src
-  `- main
-    `- kotlin
-      `- db
-        |- config
-        | |- Default.kt &lt;- default configuration file
-        | `- Custom.kt &lt;- you can create own configuration file
-        `- migration</code></pre>
-                  </div>
-                </div>
-              </section>
+              </div>
             </section>
             <section>
               <div class="row">
                 <div class="col">
-                  <h3>Migrate</h3>
+                  <h3>2. Set the migration package</h3>
                 </div>
               </div>
-              <section>
-                <div class="row">
-                  <div class="col">
-                    <h4>Create migration file</h4>
-                  </div>
+              <div class="row">
+                <div class="col">
+                  <p>Compiled migrations live in the package configured by the <code>migrationPackage</code> extra property or, failing that, derived from <code>directoryPath</code>:</p>
+                  <pre><code>extra[&quot;migrationPackage&quot;] = &quot;com.example.myapp.db&quot;
+extra[&quot;env&quot;] = &quot;Default&quot;   // optional; defaults to &quot;Default&quot;</code></pre>
                 </div>
-                <div class="row">
-                  <div class="col"></div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>3. Configure the database connection</h3>
                 </div>
-              </section>
-              <section>
-                <div class="row">
-                  <div class="col">
-                    <h4>Migrate</h4>
-                  </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p>Configuration is a compiled <code>DbConfig</code> subclass or object named after the environment, in the migration package. For each environment you use, create a <code>config/</code> file such as <code>config/Default.kt</code>:</p>
+                  <pre><code>import com.improve_future.harmonica.core.DbConfig
+import com.improve_future.harmonica.core.Dbms
+
+class Default : DbConfig() {
+    init {
+        dbms = Dbms.SQLite
+        dbName = &quot;example_app&quot;
+    }
+}</code></pre>
                 </div>
-                <div class="row">
-                  <div class="col"></div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>4. Write a migration</h3>
                 </div>
-              </section>
-              <section>
-                <div class="row">
-                  <div class="col">
-                    <h4>Revert the migration</h4>
-                  </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p>Run <code>./gradlew jarmonicaCreate -PmigrationName=CreateUsers</code> to scaffold one, or create the class manually. The class name must start with <code>M</code> and end with <code>_</code>, with the <code>yyyyMMddHHmmssSSS</code> timestamp in between — e.g. <code>M&lt;timestamp&gt;_&lt;Name&gt;</code> — because the timestamp is the migration version:</p>
+                  <pre><code>import com.improve_future.harmonica.core.AbstractMigration
+
+class M20260830120000000_CreateUsers : AbstractMigration() {
+    override fun up() {
+        createTable(&quot;users&quot;) {
+            varchar(&quot;name&quot;, size = 100, nullable = false)
+        }
+    }
+
+    override fun down() {
+        dropTable(&quot;users&quot;)
+    }
+}</code></pre>
                 </div>
-                <div class="row">
-                  <div class="col"></div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>5. Run the migrations</h3>
                 </div>
-              </section>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <pre><code>./gradlew jarmonicaCreate -PmigrationName=CreateUsers  # scaffold a migration
+./gradlew jarmonicaUp -Pstep=2                         # apply up to two steps
+./gradlew jarmonicaDown -Pstep=1                       # revert one step
+./gradlew jarmonicaVersion                             # show the current version</code></pre>
+                  <p>Select a different environment with <code>-Penv=test</code>, matching the name of a <code>DbConfig</code> you have defined.</p>
+                </div>
+              </div>
             </section>
           </section>
         </div>
@@ -128,3 +138,4 @@
     <footer></footer>
   </body>
 </html>
+

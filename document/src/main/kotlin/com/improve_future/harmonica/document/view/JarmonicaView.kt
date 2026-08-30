@@ -18,190 +18,166 @@ object JarmonicaView : AbstractView() {
             row {
                 col {
                     p {
-                        +"Jarmonica, migration with compiled Kotlin classes."
-                        +"Here, I will explain how to introduce Jarmonica into your project."
+                        +"Jarmonica is the legacy migration flow, in which migrations are "
+                        code { +"compiled Kotlin classes" }
+                        +" rather than scripts. The "
+                        code { +"harmonica" }
+                        +" plugin described on the "
+                        a("harmonica.html") { +"Harmonica introduction" }
+                        +" page is recommended for new projects."
                     }
                 }
             }
             section {
-                row {
-                    col {
-                        h2 { +"How to use" }
-                    }
-                    col {
-                        p { +"I will explain how to use Jarmonica step by step." }
+                row { col { h2 { +"How to use" } } }
+                section {
+                    row { col { h3 { +"1. Apply the plugin" } } }
+                    row {
+                        col {
+                            p { +"Add the plugin to your build script:" }
+                            pre {
+                                code {
+                                    +"""
+plugins {
+    id("jarmonica") version "3.0.0"
+    kotlin("jvm") version "2.3.20"
+}
+                                    """.trimIndent()
+                                }
+                            }
+                            p {
+                                +"Jarmonica relies on the Kotlin compiler to produce the migration "
+                                +"classes, so it also needs a runtime classpath that carries the "
+                                +"JDBC driver and the Harmonica library."
+                            }
+                            p {
+                                +"The plugin registers the tasks "
+                                code { +"jarmonicaCreate" }
+                                +", "
+                                code { +"jarmonicaUp" }
+                                +", "
+                                code { +"jarmonicaDown" }
+                                +", and "
+                                code { +"jarmonicaVersion" }
+                                +"."
+                            }
+                        }
                     }
                 }
                 section {
+                    row { col { h3 { +"2. Set the migration package" } } }
                     row {
                         col {
-                            h3 { +"Preparation" }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
-                                h4 {
-                                    +"build.gradle"
-                                }
-                                p {
-                                    +"Write "
-                                    code { +"build.gradle" }
-                                    +" as follows."
-                                }
-
-                                pre {
-                                    code {
-                                        +"""
-buildscript {
-    ext.kotlin_version = '1.4.20'
-    ext.harmonica_version = '3.0.0'
-
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${'$'}kotlin_version"
-        // required for plugin
-        classpath "com.github.KenjiOhtsuka:harmonica:harmonica_version"
-    }
-}
-
-group 'com.improve_future'
-version ext.harmonica_version
-
-apply plugin: 'kotlin'
-// required for gradle commands
-apply plugin: 'jarmonica'
-
-// Default value is src/main/kotlin/db
-extensions.extraProperties["directoryPath"] =
-        "src/main/kotlin/com/improve_future/harmonica_test/jarmonica"
-// Default value is db
-extensions.extraProperties["migrationPackage"] =
-        "com.improve_future.harmonica_test.jarmonica"
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-    // required
-    maven { url 'https://jitpack.io' }
-}
-dependencies {
-    // required
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: kotlin_version
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: kotlin_version
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
-
-    // JDBC Driver (SQLite, MySQL or PostgreSQL), prepare for your DBMS
-    compile files('/lib/postgresql-42.2.2.jar')
-    compile files('/lib/mysql-connector-java-8.0.11.jar')
-
-    //required
-    compile "com.github.KenjiOhtsuka:harmonica:${'$'}harmonica_version"
-}
-                                            """.trimIndent()
-                                    }
-                                }
+                            p {
+                                +"Compiled migrations live in the package configured by the "
+                                code { +"migrationPackage" }
+                                +" extra property or, failing that, derived from "
+                                code { +"directoryPath" }
+                                +":"
                             }
-                        }
-                    }
-                    section {
-                        row {
-                            col {
-                                h4 {
-                                    +"Directory and file structure"
-                                }
-                                p {
-                                    +("Directory and file structure must be as follows." +
-                                            " You must create at least one configuration class" +
-                                            " There are 2 configuration files, ")
-                                    code { +"Default.kt" }
-                                    +" and "
-                                    code { +"Custom.kt" }
-                                    +"."
-                                }
-                                pre {
-                                    code {
-                                        +"""
-                                            `- src
-                                              `- main
-                                                `- kotlin
-                                                  `- db
-                                                    |- config
-                                                    | |- Default.kt <- default configuration file
-                                                    | `- Custom.kt <- you can create own configuration file
-                                                    `- migration
-                                        """.trimIndent()
-                                    }
-                                }
-                                p {
-                                    +""
+                            pre {
+                                code {
+                                    +"""
+extra["migrationPackage"] = "com.example.myapp.db"
+extra["env"] = "Default"   // optional; defaults to "Default"
+                                    """.trimIndent()
                                 }
                             }
                         }
                     }
                 }
-                row {
-                    col {
-                        section {
-                            h3 { +"Migrate" }
-                            section {
-                                h4 { +"Create migration file" }
-                                pre {
-                                    code {
-                                        +"./gradlew jarmonicaCreate"
-                                    }
-                                }
-                                section {
-                                    h5 { +"Option" }
-                                    dl {
-                                        dt { +"env" }
-                                        dd {}
-                                        dt { +"migrationName" }
-                                        dd {
-                                            +"Specify migration name."
-                                        }
-                                    }
+                section {
+                    row { col { h3 { +"3. Configure the database connection" } } }
+                    row {
+                        col {
+                            p {
+                                +"Configuration is a compiled "
+                                code { +"DbConfig" }
+                                +" subclass or object named after the environment, in the migration "
+                                +"package. For each environment you use, create a "
+                                code { +"config/" }
+                                +" file such as "
+                                code { +"config/Default.kt" }
+                                +":"
+                            }
+                            pre {
+                                code {
+                                    +"""
+import com.improve_future.harmonica.core.DbConfig
+import com.improve_future.harmonica.core.Dbms
+
+class Default : DbConfig() {
+    init {
+        dbms = Dbms.SQLite
+        dbName = "example_app"
+    }
+}
+                                    """.trimIndent()
                                 }
                             }
-                            section {
-                                h4 { +"Run migrations" }
-                                pre {
-                                    code {
-                                        +"./gradlew jarmonicaUp"
-                                    }
-                                }
-                                section {
-                                    h5 { +"Option" }
-                                    dl {
-                                        dt { +"env" }
-                                        dd {
-                                            +"Specify config object."
-                                        }
-                                    }
+                        }
+                    }
+                }
+                section {
+                    row { col { h3 { +"4. Write a migration" } } }
+                    row {
+                        col {
+                            p {
+                                +"Run "
+                                code { +"./gradlew jarmonicaCreate -PmigrationName=CreateUsers" }
+                                +" to scaffold one, or create the class manually. The class name "
+                                +"must start with "
+                                code { +"M" }
+                                +" and end with "
+                                code { +"_" }
+                                +", with the "
+                                code { +"yyyyMMddHHmmssSSS" }
+                                +" timestamp in between — e.g. "
+                                code { +"M<timestamp>_<Name>" }
+                                +" — because the timestamp is the migration version:"
+                            }
+                            pre {
+                                code {
+                                    +"""
+import com.improve_future.harmonica.core.AbstractMigration
+
+class M20260830120000000_CreateUsers : AbstractMigration() {
+    override fun up() {
+        createTable("users") {
+            varchar("name", size = 100, nullable = false)
+        }
+    }
+
+    override fun down() {
+        dropTable("users")
+    }
+}
+                                    """.trimIndent()
                                 }
                             }
-                            section {
-                                h4 { +"Revert migrations" }
-                                pre {
-                                    code {
-                                        +"./gradlew jarmonicaDown"
-                                    }
+                        }
+                    }
+                }
+                section {
+                    row { col { h3 { +"5. Run the migrations" } } }
+                    row {
+                        col {
+                            pre {
+                                code {
+                                    +"""
+./gradlew jarmonicaCreate -PmigrationName=CreateUsers  # scaffold a migration
+./gradlew jarmonicaUp -Pstep=2                         # apply up to two steps
+./gradlew jarmonicaDown -Pstep=1                       # revert one step
+./gradlew jarmonicaVersion                             # show the current version
+                                    """.trimIndent()
                                 }
-                                section {
-                                    h5 { +"Option" }
-                                    dl {
-                                        dt { +"env" }
-                                        dd {
-                                            +"Specify config object."
-                                        }
-                                    }
-                                }
+                            }
+                            p {
+                                +"Select a different environment with "
+                                code { +"-Penv=test" }
+                                +", matching the name of a "
+                                code { +"DbConfig" }
+                                +" you have defined."
                             }
                         }
                     }

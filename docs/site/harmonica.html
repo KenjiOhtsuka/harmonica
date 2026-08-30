@@ -1,14 +1,8 @@
-<!--
-  ~ Harmonica: Kotlin Database Migration Tool
-  ~ Copyright (c) 2022 Kenji Otsuka
-  ~
-  ~ This software is released under the MIT License.
-  ~ http://opensource.org/licenses/mit-license.php
-  -->
-
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="charset" content="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harmonica introduction</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4">
   </head>
@@ -16,7 +10,7 @@
     <header></header>
     <div class="container">
       <div class="row">
-        <div class="col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down">
+        <div class="col-xl-1 col-lg-2 col-md-3 col-sm-3 hidden-xs-down">
           <section>
             <ul>
               <li><a href="index.html">Home</a></li>
@@ -26,7 +20,7 @@
             </ul>
           </section>
         </div>
-        <div class="col-xl-11 col-lg-10 col-md-10 col-sm-9 col-xs-12">
+        <div class="col-xl-11 col-lg-10 col-md-9 col-sm-9 col-xs-12">
           <div class="row">
             <div class="col">
               <h1>Harmonica introduction</h1>
@@ -34,12 +28,120 @@
           </div>
           <div class="row">
             <div class="col">
-              <p>Jarmonica, migration with compiled Kotlin classes.</p>
+              <p>Harmonica migrates your database with Kotlin scripts (<code>.kts</code>). This page explains how to introduce Harmonica into your project.</p>
+              <p>Version 3.0.0 is the up-coming maintenance-restart release of this page's content. The legacy, compiled-class <a href="jarmonica.html">jarmonica</a> plugin is covered separately.</p>
             </div>
           </div>
+          <section>
+            <div class="row">
+              <div class="col">
+                <h2>Getting started</h2>
+              </div>
+            </div>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>1. Apply the plugin</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p>Add the plugin to your build script:</p>
+                  <pre><code>plugins {
+    id(&quot;harmonica&quot;) version &quot;3.0.0&quot;
+}</code></pre>
+                  <p>The plugin registers the tasks <code>harmonicaUp</code>, <code>harmonicaDown</code>, and <code>harmonicaCreate</code>.</p>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>2. Point the plugin at the migration directory</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p>Set the <code>directoryPath</code> extra property to the directory that contains <code>migration/</code> and <code>config/</code> (the default is <code>src/main/kotlin/db</code>):</p>
+                  <pre><code>extra[&quot;directoryPath&quot;] = &quot;src/main/kotlin/com/example/myapp&quot;</code></pre>
+                  <p>Add whatever the scripts need — the core library, your JDBC driver, and optionally the Exposed bridge — to the <code>harmonica</code> configuration:</p>
+                  <pre><code>dependencies {
+    harmonica(&quot;com.improve_future:core:3.0.0&quot;)
+    harmonica(&quot;org.xerial:sqlite-jdbc:3.45.3.0&quot;)
+    //harmonica(&quot;com.improve_future:exposed:3.0.0&quot;)
+}</code></pre>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>3. Configure the database connection</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p>Create <code>config/&lt;env&gt;.kts</code> for each environment. The environment is selected by the <code>env</code> extra property or the <code>-Penv</code> project property and defaults to <code>default</code>. The file evaluates to a <code>DbConfig</code>:</p>
+                  <pre><code>import com.improve_future.harmonica.core.DbConfig
+import com.improve_future.harmonica.core.Dbms
+
+DbConfig {
+    dbms = Dbms.SQLite
+    dbName = &quot;example_app&quot;
+}</code></pre>
+                  <p>Available settings: <code>dbms</code>, <code>host</code>, <code>port</code>, <code>dbName</code>, <code>user</code>, <code>password</code>, and <code>sslmode</code>. Executed migration versions are tracked in the <code>harmonica_migration</code> table.</p>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>4. Write a migration</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p>Run <code>./gradlew harmonicaCreate -PmigrationName=CreateUsers</code> to scaffold a migration in <code>migration/</code>, or create one manually. Migration files are named <code>&lt;timestamp&gt;_&lt;Name&gt;.kts</code> and run in lexical order:</p>
+                  <pre><code>import com.improve_future.harmonica.core.AbstractMigration
+
+object : AbstractMigration() {
+    override fun up() {
+        createTable(&quot;users&quot;) {
+            varchar(&quot;name&quot;, size = 100, nullable = false)
+            integer(&quot;age&quot;)
+            boolean(&quot;active&quot;, default = true)
+        }
+        createIndex(&quot;users&quot;, &quot;name&quot;)
+        addTextColumn(&quot;users&quot;, &quot;address&quot;)
+    }
+
+    override fun down() {
+        dropTable(&quot;users&quot;)
+    }
+}</code></pre>
+                  <p>The full set of available methods is listed on the <a href="../api/core/core/com.improve_future.harmonica.core/-abstract-migration/index.html">AbstractMigration API page</a> and the <a href="migration_method.html">migration method reference</a>.</p>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <div class="col">
+                  <h3>5. Run the migrations</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <pre><code>./gradlew harmonicaUp      # apply all pending migrations
+./gradlew harmonicaDown    # revert the latest migration</code></pre>
+                  <p>Select a different environment with <code>-Penv=sqlite</code>. Supported database systems are PostgreSQL, MySQL, SQLite, Oracle, and H2 (the SQL Server adapter is registered but not yet implemented).</p>
+                </div>
+              </div>
+            </section>
+          </section>
         </div>
       </div>
     </div>
     <footer></footer>
   </body>
 </html>
+

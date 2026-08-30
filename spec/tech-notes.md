@@ -107,8 +107,8 @@ unavailable DB fails the job instead of skipping).
 
 | Dependency | Status | Notes |
 | --- | --- | --- |
-| `kotlinx-html-jvm` | untouched | real consumer; upgrade in Phase 7 or drop the module. |
-| wrapper Gradle 4.9 / version-less Kotlin plugin / `mainClassName` | untouched | not part of the build since Phase 0. |
+| `kotlinx-html-jvm` 0.7.3 | upgraded in Phase 7 | real consumer; resolves from Maven Central. |
+| Gradle 4.9 wrapper / version-less Kotlin plugin / `mainClassName` | upgraded in Phase 7 | standalone build now on the Gradle 9.7.0 wrapper, Kotlin 2.3.20 plugin, `application.mainClass`, and JVM 8 targets (`compilerOptions` + `java` 1.8); the groovy plugin, groovy-all, and the Space repository were removed. |
 
 ### Source-code blockers (all resolved in Phase 0)
 

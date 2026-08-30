@@ -1,8 +1,9 @@
 # Toolchain & Dependency Research
 
 Facts gathered on 2026-08-01 (test counts and versions updated through
-2026-08-28, incl. the Phase 4 `harmonica_test` port, PR #221). Update this
-file as versions change.
+2026-08-30, incl. the Phase 4 `harmonica_test` port PR #221, the Phase 5
+quick wins #220/PR #224 + #222/PR #226, and the setup-java v6.0.0 bump
+PR #225). Update this file as versions change.
 
 ## Phase 0 status (implemented 2026-08-01; merged via PR #183, merge commit `69344da`)
 

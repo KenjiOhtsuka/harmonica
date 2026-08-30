@@ -54,7 +54,7 @@ As landed:
 - **Steps**:
   - `actions/checkout@v7` with `persist-credentials: false` (no step needs Git
     authentication after checkout; Gradle doesn't use the persisted credential).
-  - `actions/setup-java@v5.7.0` with Temurin **JDK 25** — `setup-gradle` does
+  - `actions/setup-java@v6.0.0` with Temurin **JDK 25** — `setup-gradle` does
     **not** install a JDK and ignores `distribution`/`java-version` inputs
     (only `actions/setup-java` selects the JDK).
   - `gradle/actions/setup-gradle@v6` with wrapper validation, build cache, and
@@ -71,7 +71,7 @@ As landed:
   bounded-retry (10 × 2 s) and **fails** on invalid configuration, missing
   credentials, unavailable services, or skipped DB tests — never skips (see
   `spec/testing.md`). Uses the same action pins as the `build` job
-  (checkout@v7, setup-java@v5.7.0, setup-gradle@v6); `dependency-graph` stays
+  (checkout@v7, setup-java@v6.0.0, setup-gradle@v6); `dependency-graph` stays
   on the `build` job only.
 
 ### 3.2 `jvm8-bytecode.yml` — prove JVM 8 target without JDK 8
@@ -140,17 +140,19 @@ updates:
   (plugin-publish 2.1.1), and **#178** (wrapper 9.6.1) were superseded by the
   Phase 0 toolchain PR and are closed. Later CI-action bumps merged: #170
   (checkout v7), #191 (setup-gradle v6), #192 (setup-java v5.6.0), #195
-  (setup-java v5.7.0). A Kotlin `jvm` plugin bump (PR #193) is open with a
+  (setup-java v5.7.0), #225 (setup-java v6.0.0). A Kotlin `jvm` plugin bump
+  (PR #193) is open with a
   **decline recommendation** — see `spec/plan.md` §6.
 
 ## 4. Action version policy
 
 - Pin by **major tag** (e.g. `@v7`) and let Dependabot keep them current;
-  Dependabot may propose full-version pins (e.g. `setup-java@v5.7.0`) — accept
+  Dependabot may propose full-version pins (e.g. `setup-java@v6.0.0`) — accept
   those. Full SHA-pinning is optional hardening for stricter projects.
 - Recommended actions: `actions/checkout@v7` (PR #170), `gradle/actions/setup-gradle@v6`
   (PR #191; official Gradle action — replaces manual `setup-java` + cache for
-  Gradle projects), `actions/setup-java@v5.7.0` (PRs #192/#195; Temurin JDK 25),
+  Gradle projects), `actions/setup-java@v6.0.0` (PRs #192/#195 to v5.x, v6.0.0 via
+  #225; Temurin JDK 25),
   `actions/upload-artifact@v4` (if artifacts needed later). Dependabot keeps
   them current.
 

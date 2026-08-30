@@ -32,7 +32,7 @@ plan to restart and modernize the project.
   prep
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
-  `actions/setup-java@v5.7.0`), `jvm8-bytecode.yml` (major-52 assertion),
+  `actions/setup-java@v6.0.0`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (dependency-graph submission). CircleCI removed.
 - Four active modules: `core`, `exposed`, `gradle-plugin`, `integration-test` —
   `./gradlew build` runs **86 tests, 0 skipped** (73 core + 8 plugin + 4 exposed
@@ -68,7 +68,7 @@ plan to restart and modernize the project.
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
   migration classes via `com.improve_future:harmonica-demo:2.0.0`.
-- **`develop` is 117 commits ahead of `master`** — Phase 4 (real-DB tests) must
+- **`develop` is 139 commits ahead of `master`** — Phase 4 (real-DB tests) must
   pass before `master` advances. See the risk register in [`plan.md`](plan.md).
 
 ## Machine environment (current)

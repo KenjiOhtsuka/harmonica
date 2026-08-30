@@ -1,20 +1,27 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-28 (**29 open** total). Grouped by
+Snapshot of **open** issues on 2026-08-30 (**25 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
 ## URGENT — blocking restart
 
-| # | Title | Plan |
-| --- | --- | --- |
-| 153 | Tasks in jarmonica gradle plugin don't work anymore | Investigate during Phase 5; add tests (ties into #97). |
+**Closed 2026-08-30:** #153 (Tasks in jarmonica gradle plugin don't work
+anymore) — resolved on **develop** only (no released version carries it):
+Phase 3 removed Exposed from `core` (root cause gone) and `PluginFlowTest`
+verifies the plugin flow end-to-end with and without Exposed. No remaining
+items in this tier.
 
-**Resolved and closed by Phase 0/2:** #167 (jcenter removed, CI rewritten,
-PR #183), #165 (LICENSE already MIT; README badge URLs fixed, PR #181), #140
-(kotlin-pluralizer removed, internal `singularize()`, PR #187). **Closed
+**Resolved and closed (by phase, most recent first):** **Closed 2026-08-30:**
+#220 (SQLite DB parent dir, merged in PR #224), #222 (integration-test
+warnings, merged in PR #226), #196 (Real-DB tests cover both configs —
+plugin-flow TestKit tests, PR #219), and #153 (see above) — #220/#222/#196
+removed from the tables below. **Closed
 2026-08-28:** #182 (JitPack badge renders correctly, closed as completed —
-removed from the SMALL table).
+removed from the SMALL table). **Resolved and closed by Phase 0/2:** #167
+(jcenter removed, CI rewritten, PR #183), #165 (LICENSE already MIT; README
+badge URLs fixed, PR #181), #140 (kotlin-pluralizer removed, internal
+`singularize()`, PR #187).
 
 **Closed / superseded (were listed as URGENT, now resolved on `develop`):**
 the build-failure issues #159 (Win10 openjdk 15), #158 (Win/Linux openjdk 16),
@@ -27,10 +34,7 @@ superseded by Phase 0.
 
 | # | Title | Plan |
 | --- | --- | --- |
-| 189 | `isSubtypeOf` in scanner swallows all `Throwable` | Narrow to recoverable exceptions to match `loadClass` (PR #188); small fix in `JarmonicaTaskMain`. |
-| 196 | Real-DB tests must cover both configs: with and without Exposed | Phase 4 item 4 (plugin-flow TestKit tests). The `integration-test` module landed (PR #207) with SQLite + gated PostgreSQL smoke tests, plus a gated MySQL smoke test (PR #209); the with/without-`harmonica-exposed` migration-flow verification shipped as the plugin-flow TestKit tests (PR #219) — flow verified, GitHub issue still open pending closure. |
-| 220 | `harmonicaUp` fails when the SQLite DB parent directory does not exist | **Fixed (2026-08-28, in progress PR).** `core`'s `Connection.connect()` now creates the SQLite DB file's parent directory before opening the connection, so both `harmonicaUp`/`harmonicaDown` and programmatic `Connection` usage work with a nested DB path (e.g. `build/db/harmonica.db`). `PluginFlowTest` was converted into a regression by pointing its test project at a non-existent `build/db/` path and removing its previous `mkdirs()` workaround. |
-| 222 | integration test outputs some warnings | **Fixed (2026-08-30, in progress PR).** The five fixable warnings are resolved: deprecated `Project.task(name, ...)` → `tasks.register<Jar>` for `sourcesJar`/`javadocJar` (`gradle-plugin/build.gradle.kts`), the `MigrationDsl` DSL-marker-on-function no-op removed (`AbstractMigration.kt`, KT-81567; annotation kept on the class), and the unchecked casts in `JarmonicaTaskMain` replaced with the type-safe JDK `Class.asSubclass()` (no warnings, no `@Suppress` needed). The redundant explicit `kotlin-compiler-embeddable` dependency was removed (it is transitively provided by `kotlin-scripting-jvm-host`; no direct imports). Two warnings remain residual and documented: the `kotlin-compiler-embeddable` artifact-on-build-classpath warning (transitive, inherent to embedded `.kts` script compilation) and the K2 LightTree-mode scripting warning. |
+| 189 | `isSubtypeOf` in scanner swallows all `Throwable` | **Fixed (2026-08-30, PR #227 open).** Narrowed the catch to `LinkageError` (the only error `isAssignableFrom` can throw, mirroring `loadClass`'s PR #188 narrowing); other errors propagate and the skipped class is reported to stderr. No synthetic linkage test — the scanner is dormant (legacy `Jarmonica*Main` flow, not wired to the published plugin); happy path covered by `PluginFlowTest`. |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |
 | 138 | Is there a need to make AbstractColumn internal? | Open up custom-column extension points (make `AbstractColumn`/`ColumnBuilder` public, document custom column pattern). |

@@ -48,7 +48,11 @@ class PluginFlowTest {
     ): File {
         val projectDir = File(File("build", "testkit"), name).apply { mkdirs() }
         val dbPath = dbPath(projectDir)
-        File(dbPath).parentFile!!.deleteRecursively()
+        val dbParent = File(dbPath).parentFile!!
+        dbParent.deleteRecursively()
+        check(!dbParent.exists()) {
+            "Test database parent still exists: $dbParent"
+        }
 
         File(projectDir, "settings.gradle.kts").writeText(
             """

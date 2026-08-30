@@ -55,7 +55,7 @@ object JarmonicaView : AbstractView() {
                                         +"""
 buildscript {
     ext.kotlin_version = '1.4.20'
-    ext.harmonica_version = '2.0.0'
+    ext.harmonica_version = '3.0.0'
 
     repositories {
         jcenter()

@@ -67,7 +67,7 @@ plan to restart and modernize the project.
   `harmonica_test` port is DONE (PR #221). The `demo/` module (seed for the
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
-  migration classes via `com.improve_future:harmonica-demo:2.0.0`.
+  migration classes via `com.improve_future:harmonica-demo:3.0.0`.
 - **`develop` is 139 commits ahead of `master`** — Phase 4 (real-DB tests) must
   pass before `master` advances. See the risk register in [`plan.md`](plan.md).
 

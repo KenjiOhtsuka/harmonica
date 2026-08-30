@@ -406,12 +406,13 @@ Full triage: [issues-triage.md]. Order:
 - Update/regenerate API docs with modern Dokka.
 - Keep `document/` site in sync or remove it if unmaintainable.
 
-Status: **in progress.** README refresh merged (PR #229); KDoc regenerated
-with Dokka 2.2.0 (PR #231); the `document/` site build was modernized
-(Gradle 9.7.0 wrapper, Kotlin 2.3.20, `application.mainClass`, JVM 8
-targets; groovy plugin/groovy-all and the Space repo removed) and the site
-content refreshed + regenerated for 3.0.0 (this PR). Remaining: rethink the
-`docs/api` hosting/format decision and revisit the site after release.
+Status: **in progress.** README refresh merged (PR #229); KDoc regeneration
+with Dokka 2.2.0 in progress (PR #231, not yet merged); the `document/` site
+build was modernized (Gradle 9.7.0 wrapper, Kotlin 2.3.20,
+`application.mainClass`, JVM 8 targets; groovy plugin/groovy-all and the
+Space repo removed) and the site content refreshed + regenerated for 3.0.0
+(this PR). Remaining: rethink the `docs/api` hosting/format decision and
+revisit the site after release.
 
 ## 5. Definition of done (overall restart)
 

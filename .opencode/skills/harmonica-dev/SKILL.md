@@ -23,6 +23,8 @@ change.
 - `./gradlew build` works on this machine (Gradle 9.7.0 + Kotlin 2.3.20 on
   OpenJDK 25). A red build is a real bug — fix it, don't defer.
 - One change per PR against `develop`.
+- Never push directly to `develop` — docs/spec and `.opencode/**` changes go
+  through the same small-PR flow as code.
 - Never commit unless explicitly asked.
 
 ## Conventions
@@ -37,12 +39,19 @@ change.
 
 ## Workflow
 
-- Cut a phase/feature branch from `develop`, do the work, open a small PR.
+- Cut a phase/feature branch from the **current `origin/develop`** (fetch
+  first). Never cut from a sibling unmerged feature branch — it contaminates
+  the PR diff.
+- Do the work, then open a small PR. When integrating `develop` into the PR
+  branch, prefer `git merge` over rebase; never `git pull --rebase` a branch
+  that already contains merge commits, and never amend or force-push commits
+  that exist on the remote.
 - After finishing a phase, update the relevant `spec/` doc (plan phase status,
   DoD, open decisions) as part of the same PR.
 - After a phase PR or milestone merges, run the `plan-review` skill to
   reconcile `spec/plan.md`, `spec/tech-notes.md`, and `spec/issues-triage.md`
-  with reality (git log, issues/PRs, versions, test counts).
+  with reality (git log, issues/PRs, versions, test counts) — the reconcile
+  itself lands as a docs PR, never a direct push.
 - Use the review subagents (`spec-review`, `build-review`, `exposed-review`)
   to validate spec-adjacent work before opening a PR.
 

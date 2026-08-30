@@ -74,7 +74,7 @@ Key references:
 
 | Dependency | Status | Notes |
 | --- | --- | --- |
-| `kotlin-compiler-embeddable` | **DONE** | 2.3.20. |
+| `kotlin-compiler-embeddable` | **DONE** | no longer declared explicitly (2026-08-30, #222): `kotlin-scripting-jvm-host` → `kotlin-scripting-compiler-embeddable` brings it in transitively (2.3.20). There are no direct compiler imports in plugin code. The Gradle "artifact present in build classpath" warning therefore still fires (transitive, inherent to embedded `.kts` script compilation) and cannot be removed without an architecture change; documented in #222. |
 | `kotlin-script-runtime` / `kotlin-script-util` → `kotlin-scripting-jvm-host` | **DONE** | `kotlin-script-util` does not exist for 2.3.20 (404; Maven Central metadata frozen at 1.8.22), so Phase 0 adopted `kotlin-scripting-jsr223`. **Replaced 2026-08-11 (PR #202)** by `kotlin-scripting-common` + `kotlin-scripting-jvm` + `kotlin-scripting-jvm-host`: `AbstractMigrationTask` evaluates `.kts` directly with `BasicJvmScriptingHost` from a `MigrationScript` `@KotlinScript` template (`createJvmCompilationConfigurationFromTemplate`, `dependenciesFromCurrentContext(wholeClasspath = true)`, base class loaded from the plugin classloader); no `javax.script.ScriptEngine` / registered `ScriptEngineFactory` anymore. |
 | `kotlin-reflect` | **DONE** | dropped — only stdlib `KClass` usage (PR #184). |
 | `org.reflections:reflections` | **DONE** | replaced with a classpath scanner in `JarmonicaTaskMain` (Phase 2, PRs #185/#188). |

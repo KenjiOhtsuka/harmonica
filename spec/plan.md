@@ -369,7 +369,7 @@ Full triage: [issues-triage.md]. Order:
    `isSubtypeOf` swallows all `Throwable`).
    #91 (Exposed) is **closed** — the bridge shipped in Phase 3 (PRs #197-#199).
    Also added in Phase 4/5: #220 (SQLite DB parent directory not created,
-   **fixed** in core), #222 (integration-test warnings) — both quick wins.
+   **fixed** in core), #222 (integration-test warnings, **fixed**) — both quick wins.
 3. Medium: #7 (closed connection), #85 (SQLite defaults), #67 (timestamp
    default), #80 (Exposed version), #71 (seeding), #97 (JavaExec task tests),
    #155 (programmatic migration docs). Also #215 (Exposed 0.61.0 → 1.x bridge

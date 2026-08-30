@@ -22,8 +22,6 @@ dependencies {
     val kotlinVersion = property("kotlin_version") as String
 
     api(project(":core"))
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-compiler-embeddable
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
 
     /* Implementation */
     implementation("org.jetbrains.kotlin:kotlin-scripting-common:$kotlinVersion")
@@ -62,16 +60,16 @@ tasks {
             exceptionFormat = TestExceptionFormat.FULL
         }
     }
+}
 
-    task<Jar>("sourcesJar") {
-        from(sourceSets.main.get().allJava)
-        archiveClassifier.set("sources")
-    }
+tasks.register<Jar>("sourcesJar") {
+    from(sourceSets.main.get().allJava)
+    archiveClassifier.set("sources")
+}
 
-    task<Jar>("javadocJar") {
-        from(javadoc)
-        archiveClassifier.set("javadoc")
-    }
+tasks.register<Jar>("javadocJar") {
+    from(tasks.named("javadoc"))
+    archiveClassifier.set("javadoc")
 }
 
 // JUnit 6 requires Java 17+, but the plugin's published bytecode must stay

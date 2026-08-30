@@ -28,7 +28,7 @@ abstract class JarmonicaTaskMain {
     protected fun findMigrationClassList(packageName: String): List<Class<out AbstractMigration>> {
         return findClassesInPackage(packageName)
             .filter { isSubtypeOf(AbstractMigration::class.java, it) }
-            .map { it as Class<out AbstractMigration> }
+            .map { it.asSubclass(AbstractMigration::class.java) }
             .sortedBy { it.name }
     }
 
@@ -37,7 +37,7 @@ abstract class JarmonicaTaskMain {
     ): DbConfig {
         val classList = findClassesInPackage(packageName)
             .filter { isSubtypeOf(DbConfig::class.java, it) }
-            .map { it as Class<out DbConfig> }
+            .map { it.asSubclass(DbConfig::class.java) }
         classList.forEach {
             if (it.simpleName == env) {
                 return try {

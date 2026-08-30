@@ -37,7 +37,6 @@ abstract class AbstractMigration {
         }
     }
 
-    @MigrationDsl
     fun createTable(name: String, block: TableBuilder.() -> Unit) {
         println("Create Table: $name")
 

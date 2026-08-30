@@ -135,7 +135,8 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
 - **`document/` module**: decided — **dropped from the root build**, folder
   left as-is (own Gradle 4.9 wrapper, version-less Kotlin plugin, deprecated
   `mainClassName`). No longer compiled or released. Future: convert or remove
-  (Phase 7).
+  (Phase 7). **Converted in Phase 7** — standalone build modernized (see
+  Phase 7 status).
 - Fix CI — done, part of this PR (see [ci.md](ci.md)): `ci.yml` (PR-driven,
   JDK 25, `./gradlew build`, dependency-graph submission) + `jvm8-bytecode.yml`
   (javap major-version 52 check) replace `gradle.yml` and `.circleci/config.yml`
@@ -205,7 +206,9 @@ gradle-plugin; Phase 0 baseline was 66; `ScriptClasspathTest` later added 2
 - `document` module: see Phase 0 — convert to a proper subproject (upgrade its
   own wrapper, pin Kotlin, fix `mainClassName`) or drop it from the release.
   Upgrade `kotlinx-html-jvm` 0.7.3 → latest there; drop `groovy-all` 2.3.11 if
-  unused after conversion.
+  unused after conversion. **Done in Phase 7** — wrapper 9.7.0, Kotlin 2.3.20,
+  `application.mainClass`; groovy-all dropped; kotlinx-html-jvm kept at 0.7.3
+  (resolves from Maven Central; no newer version needed for the generator).
 
 ### Phase 3 — Exposed optionality
 
@@ -402,6 +405,13 @@ Full triage: [issues-triage.md]. Order:
 - Rewrite README with current usage (also for the new Exposed-optional flow).
 - Update/regenerate API docs with modern Dokka.
 - Keep `document/` site in sync or remove it if unmaintainable.
+
+Status: **in progress.** README refresh merged (PR #229); KDoc regenerated
+with Dokka 2.2.0 (PR #231); the `document/` site build was modernized
+(Gradle 9.7.0 wrapper, Kotlin 2.3.20, `application.mainClass`, JVM 8
+targets; groovy plugin/groovy-all and the Space repo removed) and the site
+content refreshed + regenerated for 3.0.0 (this PR). Remaining: rethink the
+`docs/api` hosting/format decision and revisit the site after release.
 
 ## 5. Definition of done (overall restart)
 

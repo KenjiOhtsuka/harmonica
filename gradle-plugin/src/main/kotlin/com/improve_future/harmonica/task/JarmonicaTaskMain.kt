@@ -72,7 +72,10 @@ abstract class JarmonicaTaskMain {
         if (cls == base) return false
         return try {
             base.isAssignableFrom(cls)
-        } catch (e: Throwable) {
+        } catch (e: LinkageError) {
+            System.err.println(
+                "WARN: cannot resolve the supertype chain of ${cls.name} against ${base.name}: $e"
+            )
             false
         }
     }

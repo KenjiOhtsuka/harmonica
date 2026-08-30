@@ -1,14 +1,8 @@
-<!--
-  ~ Harmonica: Kotlin Database Migration Tool
-  ~ Copyright (c) 2022 Kenji Otsuka
-  ~
-  ~ This software is released under the MIT License.
-  ~ http://opensource.org/licenses/mit-license.php
-  -->
-
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="charset" content="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Migration method</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4">
   </head>
@@ -16,7 +10,7 @@
     <header></header>
     <div class="container">
       <div class="row">
-        <div class="col-xl-1 col-lg-2 col-md-2 col-sm-3 hidden-xs-down">
+        <div class="col-xl-1 col-lg-2 col-md-3 col-sm-3 hidden-xs-down">
           <section>
             <ul>
               <li><a href="index.html">Home</a></li>
@@ -26,102 +20,82 @@
             </ul>
           </section>
         </div>
-        <div class="col-xl-11 col-lg-10 col-md-10 col-sm-9 col-xs-12">
+        <div class="col-xl-11 col-lg-10 col-md-9 col-sm-9 col-xs-12">
           <div class="row">
             <div class="col">
               <h1>Migration method</h1>
             </div>
           </div>
           <div class="row">
-            <div class="col"></div>
+            <div class="col">
+              <p>A migration extends <code>AbstractMigration</code> and implements <code>up()</code> and <code>down()</code>. Inside those methods the whole DSL is available, and column builders inside <code>createTable { }</code>. The authoritative signatures are on the <a href="../api/core/core/com.improve_future.harmonica.core/-abstract-migration/index.html">AbstractMigration API page</a>.</p>
+            </div>
           </div>
-          <section>
-            <div class="row">
-              <div class="col">
-                <h2>Create migration file</h2>
-              </div>
+          <div class="row">
+            <div class="col">
+              <h2>Creating and dropping tables</h2>
+              <ul>
+                <li><code>createTable(&quot;users&quot;) { ... }</code> — create a table; the block declares its columns and indexes.</li>
+                <li><code>dropTable(&quot;users&quot;)</code> — drop a table.</li>
+                <li><code>renameTable(&quot;members&quot;, &quot;users&quot;)</code> — rename a table.</li>
+              </ul>
             </div>
-            <div class="row">
-              <div class="col">
-                <p>First, create migration files.</p>
-                <pre><code>./gradlew jarmonicaCreate</code></pre>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2>Column builders (inside createTable)</h2>
+              <ul>
+                <li><code>varchar(&quot;name&quot;, size = 100)</code>, <code>string(...)</code> — a text column of a given size.</li>
+                <li><code>integer(...)</code>, <code>bigInteger(...)</code>, <code>decimal(...)</code> — numeric columns.</li>
+                <li><code>boolean(...)</code> — a boolean column.</li>
+                <li><code>date(...)</code>, <code>time(...)</code>, <code>dateTime(...)</code>, <code>timestamp(...)</code> — temporal columns.</li>
+                <li><code>text(...)</code> — a long text column.</li>
+                <li><code>blob(...)</code> — a binary column.</li>
+                <li><code>refer(&quot;company&quot;)</code> — a foreign key column (e.g. <code>company_id</code>) referencing the given table; also accepts <code>nullable</code>, <code>default</code>, and <code>columnName</code>.</li>
+                <li><code>comment(&quot;...&quot;)</code> — a column comment.</li>
+                <li>Builders accept <code>nullable</code> and <code>default</code> (and <code>size</code> for <code>varchar</code> — MySQL defaults to 255 — plus <code>unsigned</code> for integer columns on MySQL).</li>
+              </ul>
             </div>
-            <section>
-              <div class="row">
-                <div class="col">
-                  <h3>Parameters</h3>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <dl>
-                    <dt>migrationName</dt>
-                    <dd>
-                      <p>This parameter <code>migrationName</code>specifies migration name.</p>
-                      <figure>
-                        <figcaption>Usage</figcaption>
-                        <pre><code>./gradlew jarmonicaCreate -PmigrationName=&quot;HelloWorld&quot;</code></pre>
-                      </figure>
-                      <figure>
-                        <figcaption>Output</figcaption>
-                        <pre><code></code></pre>
-                      </figure>
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </section>
-          </section>
-          <section>
-            <div class="row">
-              <div class="col">
-                <h2>Migrate</h2>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2>Adding columns to an existing table</h2>
+              <ul>
+                <li><code>addVarcharColumn</code>, <code>addIntegerColumn</code>, <code>addBigIntegerColumn</code>, <code>addDecimalColumn</code>, <code>addBooleanColumn</code>, <code>addTextColumn</code>, <code>addBlobColumn</code> — each takes the table and column name (and column settings).</li>
+                <li><code>addDateColumn</code>, <code>addDateTimeColumn</code>, <code>addTimeColumn</code>, <code>addTimestampColumn</code> — temporal variants.</li>
+                <li><code>removeColumn(&quot;users&quot;, &quot;address&quot;)</code> — drop a column.</li>
+                <li><code>renameColumn(&quot;users&quot;, &quot;name&quot;, &quot;username&quot;)</code> — rename a column.</li>
+              </ul>
             </div>
-            <div class="row">
-              <div class="col">
-                <p>Migrate by the following command.</p>
-                <pre><code>./gradlew jarmonicaUp</code></pre>
-                <p>This command migrates all migrationswhich are not migrated at that time.</p>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2>Indexes and foreign keys</h2>
+              <ul>
+                <li><code>createIndex(&quot;users&quot;, &quot;name&quot;)</code> — create an index on one or more columns (unique and index-name variants exist).</li>
+                <li><code>dropIndex(tableName, indexName)</code> — drop an index.</li>
+                <li><code>renameIndex(tableName, oldIndexName, newIndexName)</code> — rename an index.</li>
+                <li><code>addForeignKey(&quot;users&quot;, &quot;companyId&quot;, &quot;companies&quot;, &quot;id&quot;)</code> — add a foreign key constraint.</li>
+                <li><code>dropForeignKey(tableName, columnName)</code> — drop a foreign key.</li>
+              </ul>
             </div>
-            <section>
-              <div class="row">
-                <div class="col">
-                  <h3>Parameter</h3>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <dl>
-                    <dt>env</dt>
-                    <dd></dd>
-                    <dt>step</dt>
-                    <dd></dd>
-                  </dl>
-                </div>
-              </div>
-            </section>
-          </section>
-          <section>
-            <div class="row">
-              <div class="col">
-                <h2>Table creation</h2>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2>Low-level SQL</h2>
+              <p><code>executeSql(&quot;INSERT INTO ...&quot;)</code> runs raw SQL against the connected database.</p>
             </div>
-            <div class="row">
-              <div class="col">
-                <p>For</p>
-                <pre>
-                  <div class="col"></div>
-                </pre>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2>Supported database systems</h2>
+              <p>The <code>Dbms</code> enum covers <code>PostgreSQL</code>, <code>MySQL</code>, <code>SQLite</code>, <code>SQLServer</code> (adapter registered, not yet implemented), <code>Oracle</code>, and <code>H2</code>.</p>
             </div>
-          </section>
+          </div>
         </div>
       </div>
     </div>
     <footer></footer>
   </body>
 </html>
+

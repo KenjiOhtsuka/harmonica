@@ -1,7 +1,6 @@
 plugins {
-    id 'groovy'
-    id 'org.jetbrains.kotlin.jvm'
     id 'application'
+    id 'org.jetbrains.kotlin.jvm' version '2.3.20'
 }
 
 group 'com.improve_future.harmonica'
@@ -9,24 +8,24 @@ version rootProject.version
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven"
-    }
 }
 
 dependencies {
-    // Update kotlinx_html version to build
     def kotlinx_html_version = "0.7.3"
-    // include for server side
     implementation "org.jetbrains.kotlinx:kotlinx-html-jvm:${kotlinx_html_version}"
-    implementation 'org.codehaus.groovy:groovy-all:2.3.11'
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+    }
 }
 
-mainClassName = "com.improve_future.harmonica.document.Main"
+java {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+application {
+    mainClass = "com.improve_future.harmonica.document.Main"
+}

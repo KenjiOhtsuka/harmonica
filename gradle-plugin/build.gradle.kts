@@ -53,6 +53,12 @@ kotlin {
     }
 }
 
+dokka {
+    dokkaPublications.html {
+        outputDirectory.set(rootProject.layout.projectDirectory.dir("docs/api/gradle-plugin"))
+    }
+}
+
 tasks {
     test {
         useJUnitPlatform()

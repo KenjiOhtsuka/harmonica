@@ -1,113 +1,136 @@
-**This Library is NOT developed actively now. Please feel free to fork, develop and publicize your library.**
+# Harmonica — Kotlin Database Migration Tool
 
-# Harmonica - Kotlin Database Migration Tool
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Build: CI](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml/badge.svg)](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml)
+[![Build: DB integration](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml/badge.svg?job=db-integration)](https://github.com/KenjiOhtsuka/harmonica/actions/workflows/ci.yml)
+[![Release](https://jitpack.io/v/KenjiOhtsuka/harmonica.svg)](https://jitpack.io/#KenjiOhtsuka/harmonica)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Release](https://jitpack.io/v/KenjiOhtsuka/harmonica.svg)](https://jitpack.io/#KenjiOhtsuka/harmonica)
-[![CircleCI](https://circleci.com/gh/KenjiOhtsuka/harmonica.svg?style=svg)](https://circleci.com/gh/KenjiOhtsuka/harmonica)
-[![Twitter Follow](https://img.shields.io/twitter/follow/_kjot.svg?style=social)](https://twitter.com/_kjot)
+Harmonica is a database migration tool for the JVM, written in Kotlin — a Gradle
+plugin backed by a JDBC core library. It is similar in spirit to Phinx and
+Rails migrations.
 
+Version **3.0.0** is the maintenance-restart release: the project was dormant
+for years and has been rebuilt on a modern toolchain (Kotlin 2.3, Gradle 9.7,
+published bytecode targets JVM 8). The biggest change is that Exposed support is
+now an **optional, separate module** — the core library no longer depends on
+Exposed.
 
-Gradle Plugin Page: https://plugins.gradle.org/plugin/com.improve_future.harmonica
+## Supported databases
 
-This is Database Migration Tool, gradle plugin, made with Kotlin.
-It is made similar to Phinx, Rails.
+PostgreSQL, MySQL, SQLite, Oracle, and H2.
 
-Now, this tool is for PostgreSQL, MySQL, SQLite and Oracle Database.
+- SQLite and H2 are embedded and exercised on every build.
+- PostgreSQL and MySQL are verified by the gated integration suite
+  (`docker-compose up` + `:integration-test:integrationTest`, required mode in CI).
+- The SQL Server adapter is registered but not implemented yet.
 
-## Overview
+You supply the JDBC driver for your database on the runtime classpath.
 
-With this library, you can write database migration like as follows.
+## Requirements
+
+- Gradle 9.x (built and tested with Gradle 9.7.0 and Kotlin 2.3.20).
+
+## Getting started
+
+### 1. Apply the plugin
 
 ```kotlin
-package your.migration
+plugins {
+    id("harmonica") version "3.0.0"
+}
+```
 
+The plugin registers the tasks `harmonicaUp`, `harmonicaDown`, and
+`harmonicaCreate`. The legacy `jarmonica` plugin is also available.
+
+### 2. Point the plugin at your migration scripts
+
+Migrations are `.kts` scripts. Set the root directory via the `directoryPath`
+project property, then put scripts in `migration/` and DB config in `config/`:
+
+```kotlin
+extra["directoryPath"] = "src/main/kotlin/com/example/myapp/migration"
+```
+
+### 3. Write a migration
+
+Run `./gradlew harmonicaCreate -PmigrationName=CreateUsers` to scaffold a
+migration file, or create one manually:
+
+```kotlin
 import com.improve_future.harmonica.core.AbstractMigration
 
-/**
- * HolloWorld
- */
-class M20180624011127699_HolloWorld : AbstractMigration() {
+object : AbstractMigration() {
     override fun up() {
-        createTable("table_name") {
-            // If you add the next line,
-            // the migration doesn't create auto incremental id column.
-            // id = false
-
-            // You can easily define columns with their type name.
-            boolean("boolean_column", nullable = false, default = true)
-            integer("integer_column", default = 1)
-            decimal("decimal_column", 5, 2, default = 3)
-            varchar("varchar_column", size = 10, nullable = false)
-            text("text_column", default = "default value")
-            blob("blob_column", default = "abcde".toByteArray())
-            date("date_column_1", default = "2019-01-01")
-            date("date_column_2", default = Date())
-            date("date_column_3", default = LocalDate.of(2018, 2, 2))
-            time("time_column_1", default = "11:22:33")
-            time("time_column_2", default = Date())
-            time("time_column_3", default = LocalTime.now(), nullable = false)
-            dateTime("date_tiem_column_1", default = "2011-11-12 12:34:56")
-            dateTime("date_time_column_2", default = Date())
-            dateTime("date_time_column_3", default = LocalDateTime.now())
-            timestamp("timestamp_column_1", default = "2012-10-04 1:2:3")
-            timestamp("timestamp_column_2", default = Date())
-            timestamp("timestamp_column_3", default = LocalDateTime.now())
+        createTable("users") {
+            varchar("name", size = 100, nullable = false)
+            integer("age")
+            boolean("active", default = true)
         }
-
-        // When you add column, `add*****Column` method works.
-        addBooleanColumn(
-            "table_name", "added_boolean",
-            default = true, nullable = false
-        )
-        addIntegerColumn(
-            "table_name", "added_integer", nullable = false
-        )
-        addDecimalColumn("table_name", "added_decimal_column_name")
-        addVarcharColumn(
-            "table_name", "added_boolean_column_name",
-            default = "default", nullable = false
-        )
-        addTextColumn("table_name", "added_text_column_name")
-        addDateColumn(
-            "table_name", "added_date",
-            default = LocalDate.of(2018, 12, 11)
-        )
-
-        // When you add index, use `addIndex`.
-        createIndex("table_name", "column_name")
-
-        // You can execute SQL directly.
-        executeSql("SELECT 1;")
+        createIndex("users", "name")
+        addTextColumn("users", "address")
     }
 
     override fun down() {
-        dropIndex("table_name", "table_name_integer_column_idx")
-        dropTable("table_name")
+        dropTable("users")
     }
 }
 ```
 
-## Usage, Command
+See `AbstractMigration` and `TableBuilder` for the full migration DSL —
+column types, indexes, foreign keys, renames, and raw `executeSql`.
 
-* [Wiki](https://github.com/KenjiOhtsuka/harmonica/wiki): Command usage.
-* Demo
-    * [Development Instruction](https://improve-future.com/en/spring-boot-with-db-migration.html): Explanation of how to develop the application with Spring Boot and Harmonica.
-    * [The code](https://github.com/KenjiOhtsuka/harmonica_demo): The code of above explanation.
+### 4. Run
 
-## Caution
+```console
+./gradlew harmonicaUp     # apply pending migrations
+./gradlew harmonicaDown   # revert the last migration
+```
 
-When you use harmonica, not jarmonica,
-sometimes it says "The connection has already been closed" and the migrations fail.
-Then, execute `gradlew --stop` to clear dead connections.
+## Artifacts
 
-## Contribute
+| Module | Current coordinates | Channel |
+| ------ | ------------------- | ------- |
+| Core library | `com.improve_future:core` | JitPack |
+| Exposed bridge (optional) | `com.improve_future:exposed` | JitPack |
+| Gradle plugin | `harmonica` / `jarmonica` | Gradle Plugin Portal |
 
-Pull requests are welcomed!! Please feel free to use it, and to contribute.
+The exact publication coordinates for 3.0.0 are being finalized (see Phase 6 of
+`spec/plan.md` and issue #1); Maven Central publishing is optional.
 
-## Links
+## Exposed integration (optional)
 
-* [API Document](https://kenjiohtsuka.github.io/harmonica/api/harmonica/index.html)
+If you want to write migrations against Exposed tables, add the bridge to the
+plugin's script classpath:
 
-## Test Project
+```kotlin
+dependencies {
+    harmonica("com.improve_future:exposed:2.0.0")
+}
+```
 
-Test with real database is in different repository, [Harmonica Test](https://github.com/KenjiOhtsuka/harmonica_test).
+The bridge currently targets Exposed 0.61.x (Exposed 1.x support is tracked in
+issue #215). The plugin-flow test suite verifies migrations both with and
+without the Exposed module on the script classpath.
+
+## API documentation
+
+KDoc is generated with Dokka per module and published in the `docs/api`
+directory of this repository (served on GitHub Pages at
+<https://kenjiohtsuka.github.io/harmonica/>).
+
+## Demo
+
+- [harmonica_demo](https://github.com/KenjiOhtsuka/harmonica_demo) — a working
+  example application (Spring Boot + migrations), kept outside this repository.
+- [Development instruction](https://improve-future.com/en/spring-boot-with-db-migration.html)
+
+## Contributing
+
+Pull requests are welcome. Work is planned in `spec/plan.md` and organized as
+small PRs against `develop`. Real-database integration tests run with Docker
+(`docker-compose up`); SQLite and H2 embedded tests run on every build.
+
+## License
+
+MIT

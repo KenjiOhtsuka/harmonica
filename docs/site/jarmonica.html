@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="charset" content="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jarmonica introduction</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4">
@@ -78,7 +78,9 @@ extra[&quot;env&quot;] = &quot;Default&quot;   // optional; defaults to &quot;De
               <div class="row">
                 <div class="col">
                   <p>Configuration is a compiled <code>DbConfig</code> subclass or object named after the environment, in the migration package. For each environment you use, create a <code>config/</code> file such as <code>config/Default.kt</code>:</p>
-                  <pre><code>import com.improve_future.harmonica.core.DbConfig
+                  <pre><code>package com.example.myapp.db
+
+import com.improve_future.harmonica.core.DbConfig
 import com.improve_future.harmonica.core.Dbms
 
 class Default : DbConfig() {
@@ -99,7 +101,9 @@ class Default : DbConfig() {
               <div class="row">
                 <div class="col">
                   <p>Run <code>./gradlew jarmonicaCreate -PmigrationName=CreateUsers</code> to scaffold one, or create the class manually. The class name must start with <code>M</code> and end with <code>_</code>, with the <code>yyyyMMddHHmmssSSS</code> timestamp in between — e.g. <code>M&lt;timestamp&gt;_&lt;Name&gt;</code> — because the timestamp is the migration version:</p>
-                  <pre><code>import com.improve_future.harmonica.core.AbstractMigration
+                  <pre><code>package com.example.myapp.db
+
+import com.improve_future.harmonica.core.AbstractMigration
 
 class M20260830120000000_CreateUsers : AbstractMigration() {
     override fun up() {

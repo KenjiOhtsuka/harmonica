@@ -103,6 +103,8 @@ extra["env"] = "Default"   // optional; defaults to "Default"
                             pre {
                                 code {
                                     +"""
+package com.example.myapp.db
+
 import com.improve_future.harmonica.core.DbConfig
 import com.improve_future.harmonica.core.Dbms
 
@@ -139,6 +141,8 @@ class Default : DbConfig() {
                             pre {
                                 code {
                                     +"""
+package com.example.myapp.db
+
 import com.improve_future.harmonica.core.AbstractMigration
 
 class M20260830120000000_CreateUsers : AbstractMigration() {

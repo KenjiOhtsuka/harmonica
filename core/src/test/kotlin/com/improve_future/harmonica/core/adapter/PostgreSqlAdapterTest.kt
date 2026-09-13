@@ -248,7 +248,8 @@ class PostgreSqlAdapterTest {
             "time TIME NOT NULL",
             buildTimeDeclaration()
         )
-        val defaultTime = Date()
+        val defaultTime =
+            SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2000-01-02 03:04:05.600")
         timeColumn.defaultDate = defaultTime
         val timeSql =
             SimpleDateFormat("HH:mm:ss.SSS").format(defaultTime)

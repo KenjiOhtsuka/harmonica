@@ -316,7 +316,5 @@ Resolved (2026-08-09, PR B):
 
 Remaining:
 
-- Demo project against PostgreSQL/MySQL — the demo (`demo/`, seed for the
-  plugin-flow tests) was committed in Phase 4 (PR #219) and is wired as a
-  composite `includeBuild`; the SQLite flow is exercised on every build, PG/
-  MySQL via the gated `integration-test` suite (see `spec/README.md`).
+- Demo project against a real DB (SQLite here; PostgreSQL/MySQL deferred to
+  Phase 4) — built locally, not yet merged.

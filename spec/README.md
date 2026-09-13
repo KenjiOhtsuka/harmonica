@@ -22,7 +22,7 @@ plan to restart and modernize the project.
 > db-integration, PR #209; plugin-flow TestKit, PR #219; full `harmonica_test`
 > port, PR #221). Phase 4 is complete. Updated 2026-09-13: Phase 5 quick wins
 > (#220/#222/#189, PRs #224/#226/#227), Phase 7 (README #229, KDoc #231,
-> doc-site #232) complete; 3.0.0 publishing in Phase 6. Update this
+> doc-site #232) complete; 3.0.1 publishing in Phase 6. Update this
 > list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.7.0**, `jvmTarget = 1.8` (class-file
@@ -31,8 +31,10 @@ plan to restart and modernize the project.
   2.15.3 at build time only — not shipped; see the Dependabot alerts)
 - Publish target: **JitPack-only decided 2026-09-13 (plan.md §6)** — `core`/
   `exposed` get `maven-publish` publications + a `.jitpack.yml` (JDK 17,
-  `publishToMavenLocal`); plugin-publish/OSSRH configs kept for later, unused
-  for the 3.0.0 release
+  `:core:publishToMavenLocal :exposed:publishToMavenLocal` — scoped to the
+  libraries, since the gradle-plugin publication is deferred Phase-6 work);
+  plugin-publish/OSSRH configs kept for later, unused
+  for the 3.0.1 release
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
   `actions/setup-java@v6.0.1`), `jvm8-bytecode.yml` (major-52 assertion),
@@ -70,10 +72,12 @@ plan to restart and modernize the project.
   `harmonica_test` port is DONE (PR #221). The `demo/` module (seed for the
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
-  migration classes via `com.improve_future:harmonica-demo:3.0.0`.
-- **`develop` is 168 commits ahead of `master`** (as of 2026-09-13) — the
-  Phase 4 gate (real-DB tests) is now satisfied; the `master` fast-forward is
-  authorized as part of the Phase 6 3.0.0 release. See the risk register in
+  migration classes via `com.improve_future:harmonica-demo:3.0.1`.
+- **`develop` was merged into `master`** (PR #239, merged 2026-09-13); `master`
+  is at `055572d`, the (broken) `3.0.0` tag, one commit ahead of `develop`. The
+  first released tag will be **3.0.1** (PR #240: scoped JitPack install +
+  version bump), cut from the fixed commit once it merges. See the risk
+  register in
   [`plan.md`](plan.md).
 
 ## Machine environment (current)

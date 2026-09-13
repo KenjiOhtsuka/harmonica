@@ -73,9 +73,11 @@ plan to restart and modernize the project.
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
   migration classes via `com.improve_future:harmonica-demo:3.0.1`.
-- **`develop` is 168 commits ahead of `master`** (as of 2026-09-13) — the
-  Phase 4 gate (real-DB tests) is now satisfied; the `master` fast-forward is
-  authorized as part of the Phase 6 3.0.1 release. See the risk register in
+- **`develop` was merged into `master`** (PR #239, merged 2026-09-13); `master`
+  is at `055572d`, the (broken) `3.0.0` tag, one commit ahead of `develop`. The
+  first released tag will be **3.0.1** (PR #240: scoped JitPack install +
+  version bump), cut from the fixed commit once it merges. See the risk
+  register in
   [`plan.md`](plan.md).
 
 ## Machine environment (current)

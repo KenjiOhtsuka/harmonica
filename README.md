@@ -35,15 +35,23 @@ You supply the JDBC driver for your database on the runtime classpath.
 
 ```kotlin
 plugins {
-    id("harmonica") version "3.0.0"
+    id("harmonica")
 }
 ```
 
 The plugin registers the tasks `harmonicaUp`, `harmonicaDown`, and
 `harmonicaCreate`. The legacy `jarmonica` plugin is also available.
 
-The plugin is applied from the Gradle Plugin Portal; its channel for 3.0.0 is
-being finalized (see "Download"), while the release libraries ship via JitPack.
+The 3.0.0 plugin is not yet on the Gradle Plugin Portal (see "Download"), so
+the plugins DSL resolves it from a source composite build — add something like
+this to your `settings.gradle.kts`:
+
+```kotlin
+includeBuild("../harmonica") // clone KenjiOhtsuka/harmonica at the 3.0.0 tag
+```
+
+Once the plugin channel is finalized, `id("harmonica") version "3.0.0"` can be
+applied directly from the portal.
 
 ### 2. Point the plugin at your migration scripts
 

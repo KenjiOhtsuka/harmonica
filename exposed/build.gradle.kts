@@ -47,6 +47,37 @@ tasks.test {
     useJUnitPlatform()
 }
 
+val githubUrl = "https://github.com/KenjiOhtsuka/harmonica"
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name.set("Harmonica Exposed Bridge")
+                description.set("Kotlin Database Migration Tool — optional Exposed ORM integration")
+                url.set(githubUrl)
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("http://opensource.org/licenses/mit-license.php")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("kenjiohtsuka")
+                        name.set("Kenji Otsuka")
+                        email.set("kok.fdcm@gmail.com")
+                    }
+                }
+                scm {
+                    url.set(githubUrl)
+                }
+            }
+        }
+    }
+}
+
 // JUnit 6 requires Java 17+, but published bytecode must stay JVM 8
 // (jvmTarget = JVM_1_8 above). The Gradle metadata of JUnit 6 artifacts
 // declares org.gradle.jvm.version = 17, while these configurations carry

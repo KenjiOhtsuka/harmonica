@@ -1,0 +1,48 @@
+package com.improve_future.harmonica.plugin
+
+import com.improve_future.harmonica.core.VersionService
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
+import org.gradle.work.DisableCachingByDefault
+import java.io.File
+import java.nio.file.Paths
+
+@DisableCachingByDefault(because = "Migration tasks execute user-provided scripts")
+abstract class AbstractTask : DefaultTask() {
+    protected val directoryPath: String
+        @Internal
+        get() {
+            if (project.extensions.extraProperties.has("directoryPath"))
+                return project.extensions.extraProperties["directoryPath"] as String
+            return "src/main/kotlin/db"
+        }
+
+    protected val env: String
+        @Internal
+        get() {
+            if (project.extensions.extraProperties.has("env"))
+                return project.extensions.extraProperties["env"] as String
+            if (project.hasProperty("env"))
+                return project.findProperty("env") as String
+            return "default"
+        }
+
+    fun findMigrationDir(): File {
+        return resolvePath(directoryPath).resolve("migration")
+    }
+
+    protected fun resolvePath(path: String): File {
+        val asPath = Paths.get(path)
+        return if (asPath.isAbsolute) asPath.toFile() else project.file(path)
+    }
+
+    /** The table name to store executed migration version IDs. */
+    private val migrationTableName: String = "harmonica_migration"
+
+    @Internal
+    protected val versionService: VersionService
+
+    init {
+        versionService = VersionService(migrationTableName)
+    }
+}

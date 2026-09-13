@@ -1,0 +1,5 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.improve_future.harmonica.exposed////PointingToDeclaration/exposed/com.improve_future.harmonica.exposed/index.html
+$dokka.location:com.improve_future.harmonica.exposed//exposedTransaction/com.improve_future.harmonica.core.AbstractMigration#kotlin.Function1[org.jetbrains.exposed.sql.Transaction,kotlin.Unit]/PointingToDeclaration/exposed/com.improve_future.harmonica.exposed/exposed-transaction.html
+com.improve_future.harmonica.exposed

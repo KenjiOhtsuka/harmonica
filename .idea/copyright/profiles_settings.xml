@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="GPLv3_Harmonica">
+  <settings>
     <module2copyright>
-      <element module="All" copyright="GPLv3_Harmonica" />
+      <element module="All" copyright="MIT_Harmonica" />
     </module2copyright>
   </settings>
 </component>

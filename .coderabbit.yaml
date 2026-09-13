@@ -1,0 +1,6 @@
+reviews:
+  auto_review:
+    enabled: false
+  path_filters:
+    - '!docs/api/**'
+    - '!docs/site/**'

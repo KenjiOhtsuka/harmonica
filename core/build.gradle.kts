@@ -1,0 +1,95 @@
+import org.gradle.api.attributes.java.TargetJvmVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    kotlin("jvm")
+    id("maven-publish")
+    id("org.jetbrains.dokka")
+}
+
+group = "com.improve_future"
+version = "3.0.0"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Tests
+    testImplementation("org.jetbrains.kotlin:kotlin-test:${property("kotlin_version")}")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
+    testImplementation("com.h2database:h2:2.4.240")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
+}
+
+dokka {
+    dokkaPublications.html {
+        outputDirectory.set(rootProject.layout.projectDirectory.dir("docs/api/core"))
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+val githubUrl = "https://github.com/KenjiOhtsuka/harmonica"
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name.set("Harmonica Core")
+                description.set("Kotlin Database Migration Tool — JDBC core library")
+                url.set(githubUrl)
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("http://opensource.org/licenses/mit-license.php")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("kenjiohtsuka")
+                        name.set("Kenji Otsuka")
+                        email.set("kok.fdcm@gmail.com")
+                    }
+                }
+                scm {
+                    url.set(githubUrl)
+                }
+            }
+        }
+    }
+}
+
+// JUnit 6 requires Java 17+, but published bytecode must stay JVM 8
+// (jvmTarget = JVM_1_8 above). The Gradle metadata of JUnit 6 artifacts
+// declares org.gradle.jvm.version = 17, while these configurations carry
+// 8 from targetCompatibility, which would reject the dependency. Override
+// the attribute on the test classpaths only so resolution succeeds and
+// tests run on the installed JDK (25), which satisfies the 17+ baseline.
+configurations {
+    testCompileClasspath {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
+    testRuntimeClasspath {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
+}

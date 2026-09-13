@@ -35,12 +35,23 @@ You supply the JDBC driver for your database on the runtime classpath.
 
 ```kotlin
 plugins {
-    id("harmonica") version "3.0.0"
+    id("harmonica")
 }
 ```
 
 The plugin registers the tasks `harmonicaUp`, `harmonicaDown`, and
 `harmonicaCreate`. The legacy `jarmonica` plugin is also available.
+
+The 3.0.0 plugin is not yet on the Gradle Plugin Portal (see "Download"), so
+the plugins DSL resolves it from a source composite build — add something like
+this to your `settings.gradle.kts`:
+
+```kotlin
+includeBuild("../harmonica") // clone KenjiOhtsuka/harmonica at the 3.0.0 tag
+```
+
+Once the plugin channel is finalized, `id("harmonica") version "3.0.0"` can be
+applied directly from the portal.
 
 ### 2. Point the plugin at your migration scripts
 
@@ -86,16 +97,40 @@ column types, indexes, foreign keys, renames, and raw `executeSql`.
 ./gradlew harmonicaDown   # revert the last migration
 ```
 
-## Artifacts
+## Download
 
-| Module | Current coordinates | Channel |
-| ------ | ------------------- | ------- |
-| Core library | `com.improve_future:core` | JitPack |
-| Exposed bridge (optional) | `com.improve_future:exposed` | JitPack |
-| Gradle plugin | `harmonica` / `jarmonica` | Gradle Plugin Portal |
+The 3.0.0 artifacts are served from
+[JitPack](https://jitpack.io/#KenjiOhtsuka/harmonica), which builds them from
+the `3.0.0` tag. For the core library, add the JitPack repository and
+dependency:
 
-The exact publication coordinates for 3.0.0 are being finalized (see Phase 6 of
-`spec/plan.md` and issue #1); Maven Central publishing is optional.
+```kotlin
+repositories {
+    maven { url = uri("https://jitpack.io") }
+}
+
+dependencies {
+    implementation("com.github.KenjiOhtsuka.harmonica:core:3.0.0")
+}
+```
+
+The optional Exposed bridge is a separate artifact:
+
+```kotlin
+dependencies {
+    implementation("com.github.KenjiOhtsuka.harmonica:exposed:3.0.0")
+}
+```
+
+| Module | Coordinate (3.0.0) |
+| ------ | ------------------- |
+| Core library | `com.github.KenjiOhtsuka.harmonica:core` |
+| Exposed bridge (optional) | `com.github.KenjiOhtsuka.harmonica:exposed` |
+
+The Gradle plugin is applied through the plugins DSL as shown in "Getting
+started"; its distribution channel for the 3.0.0 release is still being
+finalized. Maven Central and the Gradle Plugin Portal are deferred past the
+first release.
 
 ## Exposed integration (optional)
 
@@ -104,13 +139,15 @@ plugin's script classpath:
 
 ```kotlin
 dependencies {
-    harmonica("com.improve_future:exposed:3.0.0")
+    harmonica("com.github.KenjiOhtsuka.harmonica:exposed:3.0.0")
 }
 ```
 
-The bridge currently targets Exposed 0.61.x (Exposed 1.x support is tracked in
-issue #215). The plugin-flow test suite verifies migrations both with and
-without the Exposed module on the script classpath.
+The JitPack repository from "Download" must be on the build's repository list
+so the `harmonica` configuration can resolve the bridge. The bridge currently
+targets Exposed 0.61.x (Exposed 1.x support is tracked in issue #215). The
+plugin-flow test suite verifies migrations both with and without the Exposed
+module on the script classpath.
 
 ## API documentation
 

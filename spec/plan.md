@@ -397,15 +397,23 @@ Full triage: [issues-triage.md]. Order:
 
 ### Phase 6 — Release & publishing
 
-- Configure **JitPack**: build from git tags; multi-module must produce
-  `com.improve_future.harmonica:harmonica-core` (or keep group/module names
-  stable). Verify with a snapshot tag.
-- Keep Gradle Plugin Portal publication (`plugin-publish`) for
-  `com.improve_future.harmonica`.
-- Decide on Maven Central (OSSRH) as a secondary channel; needs GPG signing
-  and credentials — treat as optional.
-- Update README: install instructions, JitPack badge, wiki command docs,
-  remove bintray references, update "not developed actively" notice.
+Status: **in progress (2026-09-13).** Channel decision made: **JitPack-only**
+for the `core`/`exposed` libraries (see the open-decision list in §6). A PR
+adds `maven-publish` publications to `core`/`exposed` and a `.jitpack.yml`
+(JDK 17, `./gradlew publishToMavenLocal`).
+
+- Configure **JitPack**: build from git tags; multi-module produces
+  `core`/`exposed` artifacts via the `maven-publish` publications consumed as
+  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.0` (JitPack rewrites the
+  `com.improve_future` group). Verify with a snapshot tag before tagging 3.0.0.
+- **Decided (2026-09-13):** Gradle Plugin Portal (`plugin-publish`,
+  `harmonica`/`jarmonica`) and Maven Central (OSSRH, needs `signing` +
+  credentials) are **deferred** past the first release; their config stays in
+  `gradle-plugin/build.gradle.kts` for a later release.
+- Update README: install instructions and JitPack download coordinates (this
+  PR), JitPack badge (already present), wiki command docs, bintray references
+  removed (Phase 7, PR #229), "not developed actively" notice removed
+  (Phase 7).
 
 ### Phase 7 — Documentation refresh
 
@@ -473,15 +481,18 @@ Resolved (2026-08-01):
 
 Still open:
 
-- Maven Central vs JitPack-only for the first release, and the `docs/api`
-  hosting decision. Publishing readiness as of 2026-09-13: `core`/`exposed`
-  have `maven-publish` but **no publication block** (they publish nothing), so
-  the 3.0.0 artifacts and the plugin's POM dependency on
-  `com.improve_future:core:3.0.0` are gated on adding `publishing {}` to those
-  two modules; `gradle-plugin` is fully publication-configured (POM, sources/
-  javadoc jars, OSSRH staging repo); Maven Central additionally needs the
-  `signing` plugin + GPG keys and OSSRH credentials; Plugin Portal publishing
-  needs `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (user credentials).
+- The `docs/api` hosting decision.
+- **Decided 2026-09-13:** the 3.0.0 release channel is **JitPack-only** for the
+  `core`/`exposed` libraries; Maven Central and the Gradle Plugin Portal are
+  deferred (configs kept). Publishing prep in progress: `core`/`exposed` had
+  `maven-publish` with **no publication block** (they published nothing) — a
+  PR adds `publishing {}` (`from(components["java"])`) to both plus a
+  `.jitpack.yml` (JDK 17, `./gradlew publishToMavenLocal`), closing the gate on
+  the plugin POM's dependency on `com.improve_future:core:3.0.0`.
+  `gradle-plugin` is fully publication-configured (POM, sources/javadoc jars,
+  OSSRH staging repo); Maven Central would additionally need the `signing`
+  plugin + GPG keys and OSSRH credentials; Plugin Portal publishing needs
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (user credentials).
 
 Resolved for Phase 3 (2026-08-08):
 

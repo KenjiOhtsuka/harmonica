@@ -168,7 +168,8 @@ Still open (not Phase 0):
 - `plugins.gradle.org/m2/` (root buildscript) — **gone**; replaced by the
   `plugins {}` block in root + `pluginManagement` in `settings.gradle.kts`.
 - OSSRH `s01.oss.sonatype.org` (gradle-plugin) — **removed in Phase 0, then
-  restored** (commit `546d956`) as Phase 6 prep; publishing decision open.
+  restored** (commit `546d956`) as Phase 6 prep; **decided 2026-09-13: JitPack-
+  only** for the 3.0.0 release (OSSRH repo remains, unused).
 
 ## Plugins in `build.gradle.kts` (root)
 

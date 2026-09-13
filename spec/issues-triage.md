@@ -60,7 +60,7 @@ superseded by Phase 0.
 
 | # | Title | Plan |
 | --- | --- | --- |
-| 1 | put into maven central | Publishing target — decide JitPack vs Maven Central (Phase 6 open decision). |
+| 1 | put into maven central | Publishing target — **decided 2026-09-13: JitPack-only** for the 3.0.0 release; Maven Central deferred. |
 | 125 | Handle Multiple database | Multi-DB config; sizable design. |
 | 121 | Dry run | `-Pdry` SQL preview (PostgreSQL first). |
 | 148 | Maven support | There is a `feature/maven-plugin` branch — evaluate resurrecting it. |

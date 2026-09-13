@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-08-30 (**25 open** total). Grouped by
+Snapshot of **open** issues on 2026-09-13 (**24 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -15,8 +15,9 @@ items in this tier.
 **Resolved and closed (by phase, most recent first):** **Closed 2026-08-30:**
 #220 (SQLite DB parent dir, merged in PR #224), #222 (integration-test
 warnings, merged in PR #226), #196 (Real-DB tests cover both configs —
-plugin-flow TestKit tests, PR #219), and #153 (see above) — #220/#222/#196
-removed from the tables below. **Closed
+plugin-flow TestKit tests, PR #219), #189 (scanner `isSubtypeOf` swallows all
+`Throwable`, merged in PR #227), and #153 (see above) — removed from the
+tables below. **Closed
 2026-08-28:** #182 (JitPack badge renders correctly, closed as completed —
 removed from the SMALL table). **Resolved and closed by Phase 0/2:** #167
 (jcenter removed, CI rewritten, PR #183), #165 (LICENSE already MIT; README
@@ -34,7 +35,6 @@ superseded by Phase 0.
 
 | # | Title | Plan |
 | --- | --- | --- |
-| 189 | `isSubtypeOf` in scanner swallows all `Throwable` | **Fixed (2026-08-30, PR #227 open).** Narrowed the catch to `LinkageError` (the only error `isAssignableFrom` can throw, mirroring `loadClass`'s PR #188 narrowing); other errors propagate and the skipped class is reported to stderr. No synthetic linkage test — the scanner is dormant (legacy `Jarmonica*Main` flow, not wired to the published plugin); happy path covered by `PluginFlowTest`. |
 | 26 | Consolidate the migration file name between harmonica and jarmonica | Pick one naming convention; update both tasks + tests. |
 | 47 | Use prepared statement | Escape/`PreparedStatement` for default values (esp. varchar with quotes). |
 | 138 | Is there a need to make AbstractColumn internal? | Open up custom-column extension points (make `AbstractColumn`/`ColumnBuilder` public, document custom column pattern). |

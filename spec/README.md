@@ -20,7 +20,9 @@ plan to restart and modernize the project.
 > script-classpath wiring, PRs #201/#202; `bin/gw` tooling, PR #203) and Phase 4
 > (H2 embedded DBMS, PR #206; integration-test module, PR #207; Docker + CI
 > db-integration, PR #209; plugin-flow TestKit, PR #219; full `harmonica_test`
-> port, PR #221). Phase 4 is complete. Update this
+> port, PR #221). Phase 4 is complete. Updated 2026-09-13: Phase 5 quick wins
+> (#220/#222/#189, PRs #224/#226/#227), Phase 7 (README #229, KDoc #231,
+> doc-site #232) complete; 3.0.0 publishing in Phase 6. Update this
 > list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.7.0**, `jvmTarget = 1.8` (class-file
@@ -32,7 +34,7 @@ plan to restart and modernize the project.
   prep
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
-  `actions/setup-java@v6.0.0`), `jvm8-bytecode.yml` (major-52 assertion),
+  `actions/setup-java@v6.0.1`), `jvm8-bytecode.yml` (major-52 assertion),
   `dependency-submit.yml` (dependency-graph submission). CircleCI removed.
 - Four active modules: `core`, `exposed`, `gradle-plugin`, `integration-test` —
   `./gradlew build` runs **86 tests, 0 skipped** (73 core + 8 plugin + 4 exposed
@@ -68,8 +70,10 @@ plan to restart and modernize the project.
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
   migration classes via `com.improve_future:harmonica-demo:3.0.0`.
-- **`develop` is 139 commits ahead of `master`** — Phase 4 (real-DB tests) must
-  pass before `master` advances. See the risk register in [`plan.md`](plan.md).
+- **`develop` is 168 commits ahead of `master`** (as of 2026-09-13) — the
+  Phase 4 gate (real-DB tests) is now satisfied; the `master` fast-forward is
+  authorized as part of the Phase 6 3.0.0 release. See the risk register in
+  [`plan.md`](plan.md).
 
 ## Machine environment (current)
 

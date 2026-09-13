@@ -173,7 +173,8 @@ updates:
 - **`ci.yml` + `jvm8-bytecode.yml` + `dependency-submit.yml` + CircleCI
   removal**: **done**, part of the Phase 0 toolchain PR.
 - **DB matrix job**: **done** (Phase 4, PR #209).
-- **`release.yml` + secrets**: Phase 6.
+- **`release.yml` + secrets**: superseded by JitPack tag-builds (released as
+  tag `3.0.1`); Plugin Portal deferred (see plan.md §6).
 
 ## Definition of done
 

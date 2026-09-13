@@ -29,27 +29,27 @@ several years. This plan is the single source of truth for the restart.
   must not break local builds when the daemon is absent.
 - Do not force Exposed onto users; their migration classpath decides.
 
-## 3. Branch & release strategy (master is stale)
+## 3. Branch & release strategy
 
 State:
 
-- `master` (origin/master @ `3b423c6`) has not been touched in years and is the
-  direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is **168 commits ahead** (module split into `core`/`gradle-plugin`,
-  jcenter removal work, MIT license change, CI-action bumps, Phase 3 Exposed
-  bridge, Phase 4, Phase 7 docs refresh, etc.) but **never fully tested or
-  released** — this is
-  why master was left behind.
+- `master` (origin/master @ `055572d`) got `develop` merged into it as part of
+  the 3.0.0 release (PR #239, merged 2026-09-13); `develop` (`ecc1f47`) is a
+  strict ancestor of `master`, which is one commit ahead.
+- The 3.0.0 tag's JitPack build failed (see Phase 6), so the first released
+  tag will be **3.0.1**, cut from the fixed commit once PR #240 merges.
 
 Policy going forward (Git Flow, simplified):
 
 1. `develop` is the integration branch; feature/phase branches are cut from it.
 2. A release branch/tag is created from `develop` only when CI is fully green
    and manual DB tests pass.
-3. The first milestone of this restart is: make `develop` build green and
+3. The first milestone of this restart was: make `develop` build green and
    DB-backed tests (Phase 4) pass → then fast-forward `master` to `develop` →
-   tag the first new release there. (Because `master` is an ancestor, this is a
-   clean fast-forward, no merge conflict risk.)
+   tag the first new release there — **done in Phase 6 via PR #239 (merged
+   2026-09-13; realized as a normal merge commit `055572d` rather than a
+   literal fast-forward; first tag will be `3.0.1`)**. (Because `master` was an
+   ancestor, this was a clean fast-forward, no merge conflict risk.)
 4. `master` becomes the source of released tags (JitPack builds from tags).
 5. Old branches on the remote (`feature/core_split`, `feature/maven-plugin`,
    `feature/version_up`, `feature/exposed`, `feature/show_sql`,
@@ -78,9 +78,9 @@ Consequences for the restart:
   fix packaging, plugin application, and publication.
 - These unverified changes are the reason `master` was left behind — do not
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
-  **Gate cleared (2026-08-28, Phase 4 complete) — the `master` fast-forward is
-  now authorized as part of the Phase 6 release (also noted in the Phase 0
-  status bullet).**
+  **Gate cleared (2026-08-28, Phase 4 complete) — the `master`/`develop`
+  merge was executed in Phase 6 via PR #239 (merged 2026-09-13, merge commit
+  `055572d`; also noted in the Phase 0 status bullet).**
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
   `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
   `exposed` module — see spec/README for current test counts), and package correctly on
@@ -145,10 +145,11 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
   JDK 25, `./gradlew build`, dependency-graph submission) + `jvm8-bytecode.yml`
   (javap major-version 52 check) replace `gradle.yml` and `.circleci/config.yml`
   (both deleted). `.github/dependabot.yml` already landed (#169).
-- After green: fast-forward `master` to `develop` **deferred at the time** —
+- After green: fast-forward `master` to `develop` was **deferred at the time** —
   policy was to wait until Phase 4 DB tests pass (see §3.5 and Phase 4). Gate
-  **satisfied (2026-08-28, Phase 4 complete)**: the fast-forward is authorized
-  as part of Phase 6 (first 3.0.0 release).
+  **satisfied (2026-08-28, Phase 4 complete)**: PR #239 merged `develop` into
+  `master` as part of Phase 6 (2026-09-13); the first release tag (`3.0.1`) is
+  cut from the fixed commit once PR #240 merges.
 
 ### Phase 1 — License header removal
 
@@ -323,7 +324,7 @@ Breakdown (each item is its own small PR against `develop`):
    source set, always-green) spawns real Gradle builds via TestKit that apply
    the `harmonica` plugin from a composite `includeBuild` of the repo root and
    run `harmonicaUp`/`harmonicaDown` against an embedded SQLite DB (absolute
-   path in `<projectDir>/build/`); one case has `harmonica("com.improve_future:exposed:2.0.0")`
+   path in `<projectDir>/build/`); one case has `harmonica("com.improve_future:exposed:3.0.1")`
    on the script classpath (Exposed migration), one does not (plain JDBC
    migration). Assertions check `harmonica_migration` version rows + table
    existence. The `demo/` project is committed as the seed (script/ + jarmonica/
@@ -398,14 +399,18 @@ Full triage: [issues-triage.md]. Order:
 ### Phase 6 — Release & publishing
 
 Status: **in progress (2026-09-13).** Channel decision made: **JitPack-only**
-for the `core`/`exposed` libraries (see the open-decision list in §6). A PR
-adds `maven-publish` publications to `core`/`exposed` and a `.jitpack.yml`
-(JDK 17, `./gradlew publishToMavenLocal`).
+for the `core`/`exposed` libraries (see the open-decision list in §6). PR #238
+added `maven-publish` publications to `core`/`exposed` plus a `.jitpack.yml`;
+PR #240 scopes the JitPack install to the two library modules and raises the
+version to 3.0.1. JitPack install: JDK 17, `./gradlew :core:publishToMavenLocal
+:exposed:publishToMavenLocal` — scoped because `:gradle-plugin:publishToMavenLocal`
+fails on the gradle-plugin `mavenJava` source/javadoc duplicate-classifier
+publication collision (deferred Phase-6 plugin work).
 
 - Configure **JitPack**: build from git tags; multi-module produces
   `core`/`exposed` artifacts via the `maven-publish` publications consumed as
-  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.0` (JitPack rewrites the
-  `com.improve_future` group). Verify with a snapshot tag before tagging 3.0.0.
+  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.1` (JitPack rewrites the
+  `com.improve_future` group). Verify with a snapshot tag before tagging 3.0.1.
 - **Decided (2026-09-13):** Gradle Plugin Portal (`plugin-publish`,
   `harmonica`/`jarmonica`) and Maven Central (OSSRH, needs `signing` +
   credentials) are **deferred** past the first release; their config stays in
@@ -426,7 +431,9 @@ regenerated with Dokka 2.2.0 and merged (PR #231); the `document/` site build
 was modernized (Gradle 9.7.0 wrapper, Kotlin 2.3.20, `application.mainClass`,
 JVM 8 targets; groovy plugin/groovy-all and the Space repo removed) and the
 site content refreshed + regenerated for 3.0.0 (PR #232). Holdover: rethink
-the `docs/api` hosting/format decision and revisit the site after release.
+the `docs/api` hosting/format decision and revisit the site after release — the
+`document/` views + `docs/site` still show 3.0.0 (and `com.improve_future:core`
+coordinates) and will be refreshed for 3.0.1 post-tag.
 
 ## 5. Definition of done (overall restart)
 
@@ -435,7 +442,8 @@ the `docs/api` hosting/format decision and revisit the site after release.
 - No dead repositories (jcenter/bintray) anywhere in the build or docs.
 - Exposed fully optional, with docs and at least one example each way.
 - Real-DB tests merged and runnable; local DB setup documented.
-- First new release tagged; `master` fast-forwarded; JitPack build verified.
+- First new release tagged (`3.0.1`); `master` released from `develop` via the
+  Phase 6 merge commit `055572d`; JitPack build verified.
 - Open-issue count reduced (all "urgent/small" closed or converted to tasks).
 - `harmonica_demo` left untouched (documented only, not part of the restart).
 
@@ -482,13 +490,21 @@ Resolved (2026-08-01):
 Still open:
 
 - The `docs/api` hosting decision.
-- **Decided 2026-09-13:** the 3.0.0 release channel is **JitPack-only** for the
+- **Decided 2026-09-13:** the first release is tagged **3.0.1** — the
+  `3.0.0` tag's JitPack build failed on `:gradle-plugin`'s `mavenJava`
+  source/javadoc duplicate-classifier publication collision, and the project
+  opts for a fresh tag (`3.0.1`) on the fixed commit rather than recreating
+  `3.0.0`.
+- **Decided 2026-09-13:** the 3.0.1 release channel is **JitPack-only** for the
   `core`/`exposed` libraries; Maven Central and the Gradle Plugin Portal are
-  deferred (configs kept). Publishing prep in progress: `core`/`exposed` had
-  `maven-publish` with **no publication block** (they published nothing) — a
-  PR adds `publishing {}` (`from(components["java"])`) to both plus a
-  `.jitpack.yml` (JDK 17, `./gradlew publishToMavenLocal`), closing the gate on
-  the plugin POM's dependency on `com.improve_future:core:3.0.0`.
+  deferred (configs kept). Publishing prep status: `core`/`exposed` had
+  `maven-publish` with **no publication block** (they published nothing) —
+  PR #238 added `publishing {}` (`from(components["java"])`) to both plus a
+  `.jitpack.yml`; PR #240 scopes the JitPack install to
+  `:core:publishToMavenLocal :exposed:publishToMavenLocal` (gradle-plugin
+  excluded — its publication is deferred) and raises the version to 3.0.1,
+  closing the gate on
+  the plugin POM's dependency on `com.improve_future:core:3.0.1`.
   `gradle-plugin` is fully publication-configured (POM, sources/javadoc jars,
   OSSRH staging repo); Maven Central would additionally need the `signing`
   plugin + GPG keys and OSSRH credentials; Plugin Portal publishing needs

@@ -228,7 +228,7 @@ transaction.**
   ```kotlin
   plugins { id("harmonica") }
   dependencies {
-      harmonica("com.improve_future.harmonica:harmonica-exposed:2.0.0")
+      harmonica("com.github.KenjiOhtsuka.harmonica:exposed:3.0.1")
   }
   ```
 

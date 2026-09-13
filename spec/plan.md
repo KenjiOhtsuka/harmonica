@@ -35,9 +35,10 @@ State:
 
 - `master` (origin/master @ `3b423c6`) has not been touched in years and is the
   direct ancestor of `develop` (merge-base == master HEAD).
-- `develop` is **139 commits ahead** (module split into `core`/`gradle-plugin`,
+- `develop` is **168 commits ahead** (module split into `core`/`gradle-plugin`,
   jcenter removal work, MIT license change, CI-action bumps, Phase 3 Exposed
-  bridge, Phase 4 start, etc.) but **never fully tested or released** — this is
+  bridge, Phase 4, Phase 7 docs refresh, etc.) but **never fully tested or
+  released** — this is
   why master was left behind.
 
 Policy going forward (Git Flow, simplified):
@@ -77,6 +78,9 @@ Consequences for the restart:
   fix packaging, plugin application, and publication.
 - These unverified changes are the reason `master` was left behind — do not
   fast-forward `master` until Phase 0 is green and DB tests (Phase 4) pass.
+  **Gate cleared (2026-08-28, Phase 4 complete) — the `master` fast-forward is
+  now authorized as part of the Phase 6 release (also noted in the Phase 0
+  status bullet).**
 - **Status (post-Phase 0/2):** the split build is verified — `core` and
   `gradle-plugin` build, test (72 tests green; snapshot before the Phase 3
   `exposed` module — see spec/README for current test counts), and package correctly on
@@ -141,8 +145,10 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
   JDK 25, `./gradlew build`, dependency-graph submission) + `jvm8-bytecode.yml`
   (javap major-version 52 check) replace `gradle.yml` and `.circleci/config.yml`
   (both deleted). `.github/dependabot.yml` already landed (#169).
-- After green: fast-forward `master` to `develop` **deferred** — policy is to
-  wait until Phase 4 DB tests pass (see §3.5 and Phase 4).
+- After green: fast-forward `master` to `develop` **deferred at the time** —
+  policy was to wait until Phase 4 DB tests pass (see §3.5 and Phase 4). Gate
+  **satisfied (2026-08-28, Phase 4 complete)**: the fast-forward is authorized
+  as part of Phase 6 (first 3.0.0 release).
 
 ### Phase 1 — License header removal
 
@@ -192,7 +198,7 @@ gradle-plugin; Phase 0 baseline was 66; `ScriptClasspathTest` later added 2
   - `org.reflections` 0.9.11 → **replaced** with a lightweight classpath
     scanner in `JarmonicaTaskMain` (PR #185; `loadClass` narrowed to
     recoverable exceptions in PR #188 — remaining `isSubtypeOf` `catch
-    (Throwable)` tracked in issue #189).
+    (Throwable)` tracked in issue #189, fixed in PR #227, 2026-08-30).
   - `kotlinx-html-jvm` 0.7.3 → **dropped here** (unused in this module; only
     `document` uses it — upgrade there, Phase 7).
   - `kotlin-reflect` → **dropped** (only stdlib `KClass` usage; PR #184).
@@ -371,7 +377,8 @@ Full triage: [issues-triage.md]. Order:
 2. Small: #26 (migration file naming), #47 (prepared statements), #138 (custom
    columns), #141 (more column types), #145 (alter column), #139 (FK options),
    #69 (query execution API), #4 (created_at/updated_at), #189 (scanner
-   `isSubtypeOf` swallows all `Throwable` — fix in PR #227, open).
+   `isSubtypeOf` swallows all `Throwable` — **fixed and merged in PR #227**,
+   2026-08-30).
    #91 (Exposed) is **closed** — the bridge shipped in Phase 3 (PRs #197-#199).
    #196 (Real-DB both-config coverage) closed 2026-08-30 — satisfied by PR #219.
    Also added in Phase 4/5: #220 (SQLite DB parent directory not created,
@@ -390,15 +397,23 @@ Full triage: [issues-triage.md]. Order:
 
 ### Phase 6 — Release & publishing
 
-- Configure **JitPack**: build from git tags; multi-module must produce
-  `com.improve_future.harmonica:harmonica-core` (or keep group/module names
-  stable). Verify with a snapshot tag.
-- Keep Gradle Plugin Portal publication (`plugin-publish`) for
-  `com.improve_future.harmonica`.
-- Decide on Maven Central (OSSRH) as a secondary channel; needs GPG signing
-  and credentials — treat as optional.
-- Update README: install instructions, JitPack badge, wiki command docs,
-  remove bintray references, update "not developed actively" notice.
+Status: **in progress (2026-09-13).** Channel decision made: **JitPack-only**
+for the `core`/`exposed` libraries (see the open-decision list in §6). A PR
+adds `maven-publish` publications to `core`/`exposed` and a `.jitpack.yml`
+(JDK 17, `./gradlew publishToMavenLocal`).
+
+- Configure **JitPack**: build from git tags; multi-module produces
+  `core`/`exposed` artifacts via the `maven-publish` publications consumed as
+  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.0` (JitPack rewrites the
+  `com.improve_future` group). Verify with a snapshot tag before tagging 3.0.0.
+- **Decided (2026-09-13):** Gradle Plugin Portal (`plugin-publish`,
+  `harmonica`/`jarmonica`) and Maven Central (OSSRH, needs `signing` +
+  credentials) are **deferred** past the first release; their config stays in
+  `gradle-plugin/build.gradle.kts` for a later release.
+- Update README: install instructions and JitPack download coordinates (this
+  PR), JitPack badge (already present), wiki command docs, bintray references
+  removed (Phase 7, PR #229), "not developed actively" notice removed
+  (Phase 7).
 
 ### Phase 7 — Documentation refresh
 
@@ -406,13 +421,12 @@ Full triage: [issues-triage.md]. Order:
 - Update/regenerate API docs with modern Dokka.
 - Keep `document/` site in sync or remove it if unmaintainable.
 
-Status: **in progress.** README refresh merged (PR #229); KDoc regeneration
-with Dokka 2.2.0 in progress (PR #231, not yet merged); the `document/` site
-build was modernized (Gradle 9.7.0 wrapper, Kotlin 2.3.20,
-`application.mainClass`, JVM 8 targets; groovy plugin/groovy-all and the
-Space repo removed) and the site content refreshed + regenerated for 3.0.0
-(this PR). Remaining: rethink the `docs/api` hosting/format decision and
-revisit the site after release.
+Status: **complete (2026-09-13).** README refresh merged (PR #229); KDoc
+regenerated with Dokka 2.2.0 and merged (PR #231); the `document/` site build
+was modernized (Gradle 9.7.0 wrapper, Kotlin 2.3.20, `application.mainClass`,
+JVM 8 targets; groovy plugin/groovy-all and the Space repo removed) and the
+site content refreshed + regenerated for 3.0.0 (PR #232). Holdover: rethink
+the `docs/api` hosting/format decision and revisit the site after release.
 
 ## 5. Definition of done (overall restart)
 
@@ -451,12 +465,12 @@ Resolved (2026-08-01):
   `org.gradle.jvm.version = 17` via `TargetJvmVersion` attribute override;
   published bytecode stays JVM 8 (Phase 2, PR #186).
 - Reflections: **replaced with an internal classpath scanner**; `loadClass`
-  catches only `ClassNotFoundException` + `LinkageError`. `isSubtypeOf` still
-  catches `Throwable` — issue #189 (Phase 2, PRs #185/#188).
+  catches only `ClassNotFoundException` + `LinkageError`; `isSubtypeOf` was
+  narrowed to `LinkageError` too — issue #189 fixed in PR #227 (2026-08-30).
 - Kotlin `jvm` plugin bump 2.3.20 → 2.4.10 (PR #193): **declined** — no
   functional need; stay on 2.3.20. PR #193 is still open (dependabot) as of
-  2026-08-28 — revisit/close before starting Phase 5.
-- Dependabot batch 2026-08-15 (PRs #210-#216): wrapper 9.7.0 (#211), JUnit
+  2026-09-13 — close it (no functional need, per the declined decision above).
+- Dependabot batch of 2026-08-15 (PRs #210-#216): wrapper 9.7.0 (#211), JUnit
   6.1.3 (#210/#214), postgresql 42.7.13 (#213), H2 2.4.240 (#212),
   mysql-connector-j 26.7.0 (#216) — **merged 2026-08-16**; spec pins in
   tech-notes.md updated. **Not merged:** exposed 1.4.0 (#215) — Exposed 1.x
@@ -467,7 +481,18 @@ Resolved (2026-08-01):
 
 Still open:
 
-- Maven Central vs JitPack-only for the first release.
+- The `docs/api` hosting decision.
+- **Decided 2026-09-13:** the 3.0.0 release channel is **JitPack-only** for the
+  `core`/`exposed` libraries; Maven Central and the Gradle Plugin Portal are
+  deferred (configs kept). Publishing prep in progress: `core`/`exposed` had
+  `maven-publish` with **no publication block** (they published nothing) — a
+  PR adds `publishing {}` (`from(components["java"])`) to both plus a
+  `.jitpack.yml` (JDK 17, `./gradlew publishToMavenLocal`), closing the gate on
+  the plugin POM's dependency on `com.improve_future:core:3.0.0`.
+  `gradle-plugin` is fully publication-configured (POM, sources/javadoc jars,
+  OSSRH staging repo); Maven Central would additionally need the `signing`
+  plugin + GPG keys and OSSRH credentials; Plugin Portal publishing needs
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (user credentials).
 
 Resolved for Phase 3 (2026-08-08):
 

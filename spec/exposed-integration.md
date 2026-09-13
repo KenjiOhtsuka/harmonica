@@ -6,7 +6,9 @@
 > SQLException propagation) exist and pass (`./gradlew :exposed:test`, 4
 > tests). Script-classpath wiring for `.kts` migrations (Pitfall F) is **done**
 > — the plugin evaluates scripts via a direct `BasicJvmScriptingHost` over the
-> `harmonica` configuration. Still open in Phase 3: the demo project. Issue #91
+> `harmonica` configuration. The demo project was committed in Phase 4 (PR
+> #219) and is wired as a composite `includeBuild` (see `spec/README.md`).
+> Issue #91
 > was closed at the Phase 3 merge (2026-08-09).
 
 ## Problem
@@ -316,5 +318,7 @@ Resolved (2026-08-09, PR B):
 
 Remaining:
 
-- Demo project against a real DB (SQLite here; PostgreSQL/MySQL deferred to
-  Phase 4) — built locally, not yet merged.
+- Demo project against PostgreSQL/MySQL — the demo (`demo/`, seed for the
+  plugin-flow tests) was committed in Phase 4 (PR #219) and is wired as a
+  composite `includeBuild`; the SQLite flow is exercised on every build, PG/
+  MySQL via the gated `integration-test` suite (see `spec/README.md`).

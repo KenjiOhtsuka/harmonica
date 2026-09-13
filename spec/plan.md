@@ -400,7 +400,10 @@ Full triage: [issues-triage.md]. Order:
 Status: **in progress (2026-09-13).** Channel decision made: **JitPack-only**
 for the `core`/`exposed` libraries (see the open-decision list in §6). A PR
 adds `maven-publish` publications to `core`/`exposed` and a `.jitpack.yml`
-(JDK 17, `./gradlew publishToMavenLocal`).
+(JDK 17, `./gradlew :core:publishToMavenLocal :exposed:publishToMavenLocal` —
+scoped to the two library modules because `:gradle-plugin:publishToMavenLocal`
+fails on the plugin-publish 2.x source/javadoc duplicate-classifier collision,
+deferred Phase-6 plugin work).
 
 - Configure **JitPack**: build from git tags; multi-module produces
   `core`/`exposed` artifacts via the `maven-publish` publications consumed as
@@ -487,7 +490,8 @@ Still open:
   deferred (configs kept). Publishing prep in progress: `core`/`exposed` had
   `maven-publish` with **no publication block** (they published nothing) — a
   PR adds `publishing {}` (`from(components["java"])`) to both plus a
-  `.jitpack.yml` (JDK 17, `./gradlew publishToMavenLocal`), closing the gate on
+  `.jitpack.yml` (JDK 17, `./gradlew :core:publishToMavenLocal
+  :exposed:publishToMavenLocal`), closing the gate on
   the plugin POM's dependency on `com.improve_future:core:3.0.0`.
   `gradle-plugin` is fully publication-configured (POM, sources/javadoc jars,
   OSSRH staging repo); Maven Central would additionally need the `signing`

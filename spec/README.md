@@ -31,7 +31,9 @@ plan to restart and modernize the project.
   2.15.3 at build time only — not shipped; see the Dependabot alerts)
 - Publish target: **JitPack-only decided 2026-09-13 (plan.md §6)** — `core`/
   `exposed` get `maven-publish` publications + a `.jitpack.yml` (JDK 17,
-  `publishToMavenLocal`); plugin-publish/OSSRH configs kept for later, unused
+  `:core:publishToMavenLocal :exposed:publishToMavenLocal` — scoped to the
+  libraries, since the gradle-plugin publication is deferred Phase-6 work);
+  plugin-publish/OSSRH configs kept for later, unused
   for the 3.0.0 release
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +

@@ -31,7 +31,8 @@ PR #225). Update this file as versions change.
 - `document/` is **dropped from the root build** (`settings.gradle.kts` includes
   only `core`, `exposed`, `gradle-plugin`, `integration-test`; `demo` is a
   composite `includeBuild`, not a subproject). The nested
-  Gradle 4.9 build is untouched.
+  Gradle 4.9 build was untouched as of Phase 0; it was modernized in Phase 7
+  (see the [document subsection](#document-separate-subproject-excluded-from-the-root-build)).
 - CI replaced: `gradle.yml` + `.circleci/config.yml` → `ci.yml` +
   `jvm8-bytecode.yml` (see [ci.md](ci.md)).
 
@@ -107,8 +108,8 @@ unavailable DB fails the job instead of skipping).
 
 | Dependency | Status | Notes |
 | --- | --- | --- |
-| `kotlinx-html-jvm` | untouched | real consumer; upgrade in Phase 7 or drop the module. |
-| wrapper Gradle 4.9 / version-less Kotlin plugin / `mainClassName` | untouched | not part of the build since Phase 0. |
+| `kotlinx-html-jvm` 0.7.3 | modernized in Phase 7 | real consumer; version kept at 0.7.3, now resolves from Maven Central. |
+| Gradle 4.9 wrapper / version-less Kotlin plugin / `mainClassName` | upgraded in Phase 7 | standalone build now on the Gradle 9.7.0 wrapper, Kotlin 2.3.20 plugin, `application.mainClass`, and JVM 8 targets (`compilerOptions` + `java` 1.8); the groovy plugin, groovy-all, and the Space repository were removed. |
 
 ### Source-code blockers (all resolved in Phase 0)
 
@@ -138,7 +139,8 @@ Still open (not Phase 0):
   the build).
 - `maven.pkg.jetbrains.space/public/p/kotlinx-html/maven` — **removed from
   `gradle-plugin` in Phase 0** (kotlinx-html 0.7.3 resolves from Maven Central);
-  still declared in `document/build.gradle` (module excluded from build).
+  **removed from `document/build.gradle` in Phase 7** (the site build was
+  modernized; see the [document subsection](#document-separate-subproject-excluded-from-the-root-build)).
 - `https://jitpack.io` — **removed from both `core` and `gradle-plugin`**
   (Phase 2, PR #187). Note: while `kotlin-pluralizer` existed, `gradle-plugin`
   needed jitpack transitively (`api(project(":core"))` exposes it on the

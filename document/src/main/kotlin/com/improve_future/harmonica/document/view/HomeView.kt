@@ -1,6 +1,7 @@
 package com.improve_future.harmonica.document.view
 
 import com.improve_future.harmonica.document.helper.row
+import com.improve_future.harmonica.document.helper.col
 import kotlinx.html.*
 
 object HomeView : AbstractView() {
@@ -10,21 +11,35 @@ object HomeView : AbstractView() {
     override fun index(): String {
         return Template.default(articleTitle) {
             row {
-                div("col") {
+                col {
                     h1 { +articleTitle }
                 }
             }
             row {
-                div("col") {
+                col {
+                    p { +"Welcome to Harmonica!" }
                     p {
-                        +"Welcome to Harmonica!"
+                        +"Harmonica is a database migration tool for the JVM written in Kotlin: "
+                        +"a Gradle plugin backed by a JDBC core library, similar in spirit to "
+                        +"Phinx and Rails migrations."
                     }
-                    p {
-                        +"Harmonica is Kotlin database migration library written in Kotlin using Exposed. Harmonica provides migration in two way."
-                    }
+                    p { +"It provides migration in two ways:" }
                     ul {
-                        li { +"Use Kotlin Script" }
-                        li { +"Compile as Kotlin Application" }
+                        li {
+                            a("harmonica.html") { +"Migrate with Kotlin scripts (.kts)" }
+                            +" — the recommended flow."
+                        }
+                        li {
+                            a("jarmonica.html") { +"Migrate with compiled Kotlin classes" }
+                            +" — the legacy jarmonica flow."
+                        }
+                    }
+                    p {
+                        +"See also the "
+                        a("../api/index.html") { +"API documentation" }
+                        +" and the "
+                        a("migration_method.html") { +"migration method reference" }
+                        +"."
                     }
                 }
             }

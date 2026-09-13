@@ -49,8 +49,8 @@ Policy going forward (Git Flow, simplified):
    tag the first new release there — **executed in Phase 6: PR #239 merged
    `develop` into `master` (2026-09-13; merge commit `055572d` rather than a
    literal fast-forward), and the first release tag `3.0.1` was cut at PR #241's
-   merge commit `380fda5`**. (Because `master` was an
-   ancestor, this was a clean fast-forward, no merge conflict risk.)
+   merge commit `380fda5`**. (Because `master` was an ancestral commit of
+   `develop`, the merge was conflict-free.)
 4. `master` becomes the source of released tags (JitPack builds from tags).
 5. Old branches on the remote (`feature/core_split`, `feature/maven-plugin`,
    `feature/version_up`, `feature/exposed`, `feature/show_sql`,
@@ -448,7 +448,8 @@ coordinates) and will be refreshed for 3.0.1 post-tag.
 - Exposed fully optional, with docs and at least one example each way.
 - Real-DB tests merged and runnable; local DB setup documented.
 - First new release tagged (`3.0.1`); `master` released from `develop` via PR
-  #241 (`380fda5`); JitPack build verified (`ok`).
+  #239 (`055572d`), with the 3.0.1 release merged via PR #241 (tag `380fda5`);
+  JitPack build verified (`ok`).
 - Open-issue count reduced (all "urgent/small" closed or converted to tasks).
 - `harmonica_demo` left untouched (documented only, not part of the restart).
 

@@ -60,7 +60,7 @@ superseded by Phase 0.
 
 | # | Title | Plan |
 | --- | --- | --- |
-| 1 | put into maven central | Publishing target — **decided 2026-09-13: JitPack-only** for the 3.0.1 release; Maven Central deferred. |
+| 1 | put into maven central | Publishing target — **decided 2026-09-13**: JitPack for `core`/`exposed`, Gradle Plugin Portal (`com.improve_future.harmonica`/`com.improve_future.jarmonica`) for the plugin (3.0.1); Maven Central deferred. |
 | 125 | Handle Multiple database | Multi-DB config; sizable design. |
 | 121 | Dry run | `-Pdry` SQL preview (PostgreSQL first). |
 | 148 | Maven support | There is a `feature/maven-plugin` branch — evaluate resurrecting it. |

@@ -103,10 +103,16 @@ Since Gradle 9 cannot run on JDK 8:
 
 ### 3.4 `release.yml` (optional, Phase 6)
 
-- Trigger: tag push (`v*`).
-- Build + publish the Gradle plugin to the Plugin Portal
-  (`plugin-publish`), and optionally publish `core`/`exposed` artifacts to
-  JitPack (out-of-band, triggered by the tag) and/or Maven Central (OSSRH).
+- Trigger: tag push (`3.0.*`) plus manual `workflow_dispatch` (used to publish
+  an already-existing tag such as `3.0.1`).
+- Runs `./gradlew :gradle-plugin:publishPlugins` to publish to the Plugin
+  Portal (`plugin-publish`, ids `com.improve_future.harmonica` /
+  `com.improve_future.jarmonica` — namespaced, the 2.x id gate rejects short
+  ids), credentialled by the
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` GitHub Secrets. The latter id
+  must be claimed on the portal first.
+- `core`/`exposed` go to JitPack out-of-band from the same tag; Maven Central
+  (OSSRH) remains deferred.
 - Requires secrets (`GRADLE_PUBLISH_KEY/SECRET`, `MAVEN_USERNAME/PASSWORD`,
   GPG key) — configure in repo settings only when publishing is ready.
 
@@ -173,7 +179,11 @@ updates:
 - **`ci.yml` + `jvm8-bytecode.yml` + `dependency-submit.yml` + CircleCI
   removal**: **done**, part of the Phase 0 toolchain PR.
 - **DB matrix job**: **done** (Phase 4, PR #209).
-- **`release.yml` + secrets**: Phase 6.
+- **`release.yml` + secrets**: **done** — the Plugin Portal PR added
+  `.github/workflows/release.yml` (publishes `com.improve_future.harmonica` /
+  `com.improve_future.jarmonica` to the portal); the
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` secrets are set, the latter id
+  pending portal claim.
 
 ## Definition of done
 

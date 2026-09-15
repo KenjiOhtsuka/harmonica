@@ -42,16 +42,32 @@ plugins {
 The plugin registers the tasks `harmonicaUp`, `harmonicaDown`, and
 `harmonicaCreate`. The legacy `jarmonica` plugin is also available.
 
-The 3.0.x plugin is not yet on the Gradle Plugin Portal (see "Download"), so
-the plugins DSL resolves it from a source composite build — add something like
-this to your `settings.gradle.kts`:
+The plugin is published to the Gradle Plugin Portal, so the plugins DSL can
+resolve it directly:
 
 ```kotlin
-includeBuild("../harmonica") // clone KenjiOhtsuka/harmonica at the 3.0.1 tag
+plugins {
+    id("com.improve_future.harmonica") version "3.0.1"
+}
 ```
 
-Once the plugin channel is finalized, `id("harmonica") version "3.0.1"` can be
-applied directly from the portal.
+The legacy `com.improve_future.jarmonica` id is published too. The plugin's
+classpath depends on the `com.improve_future:core` library, which is
+JitPack-only for this release, so add JitPack to the `pluginManagement`
+repositories in `settings.gradle.kts`:
+
+```kotlin
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://jitpack.io")
+    }
+}
+```
+
+To develop against a source checkout instead, apply the id without a version
+and add `includeBuild("..")` for the repository root to your
+`settings.gradle.kts`.
 
 ### 2. Point the plugin at your migration scripts
 
@@ -127,10 +143,9 @@ dependencies {
 | Core library | `com.github.KenjiOhtsuka.harmonica:core` |
 | Exposed bridge (optional) | `com.github.KenjiOhtsuka.harmonica:exposed` |
 
-The Gradle plugin is applied through the plugins DSL as shown in "Getting
-started"; its distribution channel for the first release is still being
-finalized. Maven Central and the Gradle Plugin Portal are deferred past the
-first release.
+The Gradle plugin is published to the Gradle Plugin Portal (see "Getting
+started"); Maven Central for the libraries is deferred past the first
+release.
 
 ## Exposed integration (optional)
 

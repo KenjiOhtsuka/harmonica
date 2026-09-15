@@ -39,7 +39,6 @@ plan to restart and modernize the project.
   (`GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET`, tag `3.0.*` push or manual
   dispatch; new ids are auto-registered on first publish and manually
   reviewed); the OSSRH/Maven Central config stays unused
-  for the 3.0.1 release
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +
   `actions/setup-java@v6.0.1`), `jvm8-bytecode.yml` (major-52 assertion),
@@ -77,12 +76,15 @@ plan to restart and modernize the project.
   `harmonica_test` port is DONE (PR #221). The `demo/` module (seed for the
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
-  migration classes via `com.improve_future:harmonica-demo:3.0.1`.
+  migration classes via `com.improve_future:harmonica-demo:3.0.2`.
 - **`master` carries the first release** — `develop` was merged in (PR #239),
   the 3.0.1 release PR #241 landed, and tag **`3.0.1`** was cut at `380fda5`
   (2026-09-13): JitPack builds it `ok` and
   `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.1` resolve from JitPack
-  (the `3.0.0` tag is broken and superseded). See the risk register in
+  (the `3.0.0` tag is broken and superseded). The Plugin Portal publish runs
+  via `release.yml` on tag **3.0.2** (the `3.0.1` tag predates the workflow);
+  core is bundled into the plugin jar so the portal plugin needs no extra
+  repositories. See the risk register in
   [`plan.md`](plan.md).
 
 ## Machine environment (current)

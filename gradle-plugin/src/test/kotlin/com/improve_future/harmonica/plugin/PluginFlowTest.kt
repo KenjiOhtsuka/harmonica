@@ -78,14 +78,14 @@ class PluginFlowTest {
             appendLine("    }")
             appendLine("}")
             appendLine("plugins {")
-            appendLine("    id(\"com.improve_future.harmonica\") version \"3.0.1\"")
+            appendLine("    id(\"com.improve_future.harmonica\") version \"3.0.2\"")
             appendLine("}")
             appendLine("repositories {")
             appendLine("    mavenCentral()")
             appendLine("}")
             if (withExposed) {
                 appendLine("dependencies {")
-                appendLine("    harmonica(\"com.improve_future:exposed:3.0.1\")")
+                appendLine("    harmonica(\"com.improve_future:exposed:3.0.2\")")
                 appendLine("}")
             }
         }.toString()

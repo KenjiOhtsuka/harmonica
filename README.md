@@ -35,31 +35,23 @@ You supply the JDBC driver for your database on the runtime classpath.
 
 ```kotlin
 plugins {
-    id("harmonica")
-}
-```
-
-The plugin registers the tasks `harmonicaUp`, `harmonicaDown`, and
-`harmonicaCreate`. The legacy `jarmonica` plugin is also available.
-
-The plugin is published to the Gradle Plugin Portal, so the plugins DSL can
-resolve it directly:
-
-```kotlin
-plugins {
     id("com.improve_future.harmonica") version "3.0.1"
 }
 ```
 
-The legacy `com.improve_future.jarmonica` id is published too. The plugin's
-classpath depends on the `com.improve_future:core` library, which is
-JitPack-only for this release, so add JitPack to the `pluginManagement`
+The plugin registers the tasks `harmonicaUp`, `harmonicaDown`, and
+`harmonicaCreate`. The legacy `com.improve_future.jarmonica` plugin is also
+published.
+
+The plugin's classpath depends on the `com.improve_future:core` library, which
+is JitPack-only for this release, so add JitPack to the `pluginManagement`
 repositories in `settings.gradle.kts`:
 
 ```kotlin
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        mavenCentral()
         maven("https://jitpack.io")
     }
 }
@@ -117,11 +109,13 @@ column types, indexes, foreign keys, renames, and raw `executeSql`.
 
 The 3.0.1 artifacts are served from
 [JitPack](https://jitpack.io/#KenjiOhtsuka/harmonica), which builds them from
-the `3.0.1` tag. For the core library, add the JitPack repository and
-dependency:
+the `3.0.1` tag. Keep Maven Central in the repositories (the Exposed bridge
+depends on Exposed artifacts from Central), and add the JitPack repository for
+the core library:
 
 ```kotlin
 repositories {
+    mavenCentral()
     maven { url = uri("https://jitpack.io") }
 }
 

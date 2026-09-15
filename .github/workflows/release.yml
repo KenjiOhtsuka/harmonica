@@ -30,5 +30,16 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
 
+      - name: Validate release ref
+        run: |
+          ref="${{ github.ref }}"
+          case "$ref" in
+            refs/tags/3.0.*) ;;
+            *) echo "::error::release.yml must run against a 3.0.* tag, got '$ref'" && exit 1 ;;
+          esac
+          version="$(grep -m1 '^version = ' gradle-plugin/build.gradle.kts | sed -E 's/.*"(.*)".*/\1/')"
+          tag="${ref#refs/tags/}"
+          [ "$tag" = "$version" ] || { echo "::error::tag '$tag' does not match project version '$version'" && exit 1; }
+
       - name: Publish to the Gradle Plugin Portal
         run: ./gradlew :gradle-plugin:publishPlugins --no-daemon

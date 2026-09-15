@@ -114,8 +114,10 @@ Since Gradle 9 cannot run on JDK 8:
   then go through the portal's manual review.
 - `core`/`exposed` go to JitPack out-of-band from the same tag; Maven Central
   (OSSRH) remains deferred.
-- Requires secrets (`GRADLE_PUBLISH_KEY/SECRET`, `MAVEN_USERNAME/PASSWORD`,
-  GPG key) — configure in repo settings only when publishing is ready.
+- Requires secrets `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (held in the
+  `publish action` environment, referenced by the job) — configure in repo
+  settings only when publishing is ready. `MAVEN_USERNAME/PASSWORD` and a GPG
+  key are only needed if Maven Central is activated.
 
 ### 3.5 `dependabot.yml` — landed (#169, merged)
 

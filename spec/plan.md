@@ -134,9 +134,10 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
 - **Coordinates/IDs**: **resolved** — the plugin-publish 2.x id gate requires
   namespaced ids, so the Plugin Portal id-s (published on the 3.0.1 release)
   are the historical ones: `com.improve_future.harmonica` (already registered
-  under the owner's account at 1.1.24) and `com.improve_future.jarmonica`
-  (pending claim). The stale bundled descriptor was removed, replaced by
-  plugin-publish's generated ones.
+  under the owner's account at 1.1.24) and `com.improve_future.jarmonica` (new
+  id — auto-registered by the first `publishPlugins` run, then manually
+  reviewed by the portal). The stale bundled descriptor was removed, replaced
+  by plugin-publish's generated ones.
 - **`document/` module**: decided — **dropped from the root build**, folder
   left as-is (own Gradle 4.9 wrapper, version-less Kotlin plugin, deprecated
   `mainClassName`). No longer compiled or released. Future: convert or remove
@@ -517,8 +518,9 @@ Still open:
   and must be re-added to `mavenJava` if Maven Central is activated;
   Maven Central would additionally need the `signing`
   plugin + GPG keys and OSSRH credentials; Plugin Portal publishing (done for
-  3.0.1) needs the portal-registered `com.improve_future.harmonica` id and a
-  claim of `com.improve_future.jarmonica`, plus
+  3.0.1) needs only the `com.improve_future.harmonica` /
+  `com.improve_future.jarmonica` ids (the latter auto-registered on first
+  publish, then manually reviewed) plus
   `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (user credentials).
 
 Resolved for Phase 3 (2026-08-08):

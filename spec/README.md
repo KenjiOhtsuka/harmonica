@@ -37,8 +37,8 @@ plan to restart and modernize the project.
   — the plugin-publish 2.x gate rejects short ids) publish to the Plugin Portal
   via `.github/workflows/release.yml`
   (`GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET`, tag `3.0.*` push or manual
-  dispatch; the former id is already registered under the owner, the latter
-  pending claim); the OSSRH/Maven Central config stays unused
+  dispatch; new ids are auto-registered on first publish and manually
+  reviewed); the OSSRH/Maven Central config stays unused
   for the 3.0.1 release
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +

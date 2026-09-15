@@ -109,8 +109,9 @@ Since Gradle 9 cannot run on JDK 8:
   Portal (`plugin-publish`, ids `com.improve_future.harmonica` /
   `com.improve_future.jarmonica` — namespaced, the 2.x id gate rejects short
   ids), credentialled by the
-  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` GitHub Secrets. The latter id
-  must be claimed on the portal first.
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` GitHub Secrets. New ids (e.g.
+  `com.improve_future.jarmonica`) are auto-registered by the first publish and
+  then go through the portal's manual review.
 - `core`/`exposed` go to JitPack out-of-band from the same tag; Maven Central
   (OSSRH) remains deferred.
 - Requires secrets (`GRADLE_PUBLISH_KEY/SECRET`, `MAVEN_USERNAME/PASSWORD`,
@@ -182,8 +183,7 @@ updates:
 - **`release.yml` + secrets**: **done** — the Plugin Portal PR added
   `.github/workflows/release.yml` (publishes `com.improve_future.harmonica` /
   `com.improve_future.jarmonica` to the portal); the
-  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` secrets are set, the latter id
-  pending portal claim.
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` secrets are set.
 
 ## Definition of done
 

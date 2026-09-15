@@ -101,11 +101,12 @@ column types, indexes, foreign keys, renames, and raw `executeSql`.
 
 The 3.0.1 artifacts are served from
 [JitPack](https://jitpack.io/#KenjiOhtsuka/harmonica), which builds them from
-the `3.0.1` tag. For the core library, add the JitPack repository and
-dependency:
+the `3.0.1` tag. For the core library, add the JitPack repository (and Maven
+Central for the transitive dependencies) plus the dependency:
 
 ```kotlin
 repositories {
+    mavenCentral()
     maven { url = uri("https://jitpack.io") }
 }
 
@@ -128,9 +129,8 @@ dependencies {
 | Exposed bridge (optional) | `com.github.KenjiOhtsuka.harmonica:exposed` |
 
 The Gradle plugin is applied through the plugins DSL as shown in "Getting
-started"; its distribution channel for the first release is still being
-finalized. Maven Central and the Gradle Plugin Portal are deferred past the
-first release.
+started"; its distribution channel is still being finalized. Maven Central
+and the Gradle Plugin Portal are deferred past the first release.
 
 ## Exposed integration (optional)
 
@@ -143,9 +143,11 @@ dependencies {
 }
 ```
 
-The JitPack repository from "Download" must be on the build's repository list
-so the `harmonica` configuration can resolve the bridge. The bridge currently
-targets Exposed 0.61.x (Exposed 1.x support is tracked in issue #215). The
+The JitPack and Maven Central repositories from "Download" must be on the
+build's repository list so the `harmonica` configuration can resolve the
+bridge and its transitive dependencies. The bridge currently
+targets Exposed 0.61.x (Exposed 1.x support is tracked in the open
+dependabot PR #215, kept open). The
 plugin-flow test suite verifies migrations both with and without the Exposed
 module on the script classpath.
 

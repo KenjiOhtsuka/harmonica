@@ -131,7 +131,7 @@ Still open (not Phase 0):
   PR #206 — `jdbc:h2:<dbName>`.)
 - Coordinates/IDs reconciliation (plugin id `harmonica`/`jarmonica` applied vs
   published; stale `META-INF/gradle-plugins/com.improve_future.harmonica.properties`
-  still bundled) — Phase 6.
+  still bundled) — deferred past Phase 6 (Plugin Portal publication).
 
 ## Repositories
 

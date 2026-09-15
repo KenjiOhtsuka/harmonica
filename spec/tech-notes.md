@@ -169,7 +169,15 @@ Still open (not Phase 0):
   `plugins {}` block in root + `pluginManagement` in `settings.gradle.kts`.
 - OSSRH `s01.oss.sonatype.org` (gradle-plugin) — **removed in Phase 0, then
   restored** (commit `546d956`) as Phase 6 prep; **decided 2026-09-13: JitPack-
-  only** for the 3.0.1 release (OSSRH repo remains, unused).
+  only** for the libraries (OSSRH repo remains, unused; Maven Central deferred).
+- `com.improve_future:core` in the plugin POM — **removed 2026-09-16**: core is
+  bundled into the plugin jar (`tasks.jar { from(core sourceset output) }`) and
+  the POM strip removes the dependency; module metadata generation for
+  `pluginMaven` is disabled so consumers resolve the POM only. The portal
+  plugin is self-contained; the Exposed bridge stays resolved from JitPack.
+  The legacy `mavenJava` publication was **removed** with the strip work —
+  portal publishing uses only `pluginMaven`; re-enabling Maven Central will
+  require recreating a Central publication (with the same bundle/strip policy).
 
 ## Plugins in `build.gradle.kts` (root)
 

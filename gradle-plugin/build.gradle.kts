@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "com.improve_future"
-version = "3.0.1"
+version = "3.0.2"
 
 repositories {
     mavenCentral()
@@ -21,7 +21,7 @@ repositories {
 dependencies {
     val kotlinVersion = property("kotlin_version") as String
 
-    api(project(":core"))
+    implementation(project(":core"))
 
     /* Implementation */
     implementation("org.jetbrains.kotlin:kotlin-scripting-common:$kotlinVersion")
@@ -73,6 +73,14 @@ tasks.register<Jar>("sourcesJar") {
     archiveClassifier.set("sources")
 }
 
+// Core is bundled into the jar (not a published dependency), so portal
+// consumers apply the plugin without extra repositories.
+tasks.jar {
+    val coreMain =
+        project(":core").the<SourceSetContainer>()["main"]
+    from(coreMain.output)
+}
+
 tasks.register<Jar>("javadocJar") {
     from(tasks.named("javadoc"))
     archiveClassifier.set("javadoc")
@@ -120,35 +128,59 @@ gradlePlugin {
 
 val githubUrl = "https://github.com/KenjiOhtsuka/harmonica"
 
-// Create the publication with the pom configuration:
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-
-            pom {
-                name.set("Harmonica")
-                description.set("Kotlin Database Migration Tool")
-                url.set(githubUrl)
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("http://opensource.org/licenses/mit-license.php")
-                    }
+gradle.projectsEvaluated {
+    publishing {
+        publications {
+            named<MavenPublication>("pluginMaven") {
+                // POM-only publish: core ships in the jar, so no core metadata
+                // is generated and the core dependency is stripped from the POM.
+                tasks.named("generateMetadataFileForPluginMavenPublication") {
+                    enabled = false
                 }
-                developers {
-                    developer {
-                        id.set("kenjiohtsuka")
-                        name.set("Kenji Otsuka")
-                        email.set("kok.fdcm@gmail.com")
-                    }
-                }
-                scm {
+                pom {
+                    name.set("Harmonica")
+                    description.set("Kotlin Database Migration Tool")
                     url.set(githubUrl)
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("http://opensource.org/licenses/mit-license.php")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("kenjiohtsuka")
+                            name.set("Kenji Otsuka")
+                            email.set("kok.fdcm@gmail.com")
+                        }
+                    }
+                    scm {
+                        url.set(githubUrl)
+                    }
+                }
+                pom.withXml {
+                    @Suppress("UNCHECKED_CAST")
+                    val dependenciesNode =
+                        (asNode().get("dependencies") as? List<groovy.util.Node>)?.firstOrNull()
+                            ?: return@withXml
+                    val coreDeps =
+                        (dependenciesNode.get("dependency") as List<groovy.util.Node>)
+                            .filter {
+                                (it.get("groupId") as List<groovy.util.Node>).first().text() ==
+                                    "com.improve_future" &&
+                                    (it.get("artifactId") as List<groovy.util.Node>).first().text() ==
+                                    "core"
+                            }
+                    coreDeps.forEach { (it.parent() as groovy.util.Node).remove(it) }
                 }
             }
         }
     }
+}
+
+// OSSRH staging repo kept for a future Maven Central release (deferred);
+// unused while the Plugin Portal is the only publishing channel.
+publishing {
     repositories {
         maven {
             name = "OSSRH"

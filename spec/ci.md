@@ -104,7 +104,7 @@ Since Gradle 9 cannot run on JDK 8:
 ### 3.4 `release.yml` (optional, Phase 6)
 
 - Trigger: tag push (`3.0.*`) plus manual `workflow_dispatch` (used to publish
-  an already-existing tag such as `3.0.1`).
+  an already-existing tag such as `3.0.2`).
 - Runs `./gradlew :gradle-plugin:publishPlugins` to publish to the Plugin
   Portal (`plugin-publish`, ids `com.improve_future.harmonica` /
   `com.improve_future.jarmonica` — namespaced, the 2.x id gate rejects short

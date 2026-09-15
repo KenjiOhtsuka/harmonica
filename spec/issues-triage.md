@@ -1,6 +1,6 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-09-13 (**24 open** total). Grouped by
+Snapshot of **open** issues on 2026-09-16 (**25 open** total). Grouped by
 urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
 upgrade in Phase 0/2.
 
@@ -60,7 +60,8 @@ superseded by Phase 0.
 
 | # | Title | Plan |
 | --- | --- | --- |
-| 1 | put into maven central | Publishing target — **decided 2026-09-13**: JitPack for `core`/`exposed`, Gradle Plugin Portal (`com.improve_future.harmonica`/`com.improve_future.jarmonica`) for the plugin (3.0.1); Maven Central deferred. |
+| 1 | put into maven central | Publishing target — **decided 2026-09-13/16**: JitPack for `core`/`exposed` (3.0.1/3.0.2), Plugin Portal for the plugin (first publish on tag 3.0.2, core bundled); Maven Central deferred. |
+| 243 | add new plugins | Superseded — the id/portal strategy it proposes (3.x under new ids, legacy `com.improve_future.harmonica` untouched, `jarmonica` as an alias) was decided in PRs #242/#244: namespaced historical ids + `jarmonica` alias + `release.yml`. Close. |
 | 125 | Handle Multiple database | Multi-DB config; sizable design. |
 | 121 | Dry run | `-Pdry` SQL preview (PostgreSQL first). |
 | 148 | Maven support | There is a `feature/maven-plugin` branch — evaluate resurrecting it. |

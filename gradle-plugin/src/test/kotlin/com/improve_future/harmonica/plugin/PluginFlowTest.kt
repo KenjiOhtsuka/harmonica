@@ -78,7 +78,7 @@ class PluginFlowTest {
             appendLine("    }")
             appendLine("}")
             appendLine("plugins {")
-            appendLine("    id(\"harmonica\") version \"3.0.1\"")
+            appendLine("    id(\"com.improve_future.harmonica\") version \"3.0.1\"")
             appendLine("}")
             appendLine("repositories {")
             appendLine("    mavenCentral()")

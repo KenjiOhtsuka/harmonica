@@ -7,8 +7,7 @@ upgrade in Phase 0/2.
 ## URGENT — blocking restart
 
 **Closed 2026-08-30:** #153 (Tasks in jarmonica gradle plugin don't work
-anymore) — resolved on `develop`, first released as tag **3.0.1** (the
-original `3.0.0` tag is broken):
+anymore) — resolved on **develop** only (no released version carries it):
 Phase 3 removed Exposed from `core` (root cause gone) and `PluginFlowTest`
 verifies the plugin flow end-to-end with and without Exposed. No remaining
 items in this tier.
@@ -61,7 +60,7 @@ superseded by Phase 0.
 
 | # | Title | Plan |
 | --- | --- | --- |
-| 1 | put into maven central | Publishing target — **decided 2026-09-13: JitPack-only; released as tag 3.0.1 (JitPack builds ok)**; Maven Central deferred. |
+| 1 | put into maven central | Publishing target — **decided 2026-09-13**: JitPack for `core`/`exposed`, Gradle Plugin Portal (`com.improve_future.harmonica`/`com.improve_future.jarmonica`) for the plugin (3.0.1); Maven Central deferred. |
 | 125 | Handle Multiple database | Multi-DB config; sizable design. |
 | 121 | Dry run | `-Pdry` SQL preview (PostgreSQL first). |
 | 148 | Maven support | There is a `feature/maven-plugin` branch — evaluate resurrecting it. |

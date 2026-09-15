@@ -14,8 +14,8 @@ version = "3.0.1"
 
 plugins {
     kotlin("jvm") version "2.3.20"
-    id("harmonica") version "3.0.1"
-    id("jarmonica") version "3.0.1"
+    id("com.improve_future.harmonica") version "3.0.1"
+    id("com.improve_future.jarmonica") version "3.0.1"
 }
 
 extra["directoryPath"] = "src/main/kotlin/com/improve_future/harmonica/demo/script"

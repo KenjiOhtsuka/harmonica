@@ -29,11 +29,16 @@ plan to restart and modernize the project.
   major 52 asserted in CI)
 - Gradle plugin-publish **2.1.1**, Dokka **2.2.0** (Dokka bundles Jackson
   2.15.3 at build time only — not shipped; see the Dependabot alerts)
-- Publish target: **JitPack-only decided 2026-09-13 (plan.md §6)** — `core`/
-  `exposed` get `maven-publish` publications + a `.jitpack.yml` (JDK 17,
-  `:core:publishToMavenLocal :exposed:publishToMavenLocal` — scoped to the
-  libraries, since the gradle-plugin publication is deferred Phase-6 work);
-  plugin-publish/OSSRH configs kept for later, unused
+- Publish target: **JitPack + Gradle Plugin Portal decided 2026-09-13
+  (plan.md §6)** — `core`/`exposed` get `maven-publish` publications + a
+  `.jitpack.yml` (JDK 17, `:core:publishToMavenLocal
+  :exposed:publishToMavenLocal` — scoped to the libraries); the plugin's
+  `com.improve_future.harmonica`/`com.improve_future.jarmonica` ids (namespaced
+  — the plugin-publish 2.x gate rejects short ids) publish to the Plugin Portal
+  via `.github/workflows/release.yml`
+  (`GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET`, tag `3.0.*` push or manual
+  dispatch; new ids are auto-registered on first publish and manually
+  reviewed); the OSSRH/Maven Central config stays unused
   for the 3.0.1 release
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
   `actions/checkout@v7` + `gradle/actions/setup-gradle@v6` +

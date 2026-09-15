@@ -102,15 +102,18 @@ gradlePlugin {
     vcsUrl = "https://github.com/KenjiOhtsuka/harmonica"
     plugins {
         register("harmonica") {
-            id = "harmonica"
+            id = "com.improve_future.harmonica"
             implementationClass = "com.improve_future.harmonica.plugin.HarmonicaPlugin"
             displayName = "DB Migration Plugin"
             description = "Kotlin Database Migration Tool"
             tags = listOf("kotlin", "database", "migration")
         }
         register("jarmonica") {
-            id = "jarmonica"
+            id = "com.improve_future.jarmonica"
             implementationClass = "com.improve_future.harmonica.plugin.JarmonicaPlugin"
+            displayName = "DB Migration Plugin (legacy)"
+            description = "Kotlin Database Migration Tool (legacy id)"
+            tags = listOf("kotlin", "database", "migration")
         }
     }
 }
@@ -122,8 +125,6 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
 
             pom {
                 name.set("Harmonica")

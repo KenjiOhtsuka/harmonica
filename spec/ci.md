@@ -103,12 +103,21 @@ Since Gradle 9 cannot run on JDK 8:
 
 ### 3.4 `release.yml` (optional, Phase 6)
 
-- Trigger: tag push (`v*`).
-- Build + publish the Gradle plugin to the Plugin Portal
-  (`plugin-publish`), and optionally publish `core`/`exposed` artifacts to
-  JitPack (out-of-band, triggered by the tag) and/or Maven Central (OSSRH).
-- Requires secrets (`GRADLE_PUBLISH_KEY/SECRET`, `MAVEN_USERNAME/PASSWORD`,
-  GPG key) — configure in repo settings only when publishing is ready.
+- Trigger: tag push (`3.0.*`) plus manual `workflow_dispatch` (used to publish
+  an already-existing tag such as `3.0.1`).
+- Runs `./gradlew :gradle-plugin:publishPlugins` to publish to the Plugin
+  Portal (`plugin-publish`, ids `com.improve_future.harmonica` /
+  `com.improve_future.jarmonica` — namespaced, the 2.x id gate rejects short
+  ids), credentialled by the
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` GitHub Secrets. New ids (e.g.
+  `com.improve_future.jarmonica`) are auto-registered by the first publish and
+  then go through the portal's manual review.
+- `core`/`exposed` go to JitPack out-of-band from the same tag; Maven Central
+  (OSSRH) remains deferred.
+- Requires secrets `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (held in the
+  `publish action` environment, referenced by the job) — configure in repo
+  settings only when publishing is ready. `MAVEN_USERNAME/PASSWORD` and a GPG
+  key are only needed if Maven Central is activated.
 
 ### 3.5 `dependabot.yml` — landed (#169, merged)
 
@@ -173,8 +182,10 @@ updates:
 - **`ci.yml` + `jvm8-bytecode.yml` + `dependency-submit.yml` + CircleCI
   removal**: **done**, part of the Phase 0 toolchain PR.
 - **DB matrix job**: **done** (Phase 4, PR #209).
-- **`release.yml` + secrets**: superseded by JitPack tag-builds (released as
-  tag `3.0.1`); Plugin Portal deferred (see plan.md §6).
+- **`release.yml` + secrets**: **done** — the Plugin Portal PR added
+  `.github/workflows/release.yml` (publishes `com.improve_future.harmonica` /
+  `com.improve_future.jarmonica` to the portal); the
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` secrets are set.
 
 ## Definition of done
 

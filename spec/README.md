@@ -78,11 +78,11 @@ plan to restart and modernize the project.
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
   migration classes via `com.improve_future:harmonica-demo:3.0.1`.
-- **`develop` was merged into `master`** (PR #239, merged 2026-09-13); `master`
-  is at `055572d`, the (broken) `3.0.0` tag, one commit ahead of `develop`. The
-  first released tag will be **3.0.1** (PR #240: scoped JitPack install +
-  version bump), cut from the fixed commit once it merges. See the risk
-  register in
+- **`master` carries the first release** — `develop` was merged in (PR #239),
+  the 3.0.1 release PR #241 landed, and tag **`3.0.1`** was cut at `380fda5`
+  (2026-09-13): JitPack builds it `ok` and
+  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.1` resolve from JitPack
+  (the `3.0.0` tag is broken and superseded). See the risk register in
   [`plan.md`](plan.md).
 
 ## Machine environment (current)

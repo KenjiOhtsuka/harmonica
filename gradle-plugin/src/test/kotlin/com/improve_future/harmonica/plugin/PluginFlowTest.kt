@@ -40,6 +40,7 @@ class PluginFlowTest {
         assertMigrated(projectDir, "demo_exposed", "20260811000000", migrated = false)
     }
 
+    /** Creates an isolated TestKit project for a plugin migration flow. */
     private fun createProject(
         name: String,
         migrationFileName: String,

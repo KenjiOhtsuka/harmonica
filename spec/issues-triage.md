@@ -60,8 +60,8 @@ superseded by Phase 0.
 
 | # | Title | Plan |
 | --- | --- | --- |
-| 1 | put into maven central | Publishing target — **decided 2026-09-13/16**: JitPack for `core`/`exposed` (3.0.1/3.0.2), Plugin Portal for the plugin (first publish on tag 3.0.2, core bundled); Maven Central deferred. |
-| 243 | add new plugins | Superseded — the id/portal strategy it proposes (3.x under new ids, legacy `com.improve_future.harmonica` untouched, `jarmonica` as an alias) was decided in PRs #242/#244: namespaced historical ids + `jarmonica` alias + `release.yml`. Close. |
+| 1 | put into maven central | Publishing target — **decided 2026-09-13/16**: JitPack for `core`/`exposed` (3.0.1/3.0.3), Plugin Portal for the plugin (first publish tag 3.0.3 under `io.github.kenjiohtsuka`, core bundled; the tag-3.0.2 portal attempt was rejected); Maven Central deferred. |
+| 243 | add new plugins | Superseded — the id/portal strategy it proposes (3.x under new ids, legacy `com.improve_future.harmonica` untouched, `jarmonica` as an alias) was decided in PRs #242/#244: namespaced ids. **Refined 2026-09-16:** the portal rejected the historical `com.improve_future/*` coordinates, so the 3.x ids moved to `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica` (legacy 1.1.24 id untouched, publish on tag 3.0.3). Close. |
 | 125 | Handle Multiple database | Multi-DB config; sizable design. |
 | 121 | Dry run | `-Pdry` SQL preview (PostgreSQL first). |
 | 148 | Maven support | There is a `feature/maven-plugin` branch — evaluate resurrecting it. |

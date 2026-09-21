@@ -11,8 +11,11 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-group = "com.improve_future"
-version = "3.0.2"
+// Plugin Portal ownership is verified via the owner's GitHub account, so the
+// published coordinate lives under io.github.kenjiohtsuka; the historical
+// com.improve_future group is not available for new publishes.
+group = "io.github.kenjiohtsuka"
+version = "3.0.3"
 
 repositories {
     mavenCentral()
@@ -110,14 +113,14 @@ gradlePlugin {
     vcsUrl = "https://github.com/KenjiOhtsuka/harmonica"
     plugins {
         register("harmonica") {
-            id = "com.improve_future.harmonica"
+            id = "io.github.kenjiohtsuka.harmonica"
             implementationClass = "com.improve_future.harmonica.plugin.HarmonicaPlugin"
             displayName = "DB Migration Plugin"
             description = "Kotlin Database Migration Tool"
             tags = listOf("kotlin", "database", "migration")
         }
         register("jarmonica") {
-            id = "com.improve_future.jarmonica"
+            id = "io.github.kenjiohtsuka.jarmonica"
             implementationClass = "com.improve_future.harmonica.plugin.JarmonicaPlugin"
             displayName = "DB Migration Plugin (legacy)"
             description = "Kotlin Database Migration Tool (legacy id)"

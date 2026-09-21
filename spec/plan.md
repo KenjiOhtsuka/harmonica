@@ -35,11 +35,13 @@ State:
 
 - `master` (`380fda5`) received `develop` (`52673f9`) via the **3.0.1 release
   PR #241** (merged 2026-09-13), on top of the 3.0.0 merge commit `055572d`
-  (PR #239). `develop` has since advanced past `master` (PRs #242/#244), so the
+  (PR #239). `develop` has since advanced past `master` (PRs #244/#245), so the
   branches have diverged.
 - The 3.0.0 tag's JitPack build failed (see Phase 6).  The first JitPack-
   released tag is **3.0.1** (`380fda5`); the Plugin Portal publish targets
-  **3.0.2** via `release.yml`.
+  **3.0.3** via `release.yml` under the `io.github.kenjiohtsuka` namespace (the
+  portal rejected the 3.0.2 attempt: the historic `com.improve_future:*`
+  coordinates are restricted for new publishes — see Phase 6).
 
 Policy going forward (Git Flow, simplified):
 
@@ -137,15 +139,19 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
   JSR-223 engine was replaced by a direct `BasicJvmScriptingHost` — see the
   decision in §6 and Phase 3 status.
 - **Coordinates/IDs**: **resolved** — the plugin-publish 2.x id gate requires
-  namespaced ids, so the Plugin Portal id-s are the historical ones:
-  `com.improve_future.harmonica` (already registered under the owner's account
-  at 1.1.24) and `com.improve_future.jarmonica` (new id — auto-registered by
-  the first `publishPlugins` run, then manually reviewed by the portal). The
-  stale bundled descriptor was removed, replaced by plugin-publish's generated
-  ones. **Core is bundled into the plugin jar and stripped from the published
-  POM (PR in Phase 8)**, so the portal plugin resolves without extra
-  repositories. The first portal publish runs via `release.yml` on tag
-  **3.0.2**.
+  namespaced ids, and the plugin portal now demands an `io.github.<owner>`
+  namespace for new publishes (the portal rejected the 3.0.2 attempt under the
+  historical group with "Coordinates 'com.improve_future:gradle-plugin' are
+  restricted from use"). The portal plugin therefore publishes as
+  `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica` (new
+  ids — auto-registered by the first `publishPlugins` run, then manually
+  reviewed by the portal) with Maven group `io.github.kenjiohtsuka`; the
+  historical `com.improve_future.harmonica` id (1.1.24) is untouched for
+  existing users. The stale bundled descriptor was removed, replaced by
+  plugin-publish's generated ones. **Core is bundled into the plugin jar and
+  stripped from the published POM (PR #245)**, so the portal plugin
+  resolves without extra repositories. The first portal publish runs via
+  `release.yml` on tag **3.0.3**.
 - **`document/` module**: decided — **dropped from the root build**, folder
   left as-is (own Gradle 4.9 wrapper, version-less Kotlin plugin, deprecated
   `mainClassName`). No longer compiled or released. Future: convert or remove
@@ -334,7 +340,7 @@ Breakdown (each item is its own small PR against `develop`):
    source set, always-green) spawns real Gradle builds via TestKit that apply
    the `harmonica` plugin from a composite `includeBuild` of the repo root and
    run `harmonicaUp`/`harmonicaDown` against an embedded SQLite DB (absolute
-   path in `<projectDir>/build/`); one case has `harmonica("com.improve_future:exposed:3.0.2")`
+   path in `<projectDir>/build/`); one case has `harmonica("com.improve_future:exposed:3.0.3")`
    on the script classpath (Exposed migration), one does not (plain JDBC
    migration). Assertions check `harmonica_migration` version rows + table
    existence. The `demo/` project is committed as the seed (script/ + jarmonica/
@@ -413,17 +419,21 @@ for the `core`/`exposed` libraries (see the open-decision list in §6). PR #238
 added `maven-publish` publications to `core`/`exposed` plus a `.jitpack.yml`;
 PR #240 scoped the JitPack install to the two library modules and raised the
 version to 3.0.1, which was **JitPack-released from tag `3.0.1`**. The plugin
-will be published to the Plugin Portal on tag **3.0.2** via `release.yml`
-(PR #244); core is bundled into the plugin jar and dropped from the published
-POM, so the portal plugin resolves without extra repositories.
+publish to the Plugin Portal from tag **3.0.2** (PR #244) was **rejected by the
+portal** — "Coordinates 'com.improve_future:gradle-plugin' are restricted from
+use" — because new publishes must use an `io.github.<owner>` namespace. The
+plugin now publishes on tag **3.0.3** with ids/coordinates moved to
+`io.github.kenjiohtsuka`; core is bundled into the plugin jar and dropped from
+the published POM, so the portal plugin resolves without extra repositories.
 
 - Configure **JitPack**: build from git tags; multi-module produces
   `core`/`exposed` artifacts via the `maven-publish` publications consumed as
-  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.2` (JitPack rewrites the
+  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.3` (JitPack rewrites the
   `com.improve_future` group). Done for 3.0.1; re-verified per tag.
-- **Decided (2026-09-13):** the Gradle Plugin Portal (`plugin-publish`,
-  `com.improve_future.harmonica`/`com.improve_future.jarmonica`) is the
-  plugin's first-release channel — published via
+- **Decided (2026-09-13/16):** the Gradle Plugin Portal (`plugin-publish`,
+  ids `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica`,
+  Maven group `io.github.kenjiohtsuka`) is the plugin's first-release channel —
+  published via
   `.github/workflows/release.yml` for tags `3.0.*`. Maven Central (OSSRH,
   needs `signing` + credentials) stays **deferred**; its config stays in
   `gradle-plugin/build.gradle.kts` for a later release.
@@ -456,7 +466,8 @@ coordinates) and will be refreshed post-tag.
 - Real-DB tests merged and runnable; local DB setup documented.
 - First new release tagged (`3.0.1`, JitPack-verified for core/exposed);
   `master` released from `develop` via the Phase 6 merge commit `380fda5`;
-  portal plugin published from tag `3.0.2` via `release.yml`.
+  portal plugin published from tag `3.0.3` via `release.yml` under the
+  `io.github.kenjiohtsuka` namespace.
 - Open-issue count reduced (all "urgent/small" closed or converted to tasks).
 - `harmonica_demo` left untouched (documented only, not part of the restart).
 
@@ -511,15 +522,23 @@ Still open:
 - **Decided 2026-09-13/16:** the release channel is **JitPack** for the
   `core`/`exposed` libraries and the **Gradle Plugin Portal** for the plugin;
   Maven Central is deferred (config kept). `3.0.1` tag predates `release.yml`,
-  so the first portal publish is tag **3.0.2**. Because `com.improve_future:core`
+  so the first portal publish is tag **3.0.2**; that run was **rejected by the
+  portal** — "Coordinates 'com.improve_future:gradle-plugin' are restricted from
+  use" — because the portal now requires new publishes to use an
+  `io.github.<owner>` namespace verified against the account's GitHub username.
+  The portal plugin therefore moved to the `io.github.kenjiohtsuka` namespace:
+  ids `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica`,
+  Maven coordinate `io.github.kenjiohtsuka:gradle-plugin` (the historical
+  `com.improve_future:harmonica` id stays at 1.1.24 for existing users), and
+  the first portal publish is tag **3.0.3**. Because `com.improve_future:core`
   is served nowhere (JitPack only serves the rewritten `com.github.*` group),
   the plugin **bundles core into its jar** and removes the core dependency from
-  the published POM + module metadata (`tasks.jar` + POM-strip in the Phase 8
-  PR) — a portal consumer resolves the plugin with no extra repositories.
-  Portal publishing needs only the `com.improve_future.harmonica` /
-  `com.improve_future.jarmonica` ids (the latter auto-registered on first
-  publish, then manually reviewed) plus `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET`
-  (user credentials, environment `publish action`).
+  the published POM + module metadata (`tasks.jar` + POM-strip, PR #245)
+  — a portal consumer resolves the plugin with no extra repositories.
+  Portal publishing needs only the two `io.github.kenjiohtsuka.*` ids (both
+  auto-registered on first publish, then manually reviewed) plus
+  `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (user credentials, environment
+  `publish action`).
 
 Resolved for Phase 3 (2026-08-08):
 

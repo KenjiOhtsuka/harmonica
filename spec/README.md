@@ -33,9 +33,11 @@ plan to restart and modernize the project.
   (plan.md §6)** — `core`/`exposed` get `maven-publish` publications + a
   `.jitpack.yml` (JDK 17, `:core:publishToMavenLocal
   :exposed:publishToMavenLocal` — scoped to the libraries); the plugin's
-  `com.improve_future.harmonica`/`com.improve_future.jarmonica` ids (namespaced
-  — the plugin-publish 2.x gate rejects short ids) publish to the Plugin Portal
-  via `.github/workflows/release.yml`
+  `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica` ids
+  (namespaced — the plugin-publish 2.x gate rejects short ids, and the portal
+  now requires an `io.github.<owner>` namespace for new publishes, cf. the
+  rejected 3.0.2 attempt under `com.improve_future:*`) publish to the Plugin
+  Portal via `.github/workflows/release.yml`
   (`GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET`, tag `3.0.*` push or manual
   dispatch; new ids are auto-registered on first publish and manually
   reviewed); the OSSRH/Maven Central config stays unused
@@ -76,13 +78,16 @@ plan to restart and modernize the project.
   `harmonica_test` port is DONE (PR #221). The `demo/` module (seed for the
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
-  migration classes via `com.improve_future:harmonica-demo:3.0.2`.
+  migration classes via `com.improve_future:harmonica-demo:3.0.3`.
 - **`master` carries the first release** — `develop` was merged in (PR #239),
   the 3.0.1 release PR #241 landed, and tag **`3.0.1`** was cut at `380fda5`
   (2026-09-13): JitPack builds it `ok` and
   `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.1` resolve from JitPack
-  (the `3.0.0` tag is broken and superseded). The Plugin Portal publish runs
-  via `release.yml` on tag **3.0.2** (the `3.0.1` tag predates the workflow);
+  (the `3.0.0` tag is broken and superseded). The Plugin Portal publish of tag
+  **3.0.2** was rejected (coordinates `com.improve_future:*` are restricted for
+  new publishes); the plugin now targets tag **3.0.3** under
+  `io.github.kenjiohtsuka.*`
+  via `release.yml`;
   core is bundled into the plugin jar so the portal plugin needs no extra
   repositories. See the risk register in
   [`plan.md`](plan.md).

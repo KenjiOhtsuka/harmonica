@@ -131,7 +131,11 @@ Still open (not Phase 0):
   PR #206 — `jdbc:h2:<dbName>`.)
 - Coordinates/IDs reconciliation (plugin id `harmonica`/`jarmonica` applied vs
   published; stale `META-INF/gradle-plugins/com.improve_future.harmonica.properties`
-  still bundled) — deferred past Phase 6 (Plugin Portal publication).
+  still bundled) — deferred past Phase 6 (Plugin Portal publication). —
+  **Resolved in Phase 6/8**: the stale descriptor was deleted and plugin-publish
+  generates the id descriptors; the 3.x ids are now
+  `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica` (see
+  the portal-namespace record below).
 
 ## Repositories
 
@@ -178,6 +182,16 @@ Still open (not Phase 0):
   The legacy `mavenJava` publication was **removed** with the strip work —
   portal publishing uses only `pluginMaven`; re-enabling Maven Central will
   require recreating a Central publication (with the same bundle/strip policy).
+- Plugin Portal namespace — **moved to `io.github.kenjiohtsuka` 2026-09-16**:
+  the portal rejected the tag-3.0.2 publish with "Coordinates
+  'com.improve_future:gradle-plugin' are restricted from use" — new publishes
+  must use an `io.github.<owner>` group (verified against the account's GitHub
+  username; the historic `com.improve_future` group is grandfathered only for
+  the 1.1.24 id). The `gradle-plugin` module now publishes as
+  `io.github.kenjiohtsuka:gradle-plugin` (ids
+  `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica`),
+  version **3.0.3**; both new ids are auto-registered on first `publishPlugins`
+  and then manually reviewed by the portal.
 
 ## Plugins in `build.gradle.kts` (root)
 

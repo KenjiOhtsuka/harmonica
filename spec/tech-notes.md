@@ -198,8 +198,16 @@ Still open (not Phase 0):
 
 - `plugins { kotlin("jvm") version "2.3.20" apply false;
   id("com.gradle.plugin-publish") version "2.1.1" apply false;
-  id("org.jetbrains.dokka") version "2.2.0" apply false }` — legacy
-  `buildscript` + classpath block deleted.
+  id("org.jetbrains.dokka") version "2.2.0" apply false }`.
+- Dokka 2.2.0 transitively pulls jackson-core/databind/module-kotlin/xml
+  2.15.3 onto the root **buildscript classpath**, triggering 7 open GHSA
+  alerts (#14-#20). A `buildscript { configurations.classpath {
+  resolutionStrategy { force(…) } } }` block pins all four to **2.18.9**
+  (patched version for every affected advisory; latest of the 2.18 line).
+  Revisit the pin if Dokka's jackson baseline moves past 2.18.9. The
+  `force` cap applies only to the root script classpath, not to module
+  runtime/compile configurations; all subprojects share the root classpath,
+  so the pin is effective build-wide.
 
 ## CI
 

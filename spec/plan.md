@@ -386,31 +386,22 @@ Definition of done:
 
 Full triage: [issues-triage.md]. Order:
 
-1. Urgent blockers: #153 closed 2026-08-30 (resolved on `develop` via Phase 3
-   Exposed-removal + PluginFlowTest; no release carries it). #167, #165, #140,
-   #162 are resolved
-   and closed (toolchain/CI fixes in Phase 0 PR #183; README/license PR #181;
-   pluralizer PR #187); #158, #159 already closed (verified; not tracked here).
+1. Urgent blockers: none — all closed by the Phase 0-5 work (see
+   issues-triage.md).
 2. Small: #26 (migration file naming), #47 (prepared statements), #138 (custom
    columns), #141 (more column types), #145 (alter column), #139 (FK options),
-   #69 (query execution API), #4 (created_at/updated_at), #189 (scanner
-   `isSubtypeOf` swallows all `Throwable` — **fixed and merged in PR #227**,
-   2026-08-30).
-   #91 (Exposed) is **closed** — the bridge shipped in Phase 3 (PRs #197-#199).
-   #196 (Real-DB both-config coverage) closed 2026-08-30 — satisfied by PR #219.
-   Also added in Phase 4/5: #220 (SQLite DB parent directory not created,
-   **merged** in PR #224) and #222 (integration-test warnings, **merged** in
-   PR #226) — both quick wins, both closed.
+   #69 (query execution API), #4 (created_at/updated_at).
 3. Medium: #7 (closed connection), #85 (SQLite defaults), #67 (timestamp
    default), #80 (Exposed version), #71 (seeding), #97 (JavaExec task tests),
    #155 (programmatic migration docs). Also #215 (Exposed 0.61.0 → 1.x bridge
    rewrite): Exposed 1.x moved the JDBC API out of `org.jetbrains.exposed.sql`,
    which breaks `harmonica-exposed` (`:exposed:compileKotlin` fails); plan the
    bridge update when scheduling this — see §6.
-4. Large/strategic (separate designs/PRs): #1 (Maven Central), #125 (multiple
-   DBs), #121 (dry run), #148 (Maven support — see `feature/maven-plugin`
-   branch), #147 (Java support), #105 (adapter plugin API), #107 (SQL Server
-   adapter), #41 (auto-migrations), #20 (research).
+4. Large/strategic (separate designs/PRs): #1 (Maven Central), #243 (add new
+   plugins — **close**: superseded by the §6 namespaced-id decision), #125
+   (multiple DBs), #121 (dry run), #148 (Maven support — see
+   `feature/maven-plugin` branch), #147 (Java support), #105 (adapter plugin
+   API), #107 (SQL Server adapter), #41 (auto-migrations), #20 (research).
 
 ### Phase 6 — Release & publishing
 

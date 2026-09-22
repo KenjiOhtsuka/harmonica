@@ -1,35 +1,13 @@
 # GitHub Issue Triage
 
-Snapshot of **open** issues on 2026-09-16 (**25 open** total). Grouped by
-urgency/size. Many are already fixed (or fixable) by the toolchain/dependency
-upgrade in Phase 0/2.
+Snapshot of **open** issues on 2026-09-22 (**25 open** total). Grouped by
+urgency/size. Requirements, design, and implementation are tracked in the
+other spec docs and GitHub; entries here are only the open issues.
 
 ## URGENT — blocking restart
 
-**Closed 2026-08-30:** #153 (Tasks in jarmonica gradle plugin don't work
-anymore) — resolved on **develop** only (no released version carries it):
-Phase 3 removed Exposed from `core` (root cause gone) and `PluginFlowTest`
-verifies the plugin flow end-to-end with and without Exposed. No remaining
-items in this tier.
-
-**Resolved and closed (by phase, most recent first):** **Closed 2026-08-30:**
-#220 (SQLite DB parent dir, merged in PR #224), #222 (integration-test
-warnings, merged in PR #226), #196 (Real-DB tests cover both configs —
-plugin-flow TestKit tests, PR #219), #189 (scanner `isSubtypeOf` swallows all
-`Throwable`, merged in PR #227), and #153 (see above) — removed from the
-tables below. **Closed
-2026-08-28:** #182 (JitPack badge renders correctly, closed as completed —
-removed from the SMALL table). **Resolved and closed by Phase 0/2:** #167
-(jcenter removed, CI rewritten, PR #183), #165 (LICENSE already MIT; README
-badge URLs fixed, PR #181), #140 (kotlin-pluralizer removed, internal
-`singularize()`, PR #187).
-
-**Closed / superseded (were listed as URGENT, now resolved on `develop`):**
-the build-failure issues #159 (Win10 openjdk 15), #158 (Win/Linux openjdk 16),
-and #162 (Build on Java 17) are all **closed** — same root cause (old Kotlin
-1.4.20 toolchain on new JDKs), fixed by the Phase 0 toolchain upgrade; drop
-them from active tracking. PR #163 ("update to JDK 17") is now **closed** —
-superseded by Phase 0.
+No remaining items in this tier — all original blockers were resolved and
+closed by the Phase 0-5 work (phase histories in [plan.md](plan.md)).
 
 ## SMALL — quick wins (Phase 5)
 
@@ -71,23 +49,9 @@ superseded by Phase 0.
 | 41 | Autogenerate migrations | Diff schemas and generate migration files. |
 | 20 | Research other tools | Compare rails/phinx/flyway/liquibase features; use to prioritize. |
 
-## Closed-but-related (context)
-
-- #91 (closed 2026-08-09 at the Phase 3 merge, PRs #197-#199): "Exposed Library
-  must be loaded by Class.forName" — `core` has no Exposed reference and the
-  `harmonica-exposed` bridge shipped. Script-classpath wiring (Pitfall F)
-  shipped 2026-08-11 (PRs #201/#202); the demo project remains as Phase 3 work,
-  tracked by [plan.md](plan.md), not by this issue.
-- #168 (PR, merged): bug-build-issue — build fixes already on `develop`.
-- #160 (closed): "How it should be used with Exposed" — reopened conceptually in
-  exposed-integration.md.
-- #164 (PR, not merged): actual title **"Task/boko 49"** — a closed PR; not an
-  issue and not part of active triage (was previously miscatalogued).
-- #163 (PR, "update to JDK 17") — **closed**; superseded by Phase 0.
-
 ## Process
 
 - Close issues that the Phase 0/2 upgrades resolve, referencing the PR.
-- Convert "small" items into a backlog with acceptance criteria before starting
+- Small items are worked as a backlog with acceptance criteria as part of
   Phase 5.
 - Keep "large/strategic" items open as RFCs until a design doc exists.

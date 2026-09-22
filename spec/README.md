@@ -67,7 +67,7 @@ plan to restart and modernize the project.
 - License headers stripped from all source files (PR #180); README badges fixed
   (PR #181)
 - No Exposed dependency in `core`. The optional `harmonica-exposed` module
-  (`exposed/`, pinned to Exposed 0.61.0) ships the `exposedTransaction` bridge
+  (`exposed/`, pinned to Exposed 1.5.0) ships the `exposedTransaction` bridge
   (Phase 3, PR B); runtime reflection detection was removed from
   `gradle-plugin` (PR A) — see
   [`exposed-integration.md`](exposed-integration.md)

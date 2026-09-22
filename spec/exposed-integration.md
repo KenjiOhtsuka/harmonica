@@ -35,16 +35,16 @@ migrations. Consequences:
   (the `Class.forName` runtime detection) was **deleted** in PR A. Plugin
   behavior is identical with or without Exposed on the classpath.
 - `harmonica-exposed` exists as module `exposed/` (PR B): `api`-depends on
-  `:core` and `exposed-jdbc:0.61.0` (per spec/tech-notes.md), provides
+  `:core` and `exposed-jdbc:1.5.0` (per spec/tech-notes.md), provides
   `AbstractMigration.exposedTransaction { }`, and is covered by SQLite
   transaction tests. `core` and `gradle-plugin` are unchanged by it.
 - **Bridge contract**: the bridge targets a **single supported Exposed major**:
-  **Exposed 0.x — pinned 0.61.0** — the major whose JDBC API lives in package
-  `org.jetbrains.exposed.sql` (`Database.connect(DataSource)` +
+  **Exposed 1.x — pinned 1.5.0** — the major whose JDBC API lives in package
+  `org.jetbrains.exposed.v1.jdbc.*` (`Database.connect(DataSource)` +
   `transaction()`).
-  Exposed 1.x moved these classes to `org.jetbrains.exposed.v1.jdbc.*`, so
-  adopting 1.x requires updating the detection class name and bridge APIs
-  together; never support two majors in one bridge.
+  Exposed 0.x kept these classes in `org.jetbrains.exposed.sql.*`; adopting 1.x
+  required updating the detection class name and bridge APIs together; never
+  support two majors in one bridge.
 - GitHub issues that this resolves: #91 (Exposed must be loadable by
   `Class.forName`), #160 ("how to use with Exposed — AbstractMigration has no
   `create` method"), #80 (Exposed version update — out of harmonica's control
@@ -73,7 +73,7 @@ A tiny **separate artifact** (Gradle submodule `exposed/`) that:
 - Provides the bridge (as shipped in PR B):
 
 ```kotlin
-fun AbstractMigration.exposedTransaction(block: Transaction.() -> Unit) {
+fun AbstractMigration.exposedTransaction(block: JdbcTransaction.() -> Unit) {
     val connection = connection as? Connection
         ?: error("exposedTransaction requires a com.improve_future.harmonica.core.Connection")
     transaction(connection.exposedDatabase()) { block() }
@@ -109,7 +109,8 @@ fun AbstractMigration.exposedTransaction(block: Transaction.() -> Unit) {
   migration itself), because inside `up()` the receiver is `AbstractMigration`
   and its `connection` field is typed `ConnectionInterface` — an extension on
   the concrete `Connection` would not resolve. See Pitfall E below.
-- The block receiver is Exposed's `Transaction` (`block: Transaction.() -> Unit`),
+- The block receiver is Exposed 1.x's `JdbcTransaction`
+  (`block: JdbcTransaction.() -> Unit`, replacing 0.x's `Transaction`),
   so DSL calls that need the transaction receiver (e.g. `exec`) work inside
   `exposedTransaction {}`.
 
@@ -164,7 +165,7 @@ transaction.**
   runner is single-threaded, so this holds. The `WeakHashMap` cache is likewise
   not thread-safe — document the single-threaded assumption.
 - **`autoCommit`**: harmonica forces `autoCommit = false` (connect + at the top
-  of `transaction`). Exposed 0.61's `ThreadLocalTransaction` init also sets
+  of `transaction`). Exposed 1.x's `ThreadLocalTransaction` init also sets
   `autoCommit = false` on the wrapped connection; it does not restore
   `autoCommit = true` after a transaction, so the two agree. Verified by the
   transaction tests.
@@ -174,8 +175,8 @@ transaction.**
   execution).
 - **Name collision**: `core` has an (empty) `com.improve_future.harmonica.core.Database`
   class (`Database.kt`). Avoid wildcard imports in the bridge so it doesn't
-  collide with `org.jetbrains.exposed.sql.Database`.
-- **`setReadOnly` is delegated**: Exposed 0.61's transaction setup calls
+  collide with `org.jetbrains.exposed.v1.jdbc.Database`.
+- **`setReadOnly` is delegated**: Exposed 1.x's transaction setup calls
   `setTransactionIsolation(...)` (already no-op'd for non-SQLite by core's proxy)
   **and** `setReadOnly(false)` on the wrapped connection. `setReadOnly` is *not*
   overridden anywhere, so for PostgreSQL/MySQL it executes driver-side state
@@ -289,6 +290,17 @@ its `SQLException` type instead of surfacing as
 `UndeclaredThrowableException`). Full `./gradlew build` is green with and
 without Exposed on the classpath; `:core` still has zero Exposed references.
 
+**Shipped in the Exposed 1.x upgrade (2026-09-22):** the `exposed/` module now
+builds with `exposed-jdbc:1.5.0`. Imports moved from
+`org.jetbrains.exposed.sql.*` to `org.jetbrains.exposed.v1.jdbc.*` /
+`v1.core.*`, and `exposedTransaction`'s block receiver is now
+`JdbcTransaction` (the 1.x replacement for `Transaction`). The bridge contract
+(Option A proxy, no-op `commit`/`rollback`/`close`, `defaultMaxAttempts = 1`,
+`WeakHashMap` cache) is unchanged; all four SQLite tests pass against 1.5.0.
+Exception typing note: under 1.5 the SQLException test observes Exposed's
+`ExposedSQLException` (a `SQLException` subtype wrapping the driver error)
+rather than the raw driver `SQLException`.
+
 **Shipped in Phase 3:** script-classpath wiring for `.kts` migrations
 (Pitfall F) — the `harmonica` plugin-managed configuration above
 (`ScriptClasspathTest` proves a migration `.kts` can resolve a class that lives
@@ -305,6 +317,12 @@ Resolved (2026-08-08):
   snippet first.
 - **Exposed 0.61.0** — latest 0.x, JDBC API in `org.jetbrains.exposed.sql`.
 - **Option A** — harmonica owns the transaction (no Exposed-managed commit).
+
+Resolved (2026-09-22, Exposed 1.x upgrade):
+
+- **Exposed 1.5.0** — the bridge upgraded from 0.61.0 to the latest 1.x; JDBC
+  API is `org.jetbrains.exposed.v1.jdbc.*` / core types
+  `org.jetbrains.exposed.v1.core.*`.
 
 Resolved (2026-08-09, PR B):
 

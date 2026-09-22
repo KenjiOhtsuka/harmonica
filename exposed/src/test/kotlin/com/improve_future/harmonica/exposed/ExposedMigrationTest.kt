@@ -3,9 +3,9 @@ package com.improve_future.harmonica.exposed
 import com.improve_future.harmonica.core.AbstractMigration
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.Dbms
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.insert
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path

@@ -241,8 +241,8 @@ Exposed, and integration is documented. Full design: [exposed-integration.md].
 Status: **merged 2026-08-09 (PRs #197, #198, #199).** `core` has zero Exposed
 references (PR A removed the dead `hasExposed` flag and exposed `jdbcConnection`
 on `ConnectionInterface`). The `exposed/` module (`harmonica-exposed`, pinned to
-Exposed 0.61.0) ships the `exposedTransaction` bridge (Option A transaction
-ownership via a no-op commit/rollback/close proxy; `WeakHashMap`-cached
+Exposed 1.5.0 since 2026-09-22) ships the `exposedTransaction` bridge (Option A
+transaction ownership via a no-op commit/rollback/close proxy; `WeakHashMap`-cached
 `Database` per `Connection`; `defaultMaxAttempts = 1`) with 4 SQLite tests:
 commit, rollback, reconnect, and SQLException propagation through the proxy
 (exceptions unwrapped from `InvocationTargetException` so they keep their
@@ -393,10 +393,10 @@ Full triage: [issues-triage.md]. Order:
    #69 (query execution API), #4 (created_at/updated_at).
 3. Medium: #7 (closed connection), #85 (SQLite defaults), #67 (timestamp
    default), #80 (Exposed version), #71 (seeding), #97 (JavaExec task tests),
-   #155 (programmatic migration docs). Also #215 (Exposed 0.61.0 → 1.x bridge
-   rewrite): Exposed 1.x moved the JDBC API out of `org.jetbrains.exposed.sql`,
-   which breaks `harmonica-exposed` (`:exposed:compileKotlin` fails); plan the
-   bridge update when scheduling this — see §6.
+   #155 (programmatic migration docs). Also #215 (Exposed version — **DONE**:
+   the bridge was upgraded to Exposed 1.5.0 on 2026-09-22, resolving the
+   "Exposed 1.x relocated the JDBC API" break; close the open dependabot PR —
+   see §6).
 4. Large/strategic (separate designs/PRs): #1 (Maven Central), #243 (add new
    plugins — **close**: superseded by the §6 namespaced-id decision), #125
    (multiple DBs), #121 (dry run), #148 (Maven support — see
@@ -496,11 +496,12 @@ Resolved (2026-08-01):
 - Dependabot batch of 2026-08-15 (PRs #210-#216): wrapper 9.7.0 (#211), JUnit
   6.1.3 (#210/#214), postgresql 42.7.13 (#213), H2 2.4.240 (#212),
   mysql-connector-j 26.7.0 (#216) — **merged 2026-08-16**; spec pins in
-  tech-notes.md updated. **Not merged:** exposed 1.4.0 (#215) — Exposed 1.x
-  moved the JDBC API out of `org.jetbrains.exposed.sql`, breaking the
-  `harmonica-exposed` bridge (`:exposed:compileKotlin` fails: unresolved
-  `sql`/`Database`/`Transaction`). Deferred — a bridge rewrite is its own piece
-  of work; #215 stays open (tracked in Phase 5, Medium).
+  tech-notes.md updated. **Exposed:** the bridge rewrite superseded the
+  dependabot PR #215 (which proposed 0.61.0 → 1.4.0) by upgrading to **1.5.0
+  (merged 2026-09-22)**: imports moved `org.jetbrains.exposed.sql` →
+  `org.jetbrains.exposed.v1.jdbc.*`/`v1.core.*`, `Transaction` receiver →
+  `JdbcTransaction`. The bridge merge resolves #215; the dependabot PR itself
+  was **not merged** and stays open awaiting user closure.
 
 Still open:
 
@@ -546,6 +547,12 @@ Resolved for Phase 3 (2026-08-08):
   forbids a close hook), so it must not be combined with other Exposed code
   (bare `transaction {}`, another `Database.connect`) in a shared JVM. See
   exposed-integration.md §2.2.
+
+Resolved (2026-09-22):
+
+- Bridge targets **Exposed 1.5.0** (latest 1.x; JDBC API in
+  `org.jetbrains.exposed.v1.jdbc.*` / `v1.core.*`; `Transaction` →
+  `JdbcTransaction` receiver) — upgraded from 0.61.0; resolves #215.
 
 Resolved (2026-08-11):
 

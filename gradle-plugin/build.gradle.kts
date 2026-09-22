@@ -15,7 +15,7 @@ plugins {
 // published coordinate lives under io.github.kenjiohtsuka; the historical
 // com.improve_future group is not available for new publishes.
 group = "io.github.kenjiohtsuka"
-version = "3.0.3"
+version = "4.0.0"
 
 repositories {
     mavenCentral()

@@ -3,7 +3,7 @@ name: Publish plugins
 on:
   push:
     tags:
-      - '3.0.*'
+      - '4.0.*'
   workflow_dispatch:
 
 permissions:
@@ -34,8 +34,8 @@ jobs:
         run: |
           ref="${{ github.ref }}"
           case "$ref" in
-            refs/tags/3.0.*) ;;
-            *) echo "::error::release.yml must run against a 3.0.* tag, got '$ref'" && exit 1 ;;
+            refs/tags/4.0.*) ;;
+            *) echo "::error::release.yml must run against a 4.0.* tag, got '$ref'" && exit 1 ;;
           esac
           version="$(grep -m1 '^version = ' gradle-plugin/build.gradle.kts | sed -E 's/.*"(.*)".*/\1/')"
           tag="${ref#refs/tags/}"

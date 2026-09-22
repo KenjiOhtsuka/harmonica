@@ -22,8 +22,9 @@ plan to restart and modernize the project.
 > db-integration, PR #209; plugin-flow TestKit, PR #219; full `harmonica_test`
 > port, PR #221). Phase 4 is complete. Updated 2026-09-13: Phase 5 quick wins
 > (#220/#222/#189, PRs #224/#226/#227), Phase 7 (README #229, KDoc #231,
-> doc-site #232) complete; 3.0.1 publishing in Phase 6. Update this
-> list when the baseline advances.
+> doc-site #232) complete; 3.0.1 publishing in Phase 6. Updated 2026-09-22:
+> Exposed 1.5.0 bridge upgrade and version bump to 4.0.0 (next release tag).
+> Update this list when the baseline advances.
 
 - Kotlin **2.3.20**, Gradle wrapper **9.7.0**, `jvmTarget = 1.8` (class-file
   major 52 asserted in CI)
@@ -38,7 +39,7 @@ plan to restart and modernize the project.
   now requires an `io.github.<owner>` namespace for new publishes, cf. the
   rejected 3.0.2 attempt under `com.improve_future:*`) publish to the Plugin
   Portal via `.github/workflows/release.yml`
-  (`GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET`, tag `3.0.*` push or manual
+  (`GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET`, tag `4.0.*` push or manual
   dispatch; new ids are auto-registered on first publish and manually
   reviewed); the OSSRH/Maven Central config stays unused
 - CI: GitHub Actions only — `ci.yml` (PR/push, Temurin JDK 25,
@@ -78,18 +79,19 @@ plan to restart and modernize the project.
   `harmonica_test` port is DONE (PR #221). The `demo/` module (seed for the
   plugin-flow demo and the ported 4-migration fixtures) is wired into the root
   build as a composite `includeBuild`, so `integration-test` reuses its
-  migration classes via `com.improve_future:harmonica-demo:3.0.3`.
+  migration classes via `com.improve_future:harmonica-demo:4.0.0`.
 - **`master` carries the first release** — `develop` was merged in (PR #239),
   the 3.0.1 release PR #241 landed, and tag **`3.0.1`** was cut at `380fda5`
   (2026-09-13): JitPack builds it `ok` and
   `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.1` resolve from JitPack
   (the `3.0.0` tag is broken and superseded). The Plugin Portal publish of tag
   **3.0.2** was rejected (coordinates `com.improve_future:*` are restricted for
-  new publishes); the plugin now targets tag **3.0.3** under
+  new publishes); the plugin targeted tag **3.0.3** under
   `io.github.kenjiohtsuka.*`
   via `release.yml`;
   core is bundled into the plugin jar so the portal plugin needs no extra
-  repositories. See the risk register in
+  repositories. Version bumped to **4.0.0** for the next release (2026-09-22).
+  See the risk register in
   [`plan.md`](plan.md).
 
 ## Machine environment (current)

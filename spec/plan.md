@@ -397,10 +397,11 @@ Full triage: [issues-triage.md]. Order:
    rewrite): Exposed 1.x moved the JDBC API out of `org.jetbrains.exposed.sql`,
    which breaks `harmonica-exposed` (`:exposed:compileKotlin` fails); plan the
    bridge update when scheduling this — see §6.
-4. Large/strategic (separate designs/PRs): #1 (Maven Central), #125 (multiple
-   DBs), #121 (dry run), #148 (Maven support — see `feature/maven-plugin`
-   branch), #147 (Java support), #105 (adapter plugin API), #107 (SQL Server
-   adapter), #41 (auto-migrations), #20 (research).
+4. Large/strategic (separate designs/PRs): #1 (Maven Central), #243 (add new
+   plugins — **close**: superseded by the §6 namespaced-id decision), #125
+   (multiple DBs), #121 (dry run), #148 (Maven support — see
+   `feature/maven-plugin` branch), #147 (Java support), #105 (adapter plugin
+   API), #107 (SQL Server adapter), #41 (auto-migrations), #20 (research).
 
 ### Phase 6 — Release & publishing
 

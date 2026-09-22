@@ -227,9 +227,9 @@ transaction.**
   JSR-223 engine (PR #202; the config is cached per task instance). Usage:
 
   ```kotlin
-  plugins { id("io.github.kenjiohtsuka.harmonica") version "3.0.3" }
+  plugins { id("io.github.kenjiohtsuka.harmonica") version "4.0.0" }
   dependencies {
-      harmonica("com.github.KenjiOhtsuka.harmonica:exposed:3.0.3")
+      harmonica("com.github.KenjiOhtsuka.harmonica:exposed:4.0.0")
   }
   ```
 

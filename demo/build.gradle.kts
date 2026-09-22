@@ -10,12 +10,12 @@ buildscript {
 }
 
 group = "com.improve_future"
-version = "3.0.3"
+version = "4.0.0"
 
 plugins {
     kotlin("jvm") version "2.3.20"
-    id("io.github.kenjiohtsuka.harmonica") version "3.0.3"
-    id("io.github.kenjiohtsuka.jarmonica") version "3.0.3"
+    id("io.github.kenjiohtsuka.harmonica") version "4.0.0"
+    id("io.github.kenjiohtsuka.jarmonica") version "4.0.0"
 }
 
 extra["directoryPath"] = "src/main/kotlin/com/improve_future/harmonica/demo/script"
@@ -37,8 +37,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.kenjiohtsuka:gradle-plugin:3.0.3")
-    implementation("com.improve_future:core:3.0.3")
-    harmonica("com.improve_future:exposed:3.0.3")
+    implementation("io.github.kenjiohtsuka:gradle-plugin:4.0.0")
+    implementation("com.improve_future:core:4.0.0")
+    harmonica("com.improve_future:exposed:4.0.0")
     implementation("org.xerial:sqlite-jdbc:3.45.3.0")
 }

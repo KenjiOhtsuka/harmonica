@@ -191,7 +191,7 @@ Still open (not Phase 0):
   the 1.1.24 id). The `gradle-plugin` module now publishes as
   `io.github.kenjiohtsuka:gradle-plugin` (ids
   `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica`),
-  version **3.0.3**; both new ids are auto-registered on first `publishPlugins`
+  version **4.0.0**; both new ids are auto-registered on first `publishPlugins`
   and then manually reviewed by the portal.
 
 ## Plugins in `build.gradle.kts` (root)

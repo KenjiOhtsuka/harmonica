@@ -38,10 +38,12 @@ State:
   (PR #239). `develop` has since advanced past `master` (PRs #244/#245), so the
   branches have diverged.
 - The 3.0.0 tag's JitPack build failed (see Phase 6).  The first JitPack-
-  released tag is **3.0.1** (`380fda5`); the Plugin Portal publish targets
+  released tag is **3.0.1** (`380fda5`); the Plugin Portal publish targeted
   **3.0.3** via `release.yml` under the `io.github.kenjiohtsuka` namespace (the
   portal rejected the 3.0.2 attempt: the historic `com.improve_future:*`
-  coordinates are restricted for new publishes — see Phase 6).
+  coordinates are restricted for new publishes — see Phase 6). The next release
+  is tagged **4.0.0** (version bumped 2026-09-22; `release.yml` now fires on
+  `4.0.*`).
 
 Policy going forward (Git Flow, simplified):
 
@@ -150,8 +152,9 @@ Status: **implemented and merged (2026-08-01, PR #183, merge commit
   existing users. The stale bundled descriptor was removed, replaced by
   plugin-publish's generated ones. **Core is bundled into the plugin jar and
   stripped from the published POM (PR #245)**, so the portal plugin
-  resolves without extra repositories. The first portal publish runs via
-  `release.yml` on tag **3.0.3**.
+  resolves without extra repositories. The first portal publish ran via
+  `release.yml` on tag **3.0.3**; the version was bumped to **4.0.0** on
+  2026-09-22 (next release tag).
 - **`document/` module**: decided — **dropped from the root build**, folder
   left as-is (own Gradle 4.9 wrapper, version-less Kotlin plugin, deprecated
   `mainClassName`). No longer compiled or released. Future: convert or remove
@@ -340,7 +343,7 @@ Breakdown (each item is its own small PR against `develop`):
    source set, always-green) spawns real Gradle builds via TestKit that apply
    the `harmonica` plugin from a composite `includeBuild` of the repo root and
    run `harmonicaUp`/`harmonicaDown` against an embedded SQLite DB (absolute
-   path in `<projectDir>/build/`); one case has `harmonica("com.improve_future:exposed:3.0.3")`
+   path in `<projectDir>/build/`); one case has `harmonica("com.improve_future:exposed:4.0.0")`
    on the script classpath (Exposed migration), one does not (plain JDBC
    migration). Assertions check `harmonica_migration` version rows + table
    existence. The `demo/` project is committed as the seed (script/ + jarmonica/
@@ -405,7 +408,7 @@ Full triage: [issues-triage.md]. Order:
 
 ### Phase 6 — Release & publishing
 
-Status: **in progress (2026-09-16).** Channel decision made: **JitPack-only**
+Status: **in progress (2026-09-22).** Channel decision made: **JitPack-only**
 for the `core`/`exposed` libraries (see the open-decision list in §6). PR #238
 added `maven-publish` publications to `core`/`exposed` plus a `.jitpack.yml`;
 PR #240 scoped the JitPack install to the two library modules and raised the
@@ -413,19 +416,25 @@ version to 3.0.1, which was **JitPack-released from tag `3.0.1`**. The plugin
 publish to the Plugin Portal from tag **3.0.2** (PR #244) was **rejected by the
 portal** — "Coordinates 'com.improve_future:gradle-plugin' are restricted from
 use" — because new publishes must use an `io.github.<owner>` namespace. The
-plugin now publishes on tag **3.0.3** with ids/coordinates moved to
+plugin published on tag **3.0.3** with ids/coordinates moved to
 `io.github.kenjiohtsuka`; core is bundled into the plugin jar and dropped from
 the published POM, so the portal plugin resolves without extra repositories.
 
+**Version bumped to 4.0.0 (2026-09-22)** — all modules (`core`, `exposed`,
+`gradle-plugin`, demo, integration-test) and `release.yml` (`4.0.*` tag
+trigger/preflight); this is the next release tag. See the changelog notes in
+§3/§6.
+
 - Configure **JitPack**: build from git tags; multi-module produces
   `core`/`exposed` artifacts via the `maven-publish` publications consumed as
-  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:3.0.3` (JitPack rewrites the
+  `com.github.KenjiOhtsuka.harmonica:{core,exposed}:4.0.0` (JitPack rewrites the
   `com.improve_future` group). Done for 3.0.1; re-verified per tag.
 - **Decided (2026-09-13/16):** the Gradle Plugin Portal (`plugin-publish`,
   ids `io.github.kenjiohtsuka.harmonica`/`io.github.kenjiohtsuka.jarmonica`,
   Maven group `io.github.kenjiohtsuka`) is the plugin's first-release channel —
   published via
-  `.github/workflows/release.yml` for tags `3.0.*`. Maven Central (OSSRH,
+  `.github/workflows/release.yml` for tags `3.0.*` (bumped to `4.0.*` for the
+  4.0.0 release, 2026-09-22). Maven Central (OSSRH,
   needs `signing` + credentials) stays **deferred**; its config stays in
   `gradle-plugin/build.gradle.kts` for a later release.
 - Update README: install instructions and JitPack download coordinates (this
@@ -458,7 +467,8 @@ coordinates) and will be refreshed post-tag.
 - First new release tagged (`3.0.1`, JitPack-verified for core/exposed);
   `master` released from `develop` via the Phase 6 merge commit `380fda5`;
   portal plugin published from tag `3.0.3` via `release.yml` under the
-  `io.github.kenjiohtsuka` namespace.
+  `io.github.kenjiohtsuka` namespace. Next release: tag **4.0.0** (version
+  bumped 2026-09-22).
 - Open-issue count reduced (all "urgent/small" closed or converted to tasks).
 - `harmonica_demo` left untouched (documented only, not part of the restart).
 
@@ -527,6 +537,9 @@ Still open:
   the plugin **bundles core into its jar** and removes the core dependency from
   the published POM + module metadata (`tasks.jar` + POM-strip, PR #245)
   — a portal consumer resolves the plugin with no extra repositories.
+  **Version bumped 2026-09-22: the next release tag is 4.0.0** (`release.yml`
+  trigger + preflight now `4.0.*`); the first portal publish under this version
+  goes through the same namespaced flow.
   Portal publishing needs only the two `io.github.kenjiohtsuka.*` ids (both
   auto-registered on first publish, then manually reviewed) plus
   `GRADLE_PUBLISH_KEY`/`GRADLE_PUBLISH_SECRET` (user credentials, environment

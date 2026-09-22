@@ -12,7 +12,7 @@ Release **3.0.1** is the maintenance-restart release: the project was
 dormant for years and has been rebuilt on a modern toolchain (Kotlin 2.3,
 Gradle 9.7, published bytecode targets JVM 8). The biggest change is that Exposed
 support is now an **optional, separate module** — the core library no longer
-depends on Exposed. The 3.x line publishes to the Gradle Plugin Portal under
+depends on Exposed. Since 3.0.3, releases publish to the Gradle Plugin Portal under
 the `io.github.kenjiohtsuka` namespace (portal ownership is verified against the
 owner's GitHub account; the historical `com.improve_future.harmonica` id
 (1.1.24 and older) is untouched for existing users).
@@ -38,7 +38,7 @@ You supply the JDBC driver for your database on the runtime classpath.
 
 ```kotlin
 plugins {
-    id("io.github.kenjiohtsuka.harmonica") version "3.0.3"
+    id("io.github.kenjiohtsuka.harmonica") version "4.0.0"
 }
 ```
 
@@ -107,9 +107,9 @@ column types, indexes, foreign keys, renames, and raw `executeSql`.
 
 The Gradle plugin is published to the Gradle Plugin Portal (see "Getting
 started") without a core dependency: the library ships inside the plugin jar.
-The 3.0.3 core library (and the optional Exposed bridge) are served from
+The 4.0.0 core library (and the optional Exposed bridge) are served from
 [JitPack](https://jitpack.io/#KenjiOhtsuka/harmonica), which builds them from
-the `3.0.3` tag. Keep Maven Central in the repositories (the Exposed bridge
+the `4.0.0` tag. Keep Maven Central in the repositories (the Exposed bridge
 depends on Exposed artifacts from Central), and add the JitPack repository for
 the core library:
 
@@ -120,7 +120,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.KenjiOhtsuka.harmonica:core:3.0.3")
+    implementation("com.github.KenjiOhtsuka.harmonica:core:4.0.0")
 }
 ```
 
@@ -128,11 +128,11 @@ The optional Exposed bridge is a separate artifact:
 
 ```kotlin
 dependencies {
-    implementation("com.github.KenjiOhtsuka.harmonica:exposed:3.0.3")
+    implementation("com.github.KenjiOhtsuka.harmonica:exposed:4.0.0")
 }
 ```
 
-| Module | Coordinate (3.0.3) |
+| Module | Coordinate (4.0.0) |
 | ------ | ------------------- |
 | Core library | `com.github.KenjiOhtsuka.harmonica:core` |
 | Exposed bridge (optional) | `com.github.KenjiOhtsuka.harmonica:exposed` |
@@ -146,7 +146,7 @@ plugin's script classpath:
 
 ```kotlin
 dependencies {
-    harmonica("com.github.KenjiOhtsuka.harmonica:exposed:3.0.3")
+    harmonica("com.github.KenjiOhtsuka.harmonica:exposed:4.0.0")
 }
 ```
 

@@ -188,10 +188,10 @@ class PluginFlowTest {
         private val exposedMigration = """
             import com.improve_future.harmonica.core.AbstractMigration
             import com.improve_future.harmonica.exposed.exposedTransaction
-            import org.jetbrains.exposed.sql.SchemaUtils
-            import org.jetbrains.exposed.sql.Table
-            import org.jetbrains.exposed.sql.insert
-            import org.jetbrains.exposed.sql.selectAll
+            import org.jetbrains.exposed.v1.core.Table
+            import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+            import org.jetbrains.exposed.v1.jdbc.insert
+            import org.jetbrains.exposed.v1.jdbc.selectAll
 
             object DemoExposedTable : Table("demo_exposed") {
                 val id = integer("id").autoIncrement()

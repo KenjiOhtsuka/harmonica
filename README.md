@@ -151,10 +151,9 @@ dependencies {
 ```
 
 The JitPack repository from "Download" must be on the build's repository list
-so the `harmonica` configuration can resolve the bridge. The bridge currently
-targets Exposed 0.61.x (Exposed 1.x support is tracked in issue #215). The
-plugin-flow test suite verifies migrations both with and without the Exposed
-module on the script classpath.
+so the `harmonica` configuration can resolve the bridge. The bridge targets
+Exposed 1.x (currently pinned to 1.5.0). The plugin-flow test suite verifies
+migrations both with and without the Exposed module on the script classpath.
 
 ## API documentation
 

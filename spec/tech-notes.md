@@ -1,7 +1,8 @@
 # Toolchain & Dependency Research
 
 Facts gathered on 2026-08-01 (test counts and versions updated through
-2026-09-13, incl. the Phase 4 `harmonica_test` port PR #221, the Phase 5
+2026-09-22, incl. the Exposed 1.5.0 bridge upgrade, plus earlier: the Phase 4
+`harmonica_test` port PR #221, the Phase 5
 quick wins #220/PR #224, #222/PR #226 and #189/PR #227, the setup-java bumps
 PR #225/PR #233, the KDoc + doc-site refresh PRs #231/#232, and the
 PostgreSqlAdapter time-default test de-flake PR #234). Update this file as
@@ -71,7 +72,7 @@ Key references:
 
 | Dependency | Status | Notes |
 | --- | --- | --- |
-| `org.jetbrains.exposed:exposed-jdbc` | **DONE** | 0.61.0 pinned (api; Phase 3, PR B). `exposed-core` arrives transitively; never declare it directly. |
+| `org.jetbrains.exposed:exposed-jdbc` | **DONE** | 1.5.0 pinned (api; Phase 3, PR B; upgraded 0.61.0 → 1.5.0 on 2026-09-22). `exposed-core` arrives transitively; never declare it directly. |
 | `org.xerial:sqlite-jdbc` | **DONE** | testImplementation-only (Phase 3, PR B) for embedded-DB bridge tests; see the gradle-plugin row note on driver placement. |
 
 ### gradle-plugin

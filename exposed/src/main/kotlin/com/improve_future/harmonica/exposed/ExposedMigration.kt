@@ -2,10 +2,10 @@ package com.improve_future.harmonica.exposed
 
 import com.improve_future.harmonica.core.AbstractMigration
 import com.improve_future.harmonica.core.Connection
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.DatabaseConfig
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.core.DatabaseConfig
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.lang.ref.WeakReference
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Proxy
@@ -13,7 +13,7 @@ import java.util.WeakHashMap
 
 private val databaseCache = WeakHashMap<Connection, Database>()
 
-fun AbstractMigration.exposedTransaction(block: Transaction.() -> Unit) {
+fun AbstractMigration.exposedTransaction(block: JdbcTransaction.() -> Unit) {
     val connection = connection as? Connection
         ?: error("exposedTransaction requires a com.improve_future.harmonica.core.Connection")
     transaction(connection.exposedDatabase()) { block() }

@@ -32,7 +32,7 @@ dependencies {
     add("integrationTestImplementation", "org.jetbrains.kotlin:kotlin-test-junit5:${property("kotlin_version")}")
     add("integrationTestImplementation", "org.junit.jupiter:junit-jupiter:6.1.3")
     add("integrationTestRuntimeOnly", "org.junit.platform:junit-platform-launcher:6.1.3")
-    add("integrationTestImplementation", "org.postgresql:postgresql:42.7.13")
+    add("integrationTestImplementation", "org.postgresql:postgresql:42.7.14")
     add("integrationTestImplementation", "com.mysql:mysql-connector-j:26.7.0")
 }
 

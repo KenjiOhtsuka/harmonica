@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath("org.xerial:sqlite-jdbc:3.45.3.0")
-        classpath("org.postgresql:postgresql:42.7.13")
+        classpath("org.postgresql:postgresql:42.7.14")
         classpath("com.mysql:mysql-connector-j:26.7.0")
     }
 }

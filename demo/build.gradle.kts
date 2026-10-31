@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.xerial:sqlite-jdbc:3.45.3.0")
+        classpath("org.xerial:sqlite-jdbc:3.53.4.0")
         classpath("org.postgresql:postgresql:42.7.13")
         classpath("com.mysql:mysql-connector-j:26.7.0")
     }
@@ -40,5 +40,5 @@ dependencies {
     implementation("io.github.kenjiohtsuka:gradle-plugin:4.0.0")
     implementation("com.improve_future:core:4.0.0")
     harmonica("com.improve_future:exposed:4.0.0")
-    implementation("org.xerial:sqlite-jdbc:3.45.3.0")
+    implementation("org.xerial:sqlite-jdbc:3.53.4.0")
 }

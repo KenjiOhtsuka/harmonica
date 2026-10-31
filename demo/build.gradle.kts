@@ -13,7 +13,7 @@ group = "com.improve_future"
 version = "4.0.0"
 
 plugins {
-    kotlin("jvm") version "2.3.20"
+    kotlin("jvm") version "2.4.21"
     id("io.github.kenjiohtsuka.harmonica") version "4.0.0"
     id("io.github.kenjiohtsuka.jarmonica") version "4.0.0"
 }

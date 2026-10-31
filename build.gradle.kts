@@ -11,7 +11,7 @@ buildscript {
                 "com.fasterxml.jackson.core:jackson-core:2.18.9",
                 "com.fasterxml.jackson.core:jackson-databind:2.18.9",
                 "com.fasterxml.jackson.module:jackson-module-kotlin:2.18.9",
-                "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.9"
+                "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.4"
             )
         }
     }
